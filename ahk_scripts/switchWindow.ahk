@@ -31,11 +31,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;Win+1  VS
 #1::
-IfWinExist,ahk_class  wndclass_desked_gsk
-  IfWinActive ,ahk_class  wndclass_desked_gsk
-     WinMinimize ,ahk_class wndclass_desked_gsk
+SetTitleMatchMode, 2
+IfWinExist, - Microsoft Visual Studio
+  IfWinActive , - Microsoft Visual Studio
+     WinMinimize , - Microsoft Visual Studio
   else{
-    WinActivate ,ahk_class wndclass_desked_gsk
+    WinActivate , - Microsoft Visual Studio
     }
 else
   run devenv
