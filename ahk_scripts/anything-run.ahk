@@ -13,6 +13,7 @@ anything_cmd_source:=Object()
 anything_cmd_source["name"]:="Run"
 anything_cmd_source["candidate"]:= cmd_history
 anything_cmd_source["action"] := Array("anything_run","anything_run_delete_from_history")
+anything_cmd_source["anything-execute-action-at-once-if-one"] := "yes"
 
 
 ;;init cmd_history from anything-run.ini 
@@ -79,7 +80,7 @@ updateCmdHistory(newCmd)
     }
   }
   cmd_history.insert(1,newCmd)
-  if (directory_history.maxIndex()>50) ;;only record 50 cmd history items 
+  if (directory_history.maxIndex()>150) ;;only record 50 cmd history items 
   {
     cmd_history.remove(51)
   }

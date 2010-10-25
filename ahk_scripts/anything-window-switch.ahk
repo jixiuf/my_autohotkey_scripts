@@ -14,6 +14,14 @@
 ;     #include anything.ahk
 ;     #include anything-window-switch.ahk' 
 ;     f3::anything(anything_window_switcher_source)
+; if you want automatically switch to a window when there is only 1 search
+; result showing
+; you can
+;     #include anything.ahk
+;     #include anything-window-switch.ahk'
+;     anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
+;     f3::anything(anything_window_switcher_source)
+
 ;
 ; 2  if you also have other anything-sources ,
 ;     you just need add

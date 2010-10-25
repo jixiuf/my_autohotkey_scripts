@@ -5,17 +5,116 @@ SetBatchLines, -1
 SetKeyDelay  -1
 SendMode Input
 AutoTrim, off
+;;;;;;;;;;;;;;;;;; 4 public functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anything(anything-source)
+;; anything_with_properties(anything-source,anything-properties)
+;; anything_multiple_sources(anything-sources)
+;; anything_multiple_sources_with_properties(anything-sources, anything-properties)
+;;
+;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
+;;   an anything-source is an Object with some defined properties
+;;   now it support 5 anything-source-properties :
+;;   <name> <action> <candidate> and <icon><anything-execute-action-at-once-if-one>
+;;   for example:
+;;         my_source:=Object()
+;; ** 1 <name>  (needed)
+;;    <name> is a string ,it is just a name of this anything-source
+;;         my_source["name"]:="my_source_name"
+;;
+;; ** 2 <candidate>  (needed)
+;;    <candidate> is an array of available candidates ,or a function name(string)
+;;    without parameter which return an array .
+;;    each element of the array can be :
+;; *** a string
+;;     this string will be displayed on listview , so that you can select one
+;;     of the candidates ,and execute action on your selected candidate.
+;;    for example:
+;;             my_candidates:=Array("red","green")
+;;       or
+;;             my_candidates_fun()
+;;             {
+;;                 return Array("red","green")
+;;             }
+;;             my_candiates:="my_candidates_fun"
+;;              
+;; *** a array
+;;     the first element of this array must be a string ,the string will be
+;;     displayed on listview ,and you can selected one of the candidates ,and
+;;     execute action on your selected candidate.
+;;     other element of this array can be anything , you can store useful info.
+;;     there. and when you execute action on your selected candidate,this will
+;;     be the parameter . see <action>
+;;       for example:
+;;             my_candidates:=Array(
+;;                       Array("red","useful info ,string ,object or anything"),
+;;                       Array("green","useful info ,string ,object or anything")
+;;                       )
+;;
+;; ** 3 <action>  (needed)
+;;    <action> is a function name(string) or a list of function name (array).
+;;    and those functions must have one parameter. actually the parameter is
+;;    the selected <candidate> .
+;;          my_action:="my_action_fun"
+;;                   my_action_fun(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;       or
+;;         my_action:=Array("my_action_fun","my_action_fun2")
+;;                   my_action_fun(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;                   my_action_fun2(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;                    
+;; ** 4 <icon> (optional)
+;;     <icon> is a function(string) which return a ImageList.
+;;     this property is optional .if this property isn't empty
+;;     <Anything> will display icon before each candidates.
+;;      icon_fun()
+;;      {
+;;          ImageListID := IL_Create(10)  ; Create an ImageList to hold 10 small icons.
+;;          Loop 10  ; Load the ImageList with a series of icons from the DLL.
+;;          IL_Add(ImageListID, "shell32.dll", A_Index)
+;;          return ImageListID
+;;      }
+;;     my_icon :="icon_fun"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ** 5 <anything-execute-action-at-once-if-one> (optional)
+;;     if it has value
+;;   for example
+           my_source["anything-execute-action-at-once-if-one"]:="yes"
+;; then if only one candidate left on the listview it will execute the
+;;     default action with the candidate  
+;;
+;; my_source["candidate"]:=my_candidates
+;; my_source["action"]:=my_action
+;; my_source["icon"]:=my_icon
+;;
+;; anything(my_source)
+
+;;;;;;;;;;;;;;;;;;;;;;default anything-properties;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;don't change the default value here ,you can use 
-;;         anything_with_properties()
+;;         anything_with_properties(source,properties)
 ;; and
-;;         anything_multiple_sources_with_properties
-;; overwrite  properties here .(just overwrite properties you need is enough)
+;;         anything_multiple_sources_with_properties(sources,properties)
+;;
+;; overwrite  properties defined here .
+;;(just overwrite properties those you are interested in).
+;; example:
+;;     my_anything_properties:=Object()
+;;     my_anything_properties["win_width"]:= 900
+;;     anything_with_properties(my-anything-source ,my_anything_properties)
+
 anything_default_properties:=Object()
-;;the width of Anything window
+;; the width and height  of Anything window
 anything_default_properties["win_width"]:= 900
 anything_default_properties["win_height"]:= 510
+
+;; when Anything window lose focus ,close Anything window automatically.
 anything_default_properties["quit_when_lose_focus"]:="yes"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
@@ -23,17 +122,10 @@ anything_default_properties["quit_when_lose_focus"]:="yes"
 ;; and  this function will be treated as "action" 
 anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;global variable
+;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anthing Window Id                                  
 anything_wid=
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;4 public function
-
-;; anything
-;; anything_with_properties
-;; anything_multiple_sources
-;; anything_multiple_sources_with_properties
-
 
 anything(source)
 {
@@ -51,10 +143,12 @@ anything_multiple_sources(sources)
 {
   anything_multiple_sources_with_properties(sources ,Array())
 }
-
+;;main function 
 anything_multiple_sources_with_properties(sources,anything_properties){
 global anything_default_properties
 global anything_wid
+;; copy all property from anything_default_properties to
+;; anything_properties if  anything_properties doen't defined  
 
 for key, default_value in anything_default_properties
 {
@@ -73,19 +167,18 @@ for key, default_value in anything_default_properties
    Gui, Add, Edit,     x90 y5 w500 h30,
    if(anything_properties["quit_when_lose_focus"] = "yes")
    {
-     OnMessage( 0x06, "anything_WM_ACTIVATE" ) ;;when window lost focus 
+   ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+   ;; will be executed
+     OnMessage( 0x06, "anything_WM_ACTIVATE" ) 
    }
-   OnMessage(0x201, "anything_WM_LBUTTONDOWN") ;;when LButton(mouse) is down 
+   ;; ;;when LButton(mouse) is down ,select use mouse
+   ;;anything_WM_LBUTTONDOWN() will be called
+   OnMessage(0x201, "anything_WM_LBUTTONDOWN") 
    icon:=source["icon"]
-     ; if icon<>
-     ; {
-        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
-     ; }else{
-     ;    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
-     ; }
-     
+    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      
      candidates_count=0
+     ;; search string you have typed 
      search=
      tabListActions:=""
      matched_candidates:=Object()
@@ -214,7 +307,7 @@ for key, default_value in anything_default_properties
             selectedRowNum:= LV_GetNext(0)
             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
             action:= anything_get_default_action(tmpSources[source_index]["action"])
-            if (GetKeyState("LAlt", "P")=1){
+            if (GetKeyState("LAlt", "P")=1){ ;;LAlt+Enter 
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             }else
             {
@@ -226,7 +319,7 @@ for key, default_value in anything_default_properties
          
          if ErrorLevel = EndKey:z
            {
-            if (GetKeyState("LControl", "P")=1){
+            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+z
                   selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
@@ -238,14 +331,14 @@ for key, default_value in anything_default_properties
           }
          if ErrorLevel = EndKey:j
            {
-            if (GetKeyState("LControl", "P")=1){
+            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+j
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) 
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_exit()
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   break
-             }else if (GetKeyState("LAlt", "P")=1){
+             }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) 
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
@@ -258,14 +351,14 @@ for key, default_value in anything_default_properties
          
          if ErrorLevel = EndKey:m
            {
-            if (GetKeyState("LControl", "P")=1){
-                 selectedRowNum:= LV_GetNext(0)
+            if (GetKeyState("LControl", "P")=1){ ;; Ctrl+m
+                 selectedRowNum:= LV_GetNext(0) 
                        LV_GetText(source_index, selectedRowNum,2) 
                        action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                        anything_exit()
                        anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
-               }else if (GetKeyState("LAlt", "P")=1)
+               }else if (GetKeyState("LAlt", "P")=1) ;;Alt+m
                {
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2) 
@@ -435,6 +528,20 @@ for key, default_value in anything_default_properties
                           ; }
               }
             }
+            ;;if only one candidate left automatically execute it
+            ;; if source["anything-execute-action-at-once-if-one"]="yes"
+            if matched_candidates.maxIndex() = 1
+            {
+                   selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+              if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
+              {
+                  action:= anything_get_default_action(tmpSources[source_index]["action"])
+                  anything_exit() ;;first quit .then execute action 
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  break
+                }
+              }
 
      } ;; end of loop
      anything_exit()

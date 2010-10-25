@@ -17,7 +17,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ;;Alt+1 copy文件名
 !1::
   send ^c
-  sleep,200
+  sleep,300
   clipboard = %clipboard%
   SplitPath, clipboard, name
   clipboard = %name%
@@ -25,7 +25,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ;;alt+2 copy 此文件所在的路径名
 !2::
   send ^c
-  sleep,200
+  sleep,300
   clipboard = %clipboard%
   SplitPath, clipboard, , dir
   clipboard = %dir%
@@ -33,7 +33,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ;;copy 此文件的全路径名
 !3::
   send ^c
-  sleep,200
+  sleep,300
   clipboard = %clipboard%
   return
 #IfWinActive
@@ -47,7 +47,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
   {
     ControlGetText, oldExplorePath, Edit1, A
     Send {Enter}
-        sleep 150
+        sleep 250
         if WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass")
         {
           ControlGetText, newExplorePath, Edit1, A
@@ -71,7 +71,7 @@ return
   {
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
-    sleep 300
+    sleep 400
     updateHistory(getExplorerAddressPath())
   }
 return
@@ -85,7 +85,7 @@ return
     send {Left}
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
-    sleep 300
+    sleep 400
     updateHistory(getExplorerAddressPath())
   }else
   {
@@ -103,7 +103,7 @@ return
       Send {Home}
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
-    sleep 300
+    sleep 400
     updateHistory(newExplorePath)
   }
 return
@@ -128,6 +128,7 @@ return
 ^l:: ControlFocus, Edit1,A
 ;"+"  like Emacs dired: create new folder 
 +=::Send !fwf
+!^n::Send !fwf
 
 ; create new text file
 ;
@@ -220,7 +221,7 @@ openSelectedfileWithEamcs()
   {
     ClipSaved := ClipboardAll
     Send ^c
-    sleep,200
+    sleep,300
     clipboard = %clipboard%
     fullPath=%clipboard%
     Clipboard := ClipSaved   
