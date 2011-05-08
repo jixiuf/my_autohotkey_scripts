@@ -66,3 +66,8 @@ OpenCmdInCurrent()
         Run, cmd /K cd /D "C:\ "
     }
 }
+
+;;;Ctrl+L 定位在地址栏
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^l::Send {F4}{Escape}
+#IfWinActive
