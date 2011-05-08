@@ -1,4 +1,14 @@
-
+;;;在Explorer.exe 程序中定义以下快捷键
+;;Alt+1 复制 选中的文件名到剪切板
+;;Alt+2 复制地址栏中路径到剪切板
+;;Alt+3 复制选中文件的全路径到剪切板
+;;Ctrl+Alt+n  新建一个文件夹
+;;Ctrl+Alt+t 新建一个文本
+;;Ctrl+Alt+c 在此处打开Cmd.exe(在另一个脚本cmd2msys.ahk中，
+;;           定义了在cmd.exe窗口中按下Ctrl+Return键，转换成 msys.bat环境)
+;;
+;;Ctrl+l 定位到地址栏
+;;;Alt+1 
 ;;#NoTrayIcon
 SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ; 下面的窗口类依次为：桌面、Win+D后的桌面、我的电脑、资源管理器、另存为等
