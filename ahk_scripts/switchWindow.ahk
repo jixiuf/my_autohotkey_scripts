@@ -23,6 +23,8 @@ IfWinExist,ahk_class SWT_Window0
 else
   run eclipse
 return  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 
 ;;Win+f toggle Firefox
@@ -39,6 +41,9 @@ IfWinExist,ahk_class MozillaUIWindowClass
 else
   run firefox
 return   
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 
 ;;;;;;;;;;;Win+x ,toggle IE
 #x::
@@ -54,7 +59,8 @@ IfWinExist,ahk_class IEFrame
 else
   Run, %A_ProgramFiles%\Internet Explorer\iexplore.exe
 return   
- 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
  
 
@@ -70,6 +76,8 @@ IfWinExist,ahk_class Emacs
 else
   run runemacs
 return
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;Win+c ,toggle Pl/sql
 #c::
@@ -83,6 +91,8 @@ IfWinExist,ahk_class TPLSQLDevForm
 else
   Run, %A_ProgramFiles%\PLSQL Developer\plsqldev.exe
 return
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;Win+g ,toggle Gtalk
 #g::
@@ -97,7 +107,8 @@ IfWinExist,ahk_class Google Talk - Google Xmpp Client GUI Window
 else
   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
 return
- 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;Win+b ,toggle Gtalk
 #b::
@@ -112,6 +123,7 @@ DetectHiddenWindows, On
 else
   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
 return
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;Win+e 启动资源管理器，
@@ -137,9 +149,9 @@ IfWinExist,ahk_class ahk_class (CabinetWClass|ExploreWClass)
 else
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
 return  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
+;;;;;;Win+q  toggle Excel
 #q::
 IfWinExist,ahk_class XLMAIN
   IfWinActive ,ahk_class XLMAIN
@@ -151,4 +163,4 @@ IfWinExist,ahk_class XLMAIN
 else
   run excel
 return  
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
