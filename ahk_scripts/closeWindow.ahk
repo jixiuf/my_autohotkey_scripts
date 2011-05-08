@@ -1,5 +1,7 @@
-#IfWinActive  ;Close active window when mouse button 5 is pressed
- ^MButton::
+#NoTrayIcon
+;;;Ctrl+鼠标中键关闭窗口        
+#IfWinActive  
+^MButton::
     SendInput {Alt Down}{F4}{Alt Up}
     Return
 #IfWinActive  

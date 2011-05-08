@@ -1,3 +1,5 @@
+#NoTrayIcon
+
 ;;;这个函数没用到
 win2msysPath(winPath){
    msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
