@@ -115,17 +115,15 @@ toggle_hide_file_in_explore(){
 ^!h::toggle_hide_file_in_explore()
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+;;;;;在某些窗口中起用Ctrl+n Ctrl+p 代替上下键
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^n::SendInput {Down}
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^p::SendInput {Up}
+
+;;Alt+< 与Alt+> 跳到开头结尾,(选中第一个或最后一个文件)
+;;实际是Shift+Alt+, 与Shift+Alt+.
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 !+,::SendInput {Alt}ea{Home}
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 !+.::SendInput {Alt}ea{End}
-
-
-
-
-
