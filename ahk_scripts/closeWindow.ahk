@@ -8,3 +8,7 @@
     SendInput {Alt Down}{F4}{Alt Up}
     Return
 #IfWinActive
+
+
+;;我习惯于Win+Esc 关闭窗口,而不是Alt+F4
+#Esc::Send !{F4}
