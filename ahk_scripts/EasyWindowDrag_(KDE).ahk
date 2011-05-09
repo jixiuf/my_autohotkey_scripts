@@ -1,5 +1,5 @@
 #NoTrayIcon
-
+#SingleInstance force
 
 
 ; Easy Window Dragging -- KDE style (requires XP/2k/NT) -- by Jonny

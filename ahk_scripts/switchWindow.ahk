@@ -1,4 +1,4 @@
-;;;; switchWindow.ahk -- switch to your favourate window 
+;;;; switchWindow.ahk -- switch to your favourate window
 ;;;;@author jixiuf@gmail.com
 ;;;,此脚本因为含有中文，所以在保存此文本的时候必须保存为utf-8编码，
 ;;; 其他如gbk的编码应该不可以(未测试)
@@ -12,6 +12,7 @@
 
 
 #NoTrayIcon
+#SingleInstance force
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;注意，eclipse命令必须在Path 环境变量中,
@@ -25,26 +26,27 @@ IfWinExist,ahk_class SWT_Window0
     WinActivate ,ahk_class SWT_Window0
     }
 else
-  run eclipse
-return  
+  run, eclipse -nl en_US
+return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
 ;;Win+f toggle Firefox
 #f::
-IfWinExist,ahk_class MozillaUIWindowClass
-  IfWinActive ,ahk_class MozillaUIWindowClass
-     WinMinimize ,ahk_class MozillaUIWindowClass
+SetTitleMatchMode, RegEx
+IfWinExist,ahk_class MozillaUIWindowClass|MozillaWindowClass
+  IfWinActive ,ahk_class MozillaUIWindowClass|MozillaWindowClass
+     WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
   else{
-    WinMaximize,ahk_class MozillaUIWindowClass
+    WinMaximize,ahk_class MozillaUIWindowClass|MozillaWindowClass
     sleep 10
     WinSet, Style, -0xC00000, A ;;full screen
-    WinActivate ,ahk_class MozillaUIWindowClass
+    WinActivate ,ahk_class MozillaUIWindowClass|MozillaWindowClass
     }
 else
   run firefox
-return   
+return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -62,11 +64,11 @@ IfWinExist,ahk_class IEFrame
     }
 else
   Run, %A_ProgramFiles%\Internet Explorer\iexplore.exe
-return   
+return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- 
+
 
 ;;;;;;;;;;Win+A ,toggle.Eamcs
 #a::
@@ -93,7 +95,7 @@ IfWinExist,ahk_class TPLSQLDevForm
     WinActivate ,ahk_class TPLSQLDevForm
     }
 else
-  Run, %A_ProgramFiles%\PLSQL Developer\plsqldev.exe
+  Run, C:\Prog\PLSQL\plsqldev.exe
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -138,7 +140,7 @@ return
 ;;我们认为用户想重新启用一个资源管理器，为方便计，把目录定位到与这个窗口相同的目录
 #e::
 MyFavorateDir:="D:\"
-SetTitleMatchMode, RegEx 
+SetTitleMatchMode, RegEx
 IfWinExist,ahk_class ahk_class (CabinetWClass|ExploreWClass)
   If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
       WinGetText, full_path, A  ; 取到地址栏里的路径
@@ -152,7 +154,7 @@ IfWinExist,ahk_class ahk_class (CabinetWClass|ExploreWClass)
   }
 else
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
-return  
+return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;Win+q  toggle Excel
@@ -166,5 +168,5 @@ IfWinExist,ahk_class XLMAIN
     }
 else
   run excel
-return  
+return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

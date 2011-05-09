@@ -111,5 +111,21 @@ toggle_hide_file_in_explore(){
     Return
 }
 ;;½«Ctrl+alt+h °ó¶¨µ½ toggle_hide_file_in_explore
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^!h::toggle_hide_file_in_explore()
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^n::SendInput {Down}
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^p::SendInput {Up}
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+!+,::SendInput {Alt}ea{Home}
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+!+.::SendInput {Alt}ea{End}
+
+
+
+
+
