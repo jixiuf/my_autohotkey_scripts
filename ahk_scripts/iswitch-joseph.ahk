@@ -165,7 +165,7 @@ if filterlist <>
 ;
 ; I never use the CapsLock key, that's why I chose it.
 ;
-!Tab::
+#Tab::
 search =
 numallwin = 0
 GuiControl,, Edit1
