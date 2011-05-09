@@ -45,6 +45,9 @@
 ;
 ;----------------------------------------------------------------------
 ;
+#SingleInstance force
+#NoTrayIcon
+
 ; User configuration
 ;
 
@@ -54,11 +57,11 @@ autoactivateifonlyone =
 
 ; set this to yes if you want to enable tab completion (see above)
 ; it has no effect if firstlettermatch (see below) is enabled
-tabcompletion =
+tabcompletion =yes
 
 ; set this to yes to enable digit shortcuts when there are ten or
 ; less items in the list
-digitshortcuts =
+digitshortcuts =yes
 
 ; set this to yes to enable first letter match mode where the typed
 ; search string must match the first letter of words in the
@@ -73,7 +76,7 @@ firstlettermatch =
 
 ; set this to yes to enable activating the currently selected
 ; window in the background
-activateselectioninbg = 
+activateselectioninbg =yes 
 
 ; number of milliseconds to wait for the user become idle, before
 ; activating the currently selected window in the background
@@ -82,10 +85,10 @@ activateselectioninbg =
 ;
 ; if set to blank the current selection is activated immediately
 ; without delay
-bgactivationdelay = 300
+bgactivationdelay = 500
 
 ; show process name before window title.
-showprocessname =
+showprocessname =yes
 
 ; Close switcher window if the user activates an other window.
 ; It does not work well if activateselectioninbg is enabled, so
@@ -146,7 +149,7 @@ AutoTrim, off
 Gui, +LastFound +AlwaysOnTop -Caption   
 Gui, Color, black,black
 WinSet, Transparent, 180
-Gui,Font,s30 cYellow bold,Calibri
+Gui,Font,s24 cYellow bold,Calibri
 Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w810 h602 AltSubmit -VScroll
 ;end of modifications by ezuk
 
@@ -162,7 +165,7 @@ if filterlist <>
 ;
 ; I never use the CapsLock key, that's why I chose it.
 ;
-CapsLock::
+!Tab::
 search =
 numallwin = 0
 GuiControl,, Edit1
