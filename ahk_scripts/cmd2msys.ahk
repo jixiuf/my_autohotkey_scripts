@@ -1,4 +1,5 @@
 #NoTrayIcon
+#SingleInstance force
 
 ;;;这个函数没用到
 win2msysPath(winPath){
@@ -13,7 +14,7 @@ win2msysPath(winPath){
 ;;前提是msys.bat 在Path 路径下，及msys的相应bin 路径也在Path下
 startMsysHere(){
 send, pwd >%A_Temp%\pwd `n
-sleep 100
+sleep 150
 send msys `n
 FileReadLine,msysPath,%A_Temp%\pwd ,1
 sleep 300
@@ -23,4 +24,4 @@ send clear`n
 
 ;;;;;;;;;;;;;;;;;;
 #IfWinActive ,ahk_class ConsoleWindowClass
-^Return::startMsysHere() 
+^Return::startMsysHere()

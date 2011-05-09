@@ -1,3 +1,4 @@
+#SingleInstance force
 #NoTrayIcon
 
 ;;;在Explorer.exe 程序中定义以下快捷键
@@ -70,7 +71,7 @@ OpenCmdInCurrent()
     full_path = %word_array1%   ; Take the first element from the array
 
     ; Just in case - remove all carriage returns (`r)
-    StringReplace, full_path, full_path, `r, , all  
+    StringReplace, full_path, full_path, `r, , all
 
     IfInString full_path, \
     {
@@ -86,3 +87,43 @@ OpenCmdInCurrent()
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^l::Send {F4}{Escape}
 #IfWinActive
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;在资源管理器中，在隐与不隐间切换（隐藏文件）
+;;主要通过修改注册表
+toggle_hide_file_in_explore(){
+
+;------------------------------------------------------------------------
+; Show hidden folders and files in Windows XP
+;------------------------------------------------------------------------
+; User Key: [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+; Value Name: Hidden
+; Data Type: REG_DWORD (DWORD Value)
+; Value Data: (1 = show hidden, 2 = do not show)
+    RegRead, ShowHidden_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
+    if ShowHidden_Status = 2
+    RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
+    Else
+    RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
+    WinGetClass, CabinetWClass
+    PostMessage, 0x111, 28931,,, A
+    Return
+}
+;;将Ctrl+alt+h 绑定到 toggle_hide_file_in_explore
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^!h::toggle_hide_file_in_explore()
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;在某些窗口中起用Ctrl+n Ctrl+p 代替上下键
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^n::SendInput {Down}
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^p::SendInput {Up}
+
+;;Alt+< 与Alt+> 跳到开头结尾,(选中第一个或最后一个文件)
+;;实际是Shift+Alt+, 与Shift+Alt+.
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+!+,::SendInput {Alt}ea{Home}
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+!+.::SendInput {Alt}ea{End}
