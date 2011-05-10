@@ -16,7 +16,7 @@
 ;
 ; The switcher window can be moved horizontally with the left/right
 ; arrow keys if it blocks the view of windows under it.
-  ;
+;
 ; The switcher can also be operated with the mouse, although it is
 ; meant to be used from the keyboard. A mouse click activates the
 ; currently selected window. Mouse users may want to change the
