@@ -165,7 +165,7 @@ if filterlist <>
 ;
 ; I never use the CapsLock key, that's why I chose it.
 ;
-#Tab::
+F1::
 search =
 numallwin = 0
 GuiControl,, Edit1
@@ -189,7 +189,7 @@ Loop
     if closeifinactivated <>
         settimer, CloseIfInactive, 200
 
-    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np
+    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np{F1}
 
     if closeifinactivated <>
         settimer, CloseIfInactive, off
@@ -201,6 +201,17 @@ Loop
     }
 
     if ErrorLevel = EndKey:escape
+    {
+        Gui, cancel
+
+        ; restore the originally active window if
+        ; activateselectioninbg is enabled
+        if activateselectioninbg <>
+            WinActivate, ahk_id %orig_active_id%
+
+        break
+    }
+    if ErrorLevel = EndKey:F1
     {
         Gui, cancel
 
@@ -734,6 +745,7 @@ ListBoxClick:
 if (A_GuiControlEvent = "Normal"
     and !GetKeyState("Down", "P") and !GetKeyState("Up", "P"))
    and !GetKeyState("LControl", "P") 
+   and !GetKeyState("F1", "P") 
    and !GetKeyState("n", "P") 
    and !GetKeyState("p", "P") 
 
