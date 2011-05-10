@@ -165,6 +165,7 @@ if filterlist <>
 ;
 ; I never use the CapsLock key, that's why I chose it.
 ;
+!`::
 F1::
 search =
 numallwin = 0
@@ -189,7 +190,7 @@ Loop
     if closeifinactivated <>
         settimer, CloseIfInactive, 200
 
-    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np{F1}
+    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np{F1}``{LAlt}
 
     if closeifinactivated <>
         settimer, CloseIfInactive, off
@@ -201,6 +202,29 @@ Loop
     }
 
     if ErrorLevel = EndKey:escape
+    {
+        Gui, cancel
+
+        ; restore the originally active window if
+        ; activateselectioninbg is enabled
+        if activateselectioninbg <>
+            WinActivate, ahk_id %orig_active_id%
+
+        break
+    }
+    if ErrorLevel = EndKey:``
+    {
+        Gui, cancel
+
+        ; restore the originally active window if
+        ; activateselectioninbg is enabled
+        if activateselectioninbg <>
+            WinActivate, ahk_id %orig_active_id%
+
+        break
+    }
+
+    if ErrorLevel = EndKey:LAlt
     {
         Gui, cancel
 
