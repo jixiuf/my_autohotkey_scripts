@@ -5,6 +5,7 @@
 ;Skrommel @2005    www.donationcoders.com/skrommel
 
 
+#NoTrayIcon
 #SingleInstance,Force
 SetBatchLines,-1
 AutoTrim,Off
