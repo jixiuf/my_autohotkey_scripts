@@ -20,5 +20,9 @@ return
 ;;;;;在某些窗口中起用Ctrl+n Ctrl+p 代替上下键
 #IfWinActive ahk_class  TPLSQLDevForm
 ^n::SendInput {Down}
-#IfWinActive ahk_class   TPLSQLDevForm
 ^p::SendInput {Up}
+^q::SendInput {Home}
+^e::SendInput {End}
+^j::SendInput {Return}
+^/::Send ^z
+#IfWinActive ahk_class   TPLSQLDevForm
