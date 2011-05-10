@@ -1,7 +1,5 @@
-; iswitchw - Incrementally switch between windows using substrings
 ;
-; [MODIFIED by ezuk, 3 July 2008, changes noted below. Cosmetics only.]
-; MODIFIED by joseph, 2011/05/09 17:39:42  add support for Ctrl+n ,Ctrl+p.]
+; iswitchw - Incrementally switch between windows using substrings
 ;
 ; Required AutoHotkey version: 1.0.25+
 ;
@@ -18,7 +16,7 @@
 ;
 ; The switcher window can be moved horizontally with the left/right
 ; arrow keys if it blocks the view of windows under it.
-;
+  ;
 ; The switcher can also be operated with the mouse, although it is
 ; meant to be used from the keyboard. A mouse click activates the
 ; currently selected window. Mouse users may want to change the
@@ -85,7 +83,7 @@ activateselectioninbg =yes
 ;
 ; if set to blank the current selection is activated immediately
 ; without delay
-bgactivationdelay = 500
+bgactivationdelay = 600
 
 ; show process name before window title.
 showprocessname =yes
@@ -147,11 +145,13 @@ AutoTrim, off
 
 ;this section modified by ezuk, 03 July 2008
 Gui, +LastFound +AlwaysOnTop -Caption   
-Gui, Color, black,black
+
 WinSet, Transparent, 180
-Gui,Font,s24 cYellow bold,Calibri
-Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w810 h602 AltSubmit -VScroll
-;end of modifications by ezuk
+Gui, Color, black,black
+Gui,Font,s18 cYellow 
+Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w800 h530 AltSubmit -VScroll
+Gui, Add, Text, x6 y510 w800 h360, Search`:
+Gui, Add, Edit, x90 y510 w500 h30,
 
 if filterlist <>
 {
@@ -165,7 +165,7 @@ if filterlist <>
 ;
 ; I never use the CapsLock key, that's why I chose it.
 ;
-!`::
+!Tab::
 F1::
 search =
 numallwin = 0
@@ -175,7 +175,8 @@ GoSub, RefreshWindowList
 WinGet, orig_active_id, ID, A
 prev_active_id = %orig_active_id%
 
-Gui, Show, Center h600 w800, Window Switcher
+Gui, Show, Center h550 w800, Window Switcher
+
 ; If we determine the ID of the switcher window here then
 ; why doesn't it appear in the window list when the script is
 ; run the first time? (Note that RefreshWindowList has already
@@ -190,7 +191,7 @@ Loop
     if closeifinactivated <>
         settimer, CloseIfInactive, 200
 
-    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np{F1}``{LAlt}
+    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np{LAlt}
 
     if closeifinactivated <>
         settimer, CloseIfInactive, off
@@ -212,30 +213,8 @@ Loop
 
         break
     }
-    if ErrorLevel = EndKey:``
-    {
-        Gui, cancel
-
-        ; restore the originally active window if
-        ; activateselectioninbg is enabled
-        if activateselectioninbg <>
-            WinActivate, ahk_id %orig_active_id%
-
-        break
-    }
-
+    
     if ErrorLevel = EndKey:LAlt
-    {
-        Gui, cancel
-
-        ; restore the originally active window if
-        ; activateselectioninbg is enabled
-        if activateselectioninbg <>
-            WinActivate, ahk_id %orig_active_id%
-
-        break
-    }
-    if ErrorLevel = EndKey:F1
     {
         Gui, cancel
 
@@ -342,6 +321,7 @@ Loop
         GoSuB MoveSwitcher
         continue
     }
+
     ; FIXME: probably other error level cases
     ; should be handled here (interruption?)
 
@@ -531,7 +511,8 @@ RefreshWindowList:
         }
 
     ; sort the list alphabetically
-    Sort, winlist, D|
+    ;;I don't like sort it alphabetically 
+   ;;    Sort, winlist, D|
 
     ; add digit shortcuts if there are ten or less windows
     ; in the list and digit shortcuts are enabled
