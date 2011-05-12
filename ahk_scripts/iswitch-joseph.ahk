@@ -46,6 +46,12 @@
 #SingleInstance force
 #NoTrayIcon
 
+Process Priority,,High
+SetBatchLines, -1
+
+WS_EX_APPWINDOW = 0x40000
+WS_EX_TOOLWINDOW = 0x80
+GW_OWNER = 4
 ; User configuration
 ;
 
@@ -149,7 +155,8 @@ Gui, +LastFound +AlwaysOnTop -Caption
 WinSet, Transparent, 180
 Gui, Color, black,black
 Gui,Font,s18 cYellow 
-Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w800 h530 AltSubmit -VScroll
+;;Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w800 h530 AltSubmit -VScroll
+Gui, Add, ListView, x-2 y-2 w800 h530 -VScroll -E0x200 AltSubmit -Hdr -Multi  Count10 gListBoxClick  vindex, Icon|title
 Gui, Add, Text, x6 y510 w800 h360, Search`:
 Gui, Add, Edit, x90 y510 w500 h30,
 
@@ -349,7 +356,7 @@ Loop
 
     search = %search%%input%
     GuiControl,, Edit1, %search%
-    GoSub, RefreshWindowList
+    GoSub, RefreshWindowList 
 }
 
 Gosub, CleanExit
@@ -539,7 +546,7 @@ RefreshWindowList:
         }
 
     ; strip window IDs from the sorted list
-    titlelist =
+    titlelist  := Object()
     arrayindex = 1
 
     loop, parse, winlist, |
@@ -547,18 +554,71 @@ RefreshWindowList:
         stringgetpos, pos, A_LoopField, `r
 
         stringleft, title, A_LoopField, %pos%
-        titlelist = %titlelist%|%title%
+        ;; titlelist = %titlelist%|%title%
+        titlelist.Insert(title)
 
         pos += 2 ; skip the separator char
         stringmid, id, A_LoopField, %pos%, 10000
         idarray%arrayindex% = %id%
         ++arrayindex
     }
+  ImageListID1 := IL_Create(numwin,1,1)
+  ; Attach the ImageLists to the ListView so that it can later display the icons:
+  LV_SetImageList(ImageListID1, 1)
+LV_Delete()    
+for i ,ele in titlelist
+{
+  wid := idarray%i%
+ 
+    WinGet, es, ExStyle, ahk_id %wid%
+  Use_Large_Icons_Current =1
+if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_EX_TOOLWINDOW ) )
+             or ( es & WS_EX_APPWINDOW ) ){
+    ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
+    If Use_Large_Icons_Current =1
+      {
+      SendMessage, 0x7F, 1, 0,, ahk_id %wid%
+      h_icon := ErrorLevel
+      }
+    If ( ! h_icon )
+      {
+      SendMessage, 0x7F, 2, 0,, ahk_id %wid%
+      h_icon := ErrorLevel
+        If ( ! h_icon )
+          {
+          SendMessage, 0x7F, 0, 0,, ahk_id %wid%
+          h_icon := ErrorLevel
+          If ( ! h_icon )
+            {
+            If Use_Large_Icons_Current =1
+              h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; GCL_HICON is -14
+            If ( ! h_icon )
+              {
+              h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
+              If ( ! h_icon )
+                h_icon := DllCall( "LoadIcon", "uint", 0, "uint", 32512 ) ; IDI_APPLICATION is 32512
+              }
+            }
+          }
+        }
+ ; Add the HICON directly to the small-icon and large-icon lists.
+ ; Below uses +1 to convert the returned index from zero-based to one-based:
+ IconNumber := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon) + 1
 
+ LV_Add("Icon" . IconNumber, i, ele) ; spaces added for layout
+ }
+    WinGetClass, Win_Class, ahk_id %wid%
+    If Win_Class = #32770 ; fix for displaying control panel related windows (dialog class) that aren't on taskbar
+      {
+      IconNumber := IL_Add(ImageListID1, "C:\WINDOWS\system32\shell32.dll" , 217) ; generic control panel icon
+      LV_Add("Icon" . IconNumber,i ,ele)
+      }
+}
     ; show the list
-    GuiControl,, ListBox1, %titlelist%
-    GuiControl, Choose, ListBox1, 1
-
+;;    GuiControl,, ListBox1, %titlelist%
+;;    GuiControl, Choose, ListView1, 1
+    LV_Modify(1, "Select") ;;select the first row
+    LV_Modify(1, "Focus") ;; focus the first row
     if numwin = 1
         if autoactivateifonlyone <>
         {
@@ -660,9 +720,9 @@ return
 ; Activate selected window
 ;
 ActivateWindow:
-
 Gui, submit
-stringtrimleft, window_id, idarray%index%, 0
+rowNum:= LV_GetNext(0,"F")
+stringtrimleft, window_id, idarray%rowNum%, 0
 WinActivate, ahk_id %window_id%
 
 return
@@ -749,12 +809,10 @@ return
 ListBoxClick:
 if (A_GuiControlEvent = "Normal"
     and !GetKeyState("Down", "P") and !GetKeyState("Up", "P"))
-   and !GetKeyState("LControl", "P") 
-   and !GetKeyState("F1", "P") 
-   and !GetKeyState("n", "P") 
-   and !GetKeyState("p", "P") 
+    send ,a
+ ;;   GoSub, ActivateWindow
+  
 
-    send, {enter}
 return
 
 ;----------------------------------------------------------------------
@@ -796,3 +854,48 @@ ifwinnotactive, ahk_id %switcher_id%
     send, {esc}
 
 return
+
+;; Get_Window_Icon(wid, Use_Large_Icons_Current) ; (window id, whether to get large icons)
+;; {
+;;   Local NR_temp, h_icon
+;;   Window_Found_Count += 1
+;;   ; check status of window - if window is responding or "Not Responding"
+;;   NR_temp =0 ; init
+;;   h_icon =
+;;   Responding := DllCall("SendMessageTimeout", "UInt", wid, "UInt", 0x0, "Int", 0, "Int", 0, "UInt", 0x2, "UInt", 150, "UInt *", NR_temp) ; 150 = timeout in millisecs
+;;   If (Responding)
+;;     {
+;;     ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
+;;     If Use_Large_Icons_Current =1
+;;       {
+;;       SendMessage, 0x7F, 1, 0,, ahk_id %wid%
+;;       h_icon := ErrorLevel
+;;       }
+;;     If ( ! h_icon )
+;;       {
+;;       SendMessage, 0x7F, 2, 0,, ahk_id %wid%
+;;       h_icon := ErrorLevel
+;;         If ( ! h_icon )
+;;           {
+;;           SendMessage, 0x7F, 0, 0,, ahk_id %wid%
+;;           h_icon := ErrorLevel
+;;           If ( ! h_icon )
+;;             {
+;;             If Use_Large_Icons_Current =1
+;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; GCL_HICON is -14
+;;             If ( ! h_icon )
+;;               {
+;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
+;;               If ( ! h_icon )
+;;                 h_icon := DllCall( "LoadIcon", "uint", 0, "uint", 32512 ) ; IDI_APPLICATION is 32512
+;;               }
+;;             }
+;;           }
+;;         }
+;;       }
+;;   If ! ( h_icon = "" or h_icon = "FAIL") ; Add the HICON directly to the icon list
+;;   	Gui_Icon_Number := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon)
+;;   Else	; use a generic icon
+;;   	Gui_Icon_Number := IL_Add(ImageListID1, "shell32.dll" , 3)
+;; }
+
