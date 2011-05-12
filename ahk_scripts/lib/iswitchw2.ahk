@@ -1,8 +1,6 @@
 ;
 ; iswitchw - Incrementally switch between windows using substrings
 ;
-; [MODIFIED by ezuk, 3 July 2008, changes noted below. Cosmetics only.]
-;
 ; Required AutoHotkey version: 1.0.25+
 ;
 ; When this script is triggered via its hotkey the list of titles of
@@ -73,7 +71,7 @@ firstlettermatch =
 
 ; set this to yes to enable activating the currently selected
 ; window in the background
-activateselectioninbg = 
+activateselectioninbg =
 
 ; number of milliseconds to wait for the user become idle, before
 ; activating the currently selected window in the background
@@ -102,7 +100,7 @@ if activateselectioninbg <>
 ; List of subtsrings separated with pipe (|) characters (e.g. carpe|diem).
 ; Window titles containing any of the listed substrings are filtered out
 ; from the list of windows.
-filterlist = asticky|blackbox
+filterlist =
 
 ; Set this yes to update the list of windows every time the contents of the
 ; listbox is updated. This is usually not necessary and it is an overhead which
@@ -142,13 +140,9 @@ if nomatchsound <>
 
 AutoTrim, off
 
-;this section modified by ezuk, 03 July 2008
-Gui, +LastFound +AlwaysOnTop -Caption   
-Gui, Color, black,black
-WinSet, Transparent, 180
-Gui,Font,s30 cYellow bold,Calibri
-Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w810 h602 AltSubmit -VScroll
-;end of modifications by ezuk
+Gui, Add, ListBox, vindex gListBoxClick x6 y11 w300 h250 AltSubmit
+Gui, Add, Text, x6 y264 w50 h20, Search`:
+Gui, Add, Edit, x66 y261 w240 h20,
 
 if filterlist <>
 {
@@ -172,7 +166,8 @@ GoSub, RefreshWindowList
 WinGet, orig_active_id, ID, A
 prev_active_id = %orig_active_id%
 
-Gui, Show, Center h600 w800, Window Switcher
+Gui, Show, Center h294 w313, Window Switcher
+
 ; If we determine the ID of the switcher window here then
 ; why doesn't it appear in the window list when the script is
 ; run the first time? (Note that RefreshWindowList has already
@@ -241,7 +236,6 @@ Loop
     if ErrorLevel = EndKey:pgup
     {
         Send, {pgup}
-
         GoSuB ActivateWindowInBackgroundIfEnabled
         continue
     }

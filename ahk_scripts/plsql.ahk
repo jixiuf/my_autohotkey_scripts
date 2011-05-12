@@ -1,11 +1,9 @@
-^n::SendInput {Down}
-^p::SendInput {Up}
-LAlt & `::ShiftAltTab
+#SingleInstance force
+#NoTrayIcon
 
 
 ;;作用：在plsql中将F7影射为执行光标所在行的语句
 SetBatchLines -1 ;速度最大化
-#SingleInstance force
 #NoEnv  ; 
 SendMode Input  
 SetWorkingDir %A_ScriptDir%
@@ -17,3 +15,14 @@ return
 
 
  
+
+
+;;;;;在某些窗口中起用Ctrl+n Ctrl+p 代替上下键
+#IfWinActive ahk_class  TPLSQLDevForm
+^n::SendInput {Down}
+^p::SendInput {Up}
+^q::SendInput {Home}
+^e::SendInput {End}
+^j::SendInput {Return}
+^/::Send ^z
+#IfWinActive ahk_class   TPLSQLDevForm

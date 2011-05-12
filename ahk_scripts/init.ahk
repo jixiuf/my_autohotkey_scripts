@@ -15,3 +15,5 @@ Run %A_ScriptDir%\toggleTaskBar.ahk
 Run %A_ScriptDir%\MoveInactiveWin.ahk
 Run %A_ScriptDir%\plsql.ahk
 Run %A_ScriptDir%\DoOver.ahk
+Run %A_ScriptDir%\Console.ahk
+

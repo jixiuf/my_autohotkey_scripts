@@ -1,3 +1,4 @@
+#NoTrayIcon
 ;MoveInactiveWin.ahk
 ; Move a window without activating it.
 ;Skrommel @2006
