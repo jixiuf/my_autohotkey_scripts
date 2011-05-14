@@ -1,18 +1,18 @@
-;
 ; iswitchw - Incrementally switch between windows using substrings
 ;
 ; Required AutoHotkey version: 1.0.25+
 ;
 ; When this script is triggered via its hotkey the list of titles of
 ; all visible windows appears. The list can be narrowed quickly to a
-; particular window by typing a substring of a window title.
+; particular window by typing one or more substring of a window title.
+; separated by empty space.
 ;
 ; When the list is narrowed the desired window can be selected using
-; the cursor keys and Enter. If the substring matches exactly one
-; window that window is activated immediately (configurable, see the
-; "autoactivateifonlyone" variable).
+; the cursor keys, Enter,and Ctrl+j. If the substring matches exactly
+; onewindow that window is activated immediately (configurable, see
+; the  "autoactivateifonlyone" variable).
 ;
-; The window selection can be cancelled with Esc.
+; The window selection can be cancelled with Esc and Ctrl+g.
 ;
 ; The switcher window can be moved horizontally with the left/right
 ; arrow keys if it blocks the view of windows under it.
@@ -35,7 +35,17 @@
 ;
 ; This feature can be confusing for novice users, so it is disabled
 ; by default.
+; 
 ;
+; you can use UP,Ctrl+P Alt+p Shift+Tab,Alt+Shift+Tab
+; to select previous item
+; and use Down ,Ctrl+n Alt+n  Tab ,Alt+Tab  to select next item .
+;
+; Ctrl+u will clear all search string in textfield ,
+; Ctrl+h ,and backspace will delete a char.
+; Ctrl+backspace will delete last word in textfield.
+; enter ,and Ctrl+j for select
+; escape ,and  Ctrl+g for cancel
 ;
 ; For the idea of this script the credit goes to the creators of the
 ; iswitchb package for the Emacs editor
@@ -44,7 +54,8 @@
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-#NoTrayIcon
+;#NoTrayIcon
+#InstallKeybdHook
 
 Process Priority,,High
 SetBatchLines, -1
@@ -154,10 +165,10 @@ Gui,+LastFound +AlwaysOnTop -Caption ToolWindow
 WinSet, Transparent, 230
 Gui, Color,black,black
 Gui,Font,s13 c7cfc00 bold
-;;Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w800 h530 AltSubmit -VScroll
+;;Gui, Add, ListView, vindex gListViewClick x-2 y-2 w800 h530 AltSubmit -VScroll
 Gui, Add, Text,     x10  y10 w800 h30, Search`:
 Gui, Add, Edit,     x90 y5 w500 h30,
-Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 gListBoxClick, Icon|title
+Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 gListViewClick, Icon|title
 
 if filterlist <>
 {
@@ -302,7 +313,7 @@ Loop
 
     if ErrorLevel = EndKey:n
       {
-       if (GetKeyState("LControl", "P")=1){
+       if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt", "P")=1){
            GoSuB SelectNext
            continue
        }else{
@@ -311,7 +322,7 @@ Loop
      }
       if ErrorLevel = EndKey:p
       {
-       if (GetKeyState("LControl", "P")=1){
+       if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt", "P")=1){
            GoSuB SelectPrevious
            continue
         }else{
@@ -368,7 +379,7 @@ Loop
 
                  LV_Modify(input, "Select") ;;select last line
                  LV_Modify(input, "Focus") ;; focus last line
-;;                GuiControl, choose, ListBox1, %input%
+;;                GuiControl, choose, ListView1, %input%
                 GoSub, ActivateWindow
                 break
             }
@@ -817,6 +828,8 @@ ActivateWindow:
 Gui, submit
 rowNum:= LV_GetNext(0)
 stringtrimleft, window_id, idarray%rowNum%, 0
+  IL_Destroy(ImageListID1) ; destroy gui, listview and associated icon imagelist.
+  LV_Delete()
 WinActivate, ahk_id %window_id%
 
 return
@@ -898,12 +911,11 @@ return
 ;
 ; Handle mouse click events on the list box
 ;
-ListBoxClick:
-if (A_GuiControlEvent = "Normal"
-    and !GetKeyState("Down", "P") and !GetKeyState("Up", "P"))
-    GoSub, ActivateWindow
-  
-
+ListViewClick:
+if (A_GuiControlEvent = "Normal")
+;;    GoSub, ActivateWindow
+send ,{enter}
+;;    GoSub, BgActivationTimer
 return
 
 ;----------------------------------------------------------------------
@@ -973,7 +985,7 @@ return
 ;;           If ( ! h_icon )
 ;;             {
 ;;             If Use_Large_Icons_Current =1
-;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; GCL_HICON is -14
+;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; CL_HICON is -14
 ;;             If ( ! h_icon )
 ;;               {
 ;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
