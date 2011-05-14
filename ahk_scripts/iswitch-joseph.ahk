@@ -88,7 +88,7 @@ firstlettermatch =
 
 ; set this to yes to enable activating the currently selected
 ; window in the background
-activateselectioninbg =yes
+activateselectioninbg =
 
 ; number of milliseconds to wait for the user become idle, before
 ; activating the currently selected window in the background
@@ -105,7 +105,7 @@ showprocessname =yes
 ; Close switcher window if the user activates an other window.
 ; It does not work well if activateselectioninbg is enabled, so
 ; currently they cannot be enabled together.
-closeifinactivated =
+closeifinactivated =yes
 
 if activateselectioninbg <>
     if closeifinactivated <>
@@ -122,7 +122,7 @@ filterlist = asticky|blackbox
 ; Set this yes to update the list of windows every time the contents of the
 ; listbox is updated. This is usually not necessary and it is an overhead which
 ; slows down the update of the listbox, so this feature is disabled by default.
-dynamicwindowlist =yes
+dynamicwindowlist =
 
 ; path to sound file played when the user types a substring which
 ; does not match any of the windows
