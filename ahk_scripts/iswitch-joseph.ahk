@@ -54,7 +54,7 @@
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-;#NoTrayIcon
+#NoTrayIcon
 #InstallKeybdHook
 
 Process Priority,,High
