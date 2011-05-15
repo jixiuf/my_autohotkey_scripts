@@ -54,7 +54,7 @@
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-#NoTrayIcon
+;;#NoTrayIcon
 #InstallKeybdHook
 
 Process Priority,,High
@@ -99,8 +99,6 @@ activateselectioninbg =
 ; without delay
 bgactivationdelay = 600
 
-; show process name before window title.
-showprocessname =yes
 
 ; Close switcher window if the user activates an other window.
 ; It does not work well if activateselectioninbg is enabled, so
@@ -168,7 +166,7 @@ Gui,Font,s13 c7cfc00 bold
 ;;Gui, Add, ListView, vindex gListViewClick x-2 y-2 w800 h530 AltSubmit -VScroll
 Gui, Add, Text,     x10  y10 w800 h30, Search`:
 Gui, Add, Edit,     x90 y5 w500 h30,
-Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 gListViewClick, Icon|title
+Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 gListViewClick, index|title|proc
 
 if filterlist <>
 {
@@ -412,6 +410,7 @@ RefreshWindowList:
         numallwin = 0
 
         WinGet, id, list, , , Program Manager
+
         Loop, %id%
         {
             StringTrimRight, this_id, id%a_index%, 0
@@ -425,20 +424,6 @@ RefreshWindowList:
             if switcher_id = %this_id%
                 continue
 
-            ; show process name if enabled
-            if showprocessname <>
-            {
-                WinGet, procname, ProcessName, ahk_id %this_id%
-
-                stringgetpos, pos, procname, .
-                if ErrorLevel <> 1
-                {
-                    stringleft, procname, procname, %pos%
-                }
-
-         ;;       stringupper, procname, procname
-                title = %procname%   : %title%
-            }
 
             ; don't add titles which match any of the filters
             if filterlist <>
@@ -473,10 +458,8 @@ RefreshWindowList:
     }
 
     ; filter the window list according to the search criteria
-
     winlist =
     numwin = 0
-
     Loop, %numallwin%
     {
         StringTrimRight, title, allwinarray%a_index%, 0
@@ -487,25 +470,21 @@ RefreshWindowList:
         if search <>
             if firstlettermatch =
             {
-            ;; StringReplace, regexpSearch, search, %A_Space%,.*,All
-            ;; pos:= RegExMatch(title,regexpSearch) 
-            ;;    if pos<1
-            ;;    {
-            ;;    continue
-            ;;    }
-            matched=yes
-            Loop,parse,search ,%A_Space%,%A_Space%%A_TAB%
-            {
-                if title not contains %A_LoopField%,
-                { matched=no
-                  break
+                matched=yes
+                procName:=getProcessname(this_id)
+                
+                titleAndProcName=%title%%procName%
+                Loop,parse,search ,%A_Space%,%A_Space%%A_TAB%
+                {
+                    if titleAndProcName not contains %A_LoopField%,
+                    { matched=no
+                      break
+                    }
                 }
-            }
-            if matched=no
-            {
-               continue
-            }
-            
+              if matched=no
+               {
+                  continue
+               }
             }
             else
             {
@@ -541,88 +520,27 @@ RefreshWindowList:
                 if match =
                     continue    ; no match
             }
-
-        if winlist <>
-            winlist = %winlist%|
-        winlist = %winlist%%title%`r%this_id%
-
         numwin += 1
         winarray%numwin% = %title%
+        idarray%numwin%= %this_id%
     }
-
-    ; if the pattern didn't match any window
-    if numwin = 0
-        ; if the search string is empty then we can't do much
-        if search =
-        {
-            Gui, cancel
-            Gosub, CleanExit
-        }
-        ; delete the last character
-        else
-        {
-            if nomatchsound <>
-                SoundPlay, %nomatchsound%
-
-            GoSub, DeleteSearchChar
-            return
-        }
-
     ; sort the list alphabetically
     ;;I don't like sort it alphabetically 
-   ;;    Sort, winlist, D|
+    ;;Sort, winlist, D|
 
-    ;; ; add digit shortcuts if there are ten or less windows
-    ;; ; in the list and digit shortcuts are enabled
-    ;; if digitshortcuts <>
-    ;;     if numwin <= 10
-    ;;     {
-    ;;         digitlist =
-    ;;         digit = 1
-    ;;         loop, parse, winlist, |
-    ;;         {
-    ;;             ; FIXME: windows with empty title?
-    ;;             if A_LoopField <>
-    ;;             {
-    ;;                 if digitlist <>
-    ;;                     digitlist = %digitlist%|
-    ;;                 digitlist = %digitlist%%digit%%A_Space%%A_Space%%A_Space%%A_LoopField%
 
-    ;;                 digit += 1
-    ;;                 if digit = 10
-    ;;                     digit = 0
-    ;;             }
-    ;;         }
-    ;;         winlist = %digitlist%
-    ;;     }
-
-    ; strip window IDs from the sorted list
-    titlelist  := Object()
-    arrayindex = 1
-
-    loop, parse, winlist, |
-    {
-        stringgetpos, pos, A_LoopField, `r
-
-        stringleft, title, A_LoopField, %pos%
-        ;; titlelist = %titlelist%|%title%
-        titlelist.Insert(title)
-
-        pos += 2 ; skip the separator char
-        stringmid, id, A_LoopField, %pos%, 10000
-        idarray%arrayindex% = %id%
-        ++arrayindex
-    }
-  ImageListID1 := IL_Create(numwin,1,1)
-  ; Attach the ImageLists to the ListView so that it can later display the icons:
-  LV_SetImageList(ImageListID1, 1)
+ImageListID1 := IL_Create(numwin,1,1)
+; Attach the ImageLists to the ListView so that it can later display the icons:
+LV_SetImageList(ImageListID1, 1)
 LV_Delete()
 empty=0
 iconIdArray:=Object()
+iconTitleArray:=Object()
 iconIdNum=0
-for i ,ele in titlelist
+loop,%numwin%,
 {
-     wid := idarray%i%
+  ele:=winarray%a_index%
+     wid := idarray%a_index%
      WinGet, es, ExStyle, ahk_id %wid%
      Use_Large_Icons_Current =1
 if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_EX_TOOLWINDOW ) )
@@ -656,11 +574,12 @@ if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_E
         }
                 if (h_icon){
                 iconIdArray.Insert(wid)
+                iconTitleArray.Insert(winarray%a_index%)
                 iconIdNum+=1
                  ; Add the HICON directly to the small-icon and large-icon lists.
                  ; Below uses +1 to convert the returned index from zero-based to one-based:
                  IconNumber := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon) + 1
-                 LV_Add("Icon" . IconNumber, i-empty, ele) ; spaces added for layout
+                 LV_Add("Icon" . IconNumber, a_index-empty,ele, getProcessName(wid)) ; spaces added for layout
                }else{
                empty +=1
                }
@@ -668,19 +587,39 @@ if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_E
              WinGetClass, Win_Class, ahk_id %wid%
              If Win_Class = #32770 ; fix for displaying control panel related windows (dialog class) that aren't on taskbar
               {
+                 iconTitleArray.Insert(winarray%a_index%)
                  iconIdArray.Insert(wid)
                  iconIdNum+=1
                  IconNumber := IL_Add(ImageListID1, "C:\WINDOWS\system32\shell32.dll" , 217) ; generic control panel icon
-                 LV_Add("Icon" . IconNumber,i-empty ,ele)
+                 LV_Add("Icon" . IconNumber,a_index-empty ,ele,getProcessName(wid))
               }else{
                    empty +=1
               }
              }
 }
+
 numwin:=iconIdNum
 for i ,ele in iconIdArray{
    idarray%i%:=ele
+   winarray%i%:=iconTitleArray[i]
 }
+    ; if the pattern didn't match any window
+    if numwin = 0
+        ; if the search string is empty then we can't do much
+        if search =
+        {
+            Gui, cancel
+            Gosub, CleanExit
+        }
+        ; delete the last character
+        else
+        {
+            if nomatchsound <>
+                SoundPlay, %nomatchsound%
+
+            GoSub, DeleteSearchChar
+            return
+        }
  if numwin >1
  {
     LV_Modify(2, "Select") ;;select the first row
@@ -689,6 +628,19 @@ for i ,ele in iconIdArray{
     LV_Modify(1, "Select") ;;select the secnd row
     LV_Modify(1, "Focus") ;; focus the second row
  }
+;;LV_ModifyCol()  ; Auto-size each column to fit its contents.
+LV_ModifyCol(1,48)
+LV_ModifyCol(2,652)
+LV_ModifyCol(3,100)
+;;LV_ModifyCol(3,Auto)
+    ;; Col_1 =Auto ; icon column
+    ;; Col_2 =0 ; hidden column for row number
+    ;; ; col 3 is autosized based on other column sizes
+    ;; Col_4 =Auto ; exe
+    ;; Col_5 =AutoHdr ; State
+    ;; Col_6 =Auto ; OnTop
+    ;; Col_7 =Auto ; Status - e.g. Not Responding
+
     if numwin = 1
         if autoactivateifonlyone <>
         {
@@ -715,15 +667,12 @@ for i ,ele in iconIdArray{
    
     if numwin = 1
         return
-
-    loop
+     loop
     {
         nextchar =
-
         loop, %numwin%
         {
             stringtrimleft, title, winarray%a_index%, 0
-
             if nextchar =
             {
                 substr = %search%%completion%
@@ -1040,3 +989,16 @@ CancelSwitch:
         if activateselectioninbg <>
             WinActivate, ahk_id %orig_active_id%
 return
+
+
+getProcessname(wid){
+       ; show process name if enabled
+           WinGet, procname, ProcessName, ahk_id %wid%
+           stringgetpos, pos, procname, .
+           if ErrorLevel <> 1
+           {
+               stringleft, procname, procname, %pos%
+           }
+    ;;       stringupper, procname, procname
+    return procname
+}
