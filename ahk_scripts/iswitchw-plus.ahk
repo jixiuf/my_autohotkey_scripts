@@ -1,5 +1,5 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Joseph 2011-05-16 12:23:20>
+; Time-stamp: <Joseph 2011-05-16 12:28:35>
 ; you can reach me here :<jixiuf@gmail.com>
 ; Required AutoHotkey version: 1.0.25+
 
@@ -201,8 +201,8 @@ activateselectioninbg =
 ;
 ; if set to blank the current selection is activated immediately
 ; without delay
-;;这个是设置停留多长时间时才进行预览，单位毫秒，这个选项只有在
-activateselectioninbg  不为空的时候有效
+; 这个是设置停留多长时间时才进行预览，单位毫秒，这个选项只有在
+; activateselectioninbg  不为空的时候有效
 
 bgactivationdelay = 600
 
