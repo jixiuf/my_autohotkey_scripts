@@ -17,4 +17,5 @@ Run %A_ScriptDir%\DoOver.ahk
 Run %A_ScriptDir%\Console.ahk
 Run %A_ScriptDir%\iswitchw-plus.ahk
 Run %A_ScriptDir%\diaglog.ahk
+Run %A_ScriptDir%\win-move-resize.ahk
 
