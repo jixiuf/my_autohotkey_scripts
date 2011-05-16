@@ -1,5 +1,5 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Administrator 2011-05-16 12:53:08>
+; Time-stamp: <Administrator 2011-05-16 14:14:57>
 ; you can reach me here :<jixiuf@gmail.com>
 ; Required AutoHotkey version: 1.0.25+
 
@@ -1138,26 +1138,15 @@ getProcessname(wid){
     return procname
 }
 ;----------------------------------------------------------------------------
-previousWinId4toggleStatus=
-previousWinStatus4toggleStatus=1
 toggleWinStatus:
     rowNum:= LV_GetNext(0)
     stringtrimleft, window_id, idarray%rowNum%, 0
-   if (previousWinId4toggleStatus=window_id)
-   {
-      if (previousWinStatus4toggleStatus=1){
-         WinMinimize , ahk_id %window_id% 
-         previousWinStatus4toggleStatus=2
-      }else if (previousWinStatus4toggleStatus=2){
-         WinMaximize , ahk_id %window_id% 
-          previousWinStatus4toggleStatus=3
-      }else{
+       WinGet,wstatus,MinMax,ahk_id %window_id%
+      if (wstatus=1){ ;;maximized ,
          WinRestore ,ahk_id %window_id% 
-         previousWinStatus4toggleStatus=1
+      }else if (wstatus=-1){ ;;minimized 
+         WinMaximize , ahk_id %window_id% 
+      }else{
+         WinMinimize , ahk_id %window_id% 
       }
-   }else{
-       WinMaximize , ahk_id %window_id% 
-       previousWinStatus4toggleStatus=max
-   }
-   previousWinId4toggleStatus:=window_id
 return 
