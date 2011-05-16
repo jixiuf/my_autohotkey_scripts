@@ -1,7 +1,86 @@
-; Time-stamp: <Administrator 2011-05-16 01:12:42>
-; iswitchw - Incrementally switch between windows using substrings
-;
+; iswitchw-plus - Incrementally switch between windows using substrings
+; Time-stamp: <Joseph 2011-05-16 12:23:20>
+; you can reach me here :<jixiuf@gmail.com>
 ; Required AutoHotkey version: 1.0.25+
+
+
+; 中文注释，
+; 首先说一说iswitch 是什么以及iswitchw.ahk的由来
+; iswitchb.el 是GNU/Emacs 编辑器的一个功能，
+; 它用来在你所有打开的文件(Emacs称之为buffer)中进行切换，你只需要输入某个文件名
+; 的一部分，它就会只列出文件名匹配你输入的内容的文件供你选择
+; 比如，你打开的文件有hello.txt iloveyou.txt ihateyou.txt
+; 然后你输入lo ,那么只有hello.txt iloveyou.txt 会被列出，因为它们中包含lo
+; 然后你继续输入lov ，此时只列出iloveyou.txt ,回车即可选中这个打开的文件.
+; 这是iswitch.el 的功能，而iswitchw.ahk 的灵感就来于此，
+; 它不再是选择文件，而是选择某个你打开的窗口.
+; keyboardfreak 由此开发了iswitchw.ahk 。我虽然用过GNU/Emacs,但是没使用
+; iswitch.el 而是用了一个功能更强大的anything.el
+; 所有我做的修改，其键绑定更像anything.el的键键绑定，而不是iswitch.el
+; 所以对于是将这个文件命名为iswitchw-plus 是很勉强的，将它叫做
+; anything-switch-window.ahk 或许更好.
+
+; 其实你不必非得输入到只剩下一个可选项时，才能回车选中，
+; 也可以在多个选项中使用上下键，或者Ctl+n, Ctrl+p 选中你想选中的，然后回车即可
+
+;
+; iswitchw.ahk 最初是由keyboardfreak 开发的，后来ezuk对它做了一点
+; 简单的修改，主要是界面的修改，功能上的改动几乎无.这两个版本的链接下面会给出。
+; 然后我在这两个版本上进行了很大的改动，
+; keyboardfreak 的版本快捷键只支持像down up 这样的单键，而Ctrl+n Ctrl+p
+; 这样的组合键不支持，另外 keyboardfreak的版本，使用listbox 显示所有的窗口title
+; 只能显示一列，我使用了listview ,可以将 title name 及process name 在不同的列
+; 进行显示,另外他的版本不显示图标，我增加了图标显示的功能,这样直观一些
+; 
+; keyboardfreak把键绑定到CapsLK键，我则默认就使用Alt+Tab
+; keyboardfreak只能使用上下键进行选择，我的则可以使用
+; UP,Ctrl+P Alt+p Shift+Tab,Alt+Shift+Tab 选择上一个
+; Down ,Ctrl+n Alt+n  Tab ,Alt+Tab  选择下一个
+;
+; 因为用惯了Emacs ，习惯让Ctrl+j 做回车键该做的事，
+; 所以Ctrl+j 功能与回车一样
+; Ctrl+g 具有escape 的功能，cancel
+
+; 因为有个搜索框，所以对搜索框的编辑功能进行了一点增强
+; ctrl+u 清空搜索框，类似于bash 的键绑定
+; Ctrl+h 功能与backspace 一样
+; Ctrl+backspace,Alt+backspace删除一个关键字
+
+
+; 另外anything.el 与iswitch.el 的不同是，iswitch.el 好像只能使用一个关键字
+; 进行过滤，而anything.el可以使用多个关键字，像google 一样，用空格将关键字隔开
+; 即可,所以此次修改增加了多个关键字的功能.
+; 另外下面的几点的增强，更是"anything.el" 的思考方法，
+; 其实我们对于switcher选中的窗口，我们不仅可以将其激活还可以将其关闭，最大化最小化
+; 所以除了回车激活选中的窗口外，Ctrl+k 会close 选中的窗口,
+; 而Ctrl+s 会在最大化最小化正常显示三个状态间切换
+; 
+; 另外 keyboardfreak的版本就具有的功能，就是Tab键的补全,这个实例功能不用多说
+; 是linux的老传统,emacs ,bash 等都具备，但是Windows用户可能不太清楚，所以简单说一下
+; 假如用两个文件iloveyou1.txt iloveyou2.txt
+; 这个时候如果你输入了lo，这两个文件都匹配，你需要再输入veyou，变成loveyou
+; 之后才能输入它们的不同点1 and 2 , 所以对于veyou 的输入根本没法区分这两个文件
+; 所以当你输入lo后，它会自动分析出veyou这几个字是它们共同的部分
+; lo[veyou]
+; 这个时候你按一下Tab键，它会自动补全上veyou 变成loveyou
+; loveyou ,这个时候你只需要输入1 或者2 选中loveyou1 loveyou2 即可
+;
+; 另外一个原版就有的功能，可以用数字键选中相应的条目。可以选择不启用此功能.
+; 
+; 
+; keyboardfreak's  version
+;     http://www.autohotkey.com/forum/viewtopic.php?t=1040
+;
+; ezuk's version
+;     http://www.autohotkey.com/forum/viewtopic.php?t=33353;
+; and this file ,my version is hosted on github.com
+;     https://github.com/jixiuf/my_autohotkey_scripts/blob/master/ahk_scripts/iswitchw-plus.ahk
+;
+;    about iswitchb.el
+; http://cvs.savannah.gnu.org/viewvc/*checkout*/emacs/emacs/lisp/iswitchb.el
+;    about "anything.el" you can find it here .
+; http://www.emacswiki.org/emacs/Anything
+
 ;
 ; When this script is triggered via its hotkey the list of titles of
 ; all visible windows appears. The list can be narrowed quickly to a
@@ -12,7 +91,9 @@
 ; the cursor keys, Enter,and Ctrl+j. If the substring matches exactly
 ; onewindow that window is activated immediately (configurable, see
 ; the  "autoactivateifonlyone" variable).
-; you can also close the selected window by Ctrl+k
+; you can also close the selected window by Ctrl+k,and Alt+k
+; the difference is Alt+k ,close the window and quit.
+; Ctrl+k close the window and  keep iswitcher running .
 ;
 ; The window selection can be cancelled with Esc and Ctrl+g.
 ;
@@ -45,41 +126,49 @@
 ;
 ; Ctrl+u will clear all search string in textfield ,
 ; Ctrl+h ,and backspace will delete a char.
-; Ctrl+backspace will delete last word in textfield.
+; Ctrl+backspace ,AltBackspace will delete last keyword in textfield.
 ; enter ,and Ctrl+j for select
-; escape ,and  Ctrl+g for cancel
+; escape ,and Ctrl+g for cancel
 
 ; Ctrl+alt+k ,force kill the selected window
 ; Alt+k      ,kill the selected window and quit.
 ; Ctrl+k ,    kill the selected window and keep switcher going ,so that
 ;             you can select other window or kill other window.
 ;
+; Ctrl+s ,  toggle the status of window:minimize,maximize and restore
+; you can press Ctrl+s several times
+;
 ; For the idea of this script the credit goes to the creators of the
 ; iswitchb package for the Emacs editor
+;
+; 
 ;
 ;
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-;;#NoTrayIcon
+#NoTrayIcon
 #InstallKeybdHook
 
 Process Priority,,High
 SetBatchLines, -1
 SetKeyDelay  -1
 ; User configuration
-;
+; 用户可配置的选项。
 
 ; set this to yes if you want to select the only matching window
 ; automatically
+; 当只有一个候选项的时候是否自动激活它(留空表示no ,yes 表是肯定)
 autoactivateifonlyone =
 
 ; set this to yes if you want to enable tab completion (see above)
 ; it has no effect if firstlettermatch (see below) is enabled
+;;如果你想使用TAB键补全功能，将这个设为yes 否则留空
 tabcompletion =yes
 
 ; set this to yes to enable digit shortcuts when there are ten or
 ; less items in the list
+; 是否启用数字键选中功能
 digitshortcuts =yes
 
 ; set this to yes to enable first letter match mode where the typed
@@ -91,10 +180,18 @@ digitshortcuts =yes
 ;  AutoHotkey - Documentation
 ;  Anne's Diary
 ;
+;是否启用首字母匹配模式，
+; 比如，假如有两个窗口，它们的title 是
+;  AutoHotkey - Documentation
+;  Anne's Diary
+;你输入"ad" 它们都会匹配，
 firstlettermatch =
 
 ; set this to yes to enable activating the currently selected
 ; window in the background
+;在switcher选中某个窗口时（注意此时还没回车，）
+; 是否将相应的窗口提到最前面，以便预览之。
+;
 activateselectioninbg =
 
 ; number of milliseconds to wait for the user become idle, before
@@ -104,12 +201,16 @@ activateselectioninbg =
 ;
 ; if set to blank the current selection is activated immediately
 ; without delay
+;;这个是设置停留多长时间时才进行预览，单位毫秒，这个选项只有在
+activateselectioninbg  不为空的时候有效
+
 bgactivationdelay = 600
 
 
 ; Close switcher window if the user activates an other window.
 ; It does not work well if activateselectioninbg is enabled, so
 ; currently they cannot be enabled together.
+;如果用户激活了其他窗口，是否自动退出iswitcher
 closeifinactivated =yes
 
 if activateselectioninbg <>
@@ -122,13 +223,16 @@ if activateselectioninbg <>
 ; List of subtsrings separated with pipe (|) characters (e.g. carpe|diem).
 ; Window titles containing any of the listed substrings are filtered out
 ; from the list of windows.
+;;这个相当于黑名单，如果某个窗口标题在这个列表里，则不将它考虑在切换列表中.
 filterlist = asticky|blackbox
 
 ; Set this yes to update the list of windows every time the contents of the
 ; listbox is updated. This is usually not necessary and it is an overhead which
 ; slows down the update of the listbox, so this feature is disabled by default.
+;在每一次的过滤时是否检查 是否有新窗口加入或删除，一般没必要检查.
 dynamicwindowlist =
 
+;;如果用户输入的关键字不与任何窗口匹配，播放下面的文件对应的声音
 ; path to sound file played when the user types a substring which
 ; does not match any of the windows
 ;
@@ -160,10 +264,7 @@ if nomatchsound <>
 ;
 ;----------------------------------------------------------------------
 
-AutoTrim, off
-WS_EX_APPWINDOW = 0x40000
-WS_EX_TOOLWINDOW = 0x80
-GW_OWNER = 4
+AutoTrim, on
 DetectHiddenWindows, off
 Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
 
@@ -174,6 +275,9 @@ Gui,Font,s13 c7cfc00 bold
 Gui, Add, Text,     x10  y10 w800 h30, Search`:
 Gui, Add, Edit,     x90 y5 w500 h30,
 Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 gListViewClick, index|title|proc
+WS_EX_APPWINDOW = 0x40000
+WS_EX_TOOLWINDOW = 0x80
+GW_OWNER = 4
 
 if filterlist <>
 {
@@ -185,7 +289,6 @@ if filterlist <>
 
 ;----------------------------------------------------------------------
 ;
-; I never use the CapsLock key, that's why I chose it.
 ;
 !Tab::
 search =
@@ -217,6 +320,7 @@ Loop
     if closeifinactivated <>
         settimer, CloseIfInactive, off
 
+    ;;enter for select
     if ErrorLevel = EndKey:enter
     {
         GoSub, ActivateWindow
@@ -233,12 +337,14 @@ Loop
             input=j
         }
     }
-
+    
+    ;excape for cancel 
     if ErrorLevel = EndKey:escape
     {
         GoSub, CancelSwitch
         break
     }
+    
     ;;control+g for cancel too
     if ErrorLevel = EndKey:g
     {
@@ -249,11 +355,12 @@ Loop
             input=g
         }
     }
+    
     if ErrorLevel = EndKey:LAlt
     {
        continue
     }
-
+     ;;delete last char 
     if ErrorLevel = EndKey:backspace
     {
        if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt","P")=1){
@@ -276,7 +383,7 @@ Loop
        }
 
     }
-    ;;change the status of selected window
+    ;;toggle the status of selected window
     ;;WinMaximize-> WinMinimize->WinRestore-> 
   if ErrorLevel = EndKey:s
     {
@@ -299,7 +406,7 @@ Loop
     
     ;;Ctrl+alt+k ,force kill the selected window
     ;;Alt+k      ,kill the selected window and quit.
-    ;;Ctrl+k ,    kill the selected window and keep switcher going ,so that
+    ;;Ctrl+k ,    kill the selected window and keep switcher running ,so that
     ;;            you can select other window or kill other window.
   if ErrorLevel = EndKey:k
     {
@@ -320,6 +427,7 @@ Loop
        }
 
     }
+    ;;Ctrl+u clear "search" string ,just like bash
     if ErrorLevel = EndKey:u
     {
       if (GetKeyState("LControl", "P")=1){
@@ -329,8 +437,8 @@ Loop
             input=u
         }
     }
+    
         
-
     if ErrorLevel = EndKey:tab
         if completion =
         {
@@ -361,6 +469,7 @@ Loop
           continue
        }
 
+     ;;ctrl+n ,or Alt+n select next item
     if ErrorLevel = EndKey:n
       {
        if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt", "P")=1){
@@ -370,6 +479,7 @@ Loop
             input=n
         }
      }
+     ;;ctrl+p ,Alt+p select previous item
       if ErrorLevel = EndKey:p
       {
        if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt", "P")=1){
