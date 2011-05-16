@@ -1,4 +1,4 @@
-#NoTrayIcon
+﻿#NoTrayIcon
 #SingleInstance force
 SetKeyDelay 0
 #IfWinActive ahk_class #32770
@@ -18,9 +18,9 @@ SetKeyDelay 0
 ;;而此处Alt+n 相当于按下5次{Down
 ;;     Alt+p 相当于按下5次Up
 #IfWinActive ahk_class SWT_Window0
-!n::Send {Down}{Down}{Down}{Down}
+!n::SendInput {Down 4} 
 #IfWinActive ahk_class SWT_Window0
-!p::Send {Up}{Up}{Up}{Up}
+!p::SendInput {Up 4}
 
 
 
