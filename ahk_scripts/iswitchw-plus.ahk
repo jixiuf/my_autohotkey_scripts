@@ -1,5 +1,5 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Joseph 2011-05-16 12:28:35>
+; Time-stamp: <Administrator 2011-05-16 12:53:08>
 ; you can reach me here :<jixiuf@gmail.com>
 ; Required AutoHotkey version: 1.0.25+
 
@@ -147,7 +147,7 @@
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-#NoTrayIcon
+;#NoTrayIcon
 #InstallKeybdHook
 
 Process Priority,,High
