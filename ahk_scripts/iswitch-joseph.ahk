@@ -1,3 +1,4 @@
+; Time-stamp: <Administrator 2011-05-16 01:12:42>
 ; iswitchw - Incrementally switch between windows using substrings
 ;
 ; Required AutoHotkey version: 1.0.25+
@@ -11,6 +12,7 @@
 ; the cursor keys, Enter,and Ctrl+j. If the substring matches exactly
 ; onewindow that window is activated immediately (configurable, see
 ; the  "autoactivateifonlyone" variable).
+; you can also close the selected window by Ctrl+k
 ;
 ; The window selection can be cancelled with Esc and Ctrl+g.
 ;
@@ -46,6 +48,11 @@
 ; Ctrl+backspace will delete last word in textfield.
 ; enter ,and Ctrl+j for select
 ; escape ,and  Ctrl+g for cancel
+
+; Ctrl+alt+k ,force kill the selected window
+; Alt+k      ,kill the selected window and quit.
+; Ctrl+k ,    kill the selected window and keep switcher going ,so that
+;             you can select other window or kill other window.
 ;
 ; For the idea of this script the credit goes to the creators of the
 ; iswitchb package for the Emacs editor
@@ -59,7 +66,7 @@
 
 Process Priority,,High
 SetBatchLines, -1
-
+SetKeyDelay  -1
 ; User configuration
 ;
 
@@ -205,7 +212,7 @@ Loop
     if closeifinactivated <>
         settimer, CloseIfInactive, 200
 
-    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npgujh{LAlt}
+    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npsgukjh{LAlt}
 
     if closeifinactivated <>
         settimer, CloseIfInactive, off
@@ -258,6 +265,7 @@ Loop
        }
 
     }
+    ;;ctrl+ h===backspace
   if ErrorLevel = EndKey:h
     {
        if (GetKeyState("LControl", "P")=1){
@@ -265,6 +273,50 @@ Loop
           continue
        }else{
        input=h
+       }
+
+    }
+    ;;change the status of selected window
+    ;;WinMaximize-> WinMinimize->WinRestore-> 
+  if ErrorLevel = EndKey:s
+    {
+       if (GetKeyState("LControl", "P")=1){
+          oldCloseifinactivated =closeifinactivated
+          closeifinactivated=
+          settimer, CloseIfInactive, off
+          GoSub, toggleWinStatus
+          WinActivate ,ahk_id %switcher_id%
+          GuiControl,, Edit1,%search%
+          SendInput {end}
+          sleep 10
+          closeifinactivated = oldCloseifinactivated
+          continue
+       }else{
+            input=s
+       }
+
+    }
+    
+    ;;Ctrl+alt+k ,force kill the selected window
+    ;;Alt+k      ,kill the selected window and quit.
+    ;;Ctrl+k ,    kill the selected window and keep switcher going ,so that
+    ;;            you can select other window or kill other window.
+  if ErrorLevel = EndKey:k
+    {
+       if (GetKeyState("LControl", "P")=1  and GetKeyState("LAlt", "P")=1){
+          GoSub, ForceKillSelectedWindow 
+          GoSub, CancelSwitch       ;; quit 
+          break
+       
+       }else if (GetKeyState("LControl", "P")=1){
+             GoSub, KillSelectedWindow
+             tmpRefresh=yes ;force refresh window list 
+       }else if (GetKeyState("LAlt", "P")=1){
+          GoSub  KillSelectedWindow ;;kill the select window
+          GoSub, CancelSwitch       ;; quit 
+          break
+       }else{
+         input=k
        }
 
     }
@@ -388,7 +440,7 @@ Loop
     GuiControl,, Edit1, %search%
     GuiControl,Focus,Edit1 ;; focus Edit1 ,
     Send {End} ;;move cursor right ,make it after the new inputed char 
-    GoSub, RefreshWindowList 
+    GoSub, RefreshWindowList
 }
 
 Gosub, CleanExit
@@ -405,8 +457,9 @@ return
 RefreshWindowList:
     ; refresh the list of windows if necessary
 
-    if ( dynamicwindowlist = "yes" or numallwin = 0 )
+    if ( dynamicwindowlist = "yes" or numallwin = 0 or tmpRefresh="yes" )
     {
+       tmpRefresh=no ;; reset to no 
         numallwin = 0
 
         WinGet, id, list, , , Program Manager
@@ -628,19 +681,10 @@ for i ,ele in iconIdArray{
     LV_Modify(1, "Select") ;;select the secnd row
     LV_Modify(1, "Focus") ;; focus the second row
  }
-;;LV_ModifyCol()  ; Auto-size each column to fit its contents.
-LV_ModifyCol(1,48)
-LV_ModifyCol(2,652)
-LV_ModifyCol(3,100)
-;;LV_ModifyCol(3,Auto)
-    ;; Col_1 =Auto ; icon column
-    ;; Col_2 =0 ; hidden column for row number
-    ;; ; col 3 is autosized based on other column sizes
-    ;; Col_4 =Auto ; exe
-    ;; Col_5 =AutoHdr ; State
-    ;; Col_6 =Auto ; OnTop
-    ;; Col_7 =Auto ; Status - e.g. Not Responding
-
+   ;;LV_ModifyCol()  ; Auto-size each column to fit its contents.
+   LV_ModifyCol(1,48)
+   LV_ModifyCol(2,652)
+   LV_ModifyCol(3,100)
     if numwin = 1
         if autoactivateifonlyone <>
         {
@@ -731,10 +775,11 @@ return
 ; Delete last search char and update the window list
 ;
 DeleteSearchChar:
-
 if search =
+{
+    GuiControl,, Edit1, 
     return
-
+}
 StringTrimRight, search, search, 1
 GuiControl,, Edit1, %search%
 GuiControl,Focus,Edit1 ;; focus Edit1 ,
@@ -742,11 +787,15 @@ Send {End} ;;move cursor end
 
 GoSub, RefreshWindowList
 return
-
+;------------------------------------------------------------------
 DeleteSearchWord: ;;delete last word of search string ,search string
                   ;; can be Separated by empty space  
+GuiControl,, Edit1, 
 if search =
-    return 
+ {
+    GuiControl,, Edit1,
+    return
+ }
 FoundPos := RegExMatch(search, "(.*) +.*", SubPat)
 if FoundPos>0
 {
@@ -760,13 +809,13 @@ if FoundPos>0
   Send {End}
   GoSub, RefreshWindowList
 return
-
+;---------------------------------------------------------------------
 DeleteAllSearchChar:
 
+GuiControl,, Edit1, 
 if search =
     return
 search=    
-GuiControl,, Edit1, 
 GoSub, RefreshWindowList
 return
 ;----------------------------------------------------------------------
@@ -781,6 +830,25 @@ stringtrimleft, window_id, idarray%rowNum%, 0
   LV_Delete()
 WinActivate, ahk_id %window_id%
 
+return
+;-------------------------------------------
+;Kill the window you selected
+KillSelectedWindow:
+Gui, submit,NoHide 
+rowNum:= LV_GetNext(0)
+stringtrimleft, window_id, idarray%rowNum%, 0
+WinClose, ahk_id %window_id%
+return
+
+;-------------------------------------------
+; force kill the window you selected 
+ForceKillSelectedWindow:
+Gui, submit,NoHide 
+rowNum:= LV_GetNext(0)
+stringtrimleft, window_id, idarray%rowNum%, 0
+WinGet, pid, PId, ahk_id %window_id%
+Process ,Close, %pid%
+send {escape}
 return
 
 ;----------------------------------------------------------------------
@@ -861,7 +929,9 @@ return
 ; Handle mouse click events on the list box
 ;
 ListViewClick:
-if (A_GuiControlEvent = "Normal")
+if (A_GuiControlEvent = "Normal"
+    and !GetKeyState("Down", "P") and !GetKeyState("Up", "P"))
+
 ;;    GoSub, ActivateWindow
 send ,{enter}
 ;;    GoSub, BgActivationTimer
@@ -906,56 +976,12 @@ ifwinnotactive, ahk_id %switcher_id%
     send, {esc}
 
 return
-
-;; Get_Window_Icon(wid, Use_Large_Icons_Current) ; (window id, whether to get large icons)
-;; {
-;;   Local NR_temp, h_icon
-;;   Window_Found_Count += 1
-;;   ; check status of window - if window is responding or "Not Responding"
-;;   NR_temp =0 ; init
-;;   h_icon =
-;;   Responding := DllCall("SendMessageTimeout", "UInt", wid, "UInt", 0x0, "Int", 0, "Int", 0, "UInt", 0x2, "UInt", 150, "UInt *", NR_temp) ; 150 = timeout in millisecs
-;;   If (Responding)
-;;     {
-;;     ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
-;;     If Use_Large_Icons_Current =1
-;;       {
-;;       SendMessage, 0x7F, 1, 0,, ahk_id %wid%
-;;       h_icon := ErrorLevel
-;;       }
-;;     If ( ! h_icon )
-;;       {
-;;       SendMessage, 0x7F, 2, 0,, ahk_id %wid%
-;;       h_icon := ErrorLevel
-;;         If ( ! h_icon )
-;;           {
-;;           SendMessage, 0x7F, 0, 0,, ahk_id %wid%
-;;           h_icon := ErrorLevel
-;;           If ( ! h_icon )
-;;             {
-;;             If Use_Large_Icons_Current =1
-;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; CL_HICON is -14
-;;             If ( ! h_icon )
-;;               {
-;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
-;;               If ( ! h_icon )
-;;                 h_icon := DllCall( "LoadIcon", "uint", 0, "uint", 32512 ) ; IDI_APPLICATION is 32512
-;;               }
-;;             }
-;;           }
-;;         }
-;;       }
-;;   If ! ( h_icon = "" or h_icon = "FAIL") ; Add the HICON directly to the icon list
-;;   	Gui_Icon_Number := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon)
-;;   Else	; use a generic icon
-;;   	Gui_Icon_Number := IL_Add(ImageListID1, "shell32.dll" , 3)
-;; }
-
+;----------------------------------------------------------------------
 RemoveToolTip:
   SetTimer, RemoveToolTip, Off
   ToolTip
 return
-
+;----------------------------------------------------------------------
 SelectNext:
        rowNum:= LV_GetNext(0)
        if(rowNum<numwin){
@@ -968,7 +994,7 @@ SelectNext:
 
         GoSuB ActivateWindowInBackgroundIfEnabled
 return
-
+;------------------------------------------------------------------------
 SelectPrevious:
               rowNum:= LV_GetNext(0)
               if(rowNum<2){
@@ -980,7 +1006,7 @@ SelectPrevious:
               }
             GoSuB ActivateWindowInBackgroundIfEnabled
 return 
-
+;-------------------------------------------------------------------------
 CancelSwitch:
         Gui, cancel
 
@@ -989,8 +1015,7 @@ CancelSwitch:
         if activateselectioninbg <>
             WinActivate, ahk_id %orig_active_id%
 return
-
-
+;---------------------------------------------------------------------------
 getProcessname(wid){
        ; show process name if enabled
            WinGet, procname, ProcessName, ahk_id %wid%
@@ -1002,3 +1027,27 @@ getProcessname(wid){
     ;;       stringupper, procname, procname
     return procname
 }
+;----------------------------------------------------------------------------
+previousWinId4toggleStatus=
+previousWinStatus4toggleStatus=1
+toggleWinStatus:
+    rowNum:= LV_GetNext(0)
+    stringtrimleft, window_id, idarray%rowNum%, 0
+   if (previousWinId4toggleStatus=window_id)
+   {
+      if (previousWinStatus4toggleStatus=1){
+         WinMinimize , ahk_id %window_id% 
+         previousWinStatus4toggleStatus=2
+      }else if (previousWinStatus4toggleStatus=2){
+         WinMaximize , ahk_id %window_id% 
+          previousWinStatus4toggleStatus=3
+      }else{
+         WinRestore ,ahk_id %window_id% 
+         previousWinStatus4toggleStatus=1
+      }
+   }else{
+       WinMaximize , ahk_id %window_id% 
+       previousWinStatus4toggleStatus=max
+   }
+   previousWinId4toggleStatus:=window_id
+return 
