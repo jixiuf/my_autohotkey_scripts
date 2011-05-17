@@ -9,8 +9,10 @@ SendMode Input
 SetWorkingDir %A_ScriptDir%
 #ifwinactive ahk_class TPLSQLDevForm
 f7::
+Enter::
+^;::
 sleep,10
-send,{esc}{end}+{home}{f8}
+send,{esc}{end}+{home}{f8}{End}
 return
 
 
@@ -41,7 +43,6 @@ return
 +!>::Send ^{End}
 !<::Send ^{Home}
 !>::Send ^{End}
-
 !s::Send ^f
 ^h::Send {BackSpace}
 
