@@ -1,18 +1,20 @@
-;
+; Time-stamp: <Administrator 2011-05-16 01:12:42>
 ; iswitchw - Incrementally switch between windows using substrings
 ;
 ; Required AutoHotkey version: 1.0.25+
 ;
 ; When this script is triggered via its hotkey the list of titles of
 ; all visible windows appears. The list can be narrowed quickly to a
-; particular window by typing a substring of a window title.
+; particular window by typing one or more substring of a window title.
+; separated by empty space.
 ;
 ; When the list is narrowed the desired window can be selected using
-; the cursor keys and Enter. If the substring matches exactly one
-; window that window is activated immediately (configurable, see the
-; "autoactivateifonlyone" variable).
+; the cursor keys, Enter,and Ctrl+j. If the substring matches exactly
+; onewindow that window is activated immediately (configurable, see
+; the  "autoactivateifonlyone" variable).
+; you can also close the selected window by Ctrl+k
 ;
-; The window selection can be cancelled with Esc.
+; The window selection can be cancelled with Esc and Ctrl+g.
 ;
 ; The switcher window can be moved horizontally with the left/right
 ; arrow keys if it blocks the view of windows under it.
@@ -35,7 +37,22 @@
 ;
 ; This feature can be confusing for novice users, so it is disabled
 ; by default.
+; 
 ;
+; you can use UP,Ctrl+P Alt+p Shift+Tab,Alt+Shift+Tab
+; to select previous item
+; and use Down ,Ctrl+n Alt+n  Tab ,Alt+Tab  to select next item .
+;
+; Ctrl+u will clear all search string in textfield ,
+; Ctrl+h ,and backspace will delete a char.
+; Ctrl+backspace will delete last word in textfield.
+; enter ,and Ctrl+j for select
+; escape ,and  Ctrl+g for cancel
+
+; Ctrl+alt+k ,force kill the selected window
+; Alt+k      ,kill the selected window and quit.
+; Ctrl+k ,    kill the selected window and keep switcher going ,so that
+;             you can select other window or kill other window.
 ;
 ; For the idea of this script the credit goes to the creators of the
 ; iswitchb package for the Emacs editor
@@ -44,14 +61,12 @@
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-#NoTrayIcon
+;;#NoTrayIcon
+#InstallKeybdHook
 
 Process Priority,,High
 SetBatchLines, -1
-
-WS_EX_APPWINDOW = 0x40000
-WS_EX_TOOLWINDOW = 0x80
-GW_OWNER = 4
+SetKeyDelay  -1
 ; User configuration
 ;
 
@@ -80,7 +95,7 @@ firstlettermatch =
 
 ; set this to yes to enable activating the currently selected
 ; window in the background
-activateselectioninbg =yes 
+activateselectioninbg =
 
 ; number of milliseconds to wait for the user become idle, before
 ; activating the currently selected window in the background
@@ -91,13 +106,11 @@ activateselectioninbg =yes
 ; without delay
 bgactivationdelay = 600
 
-; show process name before window title.
-showprocessname =yes
 
 ; Close switcher window if the user activates an other window.
 ; It does not work well if activateselectioninbg is enabled, so
 ; currently they cannot be enabled together.
-closeifinactivated =
+closeifinactivated =yes
 
 if activateselectioninbg <>
     if closeifinactivated <>
@@ -148,17 +161,19 @@ if nomatchsound <>
 ;----------------------------------------------------------------------
 
 AutoTrim, off
+WS_EX_APPWINDOW = 0x40000
+WS_EX_TOOLWINDOW = 0x80
+GW_OWNER = 4
+DetectHiddenWindows, off
+Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
 
-;this section modified by ezuk, 03 July 2008
-Gui, +LastFound +AlwaysOnTop -Caption   
-
-WinSet, Transparent, 180
-Gui, Color, black,black
-Gui,Font,s18 cYellow 
-;;Gui, Add, ListBox, vindex gListBoxClick x-2 y-2 w800 h530 AltSubmit -VScroll
-Gui, Add, ListView, x-2 y-2 w800 h530 -VScroll -E0x200 AltSubmit -Hdr -Multi  Count10 gListBoxClick  vindex, Icon|title
-Gui, Add, Text, x6 y510 w800 h360, Search`:
-Gui, Add, Edit, x90 y510 w500 h30,
+WinSet, Transparent, 230
+Gui, Color,black,black
+Gui,Font,s13 c7cfc00 bold
+;;Gui, Add, ListView, vindex gListViewClick x-2 y-2 w800 h530 AltSubmit -VScroll
+Gui, Add, Text,     x10  y10 w800 h30, Search`:
+Gui, Add, Edit,     x90 y5 w500 h30,
+Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 gListViewClick, index|title|proc
 
 if filterlist <>
 {
@@ -173,7 +188,6 @@ if filterlist <>
 ; I never use the CapsLock key, that's why I chose it.
 ;
 !Tab::
-F1::
 search =
 numallwin = 0
 GuiControl,, Edit1
@@ -198,7 +212,7 @@ Loop
     if closeifinactivated <>
         settimer, CloseIfInactive, 200
 
-    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}np{LAlt}
+    Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npsgukjh{LAlt}
 
     if closeifinactivated <>
         settimer, CloseIfInactive, off
@@ -208,91 +222,158 @@ Loop
         GoSub, ActivateWindow
         break
     }
+    
+    ;;Ctrl+j for select
+    if ErrorLevel = EndKey:j
+    {
+       if (GetKeyState("LControl", "P")=1){
+           GoSub, ActivateWindow
+           break
+       }else{
+            input=j
+        }
+    }
 
     if ErrorLevel = EndKey:escape
     {
-        Gui, cancel
-
-        ; restore the originally active window if
-        ; activateselectioninbg is enabled
-        if activateselectioninbg <>
-            WinActivate, ahk_id %orig_active_id%
-
+        GoSub, CancelSwitch
         break
     }
-    
+    ;;control+g for cancel too
+    if ErrorLevel = EndKey:g
+    {
+      if (GetKeyState("LControl", "P")=1){
+          GoSub, CancelSwitch
+          break
+       }else{
+            input=g
+        }
+    }
     if ErrorLevel = EndKey:LAlt
     {
-        Gui, cancel
-
-        ; restore the originally active window if
-        ; activateselectioninbg is enabled
-        if activateselectioninbg <>
-            WinActivate, ahk_id %orig_active_id%
-
-        break
+       continue
     }
 
     if ErrorLevel = EndKey:backspace
     {
+       if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt","P")=1){
+          GoSub, DeleteSearchWord
+          continue
+       }else{
         GoSub, DeleteSearchChar
         continue
+       }
+
     }
+    ;;ctrl+ h===backspace
+  if ErrorLevel = EndKey:h
+    {
+       if (GetKeyState("LControl", "P")=1){
+          GoSub, DeleteSearchChar
+          continue
+       }else{
+       input=h
+       }
+
+    }
+    ;;change the status of selected window
+    ;;WinMaximize-> WinMinimize->WinRestore-> 
+  if ErrorLevel = EndKey:s
+    {
+       if (GetKeyState("LControl", "P")=1){
+          oldCloseifinactivated =closeifinactivated
+          closeifinactivated=
+          settimer, CloseIfInactive, off
+          GoSub, toggleWinStatus
+          WinActivate ,ahk_id %switcher_id%
+          GuiControl,, Edit1,%search%
+          SendInput {end}
+          sleep 10
+          closeifinactivated = oldCloseifinactivated
+          continue
+       }else{
+            input=s
+       }
+
+    }
+    
+    ;;Ctrl+alt+k ,force kill the selected window
+    ;;Alt+k      ,kill the selected window and quit.
+    ;;Ctrl+k ,    kill the selected window and keep switcher going ,so that
+    ;;            you can select other window or kill other window.
+  if ErrorLevel = EndKey:k
+    {
+       if (GetKeyState("LControl", "P")=1  and GetKeyState("LAlt", "P")=1){
+          GoSub, ForceKillSelectedWindow 
+          GoSub, CancelSwitch       ;; quit 
+          break
+       
+       }else if (GetKeyState("LControl", "P")=1){
+             GoSub, KillSelectedWindow
+             tmpRefresh=yes ;force refresh window list 
+       }else if (GetKeyState("LAlt", "P")=1){
+          GoSub  KillSelectedWindow ;;kill the select window
+          GoSub, CancelSwitch       ;; quit 
+          break
+       }else{
+         input=k
+       }
+
+    }
+    if ErrorLevel = EndKey:u
+    {
+      if (GetKeyState("LControl", "P")=1){
+              GoSub, DeleteAllSearchChar
+              continue
+       }else{
+            input=u
+        }
+    }
+        
 
     if ErrorLevel = EndKey:tab
         if completion =
+        {
+          if (GetKeyState("LShift", "P")=1){
+                GoSuB SelectPrevious
+          }else{
+                GoSuB SelectNext
+          }
             continue
-        else
+        }else
             input = %completion%
 
     ; pass these keys to the selector window
 
     if ErrorLevel = EndKey:up
     {
-        Send, {up}
-        GoSuB ActivateWindowInBackgroundIfEnabled
+        GoSuB SelectPrevious
         continue
     }
 
     if ErrorLevel = EndKey:down
     {
-        Send, {down}
-        GoSuB ActivateWindowInBackgroundIfEnabled
-        continue
+       GoSuB SelectNext
+       continue
     }
-       if ErrorLevel = EndKey:LControl
-    {
-        Input, npVar, L1, np
-            if ErrorLevel = EndKey:n
-    {
-        Send, {down}
-        GoSuB ActivateWindowInBackgroundIfEnabled
-        continue
-    }
-            if ErrorLevel = EndKey:p
-    {
-        Send, {up}
-        GoSuB ActivateWindowInBackgroundIfEnabled
-        continue
-    }
-    }
+    if ErrorLevel = EndKey:LControl
+       {
+          continue
+       }
 
     if ErrorLevel = EndKey:n
       {
-      abc:=GetKeyState("LControl", "P")
-       if (GetKeyState("LControl", "P")=1){
-            Send, {down}
-            GoSuB ActivateWindowInBackgroundIfEnabled
-        continue
-        }else{
+       if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt", "P")=1){
+           GoSuB SelectNext
+           continue
+       }else{
             input=n
         }
      }
       if ErrorLevel = EndKey:p
       {
-       if (GetKeyState("LControl", "P")=1){
-            Send, {up}
-            GoSuB ActivateWindowInBackgroundIfEnabled
+       if (GetKeyState("LControl", "P")=1||GetKeyState("LAlt", "P")=1){
+           GoSuB SelectPrevious
            continue
         }else{
             input=p
@@ -303,7 +384,6 @@ Loop
     if ErrorLevel = EndKey:pgup
     {
         Send, {pgup}
-
         GoSuB ActivateWindowInBackgroundIfEnabled
         continue
     }
@@ -347,7 +427,9 @@ Loop
                     continue
                 }
 
-                GuiControl, choose, ListBox1, %input%
+                 LV_Modify(input, "Select") ;;select last line
+                 LV_Modify(input, "Focus") ;; focus last line
+;;                GuiControl, choose, ListView1, %input%
                 GoSub, ActivateWindow
                 break
             }
@@ -356,7 +438,9 @@ Loop
 
     search = %search%%input%
     GuiControl,, Edit1, %search%
-    GoSub, RefreshWindowList 
+    GuiControl,Focus,Edit1 ;; focus Edit1 ,
+    Send {End} ;;move cursor right ,make it after the new inputed char 
+    GoSub, RefreshWindowList
 }
 
 Gosub, CleanExit
@@ -373,11 +457,13 @@ return
 RefreshWindowList:
     ; refresh the list of windows if necessary
 
-    if ( dynamicwindowlist = "yes" or numallwin = 0 )
+    if ( dynamicwindowlist = "yes" or numallwin = 0 or tmpRefresh="yes" )
     {
+       tmpRefresh=no ;; reset to no 
         numallwin = 0
 
         WinGet, id, list, , , Program Manager
+
         Loop, %id%
         {
             StringTrimRight, this_id, id%a_index%, 0
@@ -391,20 +477,6 @@ RefreshWindowList:
             if switcher_id = %this_id%
                 continue
 
-            ; show process name if enabled
-            if showprocessname <>
-            {
-                WinGet, procname, ProcessName, ahk_id %this_id%
-
-                stringgetpos, pos, procname, .
-                if ErrorLevel <> 1
-                {
-                    stringleft, procname, procname, %pos%
-                }
-
-                stringupper, procname, procname
-                title = %procname%: %title%
-            }
 
             ; don't add titles which match any of the filters
             if filterlist <>
@@ -439,10 +511,8 @@ RefreshWindowList:
     }
 
     ; filter the window list according to the search criteria
-
     winlist =
     numwin = 0
-
     Loop, %numallwin%
     {
         StringTrimRight, title, allwinarray%a_index%, 0
@@ -453,8 +523,21 @@ RefreshWindowList:
         if search <>
             if firstlettermatch =
             {
-                if title not contains %search%,
-                    continue
+                matched=yes
+                procName:=getProcessname(this_id)
+                
+                titleAndProcName=%title%%procName%
+                Loop,parse,search ,%A_Space%,%A_Space%%A_TAB%
+                {
+                    if titleAndProcName not contains %A_LoopField%,
+                    { matched=no
+                      break
+                    }
+                }
+              if matched=no
+               {
+                  continue
+               }
             }
             else
             {
@@ -490,88 +573,29 @@ RefreshWindowList:
                 if match =
                     continue    ; no match
             }
-
-        if winlist <>
-            winlist = %winlist%|
-        winlist = %winlist%%title%`r%this_id%
-
         numwin += 1
         winarray%numwin% = %title%
+        idarray%numwin%= %this_id%
     }
-
-    ; if the pattern didn't match any window
-    if numwin = 0
-        ; if the search string is empty then we can't do much
-        if search =
-        {
-            Gui, cancel
-            Gosub, CleanExit
-        }
-        ; delete the last character
-        else
-        {
-            if nomatchsound <>
-                SoundPlay, %nomatchsound%
-
-            GoSub, DeleteSearchChar
-            return
-        }
-
     ; sort the list alphabetically
     ;;I don't like sort it alphabetically 
-   ;;    Sort, winlist, D|
+    ;;Sort, winlist, D|
 
-    ; add digit shortcuts if there are ten or less windows
-    ; in the list and digit shortcuts are enabled
-    if digitshortcuts <>
-        if numwin <= 10
-        {
-            digitlist =
-            digit = 1
-            loop, parse, winlist, |
-            {
-                ; FIXME: windows with empty title?
-                if A_LoopField <>
-                {
-                    if digitlist <>
-                        digitlist = %digitlist%|
-                    digitlist = %digitlist%%digit%%A_Space%%A_Space%%A_Space%%A_LoopField%
 
-                    digit += 1
-                    if digit = 10
-                        digit = 0
-                }
-            }
-            winlist = %digitlist%
-        }
-
-    ; strip window IDs from the sorted list
-    titlelist  := Object()
-    arrayindex = 1
-
-    loop, parse, winlist, |
-    {
-        stringgetpos, pos, A_LoopField, `r
-
-        stringleft, title, A_LoopField, %pos%
-        ;; titlelist = %titlelist%|%title%
-        titlelist.Insert(title)
-
-        pos += 2 ; skip the separator char
-        stringmid, id, A_LoopField, %pos%, 10000
-        idarray%arrayindex% = %id%
-        ++arrayindex
-    }
-  ImageListID1 := IL_Create(numwin,1,1)
-  ; Attach the ImageLists to the ListView so that it can later display the icons:
-  LV_SetImageList(ImageListID1, 1)
-LV_Delete()    
-for i ,ele in titlelist
+ImageListID1 := IL_Create(numwin,1,1)
+; Attach the ImageLists to the ListView so that it can later display the icons:
+LV_SetImageList(ImageListID1, 1)
+LV_Delete()
+empty=0
+iconIdArray:=Object()
+iconTitleArray:=Object()
+iconIdNum=0
+loop,%numwin%,
 {
-  wid := idarray%i%
- 
-    WinGet, es, ExStyle, ahk_id %wid%
-  Use_Large_Icons_Current =1
+  ele:=winarray%a_index%
+     wid := idarray%a_index%
+     WinGet, es, ExStyle, ahk_id %wid%
+     Use_Large_Icons_Current =1
 if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_EX_TOOLWINDOW ) )
              or ( es & WS_EX_APPWINDOW ) ){
     ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
@@ -601,31 +625,72 @@ if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_E
             }
           }
         }
- ; Add the HICON directly to the small-icon and large-icon lists.
- ; Below uses +1 to convert the returned index from zero-based to one-based:
- IconNumber := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon) + 1
-
- LV_Add("Icon" . IconNumber, i, ele) ; spaces added for layout
- }
-    WinGetClass, Win_Class, ahk_id %wid%
-    If Win_Class = #32770 ; fix for displaying control panel related windows (dialog class) that aren't on taskbar
-      {
-      IconNumber := IL_Add(ImageListID1, "C:\WINDOWS\system32\shell32.dll" , 217) ; generic control panel icon
-      LV_Add("Icon" . IconNumber,i ,ele)
-      }
+                if (h_icon){
+                iconIdArray.Insert(wid)
+                iconTitleArray.Insert(winarray%a_index%)
+                iconIdNum+=1
+                 ; Add the HICON directly to the small-icon and large-icon lists.
+                 ; Below uses +1 to convert the returned index from zero-based to one-based:
+                 IconNumber := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon) + 1
+                 LV_Add("Icon" . IconNumber, a_index-empty,ele, getProcessName(wid)) ; spaces added for layout
+               }else{
+               empty +=1
+               }
+        }else{
+             WinGetClass, Win_Class, ahk_id %wid%
+             If Win_Class = #32770 ; fix for displaying control panel related windows (dialog class) that aren't on taskbar
+              {
+                 iconTitleArray.Insert(winarray%a_index%)
+                 iconIdArray.Insert(wid)
+                 iconIdNum+=1
+                 IconNumber := IL_Add(ImageListID1, "C:\WINDOWS\system32\shell32.dll" , 217) ; generic control panel icon
+                 LV_Add("Icon" . IconNumber,a_index-empty ,ele,getProcessName(wid))
+              }else{
+                   empty +=1
+              }
+             }
 }
-    ; show the list
-;;    GuiControl,, ListBox1, %titlelist%
-;;    GuiControl, Choose, ListView1, 1
-    LV_Modify(1, "Select") ;;select the first row
-    LV_Modify(1, "Focus") ;; focus the first row
+
+numwin:=iconIdNum
+for i ,ele in iconIdArray{
+   idarray%i%:=ele
+   winarray%i%:=iconTitleArray[i]
+}
+    ; if the pattern didn't match any window
+    if numwin = 0
+        ; if the search string is empty then we can't do much
+        if search =
+        {
+            Gui, cancel
+            Gosub, CleanExit
+        }
+        ; delete the last character
+        else
+        {
+            if nomatchsound <>
+                SoundPlay, %nomatchsound%
+
+            GoSub, DeleteSearchChar
+            return
+        }
+ if numwin >1
+ {
+    LV_Modify(2, "Select") ;;select the first row
+    LV_Modify(2, "Focus") ;; focus the first row
+ }else{
+    LV_Modify(1, "Select") ;;select the secnd row
+    LV_Modify(1, "Focus") ;; focus the second row
+ }
+   ;;LV_ModifyCol()  ; Auto-size each column to fit its contents.
+   LV_ModifyCol(1,48)
+   LV_ModifyCol(2,652)
+   LV_ModifyCol(3,100)
     if numwin = 1
         if autoactivateifonlyone <>
         {
             GoSub, ActivateWindow
             Gosub, CleanExit
         }
-
     GoSub ActivateWindowInBackgroundIfEnabled
 
     completion =
@@ -646,15 +711,12 @@ if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_E
    
     if numwin = 1
         return
-
-    loop
+     loop
     {
         nextchar =
-
         loop, %numwin%
         {
             stringtrimleft, title, winarray%a_index%, 0
-
             if nextchar =
             {
                 substr = %search%%completion%
@@ -696,8 +758,16 @@ if( ( ! DllCall( "GetWindow", "uint", wid, "uint", GW_OWNER ) and  ! ( es & WS_E
     }
 
     if completion <>
+    {
+        GuiControl,Focus,Edit1 ;; focus Edit1 ,
         GuiControl,, Edit1, %search%[%completion%]
-
+         StringLen ,searchStrLen,search
+        ;; Send {Right}
+         Send {Home} ;;
+         Send {Right %searchStrLen%} ;;move right ,
+         ToolTip,You can press <Tab> now `,if you set tabcompletion =yes ,0,-30
+         SetTimer, RemoveToolTip, 3000
+    }
 return
 
 ;----------------------------------------------------------------------
@@ -705,26 +775,80 @@ return
 ; Delete last search char and update the window list
 ;
 DeleteSearchChar:
-
 if search =
+{
+    GuiControl,, Edit1, 
     return
-
+}
 StringTrimRight, search, search, 1
 GuiControl,, Edit1, %search%
+GuiControl,Focus,Edit1 ;; focus Edit1 ,
+Send {End} ;;move cursor end 
+
 GoSub, RefreshWindowList
-
 return
+;------------------------------------------------------------------
+DeleteSearchWord: ;;delete last word of search string ,search string
+                  ;; can be Separated by empty space  
+GuiControl,, Edit1, 
+if search =
+ {
+    GuiControl,, Edit1,
+    return
+ }
+FoundPos := RegExMatch(search, "(.*) +.*", SubPat)
+if FoundPos>0
+{
+  search:=SubPat1
+  GuiControl,,Edit1,%search%
+}else{
+  search=
+  GuiControl,,Edit1,
+}
+  GuiControl,Focus,Edit1 ;; focus Edit1 ,
+  Send {End}
+  GoSub, RefreshWindowList
+return
+;---------------------------------------------------------------------
+DeleteAllSearchChar:
 
+GuiControl,, Edit1, 
+if search =
+    return
+search=    
+GoSub, RefreshWindowList
+return
 ;----------------------------------------------------------------------
 ;
 ; Activate selected window
 ;
 ActivateWindow:
 Gui, submit
-rowNum:= LV_GetNext(0,"F")
+rowNum:= LV_GetNext(0)
 stringtrimleft, window_id, idarray%rowNum%, 0
+  IL_Destroy(ImageListID1) ; destroy gui, listview and associated icon imagelist.
+  LV_Delete()
 WinActivate, ahk_id %window_id%
 
+return
+;-------------------------------------------
+;Kill the window you selected
+KillSelectedWindow:
+Gui, submit,NoHide 
+rowNum:= LV_GetNext(0)
+stringtrimleft, window_id, idarray%rowNum%, 0
+WinClose, ahk_id %window_id%
+return
+
+;-------------------------------------------
+; force kill the window you selected 
+ForceKillSelectedWindow:
+Gui, submit,NoHide 
+rowNum:= LV_GetNext(0)
+stringtrimleft, window_id, idarray%rowNum%, 0
+WinGet, pid, PId, ahk_id %window_id%
+Process ,Close, %pid%
+send {escape}
 return
 
 ;----------------------------------------------------------------------
@@ -732,17 +856,15 @@ return
 ; Activate selected window in the background
 ;
 ActivateWindowInBackground:
-
-guicontrolget, index,, ListBox1
-stringtrimleft, window_id, idarray%index%, 0
-
-if prev_active_id <> %window_id%
-{
-    WinActivate, ahk_id %window_id%
-    WinActivate, ahk_id %switcher_id%
-    prev_active_id = %window_id%
-}
-
+  index:=LV_GetNext(0)
+  stringtrimleft, window_id, idarray%index%, 0
+   
+   if prev_active_id <> %window_id%
+   {
+       WinActivate, ahk_id %window_id%
+       WinActivate, ahk_id %switcher_id%
+       prev_active_id = %window_id%
+   }
 return
 
 ;----------------------------------------------------------------------
@@ -806,13 +928,13 @@ return
 ;
 ; Handle mouse click events on the list box
 ;
-ListBoxClick:
+ListViewClick:
 if (A_GuiControlEvent = "Normal"
     and !GetKeyState("Down", "P") and !GetKeyState("Up", "P"))
-    send ,a
- ;;   GoSub, ActivateWindow
-  
 
+;;    GoSub, ActivateWindow
+send ,{enter}
+;;    GoSub, BgActivationTimer
 return
 
 ;----------------------------------------------------------------------
@@ -854,48 +976,78 @@ ifwinnotactive, ahk_id %switcher_id%
     send, {esc}
 
 return
+;----------------------------------------------------------------------
+RemoveToolTip:
+  SetTimer, RemoveToolTip, Off
+  ToolTip
+return
+;----------------------------------------------------------------------
+SelectNext:
+       rowNum:= LV_GetNext(0)
+       if(rowNum<numwin){
+          LV_Modify(rowNum+1, "Select") ;;select next line
+          LV_Modify(rowNum+1, "Focus") ;; focus next line
+       }else{
+          LV_Modify(1, "Select") ;;select the first row
+          LV_Modify(1, "Focus") ;; focus the first row
+       }
 
-;; Get_Window_Icon(wid, Use_Large_Icons_Current) ; (window id, whether to get large icons)
-;; {
-;;   Local NR_temp, h_icon
-;;   Window_Found_Count += 1
-;;   ; check status of window - if window is responding or "Not Responding"
-;;   NR_temp =0 ; init
-;;   h_icon =
-;;   Responding := DllCall("SendMessageTimeout", "UInt", wid, "UInt", 0x0, "Int", 0, "Int", 0, "UInt", 0x2, "UInt", 150, "UInt *", NR_temp) ; 150 = timeout in millisecs
-;;   If (Responding)
-;;     {
-;;     ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
-;;     If Use_Large_Icons_Current =1
-;;       {
-;;       SendMessage, 0x7F, 1, 0,, ahk_id %wid%
-;;       h_icon := ErrorLevel
-;;       }
-;;     If ( ! h_icon )
-;;       {
-;;       SendMessage, 0x7F, 2, 0,, ahk_id %wid%
-;;       h_icon := ErrorLevel
-;;         If ( ! h_icon )
-;;           {
-;;           SendMessage, 0x7F, 0, 0,, ahk_id %wid%
-;;           h_icon := ErrorLevel
-;;           If ( ! h_icon )
-;;             {
-;;             If Use_Large_Icons_Current =1
-;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; GCL_HICON is -14
-;;             If ( ! h_icon )
-;;               {
-;;               h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
-;;               If ( ! h_icon )
-;;                 h_icon := DllCall( "LoadIcon", "uint", 0, "uint", 32512 ) ; IDI_APPLICATION is 32512
-;;               }
-;;             }
-;;           }
-;;         }
-;;       }
-;;   If ! ( h_icon = "" or h_icon = "FAIL") ; Add the HICON directly to the icon list
-;;   	Gui_Icon_Number := DllCall("ImageList_ReplaceIcon", UInt, ImageListID1, Int, -1, UInt, h_icon)
-;;   Else	; use a generic icon
-;;   	Gui_Icon_Number := IL_Add(ImageListID1, "shell32.dll" , 3)
-;; }
+        GoSuB ActivateWindowInBackgroundIfEnabled
+return
+;------------------------------------------------------------------------
+SelectPrevious:
+              rowNum:= LV_GetNext(0)
+              if(rowNum<2){
+                 LV_Modify(numwin, "Select") ;;select last line
+                 LV_Modify(numwin, "Focus") ;; focus last line
+              }else{
+                 LV_Modify(rowNum-1, "Select") ;;select previous line
+                 LV_Modify(rowNum-1, "Focus") ;; focus previous line
+              }
+            GoSuB ActivateWindowInBackgroundIfEnabled
+return 
+;-------------------------------------------------------------------------
+CancelSwitch:
+        Gui, cancel
 
+        ; restore the originally active window if
+        ; activateselectioninbg is enabled
+        if activateselectioninbg <>
+            WinActivate, ahk_id %orig_active_id%
+return
+;---------------------------------------------------------------------------
+getProcessname(wid){
+       ; show process name if enabled
+           WinGet, procname, ProcessName, ahk_id %wid%
+           stringgetpos, pos, procname, .
+           if ErrorLevel <> 1
+           {
+               stringleft, procname, procname, %pos%
+           }
+    ;;       stringupper, procname, procname
+    return procname
+}
+;----------------------------------------------------------------------------
+previousWinId4toggleStatus=
+previousWinStatus4toggleStatus=1
+toggleWinStatus:
+    rowNum:= LV_GetNext(0)
+    stringtrimleft, window_id, idarray%rowNum%, 0
+   if (previousWinId4toggleStatus=window_id)
+   {
+      if (previousWinStatus4toggleStatus=1){
+         WinMinimize , ahk_id %window_id% 
+         previousWinStatus4toggleStatus=2
+      }else if (previousWinStatus4toggleStatus=2){
+         WinMaximize , ahk_id %window_id% 
+          previousWinStatus4toggleStatus=3
+      }else{
+         WinRestore ,ahk_id %window_id% 
+         previousWinStatus4toggleStatus=1
+      }
+   }else{
+       WinMaximize , ahk_id %window_id% 
+       previousWinStatus4toggleStatus=max
+   }
+   previousWinId4toggleStatus:=window_id
+return 
