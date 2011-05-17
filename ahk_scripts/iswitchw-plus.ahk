@@ -1,5 +1,5 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Administrator 2011-05-16 14:14:57>
+; Time-stamp: <Joseph 2011-05-17 23:18:28>
 ; you can reach me here :<jixiuf@gmail.com>
 ; Required AutoHotkey version: 1.0.25+
 
@@ -264,7 +264,7 @@ if nomatchsound <>
 ;
 ;----------------------------------------------------------------------
 
-AutoTrim, on
+AutoTrim, off
 DetectHiddenWindows, off
 Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
 
