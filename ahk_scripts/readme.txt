@@ -1,5 +1,5 @@
-toggleTaskBar ,Ò»¼üÏÔÒþÈÎÎñÀ¸
-MouseActivete  Êó±êÒÆ¶¯µ½Ò»¸ö´°¿ÚÒ»Ãëºó£¬¼¤»îÊó±êÏÂ´°¿Ú
-DoOver           ºêÂ¼ÖÆ £¬¼ÇÂ¼ÄãµÄÒ»ÏµÁÐ°´¼ü²Ù×÷£¬È»ºó¿ÉÒÔ½øÐÐÖØ¸´Õâ¸ö¹ý³Ì
- MoveInactiveWin.ahk     Alt+×ó¼ü£¬ÒÆ¶¯Êó±êÏÂÎ´¼¤»îµÄ´°¿Ú£¬µ±È»¹â±êÏÂµÄ´°¿ÚÈç¹û¼¤»îµÄ»°Ò²¿ÉÒÆ¶¯
-LabelControl.ahk        °´ÏÂCtrlºó£¬´°¿ÚÖÐËùÓÐ¿ÉÒÔ¾Û¼¯µÄ×é¼þ»á±»±àºÅ£¬°´ÏÂ±àºÅÔòµÈÍ¬ÓÚµã»÷Ö®£¬²¢²»ºÃÓÃ
+toggleTaskBar ,ä¸€é”®æ˜¾éšä»»åŠ¡æ 
+MouseActivete  é¼ æ ‡ç§»åŠ¨åˆ°ä¸€ä¸ªçª—å£ä¸€ç§’åŽï¼Œæ¿€æ´»é¼ æ ‡ä¸‹çª—å£
+DoOver           å®å½•åˆ¶ ï¼Œè®°å½•ä½ çš„ä¸€ç³»åˆ—æŒ‰é”®æ“ä½œï¼Œç„¶åŽå¯ä»¥è¿›è¡Œé‡å¤è¿™ä¸ªè¿‡ç¨‹
+ MoveInactiveWin.ahk     Alt+å·¦é”®ï¼Œç§»åŠ¨é¼ æ ‡ä¸‹æœªæ¿€æ´»çš„çª—å£ï¼Œå½“ç„¶å…‰æ ‡ä¸‹çš„çª—å£å¦‚æžœæ¿€æ´»çš„è¯ä¹Ÿå¯ç§»åŠ¨
+LabelControl.ahk        æŒ‰ä¸‹CtrlåŽï¼Œçª—å£ä¸­æ‰€æœ‰å¯ä»¥èšé›†çš„ç»„ä»¶ä¼šè¢«ç¼–å·ï¼ŒæŒ‰ä¸‹ç¼–å·åˆ™ç­‰åŒäºŽç‚¹å‡»ä¹‹ï¼Œå¹¶ä¸å¥½ç”¨
