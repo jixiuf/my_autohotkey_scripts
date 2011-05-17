@@ -1,8 +1,7 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Joseph 2011-05-17 23:18:28>
+; Time-stamp: <Joseph 2011-05-17 23:23:02>
 ; you can reach me here :<jixiuf@gmail.com>
 ; Required AutoHotkey version: 1.0.25+
-
 
 ; 中文注释，
 ; 首先说一说iswitch 是什么以及iswitchw.ahk的由来
@@ -85,7 +84,7 @@
 ; When this script is triggered via its hotkey the list of titles of
 ; all visible windows appears. The list can be narrowed quickly to a
 ; particular window by typing one or more substring of a window title.
-; separated by empty space.
+; separated by empty space(new feature).
 ;
 ; When the list is narrowed the desired window can be selected using
 ; the cursor keys, Enter,and Ctrl+j. If the substring matches exactly
