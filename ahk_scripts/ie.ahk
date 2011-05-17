@@ -3,8 +3,9 @@
 SetKeyDelay 0
 
 
+SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 
-#IfWinActive ahk_class IEFrame
+#IfWinActive ahk_class IEFrame|HTMLSOURCEVIEW
 
 ^BS::Send ^+{Left}{Del}
 !BS::Send ^+{Left}{Del}
