@@ -170,3 +170,17 @@ else
   run excel
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;Win+q  toggle Excel
+#3::
+IfWinExist,ahk_class OpusApp
+  IfWinActive ,ahk_class OpusApp 
+     WinMinimize ,ahk_class OpusApp
+  else{
+    WinMaximize,ahk_class OpusApp
+    WinActivate ,ahk_class OpusApp
+    }
+else
+  run winword
+return
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
