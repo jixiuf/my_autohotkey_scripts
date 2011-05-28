@@ -19,4 +19,5 @@ Run %A_ScriptDir%\iswitchw-plus.ahk
 Run %A_ScriptDir%\diaglog.ahk
 Run %A_ScriptDir%\win-move-resize.ahk
 Run %A_ScriptDir%\ie.ahk
+Run %A_ScriptDir%\word-emacs-key.ahk
 
