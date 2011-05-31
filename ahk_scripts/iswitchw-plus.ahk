@@ -1,7 +1,7 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Joseph 2011-05-17 23:23:02>
+; Time-stamp: <Joseph 2011-05-31 16:22:45 星期二>
 ; you can reach me here :<jixiuf@gmail.com>
-; Required AutoHotkey version: 1.0.25+
+; Test on AutoHotKey_L v1.0.97.02
 
 ; 中文注释，
 ; 首先说一说iswitch 是什么以及iswitchw.ahk的由来
