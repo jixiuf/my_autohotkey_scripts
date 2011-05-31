@@ -4,6 +4,8 @@ SetKeyDelay  -1
         
 anything(sources){ 
    candidates_count=0
+   search=
+   matched_candidates:=Object()
    for key ,source in sources {
      candidates_count += % source["candidate"].maxIndex()
     }
@@ -21,17 +23,15 @@ anything(sources){
      }else{
         Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates
      }
-     for key ,source in sources {
-          candidates:= source["candidate"]
-          for key ,candidate in candidates {
-             LV_Add("",candidate)
-          }
-      }
+     refresh(sources,search,matched_candidates)
      Gui ,Show,,
+     WinGet, anything_id, ID, A
+     WinSet, AlwaysOnTop, On, ahk_id %anything_id%
+     
      exit=0
      loop,
      {
-         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npsgukjh{LAlt}
+         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguh{LAlt}
      
          if ErrorLevel = EndKey:enter
          {
@@ -64,6 +64,47 @@ anything(sources){
              }
       
          }
+           if ErrorLevel = EndKey:g
+           {
+            if (GetKeyState("LControl", "P")=1){
+              exit()
+              exit=1
+              break
+             }else{
+                 input=g
+             }
+      
+         }
+        ;;Ctrl+u clear "search" string ,just like bash
+        if ErrorLevel = EndKey:u
+        {
+          if (GetKeyState("LControl", "P")=1){
+               search=
+               GuiControl,, Edit1, %search%
+               GuiControl,Focus,Edit1 ;; focus Edit1 ,
+               continue
+           }else{
+                input=u
+            }
+        }
+        if ErrorLevel = EndKey:h
+        {
+          if (GetKeyState("LControl", "P")=1){
+             if search =
+              {
+                  GuiControl,, Edit1, 
+                  return
+              }
+              StringTrimRight, search, search, 1
+              GuiControl,, Edit1, %search%
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              Send {End} ;;move cursor end 
+              continue
+           }else{
+                input=h
+            }
+        }
+
        
          if ErrorLevel = EndKey:pgup
          {
@@ -80,6 +121,52 @@ anything(sources){
      }
 } ;; end of anything function
 
+refresh(sources,search,matched_candidates){
+     for key ,source in sources {
+          candidates:= source["candidate"]
+          for key ,candidate in candidates{
+               matched_candidates:=lv_add_candidate_if_match(candidate,search,matched_candidates)
+          }
+      }
+return matched_candidates
+}
+
+;;candidate can be a string, when it is  a string ,it will be
+;;displayed on the listview directly
+;;and can be an array ,when it is an array
+;;the array[1] will show on the listview ,and
+;;array[2] will store something useful info.
+lv_add_candidate_if_match(candidate,search,matched_candidates){
+  if isObject(candidate){ 
+    display:=candidate[1]
+  }else{
+    display:=candidate
+  }
+   if % anything_match(display,search)=1
+   {
+      LV_Add("",display)
+      matched_candidates.insert(candidate)
+   }
+   return matched_candidates
+}
+
+;;just like google ,the pattern ,are keywords separated by space
+;; when string matched all the keywords ,then it return 1
+;; else return 0
+anything_match(candidate_string,pattern){
+   if pattern=
+     return 1
+   else{
+    Loop,parse,pattern ,%A_Space%,%A_Space%%A_TAB%
+    {
+      if candidate_string not contains %A_LoopField%,
+      {
+       return 0
+      }
+    }
+    return 1
+ }
+}
 selectNextCandidate(candidates_count){
        rowNum:= LV_GetNext(0)
        if(rowNum< candidates_count){
@@ -103,7 +190,7 @@ Gui Cancel
  
 sources:= Array()
 source1 :=Object()
-candidates:=Array("red" ,"green")
+candidates:=Array("red" ,"geen")
 source1["candidate"]:=candidates
 sources.insert(source1)
 source2 :=Object()
