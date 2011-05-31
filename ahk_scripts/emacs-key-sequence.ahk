@@ -14,9 +14,21 @@
 ;;
 ;; 3 ,bind  the root key prefix to the root key prefix
 ;; for example 
-;; $^x::prefixKey("^x",map)
-;; $^d::prefixKey("^d",map)
-;; the "$" ,must be used 
+;; $^x::
+;;      map:=Object()
+;;      map.insert("^x^f","msg1")
+;;      map.insert("^x^e^e","msg2")
+;;      map.insert("^xvv","msg3")
+;;    prefixKey("^x",map)
+;; return
+;; $^d::
+;;   map:=Object()
+;;      map.insert("^d^f","msg1")
+;;      map.insert("^d^e^e","msg2")
+;;      map.insert("^dvv","msg3")
+;;    prefixKey("^d",map)
+;; the "$" ,must be used
+
 ;;4 define functions that will be called the some key is pressed
 ;; msg1(){
 ;;   MsgBox ,this is function msg1(),will be called when you press ^x^f in this example
