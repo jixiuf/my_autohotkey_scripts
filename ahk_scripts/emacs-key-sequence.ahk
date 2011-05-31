@@ -1,20 +1,39 @@
+;;emacs-key-sequence.ahk --   binding GNU/Emacs like key 
+        
+;; about how to use this emacs-key-sequence.ahk
+;; 1. include emacs-key-sequence.ahk in you ahk files
+;; like this :
+;; #Include emacs-key-sequence.ahk 
+;; 2. define a Object() ,a map
+;;   and insert("keys" ,"functionNameYouWantToCallWhenYouPresskeys")
+;; for example ,
+;; map:=Object()
+;; map.insert("^x^f","msg1")
+;; map.insert("^x^e^e","msg2")
+;; map.insert("^xvv","msg3")
+;;
+;; 3 ,bind  the root key prefix to the root key prefix
+;; for example 
+;; $^x::prefixKey("^x",map)
+;; $^d::prefixKey("^d",map)
+;; the "$" ,must be used 
+;;4 define functions that will be called the some key is pressed
+;; msg1(){
+;;   MsgBox ,this is function msg1(),will be called when you press ^x^f in this example
+;; }
+;; msg2(){
+;;   MsgBox ,this is function msg2(),will be called when you press ^x^e^e in this example
+;; }
+;; msg3(){
+;;   MsgBox ,this is function msg3(),will be called when you press ^xvv in this example
+;; }
+
+
+
 setkeydelay 0
-msg1(){
-  MsgBox ,this is function msg1(),will be called when you press #x#f in this example
-}
-msg2(){
-  MsgBox ,this is function msg2(),will be called when you press #x#e in this example
-}
-
-map:=Object()
-map.insert("^x^f","msg1")
-map.insert("^x^e^e","msg2")
-^x::prefixKey("^x",map)
-
 
 prefixKey(prefix ,keyFuncMap){
 seq:=prefix
-map:=keyFuncMap
 loop,
 {
 ; {LCsontrol}{RControl}{LAlt}{RAlt}{LShift}{RShift}{LWin}{RWin}{AppsKey}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Capslock}{Numlock}{PrintScreen}{Pause}{Escape}
@@ -312,34 +331,32 @@ if ErrorLevel = EndKey:Escape
 input={Escape}
 }
 
-
-
  tmpStr=
-   if (GetKeyState("RWin", "P")=1 ||GetKeyState("LWin", "P")=1){
+   if (GetKeyState("RWin")=1 ||GetKeyState("LWin")=1){
      tmpStr=#
    }
-  if (GetKeyState("RControl", "P")=1 ||GetKeyState("LControl", "P")=1 ){
+  if (GetKeyState("RControl")=1 ||GetKeyState("LControl")=1 ){
       tmpStr=%tmpStr%^
    }
-  if (GetKeyState("RAlt", "P")=1 ||GetKeyState("LAlt", "P")=1 ){
+  if (GetKeyState("RAlt")=1 ||GetKeyState("LAlt")=1 ){
       tmpStr=%tmpStr%!
    }
-  if (GetKeyState("RShift", "P")=1 ||GetKeyState("LShift", "P")=1 ){
+  if (GetKeyState("RShift")=1 ||GetKeyState("LShift")=1 ){
       tmpStr=%tmpStr%+
    }
    tmpStr=%tmpStr%%input%
        if tmpStr=^g  ;;Ctrl+g ,cancel ,
            break
       seq=%seq%%tmpStr%
-      ToolTip,%seq%
-      funcName:= map[seq]
+     ;; ToolTip,%seq%
+      funcName:= keyFuncMap[seq]
            if funcName<>
             {
               callFuncByName(funcName)
               break
             }else{
               containPrefix=
-              For k, v in map
+              For k, v in keyFuncMap
               {
                 StringGetPos, pos,k, %seq%
                 if pos=0  ;;if k starts with seq
@@ -348,11 +365,17 @@ input={Escape}
                  break
                  }
               }
+              ;;if key Prefix you press don't exists in keyFuncMap ,then
+              ;;send it to system
+              ;;suppose the map is {"^xvd" "function1"
+              ;;                    "^xc" "function2"}
+              ;; and you have pressed "^xd" , there isn't a key equas "^xd"
+              ;; so no function would be called
+              ;; and "^xd" will be send to system
               if containPrefix=
               {
-              ;; seq:=SubStr(seq ,3)
-;;               if prefix<>seq
-          ;;        send %seq%
+              Tooltip ,%seq%
+                  sendInput, %seq%
                   break
               }else{
                  continue
