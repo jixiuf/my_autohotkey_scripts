@@ -386,7 +386,7 @@ input={Escape}
               ;; and "^xd" will be send to system
               if containPrefix=
               {
-              Tooltip ,%seq%
+;;              Tooltip ,%seq%
                   sendInput, %seq%
                   break
               }else{
