@@ -1,6 +1,7 @@
 #SingleInstance force
 SetBatchLines, -1
 SetKeyDelay  -1
+AutoTrim, off
         
 anything(sources){ 
    candidates_count=0
@@ -23,14 +24,19 @@ anything(sources){
      }else{
         Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates
      }
-     refresh(sources,search,matched_candidates)
+     matched_candidates:=refresh(sources,search)
      Gui ,Show,,
+      if matched_candidates.maxIndex()>0
+      {
+         LV_Modify(1, "Select Focus") 
+      }else{
+      }
+
      WinGet, anything_id, ID, A
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
-     
-     exit=0
      loop,
      {
+
          Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguh{LAlt}
      
          if ErrorLevel = EndKey:enter
@@ -40,7 +46,6 @@ anything(sources){
          if ErrorLevel = EndKey:escape
          {
            exit()
-           exit=1
            break
          }
          if ErrorLevel = EndKey:LControl
@@ -50,10 +55,18 @@ anything(sources){
          if ErrorLevel = EndKey:n
            {
             if (GetKeyState("LControl", "P")=1){
-               selectNextCandidate(candidates_count)
+               selectNextCandidate(matched_candidates.maxIndex())
             }else{
                  input=n
              }
+          }
+         if ErrorLevel = EndKey:Down
+          {
+               selectNextCandidate(matched_candidates.maxIndex())
+          }
+          if ErrorLevel = EndKey:Up
+          {
+               selectPreviousCandidate()
           }
            if ErrorLevel = EndKey:p
            {
@@ -68,7 +81,6 @@ anything(sources){
            {
             if (GetKeyState("LControl", "P")=1){
               exit()
-              exit=1
               break
              }else{
                  input=g
@@ -82,23 +94,37 @@ anything(sources){
                search=
                GuiControl,, Edit1, %search%
                GuiControl,Focus,Edit1 ;; focus Edit1 ,
+               matched_candidates:=refresh(sources,search)
                continue
            }else{
                 input=u
             }
         }
+;;        backspace
+      if ErrorLevel = EndKey:backspace
+        {
+             if search <>
+              {
+              StringTrimRight, search, search, 1
+              }
+              GuiControl,, Edit1, %search%
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              Send {End} ;;move cursor end
+              matched_candidates:=refresh(sources,search)
+              continue
+        }
+
         if ErrorLevel = EndKey:h
         {
           if (GetKeyState("LControl", "P")=1){
-             if search =
+             if search <>
               {
-                  GuiControl,, Edit1, 
-                  return
-              }
               StringTrimRight, search, search, 1
+              }
               GuiControl,, Edit1, %search%
               GuiControl,Focus,Edit1 ;; focus Edit1 ,
-              Send {End} ;;move cursor end 
+              Send {End} ;;move cursor end
+              refresh(sources,search)
               continue
            }else{
                 input=h
@@ -111,17 +137,26 @@ anything(sources){
              Send, {pgup}
              continue
          }
-         if exit=0
-         {
+           if input<>
+           {
             search = %search%%input%
             GuiControl,, Edit1, %search%
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
+           ;;TODO: REFRESH and select needed selected 
+           matched_candidates:=refresh(sources,search)
+              if matched_candidates.maxIndex()>0
+              {
+                LV_Modify(1, "Select Focus")
+              }
+              
          }
-     }
+     } ;; end of loop
 } ;; end of anything function
 
-refresh(sources,search,matched_candidates){
+refresh(sources,search){
+     lv_delete()
+     matched_candidates:=Object()
      for key ,source in sources {
           candidates:= source["candidate"]
           for key ,candidate in candidates{
