@@ -87,10 +87,13 @@ visit_directory( candidate_directory)
 		; I added a {right} before {Enter}":
 		ControlSend, Edit1, {Right}{Enter}, ahk_id %active_id%
 		return
-  }else
-  {
+  }else if (activeWinClass="ConsoleWindowClass"){
+  	WinActivate, ahk_id %active_id% 
+	SetKeyDelay, 0 
+	SendInput, cd /d %candidate_directory%{Enter}
+   }else{
      Run explorer.exe   "%candidate_directory%"
-  }
+   }
 }
 
 

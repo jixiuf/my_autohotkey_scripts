@@ -19,9 +19,10 @@ anything_multiple_sources(sources){
    source["tmpCandidate"]:= getCandidatesArray(source)
    candidates_count += % source["tmpCandidate"].maxIndex()
     }
+    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
    WinSet, Transparent, 230
    Gui, Color,black,black
-   Gui,Font,s13 c7cfc00 bold
+   Gui,Font,s12 c7cfc00 bold
    Gui, Add, Text,     x10  y10 w800 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
      icon:=source["icon"]
@@ -53,9 +54,10 @@ anything_multiple_sources(sources){
          
             rowNum:= LV_GetNext(0)
             LV_GetText(source_index, rowNum,2) 
-            LV_GetText(candidate, rowNum, 1) 
-            LV_GetText(candidate_index, rowNum, 3)
+;;            LV_GetText(candidate, rowNum, 1) 
+;;            LV_GetText(candidate_index, rowNum, 3)
             action:= sources[source_index]["action"]
+            Gui, Destroy
             callFuncByNameWithOneParam(action ,matched_candidates[rowNum])
             break
          }
@@ -180,6 +182,10 @@ refresh(sources,search){
                matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_candidates)
           }
       }
+     LV_ModifyCol(1,800)
+     LV_ModifyCol(2,0)
+     LV_ModifyCol(3,0)
+
 return matched_candidates
 }
 
@@ -261,18 +267,3 @@ getCandidatesArray(source)
    }
 }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-action( candidate)
-{
-  ToolTip, you have selected: %candidate%
-}
-getCandidates()
-{
-  candidates:=Array("red","green")
-  return candidates
-}
- 
-source1 :=Object()
-source1["candidate"]:="getCandidates"
-source1["action"]:="action"
-f1::anything(source1)
-
