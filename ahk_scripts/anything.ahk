@@ -2,13 +2,22 @@
 SetBatchLines, -1
 SetKeyDelay  -1
 AutoTrim, off
-        
-anything(sources){ 
+
+anything(source)
+{
+  sources:= Array()
+  sources.insert(source)
+  anything_multiple_sources(sources)
+}
+
+anything_multiple_sources(sources){ 
    candidates_count=0
    search=
    matched_candidates:=Object()
    for key ,source in sources {
-     candidates_count += % source["candidate"].maxIndex()
+   candidate:=source["candidate"]
+   source["tmpCandidate"]:= getCandidatesArray(source)
+   candidates_count += % source["tmpCandidate"].maxIndex()
     }
    WinSet, Transparent, 230
    Gui, Color,black,black
@@ -18,11 +27,11 @@ anything(sources){
      icon:=source["icon"]
      if icon<>
      {
-        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates
+        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index
         ImageListID1 := IL_Create(candidates_count,1,1)
         LV_SetImageList(ImageListID1, 1)
      }else{
-        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates
+        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index
      }
      matched_candidates:=refresh(sources,search)
      Gui ,Show,,
@@ -41,7 +50,14 @@ anything(sources){
      
          if ErrorLevel = EndKey:enter
          {
-             break
+         
+            rowNum:= LV_GetNext(0)
+            LV_GetText(source_index, rowNum,2) 
+            LV_GetText(candidate, rowNum, 1) 
+            LV_GetText(candidate_index, rowNum, 3)
+            action:= sources[source_index]["action"]
+            callFuncByNameWithOneParam(action ,matched_candidates[rowNum])
+            break
          }
          if ErrorLevel = EndKey:escape
          {
@@ -152,15 +168,16 @@ anything(sources){
               
          }
      } ;; end of loop
+     Gui, Destroy
 } ;; end of anything function
 
 refresh(sources,search){
      lv_delete()
      matched_candidates:=Object()
-     for key ,source in sources {
-          candidates:= source["candidate"]
-          for key ,candidate in candidates{
-               matched_candidates:=lv_add_candidate_if_match(candidate,search,matched_candidates)
+     for source_index ,source in sources {
+          candidates:= source["tmpCandidate"]
+          for candidate_index ,candidate in candidates{
+               matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_candidates)
           }
       }
 return matched_candidates
@@ -171,7 +188,8 @@ return matched_candidates
 ;;and can be an array ,when it is an array
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
-lv_add_candidate_if_match(candidate,search,matched_candidates){
+
+lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_candidates){
   if isObject(candidate){ 
     display:=candidate[1]
   }else{
@@ -179,7 +197,7 @@ lv_add_candidate_if_match(candidate,search,matched_candidates){
   }
    if % anything_match(display,search)=1
    {
-      LV_Add("",display)
+      LV_Add("",display,source_index,candidate_index)
       matched_candidates.insert(candidate)
    }
    return matched_candidates
@@ -220,16 +238,41 @@ selectPreviousCandidate(){
               }
 }
 exit(){
-Gui Cancel
+  Gui Cancel
+}
+callFuncByNameWithOneParam(funcName,param1){
+   return %funcName%(param1)
+}
+
+callFuncByName(funcName){
+   return   %funcName%()
+}
+
+getCandidatesArray(source)
+{
+    candidate:=source["candidate"]
+   if isFunc(candidate)
+   {
+      candidates:= callFuncByName(candidate)
+      return candidates
+   }else
+   {
+      return candidate
+   }
+}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+action( candidate)
+{
+  ToolTip, you have selected: %candidate%
+}
+getCandidates()
+{
+  candidates:=Array("red","green")
+  return candidates
 }
  
-sources:= Array()
 source1 :=Object()
-candidates:=Array("red" ,"geen")
-source1["candidate"]:=candidates
-sources.insert(source1)
-source2 :=Object()
-candidates:=Array("red" ,"green")
-source2["candidate"]:=candidates
-sources.insert(source2)
-anything(sources)
+source1["candidate"]:="getCandidates"
+source1["action"]:="action"
+f1::anything(source1)
+
