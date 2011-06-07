@@ -127,3 +127,17 @@ toggle_hide_file_in_explore(){
 !+,::SendInput {Alt}ea{Home}
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 !+.::SendInput {Alt}ea{End}
+
+; WINDOWS KEY + Y TOGGLES FILE EXTENSIONS
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+#y::
+RegRead, HiddenFiles_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt
+If HiddenFiles_Status = 1
+     RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 0
+Else
+   RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 1
+WinGetClass, eh_Class,A
+If (eh_Class = "#32770" OR A_OSVersion = "WIN_VISTA")
+   send, {F5}
+Else PostMessage, 0x111, 28931,,, A
+Return
