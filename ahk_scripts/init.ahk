@@ -1,5 +1,6 @@
 #SingleInstance force
 #NoTrayIcon
+SetWorkingDir %A_ScriptDir%
 
 Run %A_ScriptDir%\alttab.ahk
 Run %A_ScriptDir%\closeWindow.ahk
@@ -20,4 +21,5 @@ Run %A_ScriptDir%\diaglog.ahk
 Run %A_ScriptDir%\win-move-resize.ahk
 Run %A_ScriptDir%\ie.ahk
 Run %A_ScriptDir%\word-emacs-key.ahk
+Run %A_ScriptDir%\anything-explorer-history.ahk
 
