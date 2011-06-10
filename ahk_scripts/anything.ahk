@@ -15,12 +15,12 @@ anything_multiple_sources(sources){
    search=
    matched_candidates:=Object()
    for key ,source in sources {
-   candidate:=source["candidate"]
-   source["tmpCandidate"]:= getCandidatesArray(source)
-   candidates_count += % source["tmpCandidate"].maxIndex()
+       candidate:=source["candidate"]
+       source["tmpCandidate"]:= getCandidatesArray(source)
+       candidates_count += % source["tmpCandidate"].maxIndex()
     }
-    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
-   WinSet, Transparent, 230
+   Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
+   WinSet, Transparent, 200
    Gui, Color,black,black
    Gui,Font,s12 c7cfc00 bold
    Gui, Add, Text,     x10  y10 w800 h30, Search`:
@@ -194,7 +194,7 @@ return matched_candidates
 ;;and can be an array ,when it is an array
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
-
+;;and the param `candidate' will be passed to action
 lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_candidates){
   if isObject(candidate){ 
     display:=candidate[1]
