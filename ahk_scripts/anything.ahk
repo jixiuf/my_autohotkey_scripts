@@ -28,11 +28,11 @@ anything_multiple_sources(sources){
      icon:=source["icon"]
      if icon<>
      {
-        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index
+        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
         ImageListID1 := IL_Create(candidates_count,1,1)
         LV_SetImageList(ImageListID1, 1)
      }else{
-        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index
+        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      }
      matched_candidates:=refresh(sources,search)
      Gui ,Show,,
@@ -178,13 +178,15 @@ refresh(sources,search){
      matched_candidates:=Object()
      for source_index ,source in sources {
           candidates:= source["tmpCandidate"]
+          source_name:=source["name"]
           for candidate_index ,candidate in candidates{
-               matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_candidates)
+               matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates)
           }
       }
-     LV_ModifyCol(1,800)
+     LV_ModifyCol(1,750)
      LV_ModifyCol(2,0)
      LV_ModifyCol(3,0)
+     LV_ModifyCol(4,50)
 
 return matched_candidates
 }
@@ -195,7 +197,7 @@ return matched_candidates
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
 ;;and the param `candidate' will be passed to action
-lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_candidates){
+lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates){
   if isObject(candidate){ 
     display:=candidate[1]
   }else{
@@ -203,7 +205,7 @@ lv_add_candidate_if_match(candidate,source_index,candidate_index,search,matched_
   }
    if % anything_match(display,search)=1
    {
-      LV_Add("",display,source_index,candidate_index)
+      LV_Add("",display,source_index,candidate_index,source_name)
       matched_candidates.insert(candidate)
    }
    return matched_candidates
