@@ -67,13 +67,17 @@ anything_multiple_sources(sources){
           }else{
              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
              tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
-            for key ,source in tmpSources {
-               candidate:=source["candidate"]
-               source["tmpCandidate"]:= getCandidatesArray(source)
-               candidates_count += % source["tmpCandidate"].maxIndex()
-            }
-             Tooltip % tmpSources["candidate"]
+             for key ,source in tmpSources {
+                candidate:=source["candidate"]
+                source["tmpCandidate"]:= getCandidatesArray(source)
+                candidates_count += % source["tmpCandidate"].maxIndex()
+             }
              matched_candidates:=refresh(tmpSources,"",win_width)
+                if matched_candidates.maxIndex()>0
+                {
+                   LV_Modify(1, "Select Focus Vis") 
+                }else{
+                }
           }
        }
          if ErrorLevel = EndKey:enter
@@ -450,6 +454,12 @@ getThirdActionorDefalutAction(actionProperty)
 }
 }
 
+;;this function will be used list all available "action"s
+;; for selected_candidate 
+;; so that you can selected one of the "actions" and execute it .
+;; so source["action"] will be used as newSource["candidate"]
+;; and the new "action" for newSource is"anything_execute_action_on_selected"
+;;
 buildSourceofActions(source,selected_candidate)
 {
 actionSources:=Array()
