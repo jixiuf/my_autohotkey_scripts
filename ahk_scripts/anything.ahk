@@ -352,10 +352,10 @@ refresh(sources,search,win_width){
                matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates)
           }
       }
-     LV_ModifyCol(1,win_width*0.88)
-     LV_ModifyCol(2,0)
-     LV_ModifyCol(3,0)
-     LV_ModifyCol(4,win_width*0.10)
+     LV_ModifyCol(1,win_width*0.88) ;;candidates 
+     LV_ModifyCol(2,0) ;;source_index
+     LV_ModifyCol(3,0) ;;candidate_index
+     LV_ModifyCol(4,win_width*0.10) ;; source_name 
 
 return matched_candidates
 }
