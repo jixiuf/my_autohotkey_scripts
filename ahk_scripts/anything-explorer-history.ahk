@@ -114,10 +114,10 @@ visit_directory( candidate_directory)
          if ( InStr(title ,"MINGW32:",true))
          {
            candidate_directory:= win2msysPath(candidate_directory)
-           SendInput, cd %candidate_directory%{Enter}
+           SendInput, cd "%candidate_directory%"{Enter}
          }else
          {
-           SendInput, cd /d %candidate_directory%{Enter}
+           SendInput, cd /d "%candidate_directory%"{Enter}
          }
   }else if (activeWinClass="Emacs"){
   	WinActivate, ahk_id %active_id% 
@@ -127,6 +127,7 @@ visit_directory( candidate_directory)
      Run explorer.exe   "%candidate_directory%"
    }
 }
+
 
 
 ;;Windows Path to msys Path 
