@@ -47,16 +47,6 @@ for key, default_value in default_anything_properties
 }
    win_width:=anything_properties["win_width"]
    win_height:=anything_properties["win_height"]
-   candidates_count=0
-   search=
-   tabListActions:=""
-   matched_candidates:=Object()
-   tmpSources:=sources
-   for key ,source in tmpSources {
-       candidate:=source["candidate"]
-       source["tmpCandidate"]:= getCandidatesArray(source)
-       candidates_count += % source["tmpCandidate"].maxIndex()
-    }
    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
    WinSet, Transparent, 225
    Gui, Color,black,black
@@ -77,6 +67,19 @@ for key, default_value in default_anything_properties
      }else{
         Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      }
+     
+     
+     candidates_count=0
+     search=
+     tabListActions:=""
+     matched_candidates:=Object()
+     tmpSources:=sources
+     for key ,source in tmpSources {
+       candidate:=source["candidate"]
+       source["tmpCandidate"]:= getCandidatesArray(source)
+       candidates_count += % source["tmpCandidate"].maxIndex()
+     }
+
      matched_candidates:=refresh(tmpSources,search,win_width)
      Gui ,Show,,
       if matched_candidates.maxIndex()>0
@@ -313,13 +316,6 @@ for key, default_value in default_anything_properties
                 input=h
             }
         }
-
-       
-         if ErrorLevel = EndKey:pgup
-         {
-             Send, {pgup}
-             continue
-         }
            if input<>
            {
             search = %search%%input%
