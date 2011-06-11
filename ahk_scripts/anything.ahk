@@ -103,6 +103,7 @@ for key, default_value in default_anything_properties
            selectedRowNum:= LV_GetNext(0)
           if(selectedRowNum=0) ;;no matched candidates 
           {
+               exit()
                callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
           }else{
              if (tabListActions = "")
@@ -129,6 +130,7 @@ for key, default_value in default_anything_properties
             selectedRowNum:= LV_GetNext(0)
           if(selectedRowNum=0) ;;no matched candidates 
           {
+              exit()
               callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
             ;;if no matched candidates ,then the string you typed in the textfield will
             ;;be treated as the candidate ,and the actions can  be executed on this
@@ -149,6 +151,7 @@ for key, default_value in default_anything_properties
                  selectedRowNum:= LV_GetNext(0)
                   if (selectedRowNum=0)
                   {
+                    exit()
                     callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
                   }else
                   {
@@ -170,7 +173,8 @@ for key, default_value in default_anything_properties
                  selectedRowNum:= LV_GetNext(0)
                   if (selectedRowNum=0)
                   {
-                    callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                    exit()
+                   callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
