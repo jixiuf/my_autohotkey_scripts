@@ -25,7 +25,8 @@ anything_multiple_sources(sources){
    Gui,Font,s12 c7cfc00 bold
    Gui, Add, Text,     x10  y10 w800 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
-     icon:=source["icon"]
+   OnMessage( 0x06, "WM_ACTIVATE" )
+   icon:=source["icon"]
      if icon<>
      {
         Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
@@ -46,7 +47,6 @@ anything_multiple_sources(sources){
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
-
          Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguh{LAlt}
      
          if ErrorLevel = EndKey:enter
@@ -57,7 +57,7 @@ anything_multiple_sources(sources){
 ;;            LV_GetText(candidate, rowNum, 1) 
 ;;            LV_GetText(candidate_index, rowNum, 3)
             action:= sources[source_index]["action"]
-            Gui, Destroy
+            exit()
             callFuncByNameWithOneParam(action ,matched_candidates[rowNum])
             break
          }
@@ -170,9 +170,19 @@ anything_multiple_sources(sources){
               
          }
      } ;; end of loop
-     Gui, Destroy
+     exit()
 } ;; end of anything function
 
+
+;;when Anything lost focus 
+WM_ACTIVATE(wParam, lParam, msg, hwnd)
+{
+;;Tooltip, % wParam
+  If ( wParam =0 and  A_Gui=1)
+  {
+    Send {esc}
+  }
+}
 refresh(sources,search){
      lv_delete()
      matched_candidates:=Object()
@@ -246,7 +256,8 @@ selectPreviousCandidate(){
               }
 }
 exit(){
-  Gui Cancel
+  OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
+  Gui Destroy
 }
 callFuncByNameWithOneParam(funcName,param1){
    return %funcName%(param1)
