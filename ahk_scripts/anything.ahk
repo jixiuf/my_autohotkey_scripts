@@ -105,6 +105,7 @@ for key, default_value in default_anything_properties
           {
                exit()
                callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+              break
           }else{
              if (tabListActions = "")
              {
@@ -132,6 +133,7 @@ for key, default_value in default_anything_properties
           {
               exit()
               callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+              break
             ;;if no matched candidates ,then the string you typed in the textfield will
             ;;be treated as the candidate ,and the actions can  be executed on this
             ;;candidate is the collection of each source's  DefaultAction 
@@ -141,6 +143,7 @@ for key, default_value in default_anything_properties
             action:= getDefaultAction(tmpSources[source_index]["action"])
             exit()
             callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+            break
           }
             break
          }
@@ -153,6 +156,7 @@ for key, default_value in default_anything_properties
                   {
                     exit()
                     callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                    break
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
@@ -175,6 +179,7 @@ for key, default_value in default_anything_properties
                   {
                     exit()
                    callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                   break
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
