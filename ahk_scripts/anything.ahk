@@ -1,3 +1,4 @@
+;; need AutoHotKey_L         
 #SingleInstance force
 SetBatchLines, -1
 SetKeyDelay  -1
@@ -48,6 +49,7 @@ for key, default_value in default_anything_properties
    win_height:=anything_properties["win_height"]
    candidates_count=0
    search=
+   tabListActions:=""
    matched_candidates:=Object()
    tmpSources:=sources
    for key ,source in tmpSources {
@@ -103,20 +105,24 @@ for key, default_value in default_anything_properties
           {
                callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
           }else{
-             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-             tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
-             for key ,source in tmpSources {
-                candidate:=source["candidate"]
-                source["tmpCandidate"]:= getCandidatesArray(source)
-                candidates_count += % source["tmpCandidate"].maxIndex()
-             }
-             matched_candidates:=refresh(tmpSources,"",win_width)
+             if (tabListActions = "")
+             {
+                tabListActions="yes"
+                 LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+                 tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
+                 for key ,source in tmpSources {
+                   candidate:=source["candidate"]
+                   source["tmpCandidate"]:= getCandidatesArray(source)
+                   candidates_count += % source["tmpCandidate"].maxIndex()
+                 }
+                 matched_candidates:=refresh(tmpSources,"",win_width)
                 if matched_candidates.maxIndex()>0
                 {
                    LV_Modify(1, "Select Focus Vis") 
                 }else{
                 }
-          }
+             }
+         }
        }
          if ErrorLevel = EndKey:enter
          {
