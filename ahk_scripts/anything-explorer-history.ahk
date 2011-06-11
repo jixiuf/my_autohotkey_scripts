@@ -4,7 +4,6 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ;;global variable 
 active_id=
 directory_history:=Array()
-addressList:=Array()
 ;;init history when first run this script 
 IfExist, anything-explorer-history.ini
 {
@@ -22,6 +21,7 @@ Loop, Parse,  history_line,,
 source:=Object()
 source["candidate"]:= directory_history
 source["action"] :="visit_directory"
+source["name"]:="ExpHist"
 
 f3::
   WinGet, active_id, ID, A
@@ -29,13 +29,18 @@ f3::
 return
 
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
+
 ~LButton::
-addressList.insert( getExplorerAddressPath())
-;;maybe you should change this to a big value ,if it
-;;doesn't add path to history 
-SetTimer, addressChangeTimer, 200
-;;MouseGetPos,,,,controlUnderMouse,
+  if (A_PriorHotkey <> "~LButton" or A_TimeSincePriorHotkey > 200)
+  {
+    ; Too much time between presses, so this isn't a double-press.
+    address:=getExplorerAddressPath()
+    KeyWait, LButton
+   SetTimer, addressChangeTimer, 200 
+   return
+  }
 return
+
 #IfWinActive 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 addressChangeTimer:
@@ -43,7 +48,7 @@ addressChangeTimer:
   if WinActive(  "ahk_class ExploreWClass|CabinetWClass")
   {
      newAddr:= getExplorerAddressPath()
-     if (addressList.remove(1) <> newAddr)
+     if (address <> newAddr)
       {
         ;;add to history list 
         updateHistory(newAddr)
