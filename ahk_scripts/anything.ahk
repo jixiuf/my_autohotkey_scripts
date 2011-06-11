@@ -15,7 +15,8 @@ anything_multiple_sources(sources){
    candidates_count=0
    search=
    matched_candidates:=Object()
-   for key ,source in sources {
+   tmpSources:=sources
+   for key ,source in tmpSources {
        candidate:=source["candidate"]
        source["tmpCandidate"]:= getCandidatesArray(source)
        candidates_count += % source["tmpCandidate"].maxIndex()
@@ -37,7 +38,7 @@ anything_multiple_sources(sources){
      }else{
         Gui, Add, ListView, x0 y40 w%win_width% h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      }
-     matched_candidates:=refresh(sources,search,win_width)
+     matched_candidates:=refresh(tmpSources,search,win_width)
      Gui ,Show,,
       if matched_candidates.maxIndex()>0
       {
@@ -49,7 +50,7 @@ anything_multiple_sources(sources){
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
-         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjm{LAlt}
+         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjmo{LAlt}
      
          if ErrorLevel = EndKey:enter
          {
@@ -63,7 +64,7 @@ anything_multiple_sources(sources){
             }else
             {
               LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
-              action:= getDefaultAction(sources[source_index]["action"])
+              action:= getDefaultAction(tmpSources[source_index]["action"])
               exit()
               callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             }
@@ -78,7 +79,7 @@ anything_multiple_sources(sources){
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
-                       action:= getSecondActionorDefalutAction(sources[source_index]["action"])
+                       action:= getSecondActionorDefalutAction(tmpSources[source_index]["action"])
                        exit()
                        callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
@@ -98,8 +99,7 @@ anything_multiple_sources(sources){
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
-                       action:= getThirdActionorDefalutAction(sources[source_index]["action"])
-                       ToolTip % action
+                       action:= getThirdActionorDefalutAction(tmpSources[source_index]["action"])
                        exit()
                        callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
@@ -109,7 +109,25 @@ anything_multiple_sources(sources){
                  input=m
              }
           }
-                  if ErrorLevel = EndKey:escape
+          
+          ;;send the first source to last 
+         if ErrorLevel = EndKey:o
+           {
+            if (GetKeyState("LControl", "P")=1){
+               tmpSources.insert(tmpSources.remove(1))
+               matched_candidates:=refresh(tmpSources,search,win_width)
+                     if matched_candidates.maxIndex()>0
+                      {
+                        LV_Modify(1, "Select Focus Vis") 
+                      }
+
+            }else{
+                 input=o
+             }
+          }
+          
+          
+         if ErrorLevel = EndKey:escape
          {
            exit()
            break
@@ -160,7 +178,7 @@ anything_multiple_sources(sources){
                search=
                GuiControl,, Edit1, %search%
                GuiControl,Focus,Edit1 ;; focus Edit1 ,
-               matched_candidates:=refresh(sources,search ,win_width)
+               matched_candidates:=refresh(tmpSources,search ,win_width)
                continue
            }else{
                 input=u
@@ -176,7 +194,7 @@ anything_multiple_sources(sources){
               GuiControl,, Edit1, %search%
               GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
-              matched_candidates:=refresh(sources,search,win_width)
+              matched_candidates:=refresh(tmpSources,search,win_width)
               continue
         }
 
@@ -190,7 +208,7 @@ anything_multiple_sources(sources){
               GuiControl,, Edit1, %search%
               GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
-              refresh(sources,search,win_width)
+              refresh(tmpSources,search,win_width)
               continue
            }else{
                 input=h
@@ -210,7 +228,7 @@ anything_multiple_sources(sources){
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
            ;;TODO: REFRESH and select needed selected 
-           matched_candidates:=refresh(sources,search,win_width)
+           matched_candidates:=refresh(tmpSources,search,win_width)
               if matched_candidates.maxIndex()>0
               {
                 LV_Modify(1, "Select Focus Vis")
