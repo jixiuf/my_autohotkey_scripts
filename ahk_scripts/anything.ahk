@@ -3,15 +3,47 @@ SetBatchLines, -1
 SetKeyDelay  -1
 AutoTrim, off
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+default_anything_properties:=Object()
+;;the width of Anything window
+default_anything_properties["win_width"]:= 900
+default_anything_properties["win_height"]:= 510
+
+;;the value is a function accpet one parameter ,when no matched candidates
+;; the search string will be treated as candidate, 
+;; and  this function will be treated as "action" 
+default_anything_properties["no_candidate_action"]:="anything_do_nothing"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 anything(source)
+{
+   anything_with_properties(source,Array())
+}
+
+anything_with_properties(source ,anything_properties)
 {
   sources:= Array()
   sources.insert(source)
-  anything_multiple_sources(sources)
+  anything_multiple_sources_with_properties(sources ,anything_properties)
 }
 
-anything_multiple_sources(sources){
-   win_width=900
+anything_multiple_sources(sources)
+{
+  anything_multiple_sources_with_properties(sources ,Array())
+}
+
+anything_multiple_sources_with_properties(sources,anything_properties){
+global default_anything_properties
+for key, default_value in default_anything_properties
+{
+  if (anything_properties[key]="")
+  {
+     anything_properties[key]:=default_value
+  }
+}
+   win_width:=anything_properties["win_width"]
+   win_height:=anything_properties["win_height"]
    candidates_count=0
    search=
    matched_candidates:=Object()
@@ -32,11 +64,11 @@ anything_multiple_sources(sources){
    icon:=source["icon"]
      if icon<>
      {
-        Gui, Add, ListView, x0 y40 w%win_width% h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
+        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
         ImageListID1 := IL_Create(candidates_count,1,1)
         LV_SetImageList(ImageListID1, 1)
      }else{
-        Gui, Add, ListView, x0 y40 w%win_width% h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
+        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      }
      matched_candidates:=refresh(tmpSources,search,win_width)
      Gui ,Show,,
@@ -50,7 +82,7 @@ anything_multiple_sources(sources){
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjmo{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjimo{LAlt}{tab}
        
        ;;list all avaiable actions for the selected candidate 
        ;; usual one source only have one action ,
@@ -64,6 +96,7 @@ anything_multiple_sources(sources){
            selectedRowNum:= LV_GetNext(0)
           if(selectedRowNum=0) ;;no matched candidates 
           {
+               callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
           }else{
              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
              tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
@@ -83,8 +116,9 @@ anything_multiple_sources(sources){
          if ErrorLevel = EndKey:enter
          {
             selectedRowNum:= LV_GetNext(0)
-            if(selectedRowNum=0) ;;no matched candidates 
-            {
+          if(selectedRowNum=0) ;;no matched candidates 
+          {
+              callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
             ;;if no matched candidates ,then the string you typed in the textfield will
             ;;be treated as the candidate ,and the actions can  be executed on this
             ;;candidate is the collection of each source's  DefaultAction 
@@ -104,6 +138,7 @@ anything_multiple_sources(sources){
                  selectedRowNum:= LV_GetNext(0)
                   if (selectedRowNum=0)
                   {
+                    callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
@@ -124,6 +159,7 @@ anything_multiple_sources(sources){
                  selectedRowNum:= LV_GetNext(0)
                   if (selectedRowNum=0)
                   {
+                    callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
                   }else
                   {
                        LV_GetText(source_index, selectedRowNum,2) 
@@ -138,7 +174,17 @@ anything_multiple_sources(sources){
              }
           }
           
-          ;;send the first source to last 
+
+         if ErrorLevel = EndKey:i
+           {
+            if (GetKeyState("LControl", "P")=1){
+                  callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                  break
+            }else{
+                 input=i
+             }
+          }
+                   ;;send the first source to last 
          if ErrorLevel = EndKey:o
            {
             if (GetKeyState("LControl", "P")=1){
@@ -489,4 +535,10 @@ anything_execute_action_on_selected(candidate)
   realCandidate:=candidate[2]
   callFuncByNameWithOneParam(functionName, realCandidate)
 }
+;;this  is just a example 
+anything_do_nothing(candidate)
+{
+   Tooltip % candidate
+}
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
