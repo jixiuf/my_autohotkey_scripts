@@ -6,7 +6,10 @@ action4source1(candidate)
 }
 
 source1 :=Object()
+;;this example is the same to anything-example2.ahk
+;;except : 
 ;;candidates can be an array
+;;
 candidates:=Array("red","green")
 source1["candidate"]:=candidates
 
