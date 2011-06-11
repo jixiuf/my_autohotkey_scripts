@@ -8,6 +8,8 @@ default_anything_properties:=Object()
 ;;the width of Anything window
 default_anything_properties["win_width"]:= 900
 default_anything_properties["win_height"]:= 510
+default_anything_properties["quit_when_lose_focus"]:="yes"
+closeifinactivated =yes
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate, 
@@ -35,6 +37,7 @@ anything_multiple_sources(sources)
 
 anything_multiple_sources_with_properties(sources,anything_properties){
 global default_anything_properties
+
 for key, default_value in default_anything_properties
 {
   if (anything_properties[key]="")
@@ -59,7 +62,10 @@ for key, default_value in default_anything_properties
    Gui,Font,s12 c7cfc00 bold
    Gui, Add, Text,     x10  y10 w80 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
-   OnMessage( 0x06, "anything_WM_ACTIVATE" ) ;;when window lost focus 
+   if(anything_properties["quit_when_lose_focus"] = "yes")
+   {
+     OnMessage( 0x06, "anything_WM_ACTIVATE" ) ;;when window lost focus 
+   }
    OnMessage(0x201, "anything_WM_LBUTTONDOWN") ;;when LButton(mouse) is down 
    icon:=source["icon"]
      if icon<>
