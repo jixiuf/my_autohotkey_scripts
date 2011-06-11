@@ -49,7 +49,7 @@ anything_multiple_sources(sources){
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
-         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhj{LAlt}
+         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjm{LAlt}
      
          if ErrorLevel = EndKey:enter
          {
@@ -89,7 +89,27 @@ anything_multiple_sources(sources){
              }
           }
          
-         if ErrorLevel = EndKey:escape
+         if ErrorLevel = EndKey:m
+           {
+            if (GetKeyState("LControl", "P")=1){
+                 selectedRowNum:= LV_GetNext(0)
+                  if (selectedRowNum=0)
+                  {
+                  }else
+                  {
+                       LV_GetText(source_index, selectedRowNum,2) 
+                       action:= getThirdActionorDefalutAction(sources[source_index]["action"])
+                       ToolTip % action
+                       exit()
+                       callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       break
+                  }
+            
+            }else{
+                 input=m
+             }
+          }
+                  if ErrorLevel = EndKey:escape
          {
            exit()
            break
@@ -349,6 +369,22 @@ getSecondActionorDefalutAction(actionProperty)
     if (actionProperty.maxIndex()>1)
     {
       Return actionProperty[2]
+    }else{
+      return actionProperty[1]
+    }
+ }else{
+  return actionProperty
+}
+}
+;;if it has the second action then return it ,else 
+;; return the default action 
+getThirdActionorDefalutAction(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    if (actionProperty.maxIndex()>2)
+    {
+      Return actionProperty[3]
     }else{
       return actionProperty[1]
     }
