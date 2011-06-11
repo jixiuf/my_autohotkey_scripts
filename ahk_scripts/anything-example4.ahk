@@ -1,5 +1,7 @@
 #include anything.ahk
-;;anything support multiply sources 
+;;anything support multiply sources
+;; the candidate from different source will execute different action 
+;; when you select it .
 action4source1( candidate)
 {
 msgbox, you have selected: %candidate% from source1 
@@ -25,10 +27,12 @@ getCandidates2()
 source1 :=Object()
 source1["candidate"]:="getCandidates"
 source1["action"]:="action4source1"
+source1["name"]:="source1"
 
 source2 :=Object()
 source2["candidate"]:="getCandidates2"
 source2["action"]:="action4source2"
+source2["name"]:="source2"
 
 
 sources:= Array()
