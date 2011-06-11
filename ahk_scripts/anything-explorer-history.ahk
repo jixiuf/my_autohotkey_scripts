@@ -1,6 +1,6 @@
 ;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk           
 #include anything.ahk
-SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
+SetTitleMatchMode Regex ;
 ;;global variable 
 active_id=
 directory_history:=Array()
@@ -88,12 +88,12 @@ updateHistory(newAddr)
 
 getExplorerAddressPath()
 {
-  WinGetText, full_path, A  ; 取到地址栏里的路径
-  StringSplit, word_array, full_path, `n     ;;因为取到的路径中有换行符，需要却掉它
-  full_path = %word_array1%   ; Take the first element from the array
-  StringReplace, full_path, full_path, `r, , all   ; 以防万一将尝试却掉回车符returns (`r)
-  ControlGetText, ExplorePath, Edit1, A
+  ; WinGetText, full_path, A  ; 
+  ; StringSplit, word_array, full_path, `n     ;;
+  ; full_path = %word_array1%   ; Take the first element from the array
+  ; StringReplace, full_path, full_path, `r, , all   ; 
   ;;return full_path
+  ControlGetText, ExplorePath, Edit1, A
   return ExplorePath
 }
   
