@@ -141,6 +141,7 @@ anything_multiple_sources(sources){
             if (GetKeyState("LControl", "P")=1){
                selectNextCandidate(matched_candidates.maxIndex())
               GuiControl,, Edit1, %search%
+              Send {End} ;;move cursor end
             }else{
                  input=n
              }
@@ -158,6 +159,7 @@ anything_multiple_sources(sources){
             if (GetKeyState("LControl", "P")=1){
               selectPreviousCandidate(matched_candidates.maxIndex())
               GuiControl,, Edit1, %search%
+              Send {End} ;;move cursor end
              }else{
                  input=p
              }
