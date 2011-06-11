@@ -50,8 +50,32 @@ anything_multiple_sources(sources){
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
-         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjmo{LAlt}
-     
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjmo{LAlt}{tab}
+       
+       ;;list all avaiable actions for the selected candidate 
+       ;; usual one source only have one action ,
+       ;; but some times user can give more than one action.
+       ;; <Enter> execute the default action .
+       ;; <Ctrl-j> execute the second action .(if only one,it execute the default action)
+       ;; <Ctrl-m> execute the third action .(if less than three ,it execute the default action)
+       ;;and <tab> list all available actions ,user can select it and execute it .
+       if ErrorLevel = EndKey:tab
+       {
+           selectedRowNum:= LV_GetNext(0)
+          if(selectedRowNum=0) ;;no matched candidates 
+          {
+          }else{
+             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+             tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
+            for key ,source in tmpSources {
+               candidate:=source["candidate"]
+               source["tmpCandidate"]:= getCandidatesArray(source)
+               candidates_count += % source["tmpCandidate"].maxIndex()
+            }
+             Tooltip % tmpSources["candidate"]
+             matched_candidates:=refresh(tmpSources,"",win_width)
+          }
+       }
          if ErrorLevel = EndKey:enter
          {
             selectedRowNum:= LV_GetNext(0)
@@ -61,15 +85,15 @@ anything_multiple_sources(sources){
             ;;be treated as the candidate ,and the actions can  be executed on this
             ;;candidate is the collection of each source's  DefaultAction 
               
-            }else
-            {
-              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
-              action:= getDefaultAction(tmpSources[source_index]["action"])
-              exit()
-              callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-            }
+          }else{
+            LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+            action:= getDefaultAction(tmpSources[source_index]["action"])
+            exit()
+            callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+          }
             break
          }
+         
          if ErrorLevel = EndKey:j
            {
             if (GetKeyState("LControl", "P")=1){
@@ -398,6 +422,17 @@ getSecondActionorDefalutAction(actionProperty)
   return actionProperty
 }
 }
+getAllActions(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+     return actionProperty
+   }else{
+     actions:=Array()
+     actions.insert(actionProperty)
+     return actions
+   }
+}
 ;;if it has the second action then return it ,else 
 ;; return the default action 
 getThirdActionorDefalutAction(actionProperty)
@@ -415,4 +450,33 @@ getThirdActionorDefalutAction(actionProperty)
 }
 }
 
+buildSourceofActions(source,selected_candidate)
+{
+actionSources:=Array()
+actionSource:=Array()
+candidates :=Array()
+for key ,action in getAllActions(source["action"])
+{   
+   next:=Array()
+   next.insert(action)
+   next.insert(selected_candidate)
+   candidates.insert(next)
+}
+actionSource["candidate"]:=candidates
+actionSource["action"]:="anything_execute_action_on_selected"
+actionSource["name"]:="Actions"
+actionSources.insert(actionSource)
+return actionSources
+}
+
+;;this is a inner "action" ,and the candidate is special
+;;the "display" of candidate (the first element of this candidate)
+;; is a function name ,and the "real" of candidate is the search_string
+;;so this function is used to display(real)
+anything_execute_action_on_selected(candidate)
+{
+  functionName:=candidate[1]
+  realCandidate:=candidate[2]
+  callFuncByNameWithOneParam(functionName, realCandidate)
+}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
