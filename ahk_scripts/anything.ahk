@@ -198,6 +198,7 @@ for key, default_value in default_anything_properties
          if ErrorLevel = EndKey:i
            {
             if (GetKeyState("LControl", "P")=1){
+                   exit()
                   callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
                   break
             }else{
