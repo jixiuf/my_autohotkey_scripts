@@ -10,7 +10,8 @@ anything(source)
   anything_multiple_sources(sources)
 }
 
-anything_multiple_sources(sources){ 
+anything_multiple_sources(sources){
+win_width=900
    candidates_count=0
    search=
    matched_candidates:=Object()
@@ -20,26 +21,27 @@ anything_multiple_sources(sources){
        candidates_count += % source["tmpCandidate"].maxIndex()
     }
    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
-   WinSet, Transparent, 200
+   WinSet, Transparent, 225
    Gui, Color,black,black
    Gui,Font,s12 c7cfc00 bold
-   Gui, Add, Text,     x10  y10 w800 h30, Search`:
+   Gui, Add, Text,     x10  y10 w80 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
-   OnMessage( 0x06, "WM_ACTIVATE" )
+   OnMessage( 0x06, "anything_WM_ACTIVATE" ) ;;when window lost focus 
+   OnMessage(0x201, "anything_WM_LBUTTONDOWN") ;;when LButton(mouse) is down 
    icon:=source["icon"]
      if icon<>
      {
-        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
+        Gui, Add, ListView, x0 y40 w%win_width% h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
         ImageListID1 := IL_Create(candidates_count,1,1)
         LV_SetImageList(ImageListID1, 1)
      }else{
-        Gui, Add, ListView, x0 y40 w800 h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
+        Gui, Add, ListView, x0 y40 w%win_width% h510 -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      }
-     matched_candidates:=refresh(sources,search)
+     matched_candidates:=refresh(sources,search,win_width)
      Gui ,Show,,
       if matched_candidates.maxIndex()>0
       {
-         LV_Modify(1, "Select Focus") 
+         LV_Modify(1, "Select Focus Vis") 
       }else{
       }
 
@@ -84,12 +86,12 @@ anything_multiple_sources(sources){
           }
           if ErrorLevel = EndKey:Up
           {
-               selectPreviousCandidate()
+               selectPreviousCandidate(matched_candidates.maxIndex())
           }
            if ErrorLevel = EndKey:p
            {
             if (GetKeyState("LControl", "P")=1){
-              selectPreviousCandidate()
+              selectPreviousCandidate(matched_candidates.maxIndex())
              }else{
                  input=p
              }
@@ -112,7 +114,7 @@ anything_multiple_sources(sources){
                search=
                GuiControl,, Edit1, %search%
                GuiControl,Focus,Edit1 ;; focus Edit1 ,
-               matched_candidates:=refresh(sources,search)
+               matched_candidates:=refresh(sources,search ,win_width)
                continue
            }else{
                 input=u
@@ -128,7 +130,7 @@ anything_multiple_sources(sources){
               GuiControl,, Edit1, %search%
               GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
-              matched_candidates:=refresh(sources,search)
+              matched_candidates:=refresh(sources,search,win_width)
               continue
         }
 
@@ -142,7 +144,7 @@ anything_multiple_sources(sources){
               GuiControl,, Edit1, %search%
               GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
-              refresh(sources,search)
+              refresh(sources,search,win_width)
               continue
            }else{
                 input=h
@@ -162,10 +164,10 @@ anything_multiple_sources(sources){
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
            ;;TODO: REFRESH and select needed selected 
-           matched_candidates:=refresh(sources,search)
+           matched_candidates:=refresh(sources,search,win_width)
               if matched_candidates.maxIndex()>0
               {
-                LV_Modify(1, "Select Focus")
+                LV_Modify(1, "Select Focus Vis")
               }
               
          }
@@ -175,7 +177,7 @@ anything_multiple_sources(sources){
 
 
 ;;when Anything lost focus 
-WM_ACTIVATE(wParam, lParam, msg, hwnd)
+anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
 {
 ;;Tooltip, % wParam
   If ( wParam =0 and  A_Gui=1)
@@ -183,7 +185,17 @@ WM_ACTIVATE(wParam, lParam, msg, hwnd)
     Send {esc}
   }
 }
-refresh(sources,search){
+;;when lbutton is down ,
+anything_WM_LBUTTONDOWN(wParam, lParam)
+{
+  MouseGetPos,,,,controlUnderMouse,
+  if(controlUnderMouse="SysListView321")
+  {
+    send {Enter}
+  }
+}
+
+refresh(sources,search,win_width){
      lv_delete()
      matched_candidates:=Object()
      for source_index ,source in sources {
@@ -193,10 +205,10 @@ refresh(sources,search){
                matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates)
           }
       }
-     LV_ModifyCol(1,750)
+     LV_ModifyCol(1,win_width*0.88)
      LV_ModifyCol(2,0)
      LV_ModifyCol(3,0)
-     LV_ModifyCol(4,50)
+     LV_ModifyCol(4,win_width*0.10)
 
 return matched_candidates
 }
@@ -241,18 +253,18 @@ anything_match(candidate_string,pattern){
 selectNextCandidate(candidates_count){
        rowNum:= LV_GetNext(0)
        if(rowNum< candidates_count){
-          LV_Modify(rowNum+1, "Select Focus")
+          LV_Modify(rowNum+1, "Select Focus Vis")
        }else{
-          LV_Modify(1, "Select Focus")
+          LV_Modify(1, "Select Focus Vis")
        }
 }
 
-selectPreviousCandidate(){
+selectPreviousCandidate(candidates_count){
             rowNum:= LV_GetNext(0)
               if(rowNum<2){
-                 LV_Modify(numwin, "Select Focus") 
+                 LV_Modify(candidates_count, "Select Focus Vis") 
               }else{
-                 LV_Modify(rowNum-1, "Select Focus")
+                 LV_Modify(rowNum-1, "Select Focus Vis")
               }
 }
 exit(){
