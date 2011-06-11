@@ -1,5 +1,5 @@
 ; iswitchw-plus - Incrementally switch between windows using substrings
-; Time-stamp: <Joseph 2011-05-31 16:22:45 星期二>
+; Time-stamp: <Joseph 2011-06-11 22:48:21 星期六>
 ; you can reach me here :<jixiuf@gmail.com>
 ; Test on AutoHotKey_L v1.0.97.02
 
@@ -146,7 +146,7 @@
 ;----------------------------------------------------------------------
 ;
 #SingleInstance force
-;#NoTrayIcon
+#NoTrayIcon
 #InstallKeybdHook
 
 Process Priority,,High
