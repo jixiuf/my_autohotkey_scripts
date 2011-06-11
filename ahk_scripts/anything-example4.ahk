@@ -3,7 +3,7 @@
 ;; the candidate from different source will execute different action 
 ;; when you select it .
 ;;
-;; and Ctrl-o  will send the First source to Last 
+;; and Ctrl-o  will send the candidates of first source to Last 
 action4source1( candidate)
 {
 msgbox, you have selected: %candidate% from source111111111
