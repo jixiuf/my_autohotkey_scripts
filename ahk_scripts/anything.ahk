@@ -11,7 +11,7 @@ anything(source)
 }
 
 anything_multiple_sources(sources){
-win_width=900
+   win_width=900
    candidates_count=0
    search=
    matched_candidates:=Object()
@@ -49,20 +49,46 @@ win_width=900
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
-         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguh{LAlt}
+         Input, input, L1, {enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhj{LAlt}
      
          if ErrorLevel = EndKey:enter
          {
-         
-            rowNum:= LV_GetNext(0)
-            LV_GetText(source_index, rowNum,2) 
-;;            LV_GetText(candidate, rowNum, 1) 
-;;            LV_GetText(candidate_index, rowNum, 3)
-            action:= sources[source_index]["action"]
-            exit()
-            callFuncByNameWithOneParam(action ,matched_candidates[rowNum])
+            selectedRowNum:= LV_GetNext(0)
+            if(selectedRowNum=0) ;;no matched candidates 
+            {
+            ;;if no matched candidates ,then the string you typed in the textfield will
+            ;;be treated as the candidate ,and the actions can  be executed on this
+            ;;candidate is the collection of each source's  DefaultAction 
+              
+            }else
+            {
+              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+              action:= getDefaultAction(sources[source_index]["action"])
+              exit()
+              callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+            }
             break
          }
+         if ErrorLevel = EndKey:j
+           {
+            if (GetKeyState("LControl", "P")=1){
+                 selectedRowNum:= LV_GetNext(0)
+                  if (selectedRowNum=0)
+                  {
+                  }else
+                  {
+                       LV_GetText(source_index, selectedRowNum,2) 
+                       action:= getSecondActionorDefalutAction(sources[source_index]["action"])
+                       exit()
+                       callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       break
+                  }
+            
+            }else{
+                 input=j
+             }
+          }
+         
          if ErrorLevel = EndKey:escape
          {
            exit()
@@ -251,25 +277,26 @@ anything_match(candidate_string,pattern){
  }
 }
 selectNextCandidate(candidates_count){
-       rowNum:= LV_GetNext(0)
-       if(rowNum< candidates_count){
-          LV_Modify(rowNum+1, "Select Focus Vis")
+       selectedRowNum:= LV_GetNext(0)
+       if(selectedRowNum< candidates_count){
+          LV_Modify(selectedRowNum+1, "Select Focus Vis")
        }else{
           LV_Modify(1, "Select Focus Vis")
        }
 }
 
 selectPreviousCandidate(candidates_count){
-            rowNum:= LV_GetNext(0)
-              if(rowNum<2){
+            selectedRowNum:= LV_GetNext(0)
+              if(selectedRowNum<2){
                  LV_Modify(candidates_count, "Select Focus Vis") 
               }else{
-                 LV_Modify(rowNum-1, "Select Focus Vis")
+                 LV_Modify(selectedRowNum-1, "Select Focus Vis")
               }
 }
 exit(){
-  OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
-  Gui Destroy
+   OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
+   OnMessage(0x201, "") ;;disable 0x201 onMessage ,when exit 
+   Gui Destroy
 }
 callFuncByNameWithOneParam(funcName,param1){
    return %funcName%(param1)
@@ -291,4 +318,43 @@ getCandidatesArray(source)
       return candidate
    }
 }
+;; @param actionProperty : the value of source["action"]
+;; the "action" property of a source can be a string  and an Array
+;; ,when it is a string ,that means there is only one default action for this source
+;; and when it is an Array the first element of this array will be treated as the default
+;; action of this source .
+;; you can press <ENTER> to execute the default action on  your selected a candidate.
+;; and press Ctrl+j to execute the second action(if exists) when you have select a candidate .
+;; when you selected a candidate ,you can press TAB to list all available "action" for
+;; this candidate ,and select one of them to execute .
+;; 
+;;
+getDefaultAction(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    return actionProperty[1]
+  }else
+  {
+    return actionProperty
+  }
+}
+
+;;if it has the second action then return it ,else 
+;; return the default action 
+getSecondActionorDefalutAction(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    if (actionProperty.maxIndex()>1)
+    {
+      Return actionProperty[2]
+    }else{
+      return actionProperty[1]
+    }
+ }else{
+  return actionProperty
+}
+}
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
