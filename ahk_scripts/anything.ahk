@@ -92,8 +92,18 @@ for key, default_value in default_anything_properties
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
      loop,
      {
+         search_updated=
        Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjimo{LAlt}{tab}
        
+         if ErrorLevel = EndKey:escape
+         {
+           exit()
+           break
+         }
+         if ErrorLevel = EndKey:LControl
+            {
+               continue
+            }
        ;;list all avaiable actions for the selected candidate 
        ;; usual one source only have one action ,
        ;; but some times user can give more than one action.
@@ -104,12 +114,6 @@ for key, default_value in default_anything_properties
        if ErrorLevel = EndKey:tab
        {
            selectedRowNum:= LV_GetNext(0)
-          if(selectedRowNum=0) ;;no matched candidates 
-          {
-               exit()
-               callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
-              break
-          }else{
              if (tabListActions = "")
              {
                 tabListActions="yes"
@@ -127,27 +131,14 @@ for key, default_value in default_anything_properties
                 }else{
                 }
              }
-         }
        }
          if ErrorLevel = EndKey:enter
          {
             selectedRowNum:= LV_GetNext(0)
-          if(selectedRowNum=0) ;;no matched candidates 
-          {
-              exit()
-              callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
-              break
-            ;;if no matched candidates ,then the string you typed in the textfield will
-            ;;be treated as the candidate ,and the actions can  be executed on this
-            ;;candidate is the collection of each source's  DefaultAction 
-              
-          }else{
             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
             action:= getDefaultAction(tmpSources[source_index]["action"])
             exit()
             callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-            break
-          }
             break
          }
          
@@ -155,43 +146,25 @@ for key, default_value in default_anything_properties
            {
             if (GetKeyState("LControl", "P")=1){
                  selectedRowNum:= LV_GetNext(0)
-                  if (selectedRowNum=0)
-                  {
-                    exit()
-                    callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
-                    break
-                  }else
-                  {
-                       LV_GetText(source_index, selectedRowNum,2) 
-                       action:= getSecondActionorDefalutAction(tmpSources[source_index]["action"])
-                       exit()
-                       callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                       break
-                  }
-            
+                  LV_GetText(source_index, selectedRowNum,2) 
+                  action:= getSecondActionorDefalutAction(tmpSources[source_index]["action"])
+                  exit()
+                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  break
             }else{
                  input=j
-             }
+            }
           }
          
          if ErrorLevel = EndKey:m
            {
             if (GetKeyState("LControl", "P")=1){
                  selectedRowNum:= LV_GetNext(0)
-                  if (selectedRowNum=0)
-                  {
-                    exit()
-                   callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
-                   break
-                  }else
-                  {
                        LV_GetText(source_index, selectedRowNum,2) 
                        action:= getThirdActionorDefalutAction(tmpSources[source_index]["action"])
                        exit()
                        callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
-                  }
-            
             }else{
                  input=m
              }
@@ -208,32 +181,7 @@ for key, default_value in default_anything_properties
                  input=i
              }
           }
-                   ;;send the first source to last 
-         if ErrorLevel = EndKey:o
-           {
-            if (GetKeyState("LControl", "P")=1){
-               tmpSources.insert(tmpSources.remove(1))
-               matched_candidates:=refresh(tmpSources,search,win_width)
-                     if matched_candidates.maxIndex()>0
-                      {
-                        LV_Modify(1, "Select Focus Vis") 
-                      }
-
-            }else{
-                 input=o
-             }
-          }
           
-          
-         if ErrorLevel = EndKey:escape
-         {
-           exit()
-           break
-         }
-         if ErrorLevel = EndKey:LControl
-            {
-               continue
-            }
          if ErrorLevel = EndKey:n
            {
             if (GetKeyState("LControl", "P")=1){
@@ -278,10 +226,7 @@ for key, default_value in default_anything_properties
         {
           if (GetKeyState("LControl", "P")=1){
                search=
-               GuiControl,, Edit1, %search%
-               GuiControl,Focus,Edit1 ;; focus Edit1 ,
-               matched_candidates:=refresh(tmpSources,search ,win_width)
-               continue
+               search_updated=yes
            }else{
                 input=u
             }
@@ -292,12 +237,8 @@ for key, default_value in default_anything_properties
              if search <>
               {
               StringTrimRight, search, search, 1
+              search_updated=yes
               }
-              GuiControl,, Edit1, %search%
-              GuiControl,Focus,Edit1 ;; focus Edit1 ,
-              Send {End} ;;move cursor end
-              matched_candidates:=refresh(tmpSources,search,win_width)
-              continue
         }
 
         if ErrorLevel = EndKey:h
@@ -306,30 +247,40 @@ for key, default_value in default_anything_properties
              if search <>
               {
               StringTrimRight, search, search, 1
+              search_updated=yes
               }
-              GuiControl,, Edit1, %search%
-              GuiControl,Focus,Edit1 ;; focus Edit1 ,
-              Send {End} ;;move cursor end
-              refresh(tmpSources,search,win_width)
-              continue
            }else{
                 input=h
             }
         }
-           if input<>
+        ;;send the first source to last 
+        if ErrorLevel = EndKey:o
+           {
+            if (GetKeyState("LControl", "P")=1){
+               tmpSources.insert(tmpSources.remove(1))
+               search_updated=yes
+            }else{
+                 input=o
+             }
+          }
+
+           if (input<>"" or  search_updated="yes")
            {
             search = %search%%input%
             GuiControl,, Edit1, %search%
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
+            selectedRowNum:= LV_GetNext(0)
            ;;TODO: REFRESH and select needed selected 
-           matched_candidates:=refresh(tmpSources,search,win_width)
-              if matched_candidates.maxIndex()>0
+            matched_candidates:=refresh(tmpSources,search,win_width)
+              if matched_candidates.maxIndex() >= selectedRowNum
+              {
+                LV_Modify(selectedRowNum, "Select Focus Vis")
+              }else if ( matched_candidates.maxIndex() >0)
               {
                 LV_Modify(1, "Select Focus Vis")
               }
-              
-         }
+            }
      } ;; end of loop
      exit()
 } ;; end of anything function
