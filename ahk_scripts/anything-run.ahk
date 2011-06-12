@@ -12,7 +12,6 @@ cmd_history:=Array()
 anything_cmd_source:=Object()
 anything_cmd_source["name"]:="Run"
 anything_cmd_source["candidate"]:= cmd_history
-
 anything_cmd_source["action"] := Array("anything_run","anything_run_delete_from_history")
 
 
