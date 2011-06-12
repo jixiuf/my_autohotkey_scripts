@@ -5,6 +5,11 @@ SetKeyDelay  -1
 AutoTrim, off
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;don't change the default value here ,you can use 
+;;         anything_with_properties()
+;; and
+;;         anything_multiple_sources_with_properties
+;; overwrite  properties here .(just overwrite properties you need is enough)
 default_anything_properties:=Object()
 ;;the width of Anything window
 default_anything_properties["win_width"]:= 900
@@ -17,6 +22,13 @@ default_anything_properties["quit_when_lose_focus"]:="no"
 default_anything_properties["no_candidate_action"]:="anything_do_nothing"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;4 public function
+
+;; anything
+;; anything_with_properties
+;; anything_multiple_sources
+;; anything_multiple_sources_with_properties
+
 
 anything(source)
 {
