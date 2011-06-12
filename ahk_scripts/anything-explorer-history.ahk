@@ -21,7 +21,7 @@ Loop, Parse,  history_line,,
 ;;source for anything .
 anything_explorer_history_source:=Object()
 anything_explorer_history_source["candidate"]:= directory_history
-anything_explorer_history_source["action"] :="visit_directory"
+anything_explorer_history_source["action"] :=Array("visit_directory","delete_from_directory_history")
 anything_explorer_history_source["name"]:="ExpHist"
 
 ; f3::
@@ -98,7 +98,19 @@ getExplorerAddressPath()
   return ExplorePath
 }
   
-
+delete_from_directory_history(candidate)
+{
+  global directory_history
+  for key ,directory in directory_history
+  {
+    if (directory = candidate)
+    {
+      directory_history.remove(key)
+      Break
+    }
+  }
+ writeHistory2Disk()
+}
 visit_directory( candidate_directory)
 {
   WinGet, active_id, ID, A
