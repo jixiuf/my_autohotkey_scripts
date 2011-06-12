@@ -9,7 +9,7 @@ default_anything_properties:=Object()
 ;;the width of Anything window
 default_anything_properties["win_width"]:= 900
 default_anything_properties["win_height"]:= 510
-default_anything_properties["quit_when_lose_focus"]:="yes"
+default_anything_properties["quit_when_lose_focus"]:="no"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate, 
@@ -97,8 +97,26 @@ for key, default_value in default_anything_properties
        
          if ErrorLevel = EndKey:escape
          {
-           exit()
-           break
+              if (tabListActions="yes")
+            {
+              tabListActions:=""
+              tmpSources:=sources
+               for key ,source in tmpSources {
+                    candidate:=source["candidate"]
+                    source["tmpCandidate"]:= getCandidatesArray(source)
+                    candidates_count += % source["tmpCandidate"].maxIndex()
+                  }
+                  matched_candidates:=refresh(tmpSources,"",win_width)
+                 if matched_candidates.maxIndex()>0
+                 {
+                    LV_Modify(1, "Select Focus Vis") 
+                 }else{
+                 }
+               }else
+               {
+                 exit()
+                 Break
+               }
          }
          if ErrorLevel = EndKey:LControl
             {
@@ -116,7 +134,7 @@ for key, default_value in default_anything_properties
            selectedRowNum:= LV_GetNext(0)
              if (tabListActions = "")
              {
-                tabListActions="yes"
+                tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                  tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
                  for key ,source in tmpSources {
@@ -238,7 +256,8 @@ for key, default_value in default_anything_properties
               {
               StringTrimRight, search, search, 1
               search_updated=yes
-              }
+            }
+            
         }
 
         if ErrorLevel = EndKey:h
@@ -266,6 +285,12 @@ for key, default_value in default_anything_properties
 
            if (input<>"" or  search_updated="yes")
            {
+             if (build_no_candidates_source="yes" and search_updated="yes")
+             {
+               tmpSources := sources
+               build_no_candidates_source:=""
+               Gui, Color,black,black
+             }
             search = %search%%input%
             GuiControl,, Edit1, %search%
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
@@ -279,8 +304,26 @@ for key, default_value in default_anything_properties
               }else if ( matched_candidates.maxIndex() >0)
               {
                 LV_Modify(1, "Select Focus Vis")
+              }else   ;;no candidates matched  
+              {
+                    build_no_candidates_source:="yes"
+                    Gui, Color,556b2f,556b2f
+                    tmpsources:= buildSource_4_no_candidates(sources , search)
+                           
+                           for key ,source in tmpSources {
+                             candidate:=source["candidate"]
+                             source["tmpCandidate"]:= getCandidatesArray(source)
+                             candidates_count += % source["tmpCandidate"].maxIndex()
+                           }
+                           matched_candidates:=refresh(tmpSources,"",win_width)
+                          if matched_candidates.maxIndex()>0
+                          {
+                             LV_Modify(1, "Select Focus Vis") 
+                          }else{
+                          }
               }
             }
+
      } ;; end of loop
      exit()
 } ;; end of anything function
@@ -503,10 +546,42 @@ anything_execute_action_on_selected(candidate)
   realCandidate:=candidate[2]
   callFuncByNameWithOneParam(functionName, realCandidate)
 }
+
+
+buildSource_4_no_candidates(sources ,search)
+{
+newSources:=Array()
+ source:=Object()
+ source["name"]:= "Actions"
+ candidates:=Array()
+ for key ,candidate in sources
+ {
+   for k,action in getAllActions(candidate["action"])
+   {
+   next:=Object()
+   next.insert("call action :  "candidate["name"] . "." . action)
+   next.insert(action)
+   next.insert(search)
+   candidates.insert(next)
+     
+   }
+ }
+ source["candidate"]:=candidates
+ source["action"] :="anything_execute_default_action_with_search"
+ newSources.insert(source)
+ return newSources
+}
+anything_execute_default_action_with_search(candidate)
+{
+  real_candidate :=candidate[3]
+  real_action:=candidate[2]
+  callFuncByNameWithOneParam(real_action ,real_candidate)
+}
 ;;this  is just a example 
 anything_do_nothing(candidate)
 {
    Tooltip % candidate
 }
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
