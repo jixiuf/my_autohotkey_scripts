@@ -93,7 +93,7 @@ for key, default_value in default_anything_properties
      loop,
      {
          search_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjimo{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlimo{LAlt}{tab}
        
          if ErrorLevel = EndKey:escape
          {
@@ -188,6 +188,28 @@ for key, default_value in default_anything_properties
              }
           }
           
+         if ErrorLevel = EndKey:l
+           {
+            if (GetKeyState("LControl", "P")=1){
+                                build_no_candidates_source:="yes"
+                    Gui, Color,483d8b,483d8b
+                    tmpsources:= buildSource_4_no_candidates(sources , search)
+                         for key ,source in tmpSources {
+                             candidate:=source["candidate"]
+                             source["tmpCandidate"]:= getCandidatesArray(source)
+                             candidates_count += % source["tmpCandidate"].maxIndex()
+                           }
+                           matched_candidates:=refresh(tmpSources,"",win_width)
+                          if matched_candidates.maxIndex()>0
+                          {
+                             LV_Modify(1, "Select Focus Vis") 
+                          }else{
+                          }
+            }else{
+                 input=l
+            }
+          }
+         
 
          if ErrorLevel = EndKey:i
            {
@@ -307,10 +329,9 @@ for key, default_value in default_anything_properties
               }else   ;;no candidates matched  
               {
                     build_no_candidates_source:="yes"
-                    Gui, Color,556b2f,556b2f
+                    Gui, Color,483d8b,483d8b
                     tmpsources:= buildSource_4_no_candidates(sources , search)
-                           
-                           for key ,source in tmpSources {
+                         for key ,source in tmpSources {
                              candidate:=source["candidate"]
                              source["tmpCandidate"]:= getCandidatesArray(source)
                              candidates_count += % source["tmpCandidate"].maxIndex()
