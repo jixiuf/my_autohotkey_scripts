@@ -12,7 +12,8 @@ cmd_history:=Array()
 anything_cmd_source:=Object()
 anything_cmd_source["name"]:="Run"
 anything_cmd_source["candidate"]:= cmd_history
-anything_cmd_source["action"] :="anything_run"
+
+anything_cmd_source["action"] := Array("anything_run","anything_run_delete_from_history")
 
 
 ;;init cmd_history from anything-run.ini 
@@ -40,6 +41,21 @@ anything_run(candidate)
     writeCmdHistory2Disk()
   }
 }
+
+anything_run_delete_from_history(candidate)
+{
+  global cmd_history
+  for key ,cmd in cmd_history
+  {
+    if (cmd = candidate)
+    {
+      cmd_history.remove(key)
+      Break
+    }
+  }
+  writeCmdHistory2Disk()
+}
+
 
 writeCmdHistory2Disk()
 {
