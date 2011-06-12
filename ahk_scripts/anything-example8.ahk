@@ -14,7 +14,7 @@
 ;; the default value is 
 ;; default_anything_properties["no_candidate_action"]:="anything_do_nothing"
 ;; that means when no candidates matched your search string ,and you press 
-;; "Enter" key ,then this function will be called ,and the search string 
+;; "Ctrl-i" key ,then this function will be called ,and the search string 
 ;; will be the parameter 
 
 
