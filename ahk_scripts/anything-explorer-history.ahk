@@ -1,8 +1,9 @@
 ;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk           
 #include anything.ahk
+SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode Regex ;
 ;;global variable 
-active_id=
+;;active_id=
 directory_history:=Array()
 ;;init history when first run this script 
 IfExist, anything-explorer-history.ini
@@ -18,15 +19,15 @@ Loop, Parse,  history_line,,
 }
 
 ;;source for anything .
-source:=Object()
-source["candidate"]:= directory_history
-source["action"] :="visit_directory"
-source["name"]:="ExpHist"
+anything_explorer_history_source:=Object()
+anything_explorer_history_source["candidate"]:= directory_history
+anything_explorer_history_source["action"] :="visit_directory"
+anything_explorer_history_source["name"]:="ExpHist"
 
-f3::
-  WinGet, active_id, ID, A
-   anything(source)
-return
+; f3::
+; ;;  WinGet, active_id, ID, A
+;    anything(anything_explorer_history_source)
+; return
 
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 
@@ -100,7 +101,8 @@ getExplorerAddressPath()
 
 visit_directory( candidate_directory)
 {
-  global active_id 
+  WinGet, active_id, ID, A
+;;  global active_id 
   WinGetClass, activeWinClass ,ahk_id %active_id%
   updateHistory(candidate_directory)
   writeHistory2Disk()
