@@ -14,7 +14,7 @@ default_anything_properties:=Object()
 ;;the width of Anything window
 default_anything_properties["win_width"]:= 900
 default_anything_properties["win_height"]:= 510
-default_anything_properties["quit_when_lose_focus"]:="no"
+default_anything_properties["quit_when_lose_focus"]:="yes"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate, 
