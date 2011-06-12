@@ -105,7 +105,7 @@ for key, default_value in default_anything_properties
      loop,
      {
          search_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlimo{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimo{LAlt}{tab}
        
          if ErrorLevel = EndKey:escape
          {
@@ -172,6 +172,18 @@ for key, default_value in default_anything_properties
             break
          }
          
+         if ErrorLevel = EndKey:z
+           {
+            if (GetKeyState("LControl", "P")=1){
+                  selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+                  action:= getDefaultAction(tmpSources[source_index]["action"])
+                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                 search_updated=yes ;;
+            }else{
+                 input=z
+            }
+          }
          if ErrorLevel = EndKey:j
            {
             if (GetKeyState("LControl", "P")=1){
