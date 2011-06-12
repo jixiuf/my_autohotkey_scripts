@@ -598,10 +598,16 @@ anything_execute_default_action_with_search(candidate)
   real_action:=candidate[2]
   callFuncByNameWithOneParam(real_action ,real_candidate)
 }
-;;this  is just a example 
+;;this  is just a example
+;;you can parse a property to anything  
+;;default_anything_properties["no_candidate_action"]:="anything_do_nothing"
+; anything_properties:=Object()
+; anything_properties["no_candidate_action"]:="do_what_you_want_when_no_matched_candidates"
+; f1::anything_multiple_sources_with_properties(sources,anything_properties)
+ 
 anything_do_nothing(candidate)
 {
-   Tooltip % candidate
+  Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
 }
 
 
