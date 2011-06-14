@@ -125,6 +125,11 @@ visit_directory( candidate_directory)
 		; then the addressbar shows http://www.L:\folder.com. To solve this,
 		; I added a {right} before {Enter}":
 		ControlSend, Edit1, {Right}{Enter}, ahk_id %active_id%
+        sleep 100
+        ControlFocus, SysListView321,A
+        Send {Home} ;;selected first file dired
+        
+
 		return
   }else if (activeWinClass="ConsoleWindowClass"){
          WinGetTitle, title ,ahk_id %active_id%
@@ -139,11 +144,22 @@ visit_directory( candidate_directory)
            SendInput, cd /d "%candidate_directory%"{Enter}
          }
   }else if (activeWinClass="Emacs"){
-  	WinActivate, ahk_id %active_id% 
-	SetKeyDelay, 0 
- SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
+ ;  	WinActivate, ahk_id %active_id% 
+ ;    SetKeyDelay, 0 
+ ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
+    dired_cmd:="emacsclientw  --eval ""(dired \""" . win2posixPath(candidate_directory) . "\"")"" "
+    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
+    if ErrorLevel = ERROR
+    {
+       MsgBox ,Please add you Emacs/bin path  to your Path
+    }
  }else{
-     Run explorer.exe   "%candidate_directory%"
+      Run explorer.exe   /n`, /e`,  "%candidate_directory%"
+      WinWait ahk_class (CabinetWClass|ExploreWClass) 
+      WinActivate
+      sleep 50
+      ControlFocus, SysListView321,A
+      Send {Home}
    }
 }
 
@@ -158,3 +174,9 @@ win2msysPath(winPath){
    return %msysPath3%
 }
 
+;;d:\a\b -->d:/a/b
+win2posixPath(winPath)
+{
+   StringReplace, posixPath, winPath, \ , /, All
+   Return posixPath  
+}
