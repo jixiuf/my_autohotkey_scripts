@@ -1,5 +1,5 @@
-#SingleInstance force
-#NoTrayIcon
+; #SingleInstance force
+; #NoTrayIcon
 ;WinGetPos ,,,deskWidth,deskHeight ,ahk_class Progman
 
 #j::
