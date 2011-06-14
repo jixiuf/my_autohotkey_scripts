@@ -35,27 +35,36 @@ anything_explorer_history_source["name"]:="ExpHist"
   if (A_PriorHotkey <> "~LButton" or A_TimeSincePriorHotkey > 200)
   {
     ; Too much time between presses, so this isn't a double-press.
-    address:=getExplorerAddressPath()
+    anything_explorer_history_address:=getExplorerAddressPath()
     KeyWait, LButton
    SetTimer, addressChangeTimer, 200 
    return
   }
 return
 
-#IfWinActive 
+#IfWinActive
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 addressChangeTimer:
   SetTimer, addressChangeTimer ,off
   if WinActive(  "ahk_class ExploreWClass|CabinetWClass")
   {
      newAddr:= getExplorerAddressPath()
-     if (address <> newAddr)
+     if (anything_explorer_history_address <> newAddr)
       {
         ;;add to history list 
         updateHistory(newAddr)
-        writeHistory2Disk()
+;;        writeHistory2Disk()
       }
   }
+return
+
+;;every 5 minute ,save history to disk 
+SetTimer, writeAnythingExpHist2Desk, 300000 
+
+
+writeAnythingExpHist2Desk:
+  writeHistory2Disk()
 return
 
 writeHistory2Disk()
