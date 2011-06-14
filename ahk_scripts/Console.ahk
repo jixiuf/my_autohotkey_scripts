@@ -1,8 +1,8 @@
 ;;;Ctrl+v Ctrl+Y Shift+Insert: paste 在命令行里有效
 ;;;Win+v 在所有窗口中有效,
 
-#NoTrayIcon
-#SingleInstance force
+; #NoTrayIcon
+; #SingleInstance force
 SendMode, Input
 
 ; ;// Win+V = "type-paste" for all apps...
