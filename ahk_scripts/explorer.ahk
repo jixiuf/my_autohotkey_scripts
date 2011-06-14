@@ -1,5 +1,5 @@
-#SingleInstance force
-#NoTrayIcon
+; #SingleInstance force
+; #NoTrayIcon
 
 ;;;在Explorer.exe 程序中定义以下快捷键
 ;;Alt+1 复制 选中的文件名到剪切板
@@ -18,45 +18,145 @@
 
 SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ; 下面的窗口类依次为：桌面、Win+D后的桌面、我的电脑、资源管理器、另存为等
-#IfWinActive, ahk_class (Progman|WorkerW|CabinetWClass|ExploreWClass|#32770)
+#IfWinActive ahk_class Progman|WorkerW|CabinetWClass|ExploreWClass|#32770
 ;;Alt+1 copy文件名
 !1::
-send ^c
-sleep,200
-clipboard = %clipboard%
-SplitPath, clipboard, name
-clipboard = %name%
-return
+  send ^c
+  sleep,200
+  clipboard = %clipboard%
+  SplitPath, clipboard, name
+  clipboard = %name%
+  return
 ;;alt+2 copy 此文件所在的路径名
 !2::
-send ^c
-sleep,200
-clipboard = %clipboard%
-SplitPath, clipboard, , dir
-clipboard = %dir%
-return
+  send ^c
+  sleep,200
+  clipboard = %clipboard%
+  SplitPath, clipboard, , dir
+  clipboard = %dir%
+  return
 ;;copy 此文件的全路径名
 !3::
-send ^c
-sleep,200
-clipboard = %clipboard%
-return
-
+  send ^c
+  sleep,200
+  clipboard = %clipboard%
+  return
+#IfWinActive
 
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
-    ; create new folder
-    ;
-    ^!n::Send !fwf
+^n::Send {Down}
+^p::Send {Up}
+^j::
+  ControlGetFocus, focusedControl,A 
+    if(focusedControl="SysListView321")
+  {
+    Send {Enter}
+    ControlFocus, SysListView321,A
+    Send {Home}
+  }else
+  {
+    Send {Enter}
+  }
 
-    ; create new text file
-    ;
-    ^!t::Send !fw{Up}{Up}{Up}{Return}
+return
 
-    ; open 'cmd' in the current directory
-    ;
-    ^!c::
-        OpenCmdInCurrent()
-    return
+^f::
+  ControlGetFocus, focusedControl,A 
+    if(focusedControl="SysListView321")
+  {
+    Send {Enter}
+    ControlFocus, SysListView321,A
+    Send {Home}
+  }else
+  {
+    Send {Right}
+  }
+
+return
+^b::send {Left}
+^h::
+   ControlGetFocus, focusedControl,A 
+    if(focusedControl="SysTreeView321")
+  {
+    send {Left}
+  }else
+  {
+    Send ^h
+  }
+return
+ 
+^u::
+   MouseGetPos,,,,controlUnderMouse,
+    if(controlUnderMouse="SysListView321")
+  {
+    send     {backspace}
+    ControlFocus, SysListView321,A
+    Send {Home}
+  }else
+  {
+    send u
+  }
+return
+
+;;Alt+< 与Alt+> 跳到开头结尾,(选中第一个或最后一个文件)
+;;实际是Shift+Alt+, 与Shift+Alt+.
+!+,::
+   ControlFocus, SysListView321,A
+    Send {Home}
+return
+
+!+.::
+  ControlFocus, SysListView321,A
+  Send {End}
+  return
+  
+;;ctrl+L 定位在地址栏
+^l:: ControlFocus, Edit1,A
+;"+"  like Emacs dired: create new folder 
++=::Send !fwf
+
+; create new text file
+;
+!n::
+InputBox, UserInput, New File Name?, Please enter a New File Name(.txt), , 280, 100,,,,,.txt will be append
+if ErrorLevel
+{
+}else
+{
+  Send {Left}
+ControlGetText, ExplorePath, Edit1, A
+StringRight, isEndsWithPathSeaprator, ExplorePath, 1
+if (isEndsWithPathSeaprator ="\")
+{
+  newFilePath=%ExplorePath%%UserInput%.txt
+}else
+{
+  newFilePath=%ExplorePath%\%UserInput%.txt
+}
+FileAppend,, %newFilepath%
+ControlFocus, SysListView321,A
+; Switch the active window's keyboard layout/language to English:
+PostMessage, 0x50, 0, 0x4090409,, A  ; 0x50 is WM_INPUTLANGCHANGEREQUEST.
+SendInput {F5}%UserInput%  
+}
+return
+
+;Ctrl-t TOGGLES FILE EXTENSIONS
+!h::
+RegRead, HiddenFiles_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt
+If HiddenFiles_Status = 1
+     RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 0
+Else
+   RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 1
+WinGetClass, eh_Class,A
+If (eh_Class = "#32770" OR A_OSVersion = "WIN_VISTA")
+   send, {F5}
+Else PostMessage, 0x111, 28931,,, A
+Return
+
+; open 'cmd' in the current directory
+;
+^!c::OpenCmdInCurrent()
 #IfWinActive
 
 ; Opens the command shell 'cmd' in the directory browsed in Explorer.
@@ -64,30 +164,16 @@ return
 ;
 OpenCmdInCurrent()
 {
-    WinGetText, full_path, A  ; This is required to get the full path of the file from the address bar
-
-    ; Split on newline (`n)
-    StringSplit, word_array, full_path, `n
-    full_path = %word_array1%   ; Take the first element from the array
-
-    ; Just in case - remove all carriage returns (`r)
-    StringReplace, full_path, full_path, `r, , all
-
-    IfInString full_path, \
-    {
-        Run, cmd /K cd /D "%full_path%"
-    }
-    else
-    {
-        Run, cmd /K cd /D "C:\ "
-    }
+ ControlGetText, full_path, Edit1, A
+ IfInString full_path, \
+  {
+    Run, cmd /K cd /D "%full_path%"
+  }
+  else
+  {
+    Run, cmd /K cd /D "C:\ "
+  }
 }
-
-;;;Ctrl+L 定位在地址栏
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-^l::Send {F4}{Escape}
-#IfWinActive
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;在资源管理器中，在隐与不隐间切换（隐藏文件）
@@ -101,43 +187,12 @@ toggle_hide_file_in_explore(){
 ; Value Name: Hidden
 ; Data Type: REG_DWORD (DWORD Value)
 ; Value Data: (1 = show hidden, 2 = do not show)
-    RegRead, ShowHidden_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
-    if ShowHidden_Status = 2
-    RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
-    Else
-    RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
-    WinGetClass, CabinetWClass
-    PostMessage, 0x111, 28931,,, A
-    Return
-}
-;;将Ctrl+alt+h 绑定到 toggle_hide_file_in_explore
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-^!h::toggle_hide_file_in_explore()
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;在某些窗口中起用Ctrl+n Ctrl+p 代替上下键
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-^n::SendInput {Down}
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-^p::SendInput {Up}
-
-;;Alt+< 与Alt+> 跳到开头结尾,(选中第一个或最后一个文件)
-;;实际是Shift+Alt+, 与Shift+Alt+.
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-!+,::SendInput {Alt}ea{Home}
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-!+.::SendInput {Alt}ea{End}
-
-; WINDOWS KEY + Y TOGGLES FILE EXTENSIONS
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
-#y::
-RegRead, HiddenFiles_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt
-If HiddenFiles_Status = 1
-     RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 0
+RegRead, ShowHidden_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
+if ShowHidden_Status = 2
+  RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
 Else
-   RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 1
-WinGetClass, eh_Class,A
-If (eh_Class = "#32770" OR A_OSVersion = "WIN_VISTA")
-   send, {F5}
-Else PostMessage, 0x111, 28931,,, A
+  RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
+WinGetClass, CabinetWClass
+PostMessage, 0x111, 28931,,, A
 Return
+}
