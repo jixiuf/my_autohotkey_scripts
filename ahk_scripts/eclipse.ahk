@@ -1,5 +1,5 @@
-﻿#NoTrayIcon
-#SingleInstance force   
+﻿; #NoTrayIcon
+; #SingleInstance force   
 SetKeyDelay 0
 ;;Eclipse 中Ctrl+PageUP Ctrl+pagedown在打开的编辑器中切换
 ;;但是它硬编辑到代码中了,没法进行配置,这里将Ctrl+alt+n 按下时等效于Ctrl+pageDown
@@ -10,7 +10,7 @@ SetKeyDelay 0
 ;;     Alt+p 相当于按下5次Up
 !n::SendInput {Down 4} 
 !p::SendInput {Up 4}
-#IfWinActive ahk_class SWT_Window0
+#IfWinActive 
 
 ;;对于Ctrl+Shift+r ,open resource
 ;;按下空格相当于按下*
