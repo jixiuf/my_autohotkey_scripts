@@ -2,11 +2,15 @@
 #NoTrayIcon
 SetWorkingDir %A_ScriptDir%
 
-run %A_ScriptDir%\anything-config.ahk
 run %A_ScriptDir%\EasyWindowDrag_(KDE).ahk
-run %A_ScriptDir%\iswitchw-plus.ahk
 run %A_ScriptDir%\DoOver.ahk
 run %A_ScriptDir%\MoveInactiveWin.ahk
+
+
+run %A_ScriptDir%\iswitchw-plus.ahk
+
+
+#Include %A_ScriptDir%\anything-config.ahk
 
 #Include %A_ScriptDir%\explorer.ahk
 #Include %A_ScriptDir%\cmd2msys.ahk
