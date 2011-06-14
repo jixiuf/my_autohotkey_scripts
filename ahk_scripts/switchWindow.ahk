@@ -154,13 +154,28 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 		; then the addressbar shows http://www.L:\folder.com. To solve this,
 		; I added a {right} before {Enter}":
   ControlSend, Edit1, {Right}{Enter}, A
+ ;;选中第一个文件
+    sleep 50
+  ControlFocus, SysListView321,A
+  Send {Home}
 
 
   }else{
     WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
+    sleep 50
+     ;;选中第一个文件
+     ControlFocus, SysListView321,A
+     Send {Home}
+
   }
 else
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
+    WinWait ahk_class (CabinetWClass|ExploreWClass) 
+    WinActivate
+    ;;选中第一个文件
+    sleep 50
+    ControlFocus, SysListView321,A
+    Send {Home}
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
