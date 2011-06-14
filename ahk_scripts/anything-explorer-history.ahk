@@ -116,7 +116,7 @@ delete_all_directory_history(unused_candidate)
     directory_history.remove(1)
     maxIndex-=1
   }
-   writeHistory2Disk()
+;;   writeHistory2Disk()
 }
 
 delete_from_directory_history(candidate)
@@ -130,7 +130,7 @@ delete_from_directory_history(candidate)
       Break
     }
   }
- writeHistory2Disk()
+ ;;writeHistory2Disk()
 }
 visit_directory( candidate_directory)
 {
@@ -138,7 +138,7 @@ visit_directory( candidate_directory)
 ;;  global active_id 
   WinGetClass, activeWinClass ,ahk_id %active_id%
   updateHistory(candidate_directory)
-  writeHistory2Disk()
+  ;;writeHistory2Disk()
   if (activeWinClass ="ExploreWClass" or activeWinClass= "CabinetWClass")
   {
 		ControlSetText, Edit1, %candidate_directory%, ahk_id %active_id%
