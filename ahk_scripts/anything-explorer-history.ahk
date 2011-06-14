@@ -151,7 +151,7 @@ visit_directory( candidate_directory)
     Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
     if ErrorLevel = ERROR
     {
-       MsgBox ,Please add you Emacs/bin path  to your Path
+       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
     }
  }else{
       Run explorer.exe   /n`, /e`,  "%candidate_directory%"
