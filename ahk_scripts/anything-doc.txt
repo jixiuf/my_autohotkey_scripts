@@ -28,7 +28,8 @@ when you select a candidate you can press
                         ;; anything_multiple_sources_with_properties()
 <Esc> and <Ctrl-g>      quit Anything
 
-
+Ctrl-u                  empty search string
+backspace and Ctrl-h   back delete a char  
 
 
 Now I have wrote 2 <source> for anything.ahk
