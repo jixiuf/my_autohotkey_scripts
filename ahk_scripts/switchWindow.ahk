@@ -11,8 +11,8 @@
 ;; 如果eclipse没有获得焦点，则最大化之，并聚焦
 
 
-#NoTrayIcon
-#SingleInstance force
+; #NoTrayIcon
+; #SingleInstance force
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;注意，eclipse命令必须在Path 环境变量中,
@@ -40,8 +40,8 @@ IfWinExist,ahk_class MozillaUIWindowClass|MozillaWindowClass
      WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
   else{
     WinMaximize,ahk_class MozillaUIWindowClass|MozillaWindowClass
-    sleep 10
-    WinSet, Style, -0xC00000, A ;;full screen
+;;    sleep 10
+;;    WinSet, Style, -0xC00000, A ;;full screen
     WinActivate ,ahk_class MozillaUIWindowClass|MozillaWindowClass
     }
 else
@@ -58,8 +58,8 @@ IfWinExist,ahk_class IEFrame
      WinMinimize ,ahk_class IEFrame
   else{
     WinMaximize,ahk_class IEFrame
-    sleep 10
-    WinSet, Style, -0xC00000, A ;;full screen
+;;    sleep 10
+;;    WinSet, Style, -0xC00000, A ;;full screen
     WinActivate ,ahk_class IEFrame
     }
 else
@@ -141,14 +141,21 @@ return
 #e::
 MyFavorateDir:="D:\"
 SetTitleMatchMode, RegEx
-IfWinExist,ahk_class ahk_class (CabinetWClass|ExploreWClass)
+IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
   If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
-      WinGetText, full_path, A  ; 取到地址栏里的路径
-      StringSplit, word_array, full_path, `n     ;;因为取到的路径中有换行符，需要却掉它
-      full_path = %word_array1%   ; Take the first element from the array
-    StringReplace, full_path, full_path, `r, , all   ; 以防万一将尝试却掉回车符returns (`r)
+     ControlGetText, ExplorePath, Edit1, A
+;;之所以不用这条命令，是因为当地址栏里为“我的电脑”四个字时，用这条命令提示找不到路径     
+;;    run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
+    Run explorer  /n`, /e`, 
+    WinWait ahk_class (CabinetWClass|ExploreWClass) 
+    WinActivate
+    ControlSetText, Edit1, %ExplorePath%, A
+		; Tekl reported the following: "If I want to change to Folder L:\folder
+		; then the addressbar shows http://www.L:\folder.com. To solve this,
+		; I added a {right} before {Enter}":
+  ControlSend, Edit1, {Right}{Enter}, A
 
-      run, explorer.exe /n`, /e`, "%full_path%"
+
   }else{
     WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
   }
