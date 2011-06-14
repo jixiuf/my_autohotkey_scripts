@@ -17,3 +17,4 @@ send clear`n
 ;;;;;;;;;;;;;;;;;;
 #IfWinActive ,ahk_class ConsoleWindowClass
 ^Return::startMsysHere()
+#IfWinActive
