@@ -1,5 +1,7 @@
-#NoTrayIcon
-#SingleInstance force
+; -*- coding:utf-8 -*-
+
+; #NoTrayIcon
+; #SingleInstance force
 SetKeyDelay 0
 
 
@@ -35,7 +37,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 
 !s::Send ^f
 ^h::Send {BackSpace}
-return
+#IfWinActive 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
