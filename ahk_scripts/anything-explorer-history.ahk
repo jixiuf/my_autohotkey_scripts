@@ -21,7 +21,7 @@ Loop, Parse,  history_line,,
 ;;source for anything .
 anything_explorer_history_source:=Object()
 anything_explorer_history_source["candidate"]:= directory_history
-anything_explorer_history_source["action"] :=Array("visit_directory","delete_from_directory_history")
+anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
 anything_explorer_history_source["name"]:="ExpHist"
 
 ; f3::
@@ -97,7 +97,19 @@ getExplorerAddressPath()
   ControlGetText, ExplorePath, Edit1, A
   return ExplorePath
 }
-  
+
+delete_all_directory_history(unused_candidate)
+{
+  global directory_history
+  maxIndex:=directory_history.maxIndex()
+  Loop , %maxIndex%
+  {
+    directory_history.remove(1)
+    maxIndex-=1
+  }
+   writeHistory2Disk()
+}
+
 delete_from_directory_history(candidate)
 {
   global directory_history
