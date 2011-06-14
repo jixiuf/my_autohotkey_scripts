@@ -11,11 +11,6 @@
 ;;           定义了在cmd.exe窗口中按下Ctrl+Return键，转换成 msys.bat环境)
 ;;
 ;;Ctrl+l 定位到地址栏
-
-
-
-
-
 SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ; 下面的窗口类依次为：桌面、Win+D后的桌面、我的电脑、资源管理器、另存为等
 #IfWinActive ahk_class Progman|WorkerW|CabinetWClass|ExploreWClass|#32770
@@ -53,32 +48,46 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
     Send {Enter}
     ControlFocus, SysListView321,A
     Send {Home}
+    
+    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+    ;;add to history list
+    sleep 300
+    updateHistory(getExplorerAddressPath())
+    writeHistory2Disk()
   }else
   {
     Send {Enter}
   }
-
 return
 
 ^f::
   ControlGetFocus, focusedControl,A 
-    if(focusedControl="SysListView321")
-  {
-    Send {Enter}
-    ControlFocus, SysListView321,A
-    Send {Home}
-  }else
-  {
-    Send {Right}
-  }
+      Send {Right}
 
+    if(focusedControl="SysTreeView321")
+  {
+    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+    ;;add to history list 
+    sleep 300
+    updateHistory(getExplorerAddressPath())
+    writeHistory2Disk()
+  }
 return
+
 ^b::send {Left}
 ^h::
    ControlGetFocus, focusedControl,A 
     if(focusedControl="SysTreeView321")
   {
+
     send {Left}
+    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+    ;;add to history list 
+    sleep 300
+    updateHistory(getExplorerAddressPath())
+    writeHistory2Disk()
+    
+
   }else
   {
     Send ^h
@@ -86,31 +95,42 @@ return
 return
  
 ^u::
-   MouseGetPos,,,,controlUnderMouse,
-    if(controlUnderMouse="SysListView321")
+   ControlGetFocus, focusedControl,A 
+    if(focusedControl="SysListView321")
   {
     send     {backspace}
     ControlFocus, SysListView321,A
     Send {Home}
+        
+    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+    ;;add to history list 
+    updateHistory(getExplorerAddressPath())
+    sleep 300
+    writeHistory2Disk()
+
   }else
   {
     send u
   }
 return
 
-;;Alt+< 与Alt+> 跳到开头结尾,(选中第一个或最后一个文件)
-;;实际是Shift+Alt+, 与Shift+Alt+.
-!+,::
+;;Ctrl+, 选中第一个文件
+^,::
    ControlFocus, SysListView321,A
     Send {Home}
 return
-
-!+.::
+;;Ctrl+. 选中最后一个文件
+^.::
   ControlFocus, SysListView321,A
   Send {End}
   return
   
-;;ctrl+L 定位在地址栏
+;;ctrl+; 定位到目录树
+^;::
+  ControlFocus, SysTreeView321,A
+return
+
+ ;;ctrl+L 定位在地址栏
 ^l:: ControlFocus, Edit1,A
 ;"+"  like Emacs dired: create new folder 
 +=::Send !fwf
