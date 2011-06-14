@@ -1,5 +1,5 @@
-#NoTrayIcon
-#SingleInstance force
+; #NoTrayIcon
+; #SingleInstance force
 SetKeyDelay 0
 
 
