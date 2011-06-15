@@ -53,7 +53,6 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
     ;;add to history list
     sleep 300
     updateHistory(getExplorerAddressPath())
-    writeHistory2Disk()
   }else
   {
     Send {Enter}
@@ -70,7 +69,6 @@ return
     ;;add to history list 
     sleep 300
     updateHistory(getExplorerAddressPath())
-    writeHistory2Disk()
   }
 return
 
@@ -85,9 +83,6 @@ return
     ;;add to history list 
     sleep 300
     updateHistory(getExplorerAddressPath())
-    writeHistory2Disk()
-    
-
   }else
   {
     Send ^h
@@ -104,12 +99,8 @@ return
         
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
-    updateHistory(getExplorerAddressPath())
     sleep 300
-    writeHistory2Disk()
-
-  }else
-  {
+    updateHistory(getExplorerAddressPath())
     send u
   }
 return
@@ -177,6 +168,7 @@ Return
 ; open 'cmd' in the current directory
 ;
 ^!c::OpenCmdInCurrent()
+^!h::toggle_hide_file_in_explore()
 #IfWinActive
 
 ; Opens the command shell 'cmd' in the directory browsed in Explorer.
@@ -216,3 +208,23 @@ WinGetClass, CabinetWClass
 PostMessage, 0x111, 28931,,, A
 Return
 }
+
+;;需要 emacsclientw 在Path路径下
+openSelectedfileWithEamcs()
+{
+  ControlGetFocus, focusedControl,A
+  if (focusedControl="SysListView321")
+  {
+    ClipSaved := ClipboardAll
+    Send ^c
+    sleep,200
+    clipboard = %clipboard%
+    fullPath=%clipboard%
+    Clipboard := ClipSaved   
+    run , emacsclientw %fullPath%
+  }
+}
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+^e:: openSelectedfileWithEamcs()
+#IfWinActive
+
