@@ -45,14 +45,19 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
   ControlGetFocus, focusedControl,A 
     if(focusedControl="SysListView321")
   {
+    ControlGetText, oldExplorePath, Edit1, A
     Send {Enter}
+        sleep 150
+    ControlGetText, newExplorePath, Edit1, A
     ControlFocus, SysListView321,A
-    Send {Home}
+    if (newExplorePath<>oldExplorePath)
+    {
+      Send {Home}
+    }
     
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list
-    sleep 300
-    updateHistory(getExplorerAddressPath())
+    updateHistory(newExplorePath)
   }else
   {
     Send {Enter}
@@ -94,13 +99,13 @@ return
     if(focusedControl="SysListView321")
   {
     send     {backspace}
+    ControlGetText, newExplorePath, Edit1, A
     ControlFocus, SysListView321,A
-    Send {Home}
-        
+      Send {Home}
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
     sleep 300
-    updateHistory(getExplorerAddressPath())
+    updateHistory(newExplorePath)
   }
 return
 
@@ -128,7 +133,7 @@ return
 ; create new text file
 ;
 !n::
-InputBox, UserInput, New File Name?, Please enter a New File Name(.txt), , 280, 100,,,,,.txt will be append
+InputBox, UserInput, New File Name?, Please enter a New File Name(.txt), , 280, 100,,,,,
 if ErrorLevel
 {
 }else
@@ -138,10 +143,10 @@ ControlGetText, ExplorePath, Edit1, A
 StringRight, isEndsWithPathSeaprator, ExplorePath, 1
 if (isEndsWithPathSeaprator ="\")
 {
-  newFilePath=%ExplorePath%%UserInput%.txt
+  newFilePath=%ExplorePath%%UserInput%
 }else
 {
-  newFilePath=%ExplorePath%\%UserInput%.txt
+  newFilePath=%ExplorePath%\%UserInput%
 }
 FileAppend,, %newFilepath%
 ControlFocus, SysListView321,A
