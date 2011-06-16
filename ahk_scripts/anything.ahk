@@ -118,7 +118,7 @@ for key, default_value in default_anything_properties
                     source["tmpCandidate"]:= getCandidatesArray(source)
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
-                  matched_candidates:=refresh(tmpSources,"",win_width)
+                  matched_candidates:=refresh(tmpSources,search,win_width)
                  if matched_candidates.maxIndex()>0
                  {
                     LV_Modify(1, "Select Focus Vis") 
@@ -160,7 +160,22 @@ for key, default_value in default_anything_properties
                    LV_Modify(1, "Select Focus Vis") 
                 }else{
                 }
-             }
+              }else
+              {
+              tabListActions:=""
+              tmpSources:=sources
+               for key ,source in tmpSources {
+                    candidate:=source["candidate"]
+                    source["tmpCandidate"]:= getCandidatesArray(source)
+                    candidates_count += % source["tmpCandidate"].maxIndex()
+                  }
+                  matched_candidates:=refresh(tmpSources,search,win_width)
+                 if matched_candidates.maxIndex()>0
+                 {
+                    LV_Modify(1, "Select Focus Vis") 
+                 }else{
+                 }
+               }
        }
          if ErrorLevel = EndKey:enter
          {
