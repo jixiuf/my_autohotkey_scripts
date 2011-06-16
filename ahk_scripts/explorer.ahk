@@ -101,7 +101,6 @@ return
     ;;add to history list 
     sleep 300
     updateHistory(getExplorerAddressPath())
-    send u
   }
 return
 
