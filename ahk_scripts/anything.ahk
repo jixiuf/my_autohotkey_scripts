@@ -109,32 +109,28 @@ for key, default_value in default_anything_properties
        
        if ErrorLevel = EndKey:pgup
        {
-             ControlFocus, SysListView321,A
-             Send {pgup}
+         pageUp(matched_candidates.maxIndex())
        }
-              if ErrorLevel = EndKey:pgdn
+        
+       if ErrorLevel = EndKey:pgdn
        {
-             ControlFocus, SysListView321,A
-             Send {pgdn}
+         pageDown(matched_candidates.maxIndex())
        }
-         if ErrorLevel = EndKey:v
-           {
-            if (GetKeyState("LControl", "P")=1){
-                 ControlFocus, SysListView321,A
-                Send {PGDN}
-            }else if (GetKeyState("LAlt", "P")=1){
-                 ControlFocus, SysListView321,A
-                 Send {pgup}
-            }Else{
-               input=v
-             }
-          }
+       if ErrorLevel = EndKey:v
+       {
+         if (GetKeyState("LControl", "P")=1){
+           pageDown(matched_candidates.maxIndex())
+        }else if(GetKeyState("LAlt", "P")=1){
+            pageUp(matched_candidates.maxIndex())
+         }Else{
+           input=v
+         }
+       }
          if ErrorLevel = EndKey:r
            {
             if (GetKeyState("LControl", "P")=1){
-                 ControlFocus, SysListView321,A
-                 Send {pgup}
-            }Else{
+              pageUp(matched_candidates.maxIndex())
+          }Else{
                input=r
              }
           }
@@ -522,6 +518,25 @@ anything_match(candidate_string,pattern){
     }
     return 1
  }
+}
+pageDown(candidates_count)
+{
+  selectedRowNum:= LV_GetNext(0)
+  if (selectedRowNum= candidates_count){
+        LV_Modify(1, "Select Focus Vis") 
+  }else{
+        ControlFocus, SysListView321,A
+        Send {pgdn}
+  }
+}
+pageUp(candidates_count){
+  selectedRowNum:= LV_GetNext(0)
+  if (selectedRowNum=1){
+        LV_Modify(candidates_count, "Select Focus Vis") 
+  }else{
+        ControlFocus, SysListView321,A
+        Send {pgup}
+  }
 }
 selectNextCandidate(candidates_count){
        selectedRowNum:= LV_GetNext(0)
