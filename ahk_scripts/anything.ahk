@@ -105,8 +105,31 @@ for key, default_value in default_anything_properties
      loop,
      {
          search_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyo{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyov{LAlt}{tab}
        
+       if ErrorLevel = EndKey:pgup
+       {
+             ControlFocus, SysListView321,A
+             Send {pgup}
+       }
+              if ErrorLevel = EndKey:pgdn
+       {
+             ControlFocus, SysListView321,A
+             Send {pgdn}
+       }
+         if ErrorLevel = EndKey:v
+           {
+            if (GetKeyState("LControl", "P")=1){
+                 ControlFocus, SysListView321,A
+                Send {PGDN}
+            }else if (GetKeyState("LAlt", "P")=1){
+                 ControlFocus, SysListView321,A
+                 Send {pgup}
+            }Else{
+               input=v
+             }
+          }
+
          if ErrorLevel = EndKey:escape
          {
               if (tabListActions="yes")
