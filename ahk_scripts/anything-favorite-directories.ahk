@@ -20,8 +20,8 @@
 ;   it will visit it in current Emacs (if current activated window is Emacs.exe)
 
 
-#include anything.ahk
-SetWorkingDir %A_ScriptDir%
+;;#include anything.ahk
+;;SetWorkingDir %A_ScriptDir%
 anything_favorite_directories:=Array()
 ;;init  
 IfExist, anything-favorite-directories.ini
@@ -41,7 +41,6 @@ anything_favorite_directories_source:=Object()
 anything_favorite_directories_source["candidate"]:= anything_favorite_directories
 anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
 anything_favorite_directories_source["name"]:="FavDirs"
-
 ;;action 
 anything_favorite_directories_visit(candidate_directory)
 {
