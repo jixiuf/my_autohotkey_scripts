@@ -3,8 +3,8 @@
 SetWorkingDir %A_ScriptDir%
 
 #include anything.ahk
-#include anything-favorite-directories.ahk
 #include anything-run.ahk
+#include anything-favorite-directories.ahk
 #include anything-explorer-history.ahk
 
 f3::
