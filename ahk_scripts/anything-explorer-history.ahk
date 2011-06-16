@@ -1,9 +1,6 @@
 ;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk           
-#include anything.ahk
-SetWorkingDir %A_ScriptDir%
-SetTitleMatchMode Regex ;
-;;global variable 
-;;active_id=
+;;#include anything.ahk
+;;SetWorkingDir %A_ScriptDir%
 directory_history:=Array()
 ;;init history when first run this script 
 IfExist, anything-explorer-history.ini
@@ -29,8 +26,8 @@ anything_explorer_history_source["name"]:="ExpHist"
 ;    anything(anything_explorer_history_source)
 ; return
 
+SetTitleMatchMode Regex ;
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
-
 ~LButton::
   if (A_PriorHotkey <> "~LButton" or A_TimeSincePriorHotkey > 200)
   {
@@ -41,7 +38,6 @@ anything_explorer_history_source["name"]:="ExpHist"
    return
   }
 return
-
 #IfWinActive
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
