@@ -40,8 +40,9 @@ Ctrl-y                 paste
 
 
 
-Now I have wrote 2 <source> for anything.ahk
+Now I have wrote 3 <source> for anything.ahk
     anything-explorer-history.ahk ,
+    anything-favorite-directories.ahk,
     anything-run.ahk
 
 1 anything-explorer-history.ahk
@@ -51,16 +52,21 @@ you have visited ,then you can press  <F3> to active "Anything"
 and you can press <F3> to active "Anything" and list all directory history
 
 
-1 anything-run.ahk is a replace of <Win-r>
+2 anything-run.ahk is a replace of <Win-r>
  it could remember old  command too. when you press <F3>
-
+ 
+3 anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
+ add your favorite directories ,and visit it using "Anything"
 
  you just need download
+ 
  anything.ahk
  anything-explorer-history.ahk
+ anything-favorite-directories.ahk
  anything-run.ahk
  anything-config.ahk
 
+ 
  and run anything-config.ahk
  
 
