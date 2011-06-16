@@ -116,6 +116,8 @@ for key, default_value in default_anything_properties
        {
          pageDown(matched_candidates.maxIndex())
        }
+       ;;Ctrl-v =pageDn
+       ;;Alt-v  == pageUp
        if ErrorLevel = EndKey:v
        {
          if (GetKeyState("LControl", "P")=1){
@@ -126,6 +128,7 @@ for key, default_value in default_anything_properties
            input=v
          }
        }
+       ;;Ctrl-r  ==pageUp
          if ErrorLevel = EndKey:r
            {
             if (GetKeyState("LControl", "P")=1){
