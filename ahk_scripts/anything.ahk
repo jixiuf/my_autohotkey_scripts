@@ -105,7 +105,7 @@ for key, default_value in default_anything_properties
      loop,
      {
          search_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyov{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyorv{LAlt}{tab}
        
        if ErrorLevel = EndKey:pgup
        {
@@ -127,6 +127,15 @@ for key, default_value in default_anything_properties
                  Send {pgup}
             }Else{
                input=v
+             }
+          }
+         if ErrorLevel = EndKey:r
+           {
+            if (GetKeyState("LControl", "P")=1){
+                 ControlFocus, SysListView321,A
+                 Send {pgup}
+            }Else{
+               input=r
              }
           }
 
