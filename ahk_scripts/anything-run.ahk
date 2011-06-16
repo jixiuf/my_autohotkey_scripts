@@ -1,4 +1,4 @@
-#include anything.ahk
+;;#include anything.ahk
 SetWorkingDir %A_ScriptDir%
 ;;; anything-run.ahk , a replace of Win+r
 ;;if you only use this source ,you can bind it like this  
