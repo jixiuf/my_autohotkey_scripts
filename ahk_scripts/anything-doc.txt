@@ -8,17 +8,23 @@ and this isn't anything.el ,it 's anything.ahk
 
 you can input search string just like google to narrow the candidates
 
-Down or Ctrl+n         select next candidate 
-Up or Ctrl+p          select previous candidate
-Ctrl+o                will select next source ,that means ,all candidate from first source will be send to last 
-
+Down or Ctrl+n          select next candidate 
+Up or Ctrl+p            select previous candidate
+Ctrl+o                  will select next source ,that means ,all candidate from first source will be send to last 
+pageUp ,Ctrl-r ,Alt-v -->pageup
+pageDn ,Ctrl-v       --> pageDn
 when you select a candidate you can press
 
-<Click>and  <Enter>    to execute the default action with the selected candiate as parameter
+<Click>and  <Enter>     to execute the default action with the selected candiate as parameter
 <Ctrl-j>                to execute the second action with the selected candidate as parameter
 <Ctrl-m>                to execute the third action with the selected candidate as parameter
+
+<Ctrl-z>                  same to <Enter> ,but don't quit "Anything"
+<Alt-Enter>               do the same to Enter ,but doesn't quit "Anything"
+<Alt-j>                   do the same to Ctrl-j ,but doesn't quit "Anything"
+<Alt-m>                   do the same to Ctrl-m ,but doesn't quit "Anything"
+
 <tab>                   will list all available actions , and you can select one to execute .
-<Ctrl-z>                same to <Enter> ,but don't quit "Anything"
 <Ctrl-l>                will ignore all the candidates ,and treate the search string as candidate , and
                         list all available "action" to execute on the special "candidate"
 <Ctrl-i>                do something similar to <Ctrl-l> ,but don't list all available "action" ,just
@@ -29,7 +35,9 @@ when you select a candidate you can press
 <Esc> and <Ctrl-g>      quit Anything
 
 Ctrl-u                  empty search string
-backspace and Ctrl-h   back delete a char  
+backspace and Ctrl-h   back delete a char
+Ctrl-y                 paste
+
 
 
 Now I have wrote 2 <source> for anything.ahk
