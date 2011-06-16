@@ -177,14 +177,20 @@ for key, default_value in default_anything_properties
                  }
                }
        }
+       
          if ErrorLevel = EndKey:enter
          {
             selectedRowNum:= LV_GetNext(0)
             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
             action:= getDefaultAction(tmpSources[source_index]["action"])
-            exit()
-            callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-            break
+            if (GetKeyState("LAlt", "P")=1){
+                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+            }else
+            {
+               exit()
+               callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+               break
+            }
          }
          
          if ErrorLevel = EndKey:z
@@ -208,6 +214,12 @@ for key, default_value in default_anything_properties
                   exit()
                   callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   break
+             }else if (GetKeyState("LAlt", "P")=1){
+                 selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) 
+                  action:= getSecondActionorDefalutAction(tmpSources[source_index]["action"])
+                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  search_updated=yes
             }else{
                  input=j
             }
@@ -222,8 +234,15 @@ for key, default_value in default_anything_properties
                        exit()
                        callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
-            }else{
-                 input=m
+               }else if (GetKeyState("LAlt", "P")=1)
+               {
+                    selectedRowNum:= LV_GetNext(0)
+                    LV_GetText(source_index, selectedRowNum,2) 
+                    action:= getThirdActionorDefalutAction(tmpSources[source_index]["action"])
+                    callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                    search_updated=yes
+               }Else{
+               input=m
              }
           }
           
