@@ -105,7 +105,7 @@ for key, default_value in default_anything_properties
      loop,
      {
          search_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimo{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyo{LAlt}{tab}
        
          if ErrorLevel = EndKey:escape
          {
@@ -320,7 +320,16 @@ for key, default_value in default_anything_properties
             }
             
         }
-
+ ;;Ctrl-y ,paste 
+        if ErrorLevel = EndKey:y
+        {
+          if (GetKeyState("LControl", "P")=1){
+              clipboard = %clipboard%
+              input=%clipboard%
+           }else{
+                input=y
+            }
+        }
         if ErrorLevel = EndKey:h
         {
           if (GetKeyState("LControl", "P")=1){
