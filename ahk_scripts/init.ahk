@@ -7,6 +7,7 @@ run %A_ScriptDir%\DoOver.ahk
 run %A_ScriptDir%\MoveInactiveWin.ahk
 
 
+run %A_ScriptDir%\autoclosewin.ahk
 run %A_ScriptDir%\iswitchw-plus.ahk
 
 
@@ -25,4 +26,3 @@ run %A_ScriptDir%\iswitchw-plus.ahk
 #Include %A_ScriptDir%\win-move-resize.ahk
 #Include %A_ScriptDir%\ie.ahk
 #Include %A_ScriptDir%\word-emacs-key.ahk
-#Include %A_ScriptDir%\autoclosewin.ahk
