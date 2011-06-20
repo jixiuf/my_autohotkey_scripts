@@ -22,7 +22,7 @@ IfWinExist,ahk_class SWT_Window0
   IfWinActive ,ahk_class SWT_Window0
      WinMinimize ,ahk_class SWT_Window0
   else{
-    WinMaximize,ahk_class SWT_Window0
+;;    WinMaximize,ahk_class SWT_Window0
     WinActivate ,ahk_class SWT_Window0
     }
 else
@@ -39,7 +39,7 @@ IfWinExist,ahk_class MozillaUIWindowClass|MozillaWindowClass
   IfWinActive ,ahk_class MozillaUIWindowClass|MozillaWindowClass
      WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
   else{
-    WinMaximize,ahk_class MozillaUIWindowClass|MozillaWindowClass
+;;    WinMaximize,ahk_class MozillaUIWindowClass|MozillaWindowClass
 ;;    sleep 10
 ;;    WinSet, Style, -0xC00000, A ;;full screen
     WinActivate ,ahk_class MozillaUIWindowClass|MozillaWindowClass
@@ -57,7 +57,7 @@ IfWinExist,ahk_class IEFrame
   IfWinActive ,ahk_class IEFrame
      WinMinimize ,ahk_class IEFrame
   else{
-    WinMaximize,ahk_class IEFrame
+;;    WinMaximize,ahk_class IEFrame
 ;;    sleep 10
 ;;    WinSet, Style, -0xC00000, A ;;full screen
     WinActivate ,ahk_class IEFrame
@@ -76,7 +76,7 @@ IfWinExist,ahk_class Emacs
   IfWinActive ,ahk_class Emacs
      WinMinimize ,ahk_class Emacs
   else{
-    WinMaximize,ahk_class Emacs
+;;    WinMaximize,ahk_class Emacs
     WinActivate ,ahk_class Emacs
     }
 else
@@ -91,7 +91,7 @@ IfWinExist,ahk_class TPLSQLDevForm
   IfWinActive ,ahk_class TPLSQLDevForm
      WinMinimize ,ahk_class TPLSQLDevForm
   else{
-    WinMaximize,ahk_class TPLSQLDevForm
+;;    WinMaximize,ahk_class TPLSQLDevForm
     WinActivate ,ahk_class TPLSQLDevForm
     }
 else
@@ -185,7 +185,7 @@ IfWinExist,ahk_class XLMAIN
   IfWinActive ,ahk_class XLMAIN
      WinMinimize ,ahk_class XLMAIN
   else{
-    WinMaximize,ahk_class XLMAIN
+;;    WinMaximize,ahk_class XLMAIN
     WinActivate ,ahk_class XLMAIN
     }
 else
@@ -199,7 +199,7 @@ IfWinExist,ahk_class OpusApp
   IfWinActive ,ahk_class OpusApp 
      WinMinimize ,ahk_class OpusApp
   else{
-    WinMaximize,ahk_class OpusApp
+;;    WinMaximize,ahk_class OpusApp
     WinActivate ,ahk_class OpusApp
     }
 else
