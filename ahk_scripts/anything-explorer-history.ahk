@@ -1,4 +1,39 @@
 ;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk           
+; when you click directory in your explorer , anything-explorer-history.ahk
+; will remember the directories you have vistied, and 'Anyting' will use it 
+; as candidates ,you can visited again easyly.
+; source is hosted on
+; https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
+; and you can find the forum here
+; http://www.autohotkey.com/forum/viewtopic.php?t=72833
+
+;;how to use `anything-explorer-history.ahk'
+;1 
+; if you only have one anything-source :
+;         anything_explorer_history_source  (defined in this file )
+; you can use it like this :
+;
+;     #include anything.ahk
+;     #include anything-explorer-history.ahk
+;     f3::anything(anything_explorer_history_source)
+;
+; 2  if you also have other anything-sources ,
+;     you just need add 
+;         anything_explorer_history_source
+;     to the sources
+;    for example :
+;
+;    f3::
+;    sources:=Array()
+;    sources.insert(anything_explorer_history_source)
+;    sources.insert(anything_favorite_directories_source)
+;    sources.insert(anything_cmd_source)
+;    anything_multiple_sources(sources)
+;    return
+
+
+
+#Persistent
 ;;#include anything.ahk
 ;;SetWorkingDir %A_ScriptDir%
 directory_history:=Array()
@@ -14,6 +49,8 @@ Loop, Parse,  history_line,,
      }
    }
 }
+;;every 5 minute ,save history to disk 
+SetTimer, writeAnythingExpHist2Desk, 60000 
 
 ;;source for anything .
 anything_explorer_history_source:=Object()
@@ -21,10 +58,6 @@ anything_explorer_history_source["candidate"]:= directory_history
 anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
 anything_explorer_history_source["name"]:="ExpHist"
 
-; f3::
-; ;;  WinGet, active_id, ID, A
-;    anything(anything_explorer_history_source)
-; return
 
 SetTitleMatchMode Regex ;
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
@@ -40,6 +73,8 @@ SetTitleMatchMode Regex ;
 return
 #IfWinActive
 
+  return
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 addressChangeTimer:
   SetTimer, addressChangeTimer ,off
@@ -55,8 +90,6 @@ addressChangeTimer:
   }
 return
 
-;;every 5 minute ,save history to disk 
-SetTimer, writeAnythingExpHist2Desk, 300000 
 
 
 writeAnythingExpHist2Desk:
