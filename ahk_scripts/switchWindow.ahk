@@ -142,33 +142,24 @@ return
 MyFavorateDir:="D:\"
 SetTitleMatchMode, RegEx
 IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
+{
   If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
      ControlGetText, ExplorePath, Edit1, A
 ;;之所以不用这条命令，是因为当地址栏里为“我的电脑”四个字时，用这条命令提示找不到路径     
-;;    run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
-    Run explorer  /n`, /e`, 
-    WinWait ahk_class (CabinetWClass|ExploreWClass) 
-    WinActivate
-    ControlSetText, Edit1, %ExplorePath%, A
-		; Tekl reported the following: "If I want to change to Folder L:\folder
-		; then the addressbar shows http://www.L:\folder.com. To solve this,
-		; I added a {right} before {Enter}":
-  ControlSend, Edit1, {Right}{Enter}, A
- ;;选中第一个文件
-    sleep 50
-  ControlFocus, SysListView321,A
-  Send {Home}
-
-
-  }else{
+    run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
+  }else{ 
     WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
-    sleep 50
+    WinWaitActive
+    ControlGetFocus, focusedControl,A
+;;    Tooltip ,%focusedControl%
+    if (focusedControl <> "SysListView321")
+    {
      ;;选中第一个文件
-     ControlFocus, SysListView321,A
-     Send {Home}
-
+      ControlFocus, SysListView321,A
+      Send {Home}
+    }
   }
-else
+}else{
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
     WinWait ahk_class (CabinetWClass|ExploreWClass) 
     WinActivate
@@ -176,6 +167,7 @@ else
     sleep 50
     ControlFocus, SysListView321,A
     Send {Home}
+}
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
