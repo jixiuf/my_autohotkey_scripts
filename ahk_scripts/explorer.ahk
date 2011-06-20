@@ -48,16 +48,15 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
     ControlGetText, oldExplorePath, Edit1, A
     Send {Enter}
         sleep 150
-    ControlGetText, newExplorePath, Edit1, A
-    ControlFocus, SysListView321,A
-    if (newExplorePath<>oldExplorePath)
-    {
-      Send {Home}
-    }
-    
-    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-    ;;add to history list
-    updateHistory(newExplorePath)
+        if WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass")
+        {
+          ControlGetText, newExplorePath, Edit1, A
+          ControlFocus, SysListView321,A
+            Send {Home}
+          ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+          ;;add to history list
+          updateHistory(newExplorePath)
+        }
   }else
   {
     Send {Enter}
