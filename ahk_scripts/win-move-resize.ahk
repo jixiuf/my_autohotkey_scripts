@@ -93,4 +93,8 @@ toggleMaximize(wid=0){
 #f4::Send2Pos4( )
 #f5::Send2PosCenter( )
 #f11::send2PosFullScreen()
-f11::toggleMaximize()
+
+f11::
+#m::
+  toggleMaximize()
+return
