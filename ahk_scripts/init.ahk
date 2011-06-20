@@ -25,3 +25,4 @@ run %A_ScriptDir%\iswitchw-plus.ahk
 #Include %A_ScriptDir%\win-move-resize.ahk
 #Include %A_ScriptDir%\ie.ahk
 #Include %A_ScriptDir%\word-emacs-key.ahk
+#Include %A_ScriptDir%\autoclosewin.ahk
