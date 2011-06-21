@@ -8,7 +8,7 @@ run %A_ScriptDir%\MoveInactiveWin.ahk
 
 
 run %A_ScriptDir%\autoclosewin.ahk
-run %A_ScriptDir%\iswitchw-plus.ahk
+;; run %A_ScriptDir%\iswitchw-plus.ahk
 
 
 #Include %A_ScriptDir%\anything-config.ahk
