@@ -94,11 +94,11 @@ for key, default_value in default_anything_properties
 
      matched_candidates:=refresh(tmpSources,search,win_width)
      Gui ,Show,,
-      if matched_candidates.maxIndex()>0
-      {
-         LV_Modify(1, "Select Focus Vis") 
-      }else{
-      }
+      ; if matched_candidates.maxIndex()>0
+      ; {
+      ;    LV_Modify(1, "Select Focus Vis") 
+      ; }else{
+      ; }
 
      WinGet, anything_id, ID, A
      WinSet, AlwaysOnTop, On, ahk_id %anything_id%
@@ -150,11 +150,10 @@ for key, default_value in default_anything_properties
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
                   matched_candidates:=refresh(tmpSources,search,win_width)
-                 if matched_candidates.maxIndex()>0
-                 {
-                    LV_Modify(1, "Select Focus Vis") 
-                 }else{
-                 }
+                  if matched_candidates.maxIndex()>0
+                  {
+                     LV_Modify(1, "Select Focus Vis")
+                   }
                }else
                {
                  exit()
@@ -175,9 +174,11 @@ for key, default_value in default_anything_properties
        if ErrorLevel = EndKey:tab
        {
            selectedRowNum:= LV_GetNext(0)
+           
              if (tabListActions = "")
              {
-                tabListActions:="yes"
+                 previousSelectedIndex := selectedRowNum 
+                 tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                  tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
                  for key ,source in tmpSources {
@@ -186,11 +187,10 @@ for key, default_value in default_anything_properties
                    candidates_count += % source["tmpCandidate"].maxIndex()
                  }
                  matched_candidates:=refresh(tmpSources,"",win_width)
-                if matched_candidates.maxIndex()>0
-                {
-                   LV_Modify(1, "Select Focus Vis") 
-                }else{
-                }
+                 if matched_candidates.maxIndex()>0
+                 {
+                    LV_Modify(1, "Select Focus Vis") 
+                 }
               }else
               {
               tabListActions:=""
@@ -201,11 +201,7 @@ for key, default_value in default_anything_properties
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
                   matched_candidates:=refresh(tmpSources,search,win_width)
-                 if matched_candidates.maxIndex()>0
-                 {
-                    LV_Modify(1, "Select Focus Vis") 
-                 }else{
-                 }
+                 LV_Modify(previousSelectedIndex, "Select Focus Vis") 
                }
        }
        
@@ -289,11 +285,10 @@ for key, default_value in default_anything_properties
                              candidates_count += % source["tmpCandidate"].maxIndex()
                            }
                            matched_candidates:=refresh(tmpSources,"",win_width)
-                          if matched_candidates.maxIndex()>0
-                          {
-                             LV_Modify(1, "Select Focus Vis") 
-                          }else{
-                          }
+                           if matched_candidates.maxIndex()>0
+                           {
+                              LV_Modify(1, "Select Focus Vis") 
+                           }
             }else{
                  input=l
             }
@@ -418,13 +413,7 @@ for key, default_value in default_anything_properties
             selectedRowNum:= LV_GetNext(0)
            ;;TODO: REFRESH and select needed selected 
             matched_candidates:=refresh(tmpSources,search,win_width)
-              if matched_candidates.maxIndex() >= selectedRowNum
-              {
-                LV_Modify(selectedRowNum, "Select Focus Vis")
-              }else if ( matched_candidates.maxIndex() >0)
-              {
-                LV_Modify(1, "Select Focus Vis")
-              }else   ;;no candidates matched  
+              if matched_candidates.maxIndex() = 0
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
@@ -435,11 +424,11 @@ for key, default_value in default_anything_properties
                              candidates_count += % source["tmpCandidate"].maxIndex()
                            }
                            matched_candidates:=refresh(tmpSources,"",win_width)
-                          if matched_candidates.maxIndex()>0
-                          {
-                             LV_Modify(1, "Select Focus Vis") 
-                          }else{
-                          }
+                          ; if matched_candidates.maxIndex()>0
+                          ; {
+                          ;    LV_Modify(1, "Select Focus Vis") 
+                          ; }else{
+                          ; }
               }
             }
 
@@ -468,6 +457,7 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 }
 
 refresh(sources,search,win_width){
+     selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
      for source_index ,source in sources {
@@ -480,7 +470,27 @@ refresh(sources,search,win_width){
      LV_ModifyCol(1,win_width*0.88) ;;candidates 
      LV_ModifyCol(2,0) ;;source_index
      LV_ModifyCol(3,0) ;;candidate_index
-     LV_ModifyCol(4,win_width*0.10) ;; source_name 
+     LV_ModifyCol(4,win_width*0.10) ;; source_name
+     if (selectedRowNum = 0)
+     {
+       LV_Modify(1, "Select Focus Vis") 
+     }else
+     {
+       if matched_candidates.maxIndex() >= selectedRowNum
+       {
+         LV_Modify(selectedRowNum, "Select Focus Vis")
+       }
+       else if matched_candidates.maxIndex() >= selectedRowNum-1
+       {
+         LV_Modify(selectedRowNum-1, "Select Focus Vis")
+       }else if matched_candidates.maxIndex()>0
+       {
+         LV_Modify(1, "Select Focus Vis") 
+       }else{
+       }
+       
+     }
+
 
 return matched_candidates
 }
