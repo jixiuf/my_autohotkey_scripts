@@ -413,7 +413,7 @@ for key, default_value in default_anything_properties
             selectedRowNum:= LV_GetNext(0)
            ;;TODO: REFRESH and select needed selected 
             matched_candidates:=refresh(tmpSources,search,win_width)
-              if matched_candidates.maxIndex() = 0
+              if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
