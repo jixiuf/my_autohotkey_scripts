@@ -71,14 +71,12 @@ for key, default_value in default_anything_properties
    }
    OnMessage(0x201, "anything_WM_LBUTTONDOWN") ;;when LButton(mouse) is down 
    icon:=source["icon"]
-     if icon<>
-     {
+     ; if icon<>
+     ; {
         Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
-        ImageListID1 := IL_Create(candidates_count,1,1)
-        LV_SetImageList(ImageListID1, 1)
-     }else{
-        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
-     }
+     ; }else{
+     ;    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
+     ; }
      
      
      candidates_count=0
@@ -460,11 +458,30 @@ refresh(sources,search,win_width){
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
+     anything_imagelist:= IL_Create()  
+     for source_index ,source in sources {
+          candidates:= source["tmpCandidate"]
+         imagelist:=getIcons(source)
+          if imagelist
+          {
+            LV_SetImageList(anything_imagelist, 1)
+            anything_imagelist_merge(anything_imagelist, imagelist)
+         }
+      }
+     icon_index=0
      for source_index ,source in sources {
           candidates:= source["tmpCandidate"]
           source_name:=source["name"]
+          imagelist:=getIcons(source)
           for candidate_index ,candidate in candidates{
-               matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates)
+             if imagelist
+              {
+                 icon_index += 1
+                  matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,icon_index )
+               }else
+               {
+                  matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,0)
+               }
           }
       }
      LV_ModifyCol(1,win_width*0.88) ;;candidates 
@@ -501,7 +518,7 @@ return matched_candidates
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
 ;;and the param `candidate' will be passed to action
-lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates){
+lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,imagelistId ,imagelist_index){
   if isObject(candidate){ 
     display:=candidate[1]
   }else{
@@ -509,7 +526,13 @@ lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_n
   }
    if % anything_match(display,search)=1
    {
-      LV_Add("",display,source_index,candidate_index,source_name)
+     if imagelistId
+     {
+      LV_Add("Icon" . imagelist_index ,display,source_index,candidate_index,source_name)
+     }else
+     {
+      LV_Add("Icon" . 0 ,display,source_index,candidate_index,source_name)
+     }
       matched_candidates.insert(candidate)
    }
    return matched_candidates
@@ -579,6 +602,15 @@ callFuncByNameWithOneParam(funcName,param1){
 
 callFuncByName(funcName){
    return   %funcName%()
+}
+getIcons(source)
+{
+    icon:=source["icon"]
+   if isFunc(icon)
+   {
+      icons:= callFuncByName(icon)
+      return icons
+   }
 }
 
 getCandidatesArray(source)
@@ -737,5 +769,22 @@ anything_do_nothing(candidate)
   Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
 }
 
+;; I find this function here .
+;;http://www.autohotkey.com/forum/viewtopic.php?p=454619#454619
+;;and thanks  maul.esel
+anything_imagelist_merge(il1, il2)
+{
+DllCall("LoadLibrary", "str", "Comctl32")
+
+count1 := DllCall("Comctl32.dll\ImageList_GetImageCount", "uint", il1)
+count2 := DllCall("Comctl32.dll\ImageList_GetImageCount", "uint", il2)
+DllCall("Comctl32.dll\ImageList_SetImageCount", "uint", il1, "uint", count1 + count2)
+
+Loop %count2%
+   {
+   hIcon := DllCall("Comctl32.dll\ImageList_GetIcon", "uint", il2, "int", A_Index - 1, "uint", 0)
+   DllCall("Comctl32.dll\ImageList_ReplaceIcon", "uint", il1, "int", count1 + A_Index - 1, "uint", hIcon)
+   }
+ }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
