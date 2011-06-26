@@ -471,7 +471,7 @@ anything_refresh(sources,search,win_width){
           if imagelist
           {
             LV_SetImageList(anything_imagelist, 1)
-            anything_imagelist_merge(anything_imagelist, imagelist)
+            anything_imagelist_append(anything_imagelist, imagelist)
          }
       }
      icon_index=0
@@ -778,7 +778,7 @@ anything_do_nothing(candidate)
 ;; I find this function here .
 ;;http://www.autohotkey.com/forum/viewtopic.php?p=454619#454619
 ;;and thanks  maul.esel
-anything_imagelist_merge(il1, il2)
+anything_imagelist_append(il1, il2)
 {
 DllCall("LoadLibrary", "str", "Comctl32")
 
@@ -790,7 +790,9 @@ Loop %count2%
    {
    hIcon := DllCall("Comctl32.dll\ImageList_GetIcon", "uint", il2, "int", A_Index - 1, "uint", 0)
    DllCall("Comctl32.dll\ImageList_ReplaceIcon", "uint", il1, "int", count1 + A_Index - 1, "uint", hIcon)
+   DllCall("DestroyIcon", "UInt", hIcon)
    }
- }
+}
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
