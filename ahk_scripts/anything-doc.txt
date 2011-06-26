@@ -6,68 +6,104 @@ and see what "Anything" it is .
 
 and this isn't anything.el ,it 's anything.ahk
 
-you can input search string just like google to narrow the candidates
-
+* keybindings when <Anything> is activated 
+  you can input search string just like google to narrow the candidates
+** keybindings for select candiates
 Down or Ctrl+n          select next candidate 
 Up or Ctrl+p            select previous candidate
 Ctrl+o                  will select next source ,that means ,all candidate from first source will be send to last 
-pageUp ,Ctrl-r ,Alt-v -->pageup
-pageDn ,Ctrl-v       --> pageDn
-when you select a candidate you can press
+pageUp ,Ctrl-r ,Alt-v== pageup
+pageDn ,Ctrl-v       == pageDn
+
+** keybindings for execute actions
 
 <Click>and  <Enter>     to execute the default action with the selected candiate as parameter
 <Ctrl-j>                to execute the second action with the selected candidate as parameter
 <Ctrl-m>                to execute the third action with the selected candidate as parameter
 
-<Ctrl-z>                  same to <Enter> ,but don't quit "Anything"
-<Alt-Enter>               do the same to Enter ,but doesn't quit "Anything"
-<Alt-j>                   do the same to Ctrl-j ,but doesn't quit "Anything"
-<Alt-m>                   do the same to Ctrl-m ,but doesn't quit "Anything"
-
+<Ctrl-z> <Alt-Enter>    do the same to Enter ,but doesn't quit "Anything"
+<Alt-j>                 do the same to Ctrl-j ,but doesn't quit "Anything"
+<Alt-m>                 do the same to Ctrl-m ,but doesn't quit "Anything"
 <tab>                   will list all available actions , and you can select one to execute .
-<Ctrl-l>                will ignore all the candidates ,and treate the search string as candidate , and
+
+<Ctrl-L>                will ignore all the candidates ,and treate the search string as candidate , and
                         list all available "action" to execute on the special "candidate"
 <Ctrl-i>                do something similar to <Ctrl-l> ,but don't list all available "action" ,just
-                        execute the "action" special by "property"
-                        anything_properties["no_candidate_action"]:="anything_do_nothing"
+                        execute the "action" special by "property": no_candidate_action
+                        ;;see 
                         ;; anything_with_properties()
                         ;; anything_multiple_sources_with_properties()
+                        ;; anything_default_properties 
+                        ;; in anything.ahk
 <Esc> and <Ctrl-g>      quit Anything
-
+** keybindings for edit
 Ctrl-u                  empty search string
 backspace and Ctrl-h   back delete a char
 Ctrl-y                 paste
 
-
-
-Now I have wrote 3 <source> for anything.ahk
+* anything-source I have written
+Now I have wrote 4 <anything-source> for anything.ahk
     anything-explorer-history.ahk ,
     anything-favorite-directories.ahk,
     anything-run.ahk
+    anything-window-switch.ahk (a replacement of Alt-Tab)
 
-1 anything-explorer-history.ahk
-when you visit new directory (double click on a directory,up ,back ) in explorer.exe ,it can record directories 
-you have visited ,then you can press  <F3> to active "Anything"
+1. anything-explorer-history.ahk
+   when you visit  directory (double click on a directory,up or back ) in
+   explorer.exe ,it can remember directories 
+   you have visited ,then you can press  <F3> to active "Anything"
+   list all directory history ,you can revisit it easyly.
 
-and you can press <F3> to active "Anything" and list all directory history
+2. anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
+   add your favorite directories ,and visit it using "Anything".
+   about how to use it .see comments in anything-favorite-directories.ahk
 
-
-2 anything-run.ahk is a replace of <Win-r>
- it could remember old  command too. when you press <F3>
+3. anything-run.ahk is a replacement of <Win-r>
+   it could remember old  command too. when you press <F3>
+   about how to use it .see comments in anything-run.ahk
+4. anything-window-switch.ahk is a replacement of Alt-Tab   
+   
+** you just need download:
+   anything.ahk
+   anything-explorer-history.ahk
+   anything-favorite-directories.ahk
+   anything-run.ahk
+   anything-window-switch.ahk
+   anything-config.ahk
+   and run anything-config.ahk
  
-3 anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
- add your favorite directories ,and visit it using "Anything"
+* how to  write an anything-source
+  an anything-source is an Object with some defined properties
+  now it support 4 properties :
+  name action candidate and icon
+** name  (needed)
+   <name> is a string ,it is just a name of this anything-source
+** candidate  (needed)
+   <candidate> is an array of available candidates ,or a function name(string)
+   without parameter which return an array .
+   each element of the array can be :
+*** a string
+    this string will be displayed on listview , so that you can select one
+    of the candidates ,and execute action on your selected candidate.
+*** a array
+    the first element of this array must be a string ,the string will be
+    displayed on listview ,and you can selected one of the candidates ,and
+    execute action on your selected candidate.
+    other element of this array can be anything , you can store useful info.
+    there. and when you execute action on your selected candidate,this will
+    be the parameter . see <action>
+** action  (needed)
+   action is a function name(string) or a list of function name (array).
+   and those functions must have one parameter. actually the parameter is
+   the selected <candidate> .
+   
+** icon (optional)
+    <icon> is a function(string) which return a ImageList.
+    this property is optional .if this property isn't empty
+    <Anything> will display icon before each candidates.
+    
 
- you just need download
- 
- anything.ahk
- anything-explorer-history.ahk
- anything-favorite-directories.ahk
- anything-run.ahk
- anything-config.ahk
 
- 
- and run anything-config.ahk
- 
+  
 
 
