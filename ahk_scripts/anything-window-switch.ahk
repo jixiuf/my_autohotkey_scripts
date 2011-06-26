@@ -35,6 +35,7 @@ anything_ws_icon_imageListId=
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
+  global anything_wid
   candidates :=Array()
   WinGet, id, list, , , Program Manager
   Loop, %id%
@@ -47,6 +48,10 @@ anything_ws_get_win_candidates()
      if title =
        continue
        
+     if anything_wid and anything_wid = this_id
+     {
+       continue
+     }
     
     ; don't add the switcher window
     ; if switcher_id = %this_id%
