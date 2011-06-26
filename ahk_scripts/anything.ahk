@@ -1,7 +1,9 @@
 ;; need AutoHotKey_L         
 #SingleInstance force
+#NoEnv
 SetBatchLines, -1
 SetKeyDelay  -1
+SendMode Input
 AutoTrim, off
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,7 +75,7 @@ for key, default_value in default_anything_properties
    icon:=source["icon"]
      ; if icon<>
      ; {
-        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , icon|candidates|source_index|candidate_index|source-name
+        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      ; }else{
      ;    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      ; }
