@@ -24,6 +24,9 @@ default_anything_properties["quit_when_lose_focus"]:="yes"
 default_anything_properties["no_candidate_action"]:="anything_do_nothing"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;global variable
+anything_wid=
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;4 public function
 
 ;; anything
@@ -51,6 +54,7 @@ anything_multiple_sources(sources)
 
 anything_multiple_sources_with_properties(sources,anything_properties){
 global default_anything_properties
+global anything_wid
 
 for key, default_value in default_anything_properties
 {
@@ -88,11 +92,11 @@ for key, default_value in default_anything_properties
      tmpSources:=sources
      for key ,source in tmpSources {
        candidate:=source["candidate"]
-       source["tmpCandidate"]:= getCandidatesArray(source)
+       source["tmpCandidate"]:= anything_get_candidates_as_array(source)
        candidates_count += % source["tmpCandidate"].maxIndex()
      }
 
-     matched_candidates:=refresh(tmpSources,search,win_width)
+     matched_candidates:=anything_refresh(tmpSources,search,win_width)
      Gui ,Show,,
       ; if matched_candidates.maxIndex()>0
       ; {
@@ -100,8 +104,8 @@ for key, default_value in default_anything_properties
       ; }else{
       ; }
 
-     WinGet, anything_id, ID, A
-     WinSet, AlwaysOnTop, On, ahk_id %anything_id%
+     WinGet, anything_wid, ID, A
+     WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
      loop,
      {
          search_updated=
@@ -109,30 +113,30 @@ for key, default_value in default_anything_properties
        
        if ErrorLevel = EndKey:pgup
        {
-         pageUp(matched_candidates.maxIndex())
+         anything_pageUp(matched_candidates.maxIndex())
        }
         
        if ErrorLevel = EndKey:pgdn
        {
-         pageDown(matched_candidates.maxIndex())
+         anything_pageDown(matched_candidates.maxIndex())
        }
        ;;Ctrl-v =pageDn
-       ;;Alt-v  == pageUp
+       ;;Alt-v  == anything_pageUp
        if ErrorLevel = EndKey:v
        {
          if (GetKeyState("LControl", "P")=1){
-           pageDown(matched_candidates.maxIndex())
+           anything_pageDown(matched_candidates.maxIndex())
         }else if(GetKeyState("LAlt", "P")=1){
-            pageUp(matched_candidates.maxIndex())
+            anything_pageUp(matched_candidates.maxIndex())
          }Else{
            input=v
          }
        }
-       ;;Ctrl-r  ==pageUp
+       ;;Ctrl-r  ==anything_pageUp
          if ErrorLevel = EndKey:r
            {
             if (GetKeyState("LControl", "P")=1){
-              pageUp(matched_candidates.maxIndex())
+              anything_pageUp(matched_candidates.maxIndex())
           }Else{
                input=r
              }
@@ -146,17 +150,17 @@ for key, default_value in default_anything_properties
               tmpSources:=sources
                for key ,source in tmpSources {
                     candidate:=source["candidate"]
-                    source["tmpCandidate"]:= getCandidatesArray(source)
+                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
-                  matched_candidates:=refresh(tmpSources,search,win_width)
+                  matched_candidates:=anything_refresh(tmpSources,search,win_width)
                   if matched_candidates.maxIndex()>0
                   {
                      LV_Modify(1, "Select Focus Vis")
                    }
                }else
                {
-                 exit()
+                 anything_exit()
                  Break
                }
          }
@@ -180,13 +184,13 @@ for key, default_value in default_anything_properties
                  previousSelectedIndex := selectedRowNum 
                  tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-                 tmpSources:= buildSourceofActions(tmpSources[source_index] , matched_candidates[selectedRowNum])
+                 tmpSources:= anything_build_source_of_actions(tmpSources[source_index] , matched_candidates[selectedRowNum])
                  for key ,source in tmpSources {
                    candidate:=source["candidate"]
-                   source["tmpCandidate"]:= getCandidatesArray(source)
+                   source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                    candidates_count += % source["tmpCandidate"].maxIndex()
                  }
-                 matched_candidates:=refresh(tmpSources,"",win_width)
+                 matched_candidates:=anything_refresh(tmpSources,"",win_width)
                  if matched_candidates.maxIndex()>0
                  {
                     LV_Modify(1, "Select Focus Vis") 
@@ -197,10 +201,10 @@ for key, default_value in default_anything_properties
               tmpSources:=sources
                for key ,source in tmpSources {
                     candidate:=source["candidate"]
-                    source["tmpCandidate"]:= getCandidatesArray(source)
+                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
-                  matched_candidates:=refresh(tmpSources,search,win_width)
+                  matched_candidates:=anything_refresh(tmpSources,search,win_width)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis") 
                }
        }
@@ -209,13 +213,13 @@ for key, default_value in default_anything_properties
          {
             selectedRowNum:= LV_GetNext(0)
             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
-            action:= getDefaultAction(tmpSources[source_index]["action"])
+            action:= anything_get_default_action(tmpSources[source_index]["action"])
             if (GetKeyState("LAlt", "P")=1){
-                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             }else
             {
-               exit()
-               callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+               anything_exit()
+               anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                break
             }
          }
@@ -225,8 +229,8 @@ for key, default_value in default_anything_properties
             if (GetKeyState("LControl", "P")=1){
                   selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
-                  action:= getDefaultAction(tmpSources[source_index]["action"])
-                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  action:= anything_get_default_action(tmpSources[source_index]["action"])
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                  search_updated=yes ;;
             }else{
                  input=z
@@ -237,15 +241,15 @@ for key, default_value in default_anything_properties
             if (GetKeyState("LControl", "P")=1){
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) 
-                  action:= getSecondActionorDefalutAction(tmpSources[source_index]["action"])
-                  exit()
-                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
+                  anything_exit()
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   break
              }else if (GetKeyState("LAlt", "P")=1){
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) 
-                  action:= getSecondActionorDefalutAction(tmpSources[source_index]["action"])
-                  callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   search_updated=yes
             }else{
                  input=j
@@ -257,16 +261,16 @@ for key, default_value in default_anything_properties
             if (GetKeyState("LControl", "P")=1){
                  selectedRowNum:= LV_GetNext(0)
                        LV_GetText(source_index, selectedRowNum,2) 
-                       action:= getThirdActionorDefalutAction(tmpSources[source_index]["action"])
-                       exit()
-                       callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
+                       anything_exit()
+                       anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
                }else if (GetKeyState("LAlt", "P")=1)
                {
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2) 
-                    action:= getThirdActionorDefalutAction(tmpSources[source_index]["action"])
-                    callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                    action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
+                    anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                     search_updated=yes
                }Else{
                input=m
@@ -278,13 +282,13 @@ for key, default_value in default_anything_properties
             if (GetKeyState("LControl", "P")=1){
                                 build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
-                    tmpsources:= buildSource_4_no_candidates(sources , search)
+                    tmpsources:= anything_build_source_4_no_candidates(sources , search)
                          for key ,source in tmpSources {
                              candidate:=source["candidate"]
-                             source["tmpCandidate"]:= getCandidatesArray(source)
+                             source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                              candidates_count += % source["tmpCandidate"].maxIndex()
                            }
-                           matched_candidates:=refresh(tmpSources,"",win_width)
+                           matched_candidates:=anything_refresh(tmpSources,"",win_width)
                            if matched_candidates.maxIndex()>0
                            {
                               LV_Modify(1, "Select Focus Vis") 
@@ -298,8 +302,8 @@ for key, default_value in default_anything_properties
          if ErrorLevel = EndKey:i
            {
             if (GetKeyState("LControl", "P")=1){
-                   exit()
-                  callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                   anything_exit()
+                  anything_callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
                   break
             }else{
                  input=i
@@ -309,7 +313,7 @@ for key, default_value in default_anything_properties
          if ErrorLevel = EndKey:n
            {
             if (GetKeyState("LControl", "P")=1){
-               selectNextCandidate(matched_candidates.maxIndex())
+               anything_selectNextCandidate(matched_candidates.maxIndex())
               GuiControl,, Edit1, %search%
               Send {End} ;;move cursor end
             }else{
@@ -318,16 +322,16 @@ for key, default_value in default_anything_properties
           }
          if ErrorLevel = EndKey:Down
           {
-               selectNextCandidate(matched_candidates.maxIndex())
+               anything_selectNextCandidate(matched_candidates.maxIndex())
           }
           if ErrorLevel = EndKey:Up
           {
-               selectPreviousCandidate(matched_candidates.maxIndex())
+               anything_selectPreviousCandidate(matched_candidates.maxIndex())
           }
            if ErrorLevel = EndKey:p
            {
             if (GetKeyState("LControl", "P")=1){
-              selectPreviousCandidate(matched_candidates.maxIndex())
+              anything_selectPreviousCandidate(matched_candidates.maxIndex())
               GuiControl,, Edit1, %search%
               Send {End} ;;move cursor end
              }else{
@@ -338,7 +342,7 @@ for key, default_value in default_anything_properties
            if ErrorLevel = EndKey:g
            {
             if (GetKeyState("LControl", "P")=1){
-              exit()
+              anything_exit()
               break
              }else{
                  input=g
@@ -411,19 +415,19 @@ for key, default_value in default_anything_properties
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
             selectedRowNum:= LV_GetNext(0)
-           ;;TODO: REFRESH and select needed selected 
-            matched_candidates:=refresh(tmpSources,search,win_width)
+           ;;TODO: ANYTHING_REFRESH and select needed selected 
+            matched_candidates:=anything_refresh(tmpSources,search,win_width)
               if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
-                    tmpsources:= buildSource_4_no_candidates(sources , search)
+                    tmpsources:= anything_build_source_4_no_candidates(sources , search)
                          for key ,source in tmpSources {
                              candidate:=source["candidate"]
-                             source["tmpCandidate"]:= getCandidatesArray(source)
+                             source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                              candidates_count += % source["tmpCandidate"].maxIndex()
                            }
-                           matched_candidates:=refresh(tmpSources,"",win_width)
+                           matched_candidates:=anything_refresh(tmpSources,"",win_width)
                           ; if matched_candidates.maxIndex()>0
                           ; {
                           ;    LV_Modify(1, "Select Focus Vis") 
@@ -433,7 +437,7 @@ for key, default_value in default_anything_properties
             }
 
      } ;; end of loop
-     exit()
+     anything_exit()
 } ;; end of anything function
 
 
@@ -456,14 +460,14 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
   }
 }
 
-refresh(sources,search,win_width){
+anything_refresh(sources,search,win_width){
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
      anything_imagelist:= IL_Create()  
      for source_index ,source in sources {
           candidates:= source["tmpCandidate"]
-         imagelist:=getIcons(source)
+         imagelist:=anything_get_imagelist(source)
           if imagelist
           {
             LV_SetImageList(anything_imagelist, 1)
@@ -474,15 +478,15 @@ refresh(sources,search,win_width){
      for source_index ,source in sources {
           candidates:= source["tmpCandidate"]
           source_name:=source["name"]
-          imagelist:=getIcons(source)
+          imagelist:=anything_get_imagelist(source)
           for candidate_index ,candidate in candidates{
              if imagelist
               {
                  icon_index += 1
-                  matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,icon_index )
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,icon_index )
                }else
                {
-                  matched_candidates:=lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,0)
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,0)
                }
           }
       }
@@ -520,7 +524,7 @@ return matched_candidates
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
 ;;and the param `candidate' will be passed to action
-lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,imagelistId ,imagelist_index){
+anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,imagelistId ,imagelist_index){
   if isObject(candidate){ 
     display:=candidate[1]
   }else{
@@ -557,7 +561,7 @@ anything_match(candidate_string,pattern){
     return 1
  }
 }
-pageDown(candidates_count)
+anything_pageDown(candidates_count)
 {
   selectedRowNum:= LV_GetNext(0)
   if (selectedRowNum= candidates_count){
@@ -567,7 +571,7 @@ pageDown(candidates_count)
         Send {pgdn}
   }
 }
-pageUp(candidates_count){
+anything_pageUp(candidates_count){
   selectedRowNum:= LV_GetNext(0)
   if (selectedRowNum=1){
         LV_Modify(candidates_count, "Select Focus Vis") 
@@ -576,7 +580,7 @@ pageUp(candidates_count){
         Send {pgup}
   }
 }
-selectNextCandidate(candidates_count){
+anything_selectNextCandidate(candidates_count){
        selectedRowNum:= LV_GetNext(0)
        if(selectedRowNum< candidates_count){
           LV_Modify(selectedRowNum+1, "Select Focus Vis")
@@ -585,7 +589,7 @@ selectNextCandidate(candidates_count){
        }
 }
 
-selectPreviousCandidate(candidates_count){
+anything_selectPreviousCandidate(candidates_count){
             selectedRowNum:= LV_GetNext(0)
               if(selectedRowNum<2){
                  LV_Modify(candidates_count, "Select Focus Vis") 
@@ -593,34 +597,34 @@ selectPreviousCandidate(candidates_count){
                  LV_Modify(selectedRowNum-1, "Select Focus Vis")
               }
 }
-exit(){
+anything_exit(){
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
-   OnMessage(0x201, "") ;;disable 0x201 onMessage ,when exit 
+   OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit 
    Gui Destroy
 }
-callFuncByNameWithOneParam(funcName,param1){
+anything_callFuncByNameWithOneParam(funcName,param1){
    return %funcName%(param1)
 }
 
-callFuncByName(funcName){
+anything_callFuncByName(funcName){
    return   %funcName%()
 }
-getIcons(source)
+anything_get_imagelist(source)
 {
     icon:=source["icon"]
    if isFunc(icon)
    {
-      icons:= callFuncByName(icon)
+      icons:= anything_callFuncByName(icon)
       return icons
    }
 }
 
-getCandidatesArray(source)
+anything_get_candidates_as_array(source)
 {
     candidate:=source["candidate"]
    if isFunc(candidate)
    {
-      candidates:= callFuncByName(candidate)
+      candidates:= anything_callFuncByName(candidate)
       return candidates
    }else
    {
@@ -638,7 +642,7 @@ getCandidatesArray(source)
 ;; this candidate ,and select one of them to execute .
 ;; 
 ;;
-getDefaultAction(actionProperty)
+anything_get_default_action(actionProperty)
 {
   if isObject(actionProperty)
   {
@@ -651,7 +655,7 @@ getDefaultAction(actionProperty)
 
 ;;if it has the second action then return it ,else 
 ;; return the default action 
-getSecondActionorDefalutAction(actionProperty)
+anything_get_second_or_defalut_action(actionProperty)
 {
   if isObject(actionProperty)
   {
@@ -665,7 +669,7 @@ getSecondActionorDefalutAction(actionProperty)
   return actionProperty
 }
 }
-getAllActions(actionProperty)
+anything_get_all_actions(actionProperty)
 {
   if isObject(actionProperty)
   {
@@ -678,7 +682,7 @@ getAllActions(actionProperty)
 }
 ;;if it has the second action then return it ,else 
 ;; return the default action 
-getThirdActionorDefalutAction(actionProperty)
+anything_get_third_or_defalut_action(actionProperty)
 {
   if isObject(actionProperty)
   {
@@ -699,12 +703,12 @@ getThirdActionorDefalutAction(actionProperty)
 ;; so source["action"] will be used as newSource["candidate"]
 ;; and the new "action" for newSource is"anything_execute_action_on_selected"
 ;;
-buildSourceofActions(source,selected_candidate)
+anything_build_source_of_actions(source,selected_candidate)
 {
 actionSources:=Array()
 actionSource:=Array()
 candidates :=Array()
-for key ,action in getAllActions(source["action"])
+for key ,action in anything_get_all_actions(source["action"])
 {   
    next:=Array()
    next.insert(action)
@@ -726,11 +730,11 @@ anything_execute_action_on_selected(candidate)
 {
   functionName:=candidate[1]
   realCandidate:=candidate[2]
-  callFuncByNameWithOneParam(functionName, realCandidate)
+  anything_callFuncByNameWithOneParam(functionName, realCandidate)
 }
 
 
-buildSource_4_no_candidates(sources ,search)
+anything_build_source_4_no_candidates(sources ,search)
 {
 newSources:=Array()
  source:=Object()
@@ -738,7 +742,7 @@ newSources:=Array()
  candidates:=Array()
  for key ,candidate in sources
  {
-   for k,action in getAllActions(candidate["action"])
+   for k,action in anything_get_all_actions(candidate["action"])
    {
    next:=Object()
    next.insert("call action :  "candidate["name"] . "." . action)
@@ -757,7 +761,7 @@ anything_execute_default_action_with_search(candidate)
 {
   real_candidate :=candidate[3]
   real_action:=candidate[2]
-  callFuncByNameWithOneParam(real_action ,real_candidate)
+  anything_callFuncByNameWithOneParam(real_action ,real_candidate)
 }
 ;;this  is just a example
 ;;you can parse a property to anything  
