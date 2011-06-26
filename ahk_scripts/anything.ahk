@@ -12,16 +12,16 @@ AutoTrim, off
 ;; and
 ;;         anything_multiple_sources_with_properties
 ;; overwrite  properties here .(just overwrite properties you need is enough)
-default_anything_properties:=Object()
+anything_default_properties:=Object()
 ;;the width of Anything window
-default_anything_properties["win_width"]:= 900
-default_anything_properties["win_height"]:= 510
-default_anything_properties["quit_when_lose_focus"]:="yes"
+anything_default_properties["win_width"]:= 900
+anything_default_properties["win_height"]:= 510
+anything_default_properties["quit_when_lose_focus"]:="yes"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate, 
 ;; and  this function will be treated as "action" 
-default_anything_properties["no_candidate_action"]:="anything_do_nothing"
+anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;global variable
@@ -53,10 +53,10 @@ anything_multiple_sources(sources)
 }
 
 anything_multiple_sources_with_properties(sources,anything_properties){
-global default_anything_properties
+global anything_default_properties
 global anything_wid
 
-for key, default_value in default_anything_properties
+for key, default_value in anything_default_properties
 {
   if (anything_properties[key]="")
   {
@@ -765,7 +765,7 @@ anything_execute_default_action_with_search(candidate)
 }
 ;;this  is just a example
 ;;you can parse a property to anything  
-;;default_anything_properties["no_candidate_action"]:="anything_do_nothing"
+;;anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 ; anything_properties:=Object()
 ; anything_properties["no_candidate_action"]:="do_what_you_want_when_no_matched_candidates"
 ; f1::anything_multiple_sources_with_properties(sources,anything_properties)
