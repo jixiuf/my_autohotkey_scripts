@@ -29,9 +29,9 @@
 ;    anything_multiple_sources(sources)
 ;    return
 
-;DetectHiddenWindows, off
+DetectHiddenWindows, off
 ;;candidates         
-anything_ws_icon_imageListId=Array()
+anything_ws_icon_imageListId=
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
@@ -64,7 +64,7 @@ anything_ws_get_win_candidates()
   for key,candidate in candidates
   {
    this_id:= candidate[2]
-   anything_add_window_icon_2_imageList(this_id,1,anything_ws_icon_imageListId)
+   anything_add_window_icon_2_imageList(this_id,0,anything_ws_icon_imageListId)
   }
   return candidates 
 }
@@ -120,9 +120,9 @@ anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId)
         }
       }
   If ! ( h_icon = "" or h_icon = "FAIL") ; Add the HICON directly to the icon list
-  	Gui_Icon_Number := DllCall("ImageList_ReplaceIcon", UInt, ImageListId, Int, -1, UInt, h_icon)
+  	 DllCall("ImageList_ReplaceIcon", UInt, ImageListId, Int, -1, UInt, h_icon)
   Else	; use a generic icon
-  	Gui_Icon_Number := IL_Add(ImageListId, "shell32.dll" , 3)
+  	 IL_Add(ImageListId, "shell32.dll" , 3)
 }
 
 anything_ws_get_icon()
