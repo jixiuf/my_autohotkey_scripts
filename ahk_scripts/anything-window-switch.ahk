@@ -31,8 +31,10 @@
 
 ;DetectHiddenWindows, off
 ;;candidates         
+anything_ws_icon_imageListId=Array()
 anything_ws_get_win_candidates()
 {
+  global anything_ws_icon_imageListId
   candidates :=Array()
   WinGet, id, list, , , Program Manager
   Loop, %id%
@@ -44,6 +46,7 @@ anything_ws_get_win_candidates()
     ; FIXME: windows with empty titles?
      if title =
        continue
+       
     
     ; don't add the switcher window
     ; if switcher_id = %this_id%
@@ -57,8 +60,15 @@ anything_ws_get_win_candidates()
   {
     candidates.insert(2, candidates.remove(1))
   }
+  anything_ws_icon_imageListId := IL_Create(candidates.maxIndex())  
+  for key,candidate in candidates
+  {
+   this_id:= candidate[2]
+   anything_add_window_icon_2_imageList(this_id,1,anything_ws_icon_imageListId)
+  }
   return candidates 
 }
+
 ;;default action : visit selected window
 anything_ws_visit(candidate)
 {
@@ -71,6 +81,55 @@ anything_ws_close(candidate)
   WinClose ,ahk_id  %win_id%
 }
 
+; (window id, whether to get large icons,ImageListId where to store icon)
+anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId) 
+{
+  Local NR_temp, h_icon
+  ; check status of window - if window is responding or "Not Responding"
+  NR_temp =0 ; init
+  h_icon =
+  Responding := DllCall("SendMessageTimeout", "UInt", wid, "UInt", 0x0, "Int", 0, "Int", 0, "UInt", 0x2, "UInt", 150, "UInt *", NR_temp) ; 150 = timeout in millisecs
+  If (Responding)
+    {
+    ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
+    If Use_Large_Icons_Current =1
+      {
+      SendMessage, 0x7F, 1, 0,, ahk_id %wid%
+      h_icon := ErrorLevel
+      }
+    If ( ! h_icon )
+      {
+      SendMessage, 0x7F, 2, 0,, ahk_id %wid%
+      h_icon := ErrorLevel
+        If ( ! h_icon )
+          {
+          SendMessage, 0x7F, 0, 0,, ahk_id %wid%
+          h_icon := ErrorLevel
+          If ( ! h_icon )
+            {
+            If Use_Large_Icons_Current =1
+              h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; GCL_HICON is -14
+            If ( ! h_icon )
+              {
+              h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
+              If ( ! h_icon )
+                h_icon := DllCall( "LoadIcon", "uint", 0, "uint", 32512 ) ; IDI_APPLICATION is 32512
+              }
+            }
+          }
+        }
+      }
+  If ! ( h_icon = "" or h_icon = "FAIL") ; Add the HICON directly to the icon list
+  	Gui_Icon_Number := DllCall("ImageList_ReplaceIcon", UInt, ImageListId, Int, -1, UInt, h_icon)
+  Else	; use a generic icon
+  	Gui_Icon_Number := IL_Add(ImageListId, "shell32.dll" , 3)
+}
+
+anything_ws_get_icon()
+{
+global
+  return anything_ws_icon_imageListId
+}
 anything_ws_get_processname(wid){
        ; show process name if enabled
            WinGet, procname, ProcessName, ahk_id %wid%
@@ -86,5 +145,6 @@ anything_ws_get_processname(wid){
 anything_window_switcher_source:=Object()
 anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["name"]:="Win"
+anything_window_switcher_source["icon"]:="anything_ws_get_icon"
 anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close")
 
