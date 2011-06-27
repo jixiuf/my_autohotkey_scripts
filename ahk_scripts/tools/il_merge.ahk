@@ -1,4 +1,4 @@
- IL_Merge(il1, il2)
+IL_Append(il1, il2)
 {
 DllCall("LoadLibrary", "str", "Comctl32")
 
@@ -10,8 +10,9 @@ Loop %count2%
    {
    hIcon := DllCall("Comctl32.dll\ImageList_GetIcon", "uint", il2, "int", A_Index - 1, "uint", 0)
    DllCall("Comctl32.dll\ImageList_ReplaceIcon", "uint", il1, "int", count1 + A_Index - 1, "uint", hIcon)
+   DllCall("DestroyIcon", "UInt", hIcon)
    }
- }
+}
  
  
  ;;example
@@ -24,7 +25,7 @@ Loop %count2%
 ;    Loop 5
 ;       IL_Add(ImageListID_%i%, "shell32.dll", A_Index + 5 * i)
 ;    }
-; IL_Merge(ImageListID_1, ImageListID_2)
+; IL_Append(ImageListID_1, ImageListID_2)
 ; LV_SetImageList(ImageListID_1)
 
 ; Loop 10
