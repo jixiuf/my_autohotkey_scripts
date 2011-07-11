@@ -98,3 +98,5 @@ f11::
 #m::
   toggleMaximize()
 return
+#f12:: Send #l
+
