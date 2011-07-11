@@ -17,20 +17,53 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;注意，eclipse命令必须在Path 环境变量中,
 ;;以下用到的程序，除了加了绝对路径的均须如此，
+; #1::
+; IfWinExist,ahk_class SWT_Window0
+;   IfWinActive ,ahk_class SWT_Window0
+;      WinMinimize ,ahk_class SWT_Window0
+;   else{
+; ;;    WinMaximize,ahk_class SWT_Window0
+;     WinActivate ,ahk_class SWT_Window0
+;     }
+; else
+;   run, eclipse -nl en_US
+; return
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;Win+1  VS
 #1::
-IfWinExist,ahk_class SWT_Window0
-  IfWinActive ,ahk_class SWT_Window0
-     WinMinimize ,ahk_class SWT_Window0
+IfWinExist,ahk_class  wndclass_desked_gsk
+  IfWinActive ,ahk_class  wndclass_desked_gsk
+     WinMinimize ,ahk_class wndclass_desked_gsk
   else{
-;;    WinMaximize,ahk_class SWT_Window0
-    WinActivate ,ahk_class SWT_Window0
+    WinActivate ,ahk_class wndclass_desked_gsk
     }
 else
-  run, eclipse -nl en_US
+  run devenv
 return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; ;;;;;;;;;;Win+c ,toggle Pl/sql
+; #c::
+; IfWinExist,ahk_class TPLSQLDevForm
+;   IfWinActive ,ahk_class TPLSQLDevForm
+;      WinMinimize ,ahk_class TPLSQLDevForm
+;   else{
+;     WinActivate ,ahk_class TPLSQLDevForm
+;     }
+; else
+;   Run, C:\Prog\PLSQL\plsqldev.exe
+; return
 
+;;;;;;;;;;Win+c ,toggle Toad 
+#c::
+IfWinExist,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+  IfWinActive ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+     WinMinimize ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+  else{
+    WinActivate ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+    }
+else
+  Run, WindowsForms10.Window.8.app.0.33c0d9d
+return
 
 ;;Win+f toggle Firefox
 #f::
@@ -85,18 +118,6 @@ return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;Win+c ,toggle Pl/sql
-#c::
-IfWinExist,ahk_class TPLSQLDevForm
-  IfWinActive ,ahk_class TPLSQLDevForm
-     WinMinimize ,ahk_class TPLSQLDevForm
-  else{
-;;    WinMaximize,ahk_class TPLSQLDevForm
-    WinActivate ,ahk_class TPLSQLDevForm
-    }
-else
-  Run, C:\Prog\PLSQL\plsqldev.exe
-return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -185,7 +206,7 @@ else
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;Win+q  toggle Excel
+;;;;;;Win+3 toggle word
 #3::
 IfWinExist,ahk_class OpusApp
   IfWinActive ,ahk_class OpusApp 
@@ -198,3 +219,18 @@ else
   run winword
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;Win+o  toggle OutLook
+#o::
+IfWinExist,ahk_class rctrl_renwnd32
+  IfWinActive ,ahk_class rctrl_renwnd32
+     WinMinimize ,ahk_class rctrl_renwnd32
+  else{
+;;    WinMaximize,ahk_class OpusApp
+    WinActivate ,ahk_class rctrl_renwnd32
+    }
+else
+  run outlook
+return
+
+
