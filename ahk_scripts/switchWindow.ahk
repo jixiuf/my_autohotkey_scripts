@@ -62,7 +62,7 @@ IfWinExist,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
     WinActivate ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
     }
 else
-  Run, WindowsForms10.Window.8.app.0.33c0d9d
+  Run, D:\usr\toad\toad.exe
 return
 
 ;;Win+f toggle Firefox
