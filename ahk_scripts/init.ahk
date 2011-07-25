@@ -21,6 +21,7 @@ run %A_ScriptDir%\autoclosewin.ahk
 #Include %A_ScriptDir%\alias.ahk
 #Include %A_ScriptDir%\toggleTaskBar.ahk
 #Include %A_ScriptDir%\plsql.ahk
+#Include %A_ScriptDir%\toadsqlserver.ahk
 #Include %A_ScriptDir%\Console.ahk
 #Include %A_ScriptDir%\diaglog.ahk
 #Include %A_ScriptDir%\win-move-resize.ahk
