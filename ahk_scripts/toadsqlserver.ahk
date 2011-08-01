@@ -27,7 +27,7 @@ return
 ^BS::Send ^+{Left}{Del}
 !BS::Send ^+{Left}{Del}
 ^u::Send +{Home}^c{Del}
-!d::Send ^+{Right}^c{Del}
+!d::Send {Del}
 ^f::Send {Right}
 !f::Send ^{Right}
 ^b::Send {Left}
