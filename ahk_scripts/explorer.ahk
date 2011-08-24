@@ -128,6 +128,7 @@ return
 ^l:: ControlFocus, Edit1,A
 ;"+"  like Emacs dired: create new folder 
 +=::Send !fwf
+!^n::Send !fwf
 
 ; create new text file
 ;
