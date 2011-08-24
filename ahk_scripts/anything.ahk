@@ -351,14 +351,14 @@ for key, default_value in anything_default_properties
          
          if ErrorLevel = EndKey:m
            {
-            if (GetKeyState("LControl", "P")=1){;; Ctrl+m
+            if (GetKeyState("LControl", "P")=1){ ;; Ctrl+m
                  selectedRowNum:= LV_GetNext(0) 
                        LV_GetText(source_index, selectedRowNum,2) 
                        action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                        anything_exit()
                        anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
-               }else if (GetKeyState("LAlt", "P")=1);;Alt+m
+               }else if (GetKeyState("LAlt", "P")=1) ;;Alt+m
                {
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2) 
