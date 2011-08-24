@@ -5,35 +5,130 @@ SetBatchLines, -1
 SetKeyDelay  -1
 SendMode Input
 AutoTrim, off
+;;;;;;;;;;;;;;;;;; 4 public functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anything(anything-source)
+;; anything_with_properties(anything-source,anything-properties)
+;; anything_multiple_sources(anything-sources)
+;; anything_multiple_sources_with_properties(anything-sources, anything-properties)
+;;
+;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
+;;   an anything-source is an Object with some defined properties
+;;   now it support 4 anything-source-properties :
+;;   <name> <action> <candidate> and <icon>
+;;   for example:
+;;         my_source:=Object()
+;; ** <name>  (needed)
+;;    <name> is a string ,it is just a name of this anything-source
+;;         my_source["name"]:="my_source_name"
+;;
+;; ** <candidate>  (needed)
+;;    <candidate> is an array of available candidates ,or a function name(string)
+;;    without parameter which return an array .
+;;    each element of the array can be :
+;; *** a string
+;;     this string will be displayed on listview , so that you can select one
+;;     of the candidates ,and execute action on your selected candidate.
+;;    for example:
+;;             my_candidates:=Array("red","green")
+;;       or
+;;             my_candidates_fun()
+;;             {
+;;                 return Array("red","green")
+;;             }
+;;             my_candiates:="my_candidates_fun"
+;;              
+;; *** a array
+;;     the first element of this array must be a string ,the string will be
+;;     displayed on listview ,and you can selected one of the candidates ,and
+;;     execute action on your selected candidate.
+;;     other element of this array can be anything , you can store useful info.
+;;     there. and when you execute action on your selected candidate,this will
+;;     be the parameter . see <action>
+;;       for example:
+;;             my_candidates:=Array(
+;;                       Array("red","useful info ,string ,object or anything"),
+;;                       Array("green","useful info ,string ,object or anything")
+;;                       )
+;;
+;; ** action  (needed)
+;;    action is a function name(string) or a list of function name (array).
+;;    and those functions must have one parameter. actually the parameter is
+;;    the selected <candidate> .
+;;          my_action:="my_action_fun"
+;;                   my_action_fun(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;       or
+;;         my_action:=Array("my_action_fun","my_action_fun2")
+;;                   my_action_fun(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;                   my_action_fun2(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;                    
+;; ** icon (optional)
+;;     <icon> is a function(string) which return a ImageList.
+;;     this property is optional .if this property isn't empty
+;;     <Anything> will display icon before each candidates.
+;;      icon_fun()
+;;      {
+;;          ImageListID := IL_Create(10)  ; Create an ImageList to hold 10 small icons.
+;;          Loop 10  ; Load the ImageList with a series of icons from the DLL.
+;;          IL_Add(ImageListID, "shell32.dll", A_Index)
+;;          return ImageListID
+;;      }
+;;     my_icon :="icon_fun"
+;;
+;; my_source["candidate"]:=my_candidates
+;; my_source["action"]:=my_action
+;; my_source["icon"]:=my_icon
+;;
+;; anything(my_source)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;default anything-properties;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;don't change the default value here ,you can use 
 ;;         anything_with_properties()
 ;; and
 ;;         anything_multiple_sources_with_properties
-;; overwrite  properties here .(just overwrite properties you need is enough)
+;;
+;; overwrite  properties defined here .
+;;(just overwrite properties those you are interested in).
+;; example:
+;;     my_anything_properties:=Object()
+;;     my_anything_properties["anything-execute-action-at-once-if-one"]:="yes"
+;;     anything_with_properties(my-anything-source ,my_anything_properties)
+
 anything_default_properties:=Object()
-;;the width of Anything window
+;; the width and height  of Anything window
 anything_default_properties["win_width"]:= 900
 anything_default_properties["win_height"]:= 510
+
+;; when Anything window lose focus ,close Anything window automatically.
 anything_default_properties["quit_when_lose_focus"]:="yes"
+
+;;if anything-execute-action-at-once-if-one=yes
+;; then it will execute the default action automatically when only one
+;; candidate left.
+
+;; example:
+;;     my_anything_properties:=Object()
+;;     my_anything_properties["anything-execute-action-at-once-if-one"]:="yes"
+;;     anything_with_properties(my-anything-source ,my_anything_properties)
+anything_default_properties["anything-execute-action-at-once-if-one"]:="no"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate, 
 ;; and  this function will be treated as "action" 
 anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;global variable
+;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anthing Window Id                                  
 anything_wid=
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;4 public function
-
-;; anything
-;; anything_with_properties
-;; anything_multiple_sources
-;; anything_multiple_sources_with_properties
-
 
 anything(source)
 {
@@ -435,6 +530,15 @@ for key, default_value in anything_default_properties
                           ; }
               }
             }
+         ;;if only one candidate left    
+       if matched_candidates.maxIndex() = 1
+       {
+       ;; if only one anything-source 
+         if (sources.maxIndex()=1)
+         {
+         }
+       
+       }
 
      } ;; end of loop
      anything_exit()
