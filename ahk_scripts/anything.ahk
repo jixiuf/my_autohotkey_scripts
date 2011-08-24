@@ -307,7 +307,7 @@ for key, default_value in anything_default_properties
             selectedRowNum:= LV_GetNext(0)
             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
             action:= anything_get_default_action(tmpSources[source_index]["action"])
-            if (GetKeyState("LAlt", "P")=1){
+            if (GetKeyState("LAlt", "P")=1){ ;;LAlt+Enter 
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             }else
             {
@@ -319,7 +319,7 @@ for key, default_value in anything_default_properties
          
          if ErrorLevel = EndKey:z
            {
-            if (GetKeyState("LControl", "P")=1){
+            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+z
                   selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
@@ -331,14 +331,14 @@ for key, default_value in anything_default_properties
           }
          if ErrorLevel = EndKey:j
            {
-            if (GetKeyState("LControl", "P")=1){
+            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+j
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) 
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_exit()
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   break
-             }else if (GetKeyState("LAlt", "P")=1){
+             }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) 
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
@@ -351,14 +351,14 @@ for key, default_value in anything_default_properties
          
          if ErrorLevel = EndKey:m
            {
-            if (GetKeyState("LControl", "P")=1){
-                 selectedRowNum:= LV_GetNext(0)
+            if (GetKeyState("LControl", "P")=1){;; Ctrl+m
+                 selectedRowNum:= LV_GetNext(0) 
                        LV_GetText(source_index, selectedRowNum,2) 
                        action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                        anything_exit()
                        anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                        break
-               }else if (GetKeyState("LAlt", "P")=1)
+               }else if (GetKeyState("LAlt", "P")=1);;Alt+m
                {
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2) 
