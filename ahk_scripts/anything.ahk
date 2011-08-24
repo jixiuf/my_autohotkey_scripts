@@ -13,15 +13,15 @@ AutoTrim, off
 ;;
 ;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   an anything-source is an Object with some defined properties
-;;   now it support 4 anything-source-properties :
-;;   <name> <action> <candidate> and <icon>
+;;   now it support 5 anything-source-properties :
+;;   <name> <action> <candidate> and <icon><anything-execute-action-at-once-if-one>
 ;;   for example:
 ;;         my_source:=Object()
-;; ** <name>  (needed)
+;; ** 1 <name>  (needed)
 ;;    <name> is a string ,it is just a name of this anything-source
 ;;         my_source["name"]:="my_source_name"
 ;;
-;; ** <candidate>  (needed)
+;; ** 2 <candidate>  (needed)
 ;;    <candidate> is an array of available candidates ,or a function name(string)
 ;;    without parameter which return an array .
 ;;    each element of the array can be :
@@ -50,8 +50,8 @@ AutoTrim, off
 ;;                       Array("green","useful info ,string ,object or anything")
 ;;                       )
 ;;
-;; ** action  (needed)
-;;    action is a function name(string) or a list of function name (array).
+;; ** 3 <action>  (needed)
+;;    <action> is a function name(string) or a list of function name (array).
 ;;    and those functions must have one parameter. actually the parameter is
 ;;    the selected <candidate> .
 ;;          my_action:="my_action_fun"
@@ -70,7 +70,7 @@ AutoTrim, off
 ;;                   MsgBox , %candidate%
 ;;                 }
 ;;                    
-;; ** icon (optional)
+;; ** 4 <icon> (optional)
 ;;     <icon> is a function(string) which return a ImageList.
 ;;     this property is optional .if this property isn't empty
 ;;     <Anything> will display icon before each candidates.
@@ -82,6 +82,13 @@ AutoTrim, off
 ;;          return ImageListID
 ;;      }
 ;;     my_icon :="icon_fun"
+
+;; ** 5 <anything-execute-action-at-once-if-one> (optional)
+;;     if it has value
+;;   for example
+           my_source["anything-execute-action-at-once-if-one"]:="yes"
+;; then if only one candidate left on the listview it will execute the
+;;     default action with the candidate  
 ;;
 ;; my_source["candidate"]:=my_candidates
 ;; my_source["action"]:=my_action
@@ -91,15 +98,15 @@ AutoTrim, off
 
 ;;;;;;;;;;;;;;;;;;;;;;default anything-properties;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;don't change the default value here ,you can use 
-;;         anything_with_properties()
+;;         anything_with_properties(source,properties)
 ;; and
-;;         anything_multiple_sources_with_properties
+;;         anything_multiple_sources_with_properties(sources,properties)
 ;;
 ;; overwrite  properties defined here .
 ;;(just overwrite properties those you are interested in).
 ;; example:
 ;;     my_anything_properties:=Object()
-;;     my_anything_properties["anything-execute-action-at-once-if-one"]:="yes"
+;;     my_anything_properties["win_width"]:= 900
 ;;     anything_with_properties(my-anything-source ,my_anything_properties)
 
 anything_default_properties:=Object()
@@ -109,16 +116,6 @@ anything_default_properties["win_height"]:= 510
 
 ;; when Anything window lose focus ,close Anything window automatically.
 anything_default_properties["quit_when_lose_focus"]:="yes"
-
-;;if anything-execute-action-at-once-if-one=yes
-;; then it will execute the default action automatically when only one
-;; candidate left.
-
-;; example:
-;;     my_anything_properties:=Object()
-;;     my_anything_properties["anything-execute-action-at-once-if-one"]:="yes"
-;;     anything_with_properties(my-anything-source ,my_anything_properties)
-anything_default_properties["anything-execute-action-at-once-if-one"]:="no"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate, 
@@ -530,15 +527,20 @@ for key, default_value in anything_default_properties
                           ; }
               }
             }
-         ;;if only one candidate left    
-       if matched_candidates.maxIndex() = 1
-       {
-       ;; if only one anything-source 
-         if (sources.maxIndex()=1)
-         {
-         }
-       
-       }
+            ;;if only one candidate left automatically execute it
+            ;; if source["anything-execute-action-at-once-if-one"]="yes"
+            if matched_candidates.maxIndex() = 1
+            {
+                   selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+              if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
+              {
+                  action:= anything_get_default_action(tmpSources[source_index]["action"])
+                  anything_exit() ;;first quit .then execute action 
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  break
+                }
+              }
 
      } ;; end of loop
      anything_exit()
