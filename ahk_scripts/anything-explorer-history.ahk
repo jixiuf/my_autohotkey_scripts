@@ -119,7 +119,7 @@ updateHistory(newAddr)
     }
   }
   directory_history.insert(1,newAddr)
-  if (directory_history.maxIndex()>50)
+  if (directory_history.maxIndex()>100)
   {
     directory_history.remove(51)
   }
