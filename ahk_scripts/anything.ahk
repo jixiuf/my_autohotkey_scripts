@@ -143,10 +143,12 @@ anything_multiple_sources(sources)
 {
   anything_multiple_sources_with_properties(sources ,Array())
 }
-
+;;main function 
 anything_multiple_sources_with_properties(sources,anything_properties){
 global anything_default_properties
 global anything_wid
+;; copy all property from anything_default_properties to
+;; anything_properties if  anything_properties doen't defined  
 
 for key, default_value in anything_default_properties
 {
@@ -165,19 +167,18 @@ for key, default_value in anything_default_properties
    Gui, Add, Edit,     x90 y5 w500 h30,
    if(anything_properties["quit_when_lose_focus"] = "yes")
    {
-     OnMessage( 0x06, "anything_WM_ACTIVATE" ) ;;when window lost focus 
+   ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+   ;; will be executed
+     OnMessage( 0x06, "anything_WM_ACTIVATE" ) 
    }
-   OnMessage(0x201, "anything_WM_LBUTTONDOWN") ;;when LButton(mouse) is down 
+   ;; ;;when LButton(mouse) is down ,select use mouse
+   ;;anything_WM_LBUTTONDOWN() will be called
+   OnMessage(0x201, "anything_WM_LBUTTONDOWN") 
    icon:=source["icon"]
-     ; if icon<>
-     ; {
-        Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
-     ; }else{
-     ;    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
-     ; }
-     
+    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      
      candidates_count=0
+     ;; search string you have typed 
      search=
      tabListActions:=""
      matched_candidates:=Object()
