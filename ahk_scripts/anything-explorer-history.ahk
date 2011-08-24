@@ -175,7 +175,7 @@ visit_directory( candidate_directory)
 		; then the addressbar shows http://www.L:\folder.com. To solve this,
 		; I added a {right} before {Enter}":
 		ControlSend, Edit1, {Right}{Enter}, ahk_id %active_id%
-        sleep 100
+        sleep 500
         ControlFocus, SysListView321,A
         Send {Home} ;;selected first file dired
         
@@ -207,7 +207,7 @@ visit_directory( candidate_directory)
       Run explorer.exe   /n`, /e`,  "%candidate_directory%"
       WinWait ahk_class (CabinetWClass|ExploreWClass) 
       WinActivate
-      sleep 50
+      sleep 300
       ControlFocus, SysListView321,A
       Send {Home}
    }
