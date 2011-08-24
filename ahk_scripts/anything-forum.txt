@@ -1,0 +1,2219 @@
+there is a screencast here : 
+http://www.screenr.com/xxss
+A new One 
+http://www.screenr.com/vp8s
+and another one show anything-favorite-directories.ahk
+http://www.screenr.com/BH7s
+and another show anything-window-switch.ahk
+http://www.screenr.com/MyHs
+
+and source code is host on 
+https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
+
+ if you think 
+ anything.ahk is great ,and have written an anything-source for it ,you can post it here .
+
+
+If you use GNU/Emacs  maybe you have known "Anything"
+maybe not , 
+you can visit "Anything" on emacswiki 
+http://www.emacswiki.org/emacs/Anything 
+and see what "Anything" it is .
+
+and this isn't anything.el ,it 's anything.ahk
+
+* keybindings when <Anything> is activated 
+  you can input search string just like google to narrow the candidates
+** keybindings for select candiates
+Down or Ctrl+n          select next candidate 
+Up or Ctrl+p            select previous candidate
+Ctrl+o                  will select next source ,that means ,all candidate from first source will be send to last 
+pageUp ,Ctrl-r ,Alt-v== pageup
+pageDn ,Ctrl-v       == pageDn
+
+** keybindings for execute actions
+
+<Click>and  <Enter>     to execute the default action with the selected candiate as parameter
+<Ctrl-j>                to execute the second action with the selected candidate as parameter
+<Ctrl-m>                to execute the third action with the selected candidate as parameter
+
+<Ctrl-z> <Alt-Enter>    do the same to Enter ,but doesn't quit "Anything"
+<Alt-j>                 do the same to Ctrl-j ,but doesn't quit "Anything"
+<Alt-m>                 do the same to Ctrl-m ,but doesn't quit "Anything"
+<tab>                   will list all available actions , and you can select one to execute .
+
+<Ctrl-L>                will ignore all the candidates ,and treate the search string as candidate , and
+                        list all available "action" to execute on the special "candidate"
+<Ctrl-i>                do something similar to <Ctrl-l> ,but don't list all available "action" ,just
+                        execute the "action" special by "property": no_candidate_action
+                        ;;see 
+                        ;; anything_with_properties()
+                        ;; anything_multiple_sources_with_properties()
+                        ;; anything_default_properties 
+                        ;; in anything.ahk
+<Esc> and <Ctrl-g>      quit Anything
+** keybindings for edit
+Ctrl-u                  empty search string
+backspace and Ctrl-h   back delete a char
+Ctrl-y                 paste
+
+* anything-source I have written
+Now I have wrote 4 <anything-source> for anything.ahk
+    anything-explorer-history.ahk ,
+    anything-favorite-directories.ahk,
+    anything-run.ahk
+    anything-window-switch.ahk (a replacement of Alt-Tab)
+
+1. anything-explorer-history.ahk
+   when you visit  directory (double click on a directory,up or back ) in
+   explorer.exe ,it can remember directories 
+   you have visited ,then you can press  <F3> to active "Anything"
+   list all directory history ,you can revisit it easyly.
+
+2. anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
+   add your favorite directories ,and visit it using "Anything".
+   about how to use it .see comments in anything-favorite-directories.ahk
+
+3. anything-run.ahk is a replacement of <Win-r>
+   it could remember old  command too. when you press <F3>
+   about how to use it .see comments in anything-run.ahk
+4. anything-window-switch.ahk is a replacement of Alt-Tab   
+   
+** you just need download:
+   anything.ahk
+   anything-explorer-history.ahk
+   anything-favorite-directories.ahk
+   anything-run.ahk
+   anything-window-switch.ahk
+   anything-config.ahk
+   and run anything-config.ahk
+ 
+* how to  write an anything-source
+;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
+   an anything-source is an Object with some defined properties
+   now it support 5 anything-source-properties :
+   <name> <action> <candidate> and <icon><anything-execute-action-at-once-if-one>
+   for example:
+         my_source:=Object()
+ ** 1 <name>  (needed)
+    <name> is a string ,it is just a name of this anything-source
+         my_source["name"]:="my_source_name"
+
+ ** 2 <candidate>  (needed)
+    <candidate> is an array of available candidates ,or a function name(string)
+    without parameter which return an array .
+    each element of the array can be :
+ *** a string
+     this string will be displayed on listview , so that you can select one
+     of the candidates ,and execute action on your selected candidate.
+    for example:
+             my_candidates:=Array("red","green")
+       or
+             my_candidates_fun()
+             {
+                 return Array("red","green")
+             }
+             my_candiates:="my_candidates_fun"
+              
+ *** a array
+     the first element of this array must be a string ,the string will be
+     displayed on listview ,and you can selected one of the candidates ,and
+     execute action on your selected candidate.
+     other element of this array can be anything , you can store useful info.
+     there. and when you execute action on your selected candidate,this will
+     be the parameter . see <action>
+       for example:
+             my_candidates:=Array(
+                       Array("red","useful info ,string ,object or anything"),
+                       Array("green","useful info ,string ,object or anything")
+                       )
+
+ ** 3 <action>  (needed)
+    <action> is a function name(string) or a list of function name (array).
+    and those functions must have one parameter. actually the parameter is
+    the selected <candidate> .
+          my_action:="my_action_fun"
+                   my_action_fun(candidate)
+                 {
+                   MsgBox , %candidate%
+                 }
+       or
+         my_action:=Array("my_action_fun","my_action_fun2")
+                   my_action_fun(candidate)
+                 {
+                   MsgBox , %candidate%
+                 }
+                   my_action_fun2(candidate)
+                 {
+                   MsgBox , %candidate%
+                 }
+                    
+ ** 4 <icon> (optional)
+     <icon> is a function(string) which return a ImageList.
+     this property is optional .if this property isn't empty
+     <Anything> will display icon before each candidates.
+      icon_fun()
+      {
+          ImageListID := IL_Create(10)  ; Create an ImageList to hold 10 small icons.
+          Loop 10  ; Load the ImageList with a series of icons from the DLL.
+          IL_Add(ImageListID, "shell32.dll", A_Index)
+          return ImageListID
+      }
+     my_icon :="icon_fun"
+
+ ** 5 <anything-execute-action-at-once-if-one> (optional)
+     if it has value
+   for example
+         my_source["anything-execute-action-at-once-if-one"]:="yes"
+ then if only one candidate left on the listview it will execute the
+     default action with the candidate  
+
+ my_source["candidate"]:=my_candidates
+ my_source["action"]:=my_action
+ my_source["icon"]:=my_icon
+
+ anything(my_source)
+
+ 
+-------------------------
+ChangeLog
+2011-8-24 23:36:33
+anything-source support property anything-execute-action-at-once-if-one
+  automatically execute the default action when there is only 1 search
+  see comments in  anything-window-switch.ahk
+
+
+2011-6-27 0:43:14
+add anything-window-switch.ahk
+and update anything.ahk ,
+now anything-source support properties <icon>
+and anything-window-switch.ahk used property <icon>
+it is a  replacement of Alt-Tab
+
+2011-6-21 
+BugFix ,anything-explorer-history.ahk 
+the timer of writing history to disk  doesn't work .
+
+2011-6-16 18:40:47
+  Anything.ahk
+
+add keybindings
+
+Ctrl-y :paste
+pageUp
+pageDn
+Ctrl-v=pageDn
+alt-v ==Alt-r=pageUp
+
+and 
+Alt+j       Control+j
+Alt+m      Control+m
+Alt+Enter  Enter 
+
+Alt+j do the same thing as Control+j ,but it doesn't quit "Anything".,
+so you can do it again without restart "Anything"
+Alt+m Alt+Enter ,just like Alt+j
+
+and Add anything-favorite-directories.ahk 
+
+
+=========================================
+
+
+anything.ahk 
+
+[code]
+;; need AutoHotKey_L         
+#SingleInstance force
+#NoEnv
+SetBatchLines, -1
+SetKeyDelay  -1
+SendMode Input
+AutoTrim, off
+;;;;;;;;;;;;;;;;;; 4 public functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anything(anything-source)
+;; anything_with_properties(anything-source,anything-properties)
+;; anything_multiple_sources(anything-sources)
+;; anything_multiple_sources_with_properties(anything-sources, anything-properties)
+;;
+;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
+;;   an anything-source is an Object with some defined properties
+;;   now it support 5 anything-source-properties :
+;;   <name> <action> <candidate> and <icon><anything-execute-action-at-once-if-one>
+;;   for example:
+;;         my_source:=Object()
+;; ** 1 <name>  (needed)
+;;    <name> is a string ,it is just a name of this anything-source
+;;         my_source["name"]:="my_source_name"
+;;
+;; ** 2 <candidate>  (needed)
+;;    <candidate> is an array of available candidates ,or a function name(string)
+;;    without parameter which return an array .
+;;    each element of the array can be :
+;; *** a string
+;;     this string will be displayed on listview , so that you can select one
+;;     of the candidates ,and execute action on your selected candidate.
+;;    for example:
+;;             my_candidates:=Array("red","green")
+;;       or
+;;             my_candidates_fun()
+;;             {
+;;                 return Array("red","green")
+;;             }
+;;             my_candiates:="my_candidates_fun"
+;;              
+;; *** a array
+;;     the first element of this array must be a string ,the string will be
+;;     displayed on listview ,and you can selected one of the candidates ,and
+;;     execute action on your selected candidate.
+;;     other element of this array can be anything , you can store useful info.
+;;     there. and when you execute action on your selected candidate,this will
+;;     be the parameter . see <action>
+;;       for example:
+;;             my_candidates:=Array(
+;;                       Array("red","useful info ,string ,object or anything"),
+;;                       Array("green","useful info ,string ,object or anything")
+;;                       )
+;;
+;; ** 3 <action>  (needed)
+;;    <action> is a function name(string) or a list of function name (array).
+;;    and those functions must have one parameter. actually the parameter is
+;;    the selected <candidate> .
+;;          my_action:="my_action_fun"
+;;                   my_action_fun(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;       or
+;;         my_action:=Array("my_action_fun","my_action_fun2")
+;;                   my_action_fun(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;                   my_action_fun2(candidate)
+;;                 {
+;;                   MsgBox , %candidate%
+;;                 }
+;;                    
+;; ** 4 <icon> (optional)
+;;     <icon> is a function(string) which return a ImageList.
+;;     this property is optional .if this property isn't empty
+;;     <Anything> will display icon before each candidates.
+;;      icon_fun()
+;;      {
+;;          ImageListID := IL_Create(10)  ; Create an ImageList to hold 10 small icons.
+;;          Loop 10  ; Load the ImageList with a series of icons from the DLL.
+;;          IL_Add(ImageListID, "shell32.dll", A_Index)
+;;          return ImageListID
+;;      }
+;;     my_icon :="icon_fun"
+
+;; ** 5 <anything-execute-action-at-once-if-one> (optional)
+;;     if it has value
+;;   for example
+           my_source["anything-execute-action-at-once-if-one"]:="yes"
+;; then if only one candidate left on the listview it will execute the
+;;     default action with the candidate  
+;;
+;; my_source["candidate"]:=my_candidates
+;; my_source["action"]:=my_action
+;; my_source["icon"]:=my_icon
+;;
+;; anything(my_source)
+
+;;;;;;;;;;;;;;;;;;;;;;default anything-properties;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;don't change the default value here ,you can use 
+;;         anything_with_properties(source,properties)
+;; and
+;;         anything_multiple_sources_with_properties(sources,properties)
+;;
+;; overwrite  properties defined here .
+;;(just overwrite properties those you are interested in).
+;; example:
+;;     my_anything_properties:=Object()
+;;     my_anything_properties["win_width"]:= 900
+;;     anything_with_properties(my-anything-source ,my_anything_properties)
+
+anything_default_properties:=Object()
+;; the width and height  of Anything window
+anything_default_properties["win_width"]:= 900
+anything_default_properties["win_height"]:= 510
+
+;; when Anything window lose focus ,close Anything window automatically.
+anything_default_properties["quit_when_lose_focus"]:="yes"
+
+;;the value is a function accpet one parameter ,when no matched candidates
+;; the search string will be treated as candidate, 
+;; and  this function will be treated as "action" 
+anything_default_properties["no_candidate_action"]:="anything_do_nothing"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anthing Window Id                                  
+anything_wid=
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+anything(source)
+{
+   anything_with_properties(source,Array())
+}
+
+anything_with_properties(source ,anything_properties)
+{
+  sources:= Array()
+  sources.insert(source)
+  anything_multiple_sources_with_properties(sources ,anything_properties)
+}
+
+anything_multiple_sources(sources)
+{
+  anything_multiple_sources_with_properties(sources ,Array())
+}
+;;main function 
+anything_multiple_sources_with_properties(sources,anything_properties){
+global anything_default_properties
+global anything_wid
+;; copy all property from anything_default_properties to
+;; anything_properties if  anything_properties doen't defined  
+
+for key, default_value in anything_default_properties
+{
+  if (anything_properties[key]="")
+  {
+     anything_properties[key]:=default_value
+  }
+}
+   win_width:=anything_properties["win_width"]
+   win_height:=anything_properties["win_height"]
+   Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
+   WinSet, Transparent, 225
+   Gui, Color,black,black
+   Gui,Font,s12 c7cfc00 bold
+   Gui, Add, Text,     x10  y10 w80 h30, Search`:
+   Gui, Add, Edit,     x90 y5 w500 h30,
+   if(anything_properties["quit_when_lose_focus"] = "yes")
+   {
+   ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+   ;; will be executed
+     OnMessage( 0x06, "anything_WM_ACTIVATE" ) 
+   }
+   ;; ;;when LButton(mouse) is down ,select use mouse
+   ;;anything_WM_LBUTTONDOWN() will be called
+   OnMessage(0x201, "anything_WM_LBUTTONDOWN") 
+   icon:=source["icon"]
+    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
+     
+     candidates_count=0
+     ;; search string you have typed 
+     search=
+     tabListActions:=""
+     matched_candidates:=Object()
+     tmpSources:=sources
+     for key ,source in tmpSources {
+       candidate:=source["candidate"]
+       source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+       candidates_count += % source["tmpCandidate"].maxIndex()
+     }
+
+     matched_candidates:=anything_refresh(tmpSources,search,win_width)
+     Gui ,Show,,
+      ; if matched_candidates.maxIndex()>0
+      ; {
+      ;    LV_Modify(1, "Select Focus Vis") 
+      ; }else{
+      ; }
+
+     WinGet, anything_wid, ID, A
+     WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
+     loop,
+     {
+         search_updated=
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyorv{LAlt}{tab}
+       
+       if ErrorLevel = EndKey:pgup
+       {
+         anything_pageUp(matched_candidates.maxIndex())
+       }
+        
+       if ErrorLevel = EndKey:pgdn
+       {
+         anything_pageDown(matched_candidates.maxIndex())
+       }
+       ;;Ctrl-v =pageDn
+       ;;Alt-v  == anything_pageUp
+       if ErrorLevel = EndKey:v
+       {
+         if (GetKeyState("LControl", "P")=1){
+           anything_pageDown(matched_candidates.maxIndex())
+        }else if(GetKeyState("LAlt", "P")=1){
+            anything_pageUp(matched_candidates.maxIndex())
+         }Else{
+           input=v
+         }
+       }
+       ;;Ctrl-r  ==anything_pageUp
+         if ErrorLevel = EndKey:r
+           {
+            if (GetKeyState("LControl", "P")=1){
+              anything_pageUp(matched_candidates.maxIndex())
+          }Else{
+               input=r
+             }
+          }
+
+         if ErrorLevel = EndKey:escape
+         {
+              if (tabListActions="yes")
+            {
+              tabListActions:=""
+              tmpSources:=sources
+               for key ,source in tmpSources {
+                    candidate:=source["candidate"]
+                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                    candidates_count += % source["tmpCandidate"].maxIndex()
+                  }
+                  matched_candidates:=anything_refresh(tmpSources,search,win_width)
+                  if matched_candidates.maxIndex()>0
+                  {
+                     LV_Modify(1, "Select Focus Vis")
+                   }
+               }else
+               {
+                 anything_exit()
+                 Break
+               }
+         }
+         if ErrorLevel = EndKey:LControl
+            {
+               continue
+            }
+       ;;list all avaiable actions for the selected candidate 
+       ;; usual one source only have one action ,
+       ;; but some times user can give more than one action.
+       ;; <Enter> execute the default action .
+       ;; <Ctrl-j> execute the second action .(if only one,it execute the default action)
+       ;; <Ctrl-m> execute the third action .(if less than three ,it execute the default action)
+       ;;and <tab> list all available actions ,user can select it and execute it .
+       if ErrorLevel = EndKey:tab
+       {
+           selectedRowNum:= LV_GetNext(0)
+           
+             if (tabListActions = "")
+             {
+                 previousSelectedIndex := selectedRowNum 
+                 tabListActions:="yes"
+                 LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+                 tmpSources:= anything_build_source_of_actions(tmpSources[source_index] , matched_candidates[selectedRowNum])
+                 for key ,source in tmpSources {
+                   candidate:=source["candidate"]
+                   source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                   candidates_count += % source["tmpCandidate"].maxIndex()
+                 }
+                 matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                 if matched_candidates.maxIndex()>0
+                 {
+                    LV_Modify(1, "Select Focus Vis") 
+                 }
+              }else
+              {
+              tabListActions:=""
+              tmpSources:=sources
+               for key ,source in tmpSources {
+                    candidate:=source["candidate"]
+                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                    candidates_count += % source["tmpCandidate"].maxIndex()
+                  }
+                  matched_candidates:=anything_refresh(tmpSources,search,win_width)
+                 LV_Modify(previousSelectedIndex, "Select Focus Vis") 
+               }
+       }
+       
+         if ErrorLevel = EndKey:enter
+         {
+            selectedRowNum:= LV_GetNext(0)
+            LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+            action:= anything_get_default_action(tmpSources[source_index]["action"])
+            if (GetKeyState("LAlt", "P")=1){ ;;LAlt+Enter 
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+            }else
+            {
+               anything_exit()
+               anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+               break
+            }
+         }
+         
+         if ErrorLevel = EndKey:z
+           {
+            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+z
+                  selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+                  action:= anything_get_default_action(tmpSources[source_index]["action"])
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                 search_updated=yes ;;
+            }else{
+                 input=z
+            }
+          }
+         if ErrorLevel = EndKey:j
+           {
+            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+j
+                 selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) 
+                  action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
+                  anything_exit()
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  break
+             }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
+                 selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) 
+                  action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  search_updated=yes
+            }else{
+                 input=j
+            }
+          }
+         
+         if ErrorLevel = EndKey:m
+           {
+            if (GetKeyState("LControl", "P")=1){;; Ctrl+m
+                 selectedRowNum:= LV_GetNext(0) 
+                       LV_GetText(source_index, selectedRowNum,2) 
+                       action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
+                       anything_exit()
+                       anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       break
+               }else if (GetKeyState("LAlt", "P")=1);;Alt+m
+               {
+                    selectedRowNum:= LV_GetNext(0)
+                    LV_GetText(source_index, selectedRowNum,2) 
+                    action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
+                    anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                    search_updated=yes
+               }Else{
+               input=m
+             }
+          }
+          
+         if ErrorLevel = EndKey:l
+           {
+            if (GetKeyState("LControl", "P")=1){
+                                build_no_candidates_source:="yes"
+                    Gui, Color,483d8b,483d8b
+                    tmpsources:= anything_build_source_4_no_candidates(sources , search)
+                         for key ,source in tmpSources {
+                             candidate:=source["candidate"]
+                             source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                             candidates_count += % source["tmpCandidate"].maxIndex()
+                           }
+                           matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                           if matched_candidates.maxIndex()>0
+                           {
+                              LV_Modify(1, "Select Focus Vis") 
+                           }
+            }else{
+                 input=l
+            }
+          }
+         
+
+         if ErrorLevel = EndKey:i
+           {
+            if (GetKeyState("LControl", "P")=1){
+                   anything_exit()
+                  anything_callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                  break
+            }else{
+                 input=i
+             }
+          }
+          
+         if ErrorLevel = EndKey:n
+           {
+            if (GetKeyState("LControl", "P")=1){
+               anything_selectNextCandidate(matched_candidates.maxIndex())
+              GuiControl,, Edit1, %search%
+              Send {End} ;;move cursor end
+            }else{
+                 input=n
+             }
+          }
+         if ErrorLevel = EndKey:Down
+          {
+               anything_selectNextCandidate(matched_candidates.maxIndex())
+          }
+          if ErrorLevel = EndKey:Up
+          {
+               anything_selectPreviousCandidate(matched_candidates.maxIndex())
+          }
+           if ErrorLevel = EndKey:p
+           {
+            if (GetKeyState("LControl", "P")=1){
+              anything_selectPreviousCandidate(matched_candidates.maxIndex())
+              GuiControl,, Edit1, %search%
+              Send {End} ;;move cursor end
+             }else{
+                 input=p
+             }
+      
+         }
+           if ErrorLevel = EndKey:g
+           {
+            if (GetKeyState("LControl", "P")=1){
+              anything_exit()
+              break
+             }else{
+                 input=g
+             }
+      
+         }
+        ;;Ctrl+u clear "search" string ,just like bash
+        if ErrorLevel = EndKey:u
+        {
+          if (GetKeyState("LControl", "P")=1){
+               search=
+               search_updated=yes
+           }else{
+                input=u
+            }
+        }
+;;        backspace
+      if ErrorLevel = EndKey:backspace
+        {
+             if search <>
+              {
+              StringTrimRight, search, search, 1
+              search_updated=yes
+            }
+            
+        }
+ ;;Ctrl-y ,paste 
+        if ErrorLevel = EndKey:y
+        {
+          if (GetKeyState("LControl", "P")=1){
+              clipboard = %clipboard%
+              input=%clipboard%
+           }else{
+                input=y
+            }
+        }
+        if ErrorLevel = EndKey:h
+        {
+          if (GetKeyState("LControl", "P")=1){
+             if search <>
+              {
+              StringTrimRight, search, search, 1
+              search_updated=yes
+              }
+           }else{
+                input=h
+            }
+        }
+        ;;send the first source to last 
+        if ErrorLevel = EndKey:o
+           {
+            if (GetKeyState("LControl", "P")=1){
+               tmpSources.insert(tmpSources.remove(1))
+               search_updated=yes
+            }else{
+                 input=o
+             }
+          }
+
+           if (input<>"" or  search_updated="yes")
+           {
+             if (build_no_candidates_source="yes" and search_updated="yes")
+             {
+               tmpSources := sources
+               build_no_candidates_source:=""
+               Gui, Color,black,black
+             }
+            search = %search%%input%
+            GuiControl,, Edit1, %search%
+            GuiControl,Focus,Edit1 ;; focus Edit1 ,
+            Send {End} ;;move cursor right ,make it after the new inputed char
+            selectedRowNum:= LV_GetNext(0)
+           ;;TODO: ANYTHING_REFRESH and select needed selected 
+            matched_candidates:=anything_refresh(tmpSources,search,win_width)
+              if  matched_candidates.maxIndex() <1
+              {
+                    build_no_candidates_source:="yes"
+                    Gui, Color,483d8b,483d8b
+                    tmpsources:= anything_build_source_4_no_candidates(sources , search)
+                         for key ,source in tmpSources {
+                             candidate:=source["candidate"]
+                             source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                             candidates_count += % source["tmpCandidate"].maxIndex()
+                           }
+                           matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                          ; if matched_candidates.maxIndex()>0
+                          ; {
+                          ;    LV_Modify(1, "Select Focus Vis") 
+                          ; }else{
+                          ; }
+              }
+            }
+            ;;if only one candidate left automatically execute it
+            ;; if source["anything-execute-action-at-once-if-one"]="yes"
+            if matched_candidates.maxIndex() = 1
+            {
+                   selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+              if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
+              {
+                  action:= anything_get_default_action(tmpSources[source_index]["action"])
+                  anything_exit() ;;first quit .then execute action 
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  break
+                }
+              }
+
+     } ;; end of loop
+     anything_exit()
+} ;; end of anything function
+
+
+;;when Anything lost focus 
+anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
+{
+;;Tooltip, % wParam
+  If ( wParam =0 and  A_Gui=1)
+  {
+    Send {esc}
+  }
+}
+;;when lbutton is down ,
+anything_WM_LBUTTONDOWN(wParam, lParam)
+{
+  MouseGetPos,,,,controlUnderMouse,
+  if(controlUnderMouse="SysListView321")
+  {
+    send {Enter}
+  }
+}
+
+anything_refresh(sources,search,win_width){
+     selectedRowNum:= LV_GetNext(0)
+     lv_delete()
+     matched_candidates:=Object()
+     anything_imagelist:= IL_Create()  
+     for source_index ,source in sources {
+          candidates:= source["tmpCandidate"]
+         imagelist:=anything_get_imagelist(source)
+          if imagelist
+          {
+            LV_SetImageList(anything_imagelist, 1)
+            anything_imagelist_append(anything_imagelist, imagelist)
+         }
+      }
+     icon_index=0
+     for source_index ,source in sources {
+          candidates:= source["tmpCandidate"]
+          source_name:=source["name"]
+          imagelist:=anything_get_imagelist(source)
+          for candidate_index ,candidate in candidates{
+             if imagelist
+              {
+                 icon_index += 1
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,icon_index )
+               }else
+               {
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,0)
+               }
+          }
+      }
+     LV_ModifyCol(1,win_width*0.88) ;;candidates 
+     LV_ModifyCol(2,0) ;;source_index
+     LV_ModifyCol(3,0) ;;candidate_index
+     LV_ModifyCol(4,win_width*0.10) ;; source_name
+     if (selectedRowNum = 0)
+     {
+       LV_Modify(1, "Select Focus Vis") 
+     }else
+     {
+       if matched_candidates.maxIndex() >= selectedRowNum
+       {
+         LV_Modify(selectedRowNum, "Select Focus Vis")
+       }
+       else if matched_candidates.maxIndex() >= selectedRowNum-1
+       {
+         LV_Modify(selectedRowNum-1, "Select Focus Vis")
+       }else if matched_candidates.maxIndex()>0
+       {
+         LV_Modify(1, "Select Focus Vis") 
+       }else{
+       }
+       
+     }
+
+
+return matched_candidates
+}
+
+;;candidate can be a string, when it is  a string ,it will be
+;;displayed on the listview directly
+;;and can be an array ,when it is an array
+;;the array[1] will show on the listview ,and
+;;array[2] will store something useful info.
+;;and the param `candidate' will be passed to action
+anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,imagelistId ,imagelist_index){
+  if isObject(candidate){ 
+    display:=candidate[1]
+  }else{
+    display:=candidate
+  }
+   if % anything_match(display,search)=1
+   {
+     if imagelistId
+     {
+      LV_Add("Icon" . imagelist_index ,display,source_index,candidate_index,source_name)
+     }else
+     {
+      LV_Add("Icon" . 0 ,display,source_index,candidate_index,source_name)
+     }
+      matched_candidates.insert(candidate)
+   }
+   return matched_candidates
+}
+
+;;just like google ,the pattern ,are keywords separated by space
+;; when string matched all the keywords ,then it return 1
+;; else return 0
+anything_match(candidate_string,pattern){
+   if pattern=
+     return 1
+   else{
+    Loop,parse,pattern ,%A_Space%,%A_Space%%A_TAB%
+    {
+      if candidate_string not contains %A_LoopField%,
+      {
+       return 0
+      }
+    }
+    return 1
+ }
+}
+anything_pageDown(candidates_count)
+{
+  selectedRowNum:= LV_GetNext(0)
+  if (selectedRowNum= candidates_count){
+        LV_Modify(1, "Select Focus Vis") 
+  }else{
+        ControlFocus, SysListView321,A
+        Send {pgdn}
+  }
+}
+anything_pageUp(candidates_count){
+  selectedRowNum:= LV_GetNext(0)
+  if (selectedRowNum=1){
+        LV_Modify(candidates_count, "Select Focus Vis") 
+  }else{
+        ControlFocus, SysListView321,A
+        Send {pgup}
+  }
+}
+anything_selectNextCandidate(candidates_count){
+       selectedRowNum:= LV_GetNext(0)
+       if(selectedRowNum< candidates_count){
+          LV_Modify(selectedRowNum+1, "Select Focus Vis")
+       }else{
+          LV_Modify(1, "Select Focus Vis")
+       }
+}
+
+anything_selectPreviousCandidate(candidates_count){
+            selectedRowNum:= LV_GetNext(0)
+              if(selectedRowNum<2){
+                 LV_Modify(candidates_count, "Select Focus Vis") 
+              }else{
+                 LV_Modify(selectedRowNum-1, "Select Focus Vis")
+              }
+}
+anything_exit(){
+   OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
+   OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit 
+   Gui Destroy
+}
+anything_callFuncByNameWithOneParam(funcName,param1){
+   return %funcName%(param1)
+}
+
+anything_callFuncByName(funcName){
+   return   %funcName%()
+}
+anything_get_imagelist(source)
+{
+    icon:=source["icon"]
+   if isFunc(icon)
+   {
+      icons:= anything_callFuncByName(icon)
+      return icons
+   }
+}
+
+anything_get_candidates_as_array(source)
+{
+    candidate:=source["candidate"]
+   if isFunc(candidate)
+   {
+      candidates:= anything_callFuncByName(candidate)
+      return candidates
+   }else
+   {
+      return candidate
+   }
+}
+;; @param actionProperty : the value of source["action"]
+;; the "action" property of a source can be a string  and an Array
+;; ,when it is a string ,that means there is only one default action for this source
+;; and when it is an Array the first element of this array will be treated as the default
+;; action of this source .
+;; you can press <ENTER> to execute the default action on  your selected a candidate.
+;; and press Ctrl+j to execute the second action(if exists) when you have select a candidate .
+;; when you selected a candidate ,you can press TAB to list all available "action" for
+;; this candidate ,and select one of them to execute .
+;; 
+;;
+anything_get_default_action(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    return actionProperty[1]
+  }else
+  {
+    return actionProperty
+  }
+}
+
+;;if it has the second action then return it ,else 
+;; return the default action 
+anything_get_second_or_defalut_action(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    if (actionProperty.maxIndex()>1)
+    {
+      Return actionProperty[2]
+    }else{
+      return actionProperty[1]
+    }
+ }else{
+  return actionProperty
+}
+}
+anything_get_all_actions(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+     return actionProperty
+   }else{
+     actions:=Array()
+     actions.insert(actionProperty)
+     return actions
+   }
+}
+;;if it has the second action then return it ,else 
+;; return the default action 
+anything_get_third_or_defalut_action(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    if (actionProperty.maxIndex()>2)
+    {
+      Return actionProperty[3]
+    }else{
+      return actionProperty[1]
+    }
+ }else{
+  return actionProperty
+}
+}
+
+;;this function will be used list all available "action"s
+;; for selected_candidate 
+;; so that you can selected one of the "actions" and execute it .
+;; so source["action"] will be used as newSource["candidate"]
+;; and the new "action" for newSource is"anything_execute_action_on_selected"
+;;
+anything_build_source_of_actions(source,selected_candidate)
+{
+actionSources:=Array()
+actionSource:=Array()
+candidates :=Array()
+for key ,action in anything_get_all_actions(source["action"])
+{   
+   next:=Array()
+   next.insert(action)
+   next.insert(selected_candidate)
+   candidates.insert(next)
+}
+actionSource["candidate"]:=candidates
+actionSource["action"]:="anything_execute_action_on_selected"
+actionSource["name"]:="Actions"
+actionSources.insert(actionSource)
+return actionSources
+}
+
+;;this is a inner "action" ,and the candidate is special
+;;the "display" of candidate (the first element of this candidate)
+;; is a function name ,and the "real" of candidate is the search_string
+;;so this function is used to display(real)
+anything_execute_action_on_selected(candidate)
+{
+  functionName:=candidate[1]
+  realCandidate:=candidate[2]
+  anything_callFuncByNameWithOneParam(functionName, realCandidate)
+}
+
+
+anything_build_source_4_no_candidates(sources ,search)
+{
+newSources:=Array()
+ source:=Object()
+ source["name"]:= "Actions"
+ candidates:=Array()
+ for key ,candidate in sources
+ {
+   for k,action in anything_get_all_actions(candidate["action"])
+   {
+   next:=Object()
+   next.insert("call action :  "candidate["name"] . "." . action)
+   next.insert(action)
+   next.insert(search)
+   candidates.insert(next)
+     
+   }
+ }
+ source["candidate"]:=candidates
+ source["action"] :="anything_execute_default_action_with_search"
+ newSources.insert(source)
+ return newSources
+}
+anything_execute_default_action_with_search(candidate)
+{
+  real_candidate :=candidate[3]
+  real_action:=candidate[2]
+  anything_callFuncByNameWithOneParam(real_action ,real_candidate)
+}
+;;this  is just a example
+;;you can parse a property to anything  
+;;anything_default_properties["no_candidate_action"]:="anything_do_nothing"
+; anything_properties:=Object()
+; anything_properties["no_candidate_action"]:="do_what_you_want_when_no_matched_candidates"
+; f1::anything_multiple_sources_with_properties(sources,anything_properties)
+ 
+anything_do_nothing(candidate)
+{
+  Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
+}
+
+;; I find this function here .
+;;http://www.autohotkey.com/forum/viewtopic.php?p=454619#454619
+;;and thanks  maul.esel
+anything_imagelist_append(il1, il2)
+{
+DllCall("LoadLibrary", "str", "Comctl32")
+
+count1 := DllCall("Comctl32.dll\ImageList_GetImageCount", "uint", il1)
+count2 := DllCall("Comctl32.dll\ImageList_GetImageCount", "uint", il2)
+DllCall("Comctl32.dll\ImageList_SetImageCount", "uint", il1, "uint", count1 + count2)
+
+Loop %count2%
+   {
+   hIcon := DllCall("Comctl32.dll\ImageList_GetIcon", "uint", il2, "int", A_Index - 1, "uint", 0)
+   DllCall("Comctl32.dll\ImageList_ReplaceIcon", "uint", il1, "int", count1 + A_Index - 1, "uint", hIcon)
+   DllCall("DestroyIcon", "UInt", hIcon)
+   }
+}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[/code]
+
+anything-explorer-history.ahk
+[code]
+;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk           
+; when you click directory in your explorer , anything-explorer-history.ahk
+; will remember the directories you have vistied, and 'Anyting' will use it 
+; as candidates ,you can visited again easyly.
+; source is hosted on
+; https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
+; and you can find the forum here
+; http://www.autohotkey.com/forum/viewtopic.php?t=72833
+
+;;how to use `anything-explorer-history.ahk'
+;1 
+; if you only have one anything-source :
+;         anything_explorer_history_source  (defined in this file )
+; you can use it like this :
+;
+;     #include anything.ahk
+;     #include anything-explorer-history.ahk
+;     f3::anything(anything_explorer_history_source)
+;
+; 2  if you also have other anything-sources ,
+;     you just need add 
+;         anything_explorer_history_source
+;     to the sources
+;    for example :
+;
+;    f3::
+;    sources:=Array()
+;    sources.insert(anything_explorer_history_source)
+;    sources.insert(anything_favorite_directories_source)
+;    sources.insert(anything_cmd_source)
+;    anything_multiple_sources(sources)
+;    return
+
+
+
+#Persistent
+;;#include anything.ahk
+;;SetWorkingDir %A_ScriptDir%
+directory_history:=Array()
+;;init history when first run this script 
+IfExist, anything-explorer-history.ini
+{
+IniRead, history_line, anything-explorer-history.ini, main, history
+Loop, Parse,  history_line,,
+   {
+     if A_LoopField <>
+     {
+       directory_history.insert(A_LoopField)
+     }
+   }
+}
+;;every 5 minute ,save history to disk 
+SetTimer, writeAnythingExpHist2Desk, 60000 
+
+;;source for anything .
+anything_explorer_history_source:=Object()
+anything_explorer_history_source["candidate"]:= directory_history
+anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
+anything_explorer_history_source["name"]:="ExpHist"
+
+
+SetTitleMatchMode Regex ;
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+~LButton::
+  if (A_PriorHotkey <> "~LButton" or A_TimeSincePriorHotkey > 200)
+  {
+    ; Too much time between presses, so this isn't a double-press.
+    anything_explorer_history_address:=getExplorerAddressPath()
+    KeyWait, LButton
+   SetTimer, addressChangeTimer, 200 
+   return
+  }
+return
+#IfWinActive
+
+  return
+  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+addressChangeTimer:
+  SetTimer, addressChangeTimer ,off
+  if WinActive(  "ahk_class ExploreWClass|CabinetWClass")
+  {
+     newAddr:= getExplorerAddressPath()
+     if (anything_explorer_history_address <> newAddr)
+      {
+        ;;add to history list 
+        updateHistory(newAddr)
+;;        writeHistory2Disk()
+      }
+  }
+return
+
+
+
+writeAnythingExpHist2Desk:
+  writeHistory2Disk()
+return
+
+writeHistory2Disk()
+{
+  global directory_history
+  directory_text=
+  for key ,directory in directory_history
+  {
+    directory_text=%directory_text%%directory%
+  }
+  IniWrite,%directory_text%,anything-explorer-history.ini, main, history
+}
+
+updateHistory(newAddr)
+{
+  global directory_history
+  for key ,directory in directory_history
+  {
+    if (directory = newAddr)
+    {
+      directory_history.remove(key)
+      Break
+    }
+  }
+  directory_history.insert(1,newAddr)
+  if (directory_history.maxIndex()>100)
+  {
+    directory_history.remove(51)
+  }
+}
+
+getExplorerAddressPath()
+{
+  ; WinGetText, full_path, A  ; 
+  ; StringSplit, word_array, full_path, `n     ;;
+  ; full_path = %word_array1%   ; Take the first element from the array
+  ; StringReplace, full_path, full_path, `r, , all   ; 
+  ;;return full_path
+  ControlGetText, ExplorePath, Edit1, A
+  return ExplorePath
+}
+
+delete_all_directory_history(unused_candidate)
+{
+  global directory_history
+  maxIndex:=directory_history.maxIndex()
+  Loop , %maxIndex%
+  {
+    directory_history.remove(1)
+    maxIndex-=1
+  }
+;;   writeHistory2Disk()
+}
+
+delete_from_directory_history(candidate)
+{
+  global directory_history
+  for key ,directory in directory_history
+  {
+    if (directory = candidate)
+    {
+      directory_history.remove(key)
+      Break
+    }
+  }
+ ;;writeHistory2Disk()
+}
+visit_directory( candidate_directory)
+{
+  WinGet, active_id, ID, A
+;;  global active_id 
+  WinGetClass, activeWinClass ,ahk_id %active_id%
+  updateHistory(candidate_directory)
+  ;;writeHistory2Disk()
+  if (activeWinClass ="ExploreWClass" or activeWinClass= "CabinetWClass")
+  {
+		ControlSetText, Edit1, %candidate_directory%, ahk_id %active_id%
+		; Tekl reported the following: "If I want to change to Folder L:\folder
+		; then the addressbar shows http://www.L:\folder.com. To solve this,
+		; I added a {right} before {Enter}":
+		ControlSend, Edit1, {Right}{Enter}, ahk_id %active_id%
+        sleep 500
+        ControlFocus, SysListView321,A
+        Send {Home} ;;selected first file dired
+        
+
+		return
+  }else if (activeWinClass="ConsoleWindowClass"){
+         WinGetTitle, title ,ahk_id %active_id%
+         WinActivate, ahk_id %active_id% 
+         SetKeyDelay, 0
+         if ( InStr(title ,"MINGW32:",true))
+         {
+           candidate_directory:= win2msysPath(candidate_directory)
+           SendInput, cd "%candidate_directory%"{Enter}
+         }else
+         {
+           SendInput, cd /d "%candidate_directory%"{Enter}
+         }
+  }else if (activeWinClass="Emacs"){
+ ;  	WinActivate, ahk_id %active_id% 
+ ;    SetKeyDelay, 0 
+ ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
+    dired_cmd:="emacsclientw  --eval ""(dired \""" . win2posixPath(candidate_directory) . "\"")"" "
+    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
+    if ErrorLevel = ERROR
+    {
+       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
+    }
+ }else{
+      Run explorer.exe   /n`, /e`,  "%candidate_directory%"
+      WinWait ahk_class (CabinetWClass|ExploreWClass) 
+      WinActivate
+      sleep 300
+      ControlFocus, SysListView321,A
+      Send {Home}
+   }
+}
+
+
+
+;;Windows Path to msys Path 
+;; for example d:\a\b\ to /d/a/b
+win2msysPath(winPath){
+   msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
+   StringReplace, msysPath2, msysPath, \ , /, All
+   msysPath3 = /%msysPath2%
+   return %msysPath3%
+}
+
+;;d:\a\b -->d:/a/b
+win2posixPath(winPath)
+{
+   StringReplace, posixPath, winPath, \ , /, All
+   Return posixPath  
+}
+[/code]
+
+anything-run.ahk
+[code]
+;;#include anything.ahk
+SetWorkingDir %A_ScriptDir%
+;;; anything-run.ahk , a replace of Win+r
+;;if you only use this source ,you can bind it like this  
+; f3::
+;    anything(anything_cmd_source)
+; return
+
+
+cmd_history:=Array()
+;;source for anything .
+anything_cmd_source:=Object()
+anything_cmd_source["name"]:="Run"
+anything_cmd_source["candidate"]:= cmd_history
+anything_cmd_source["action"] := Array("anything_run","anything_run_delete_from_history")
+anything_cmd_source["anything-execute-action-at-once-if-one"] := "yes"
+
+
+;;init cmd_history from anything-run.ini 
+IfExist,anything-run.ini
+{
+IniRead, history_line, anything-run.ini, main, cmd_history
+Loop, Parse,  history_line,,
+   {
+     if A_LoopField <>
+     {
+       cmd_history.insert(A_LoopField)
+     }
+   }
+}
+
+;;the action function 
+anything_run(candidate)
+{
+ Run,%candidate%, , UseErrorLevel  ;  don't display dialog if it fails.
+ if ErrorLevel = ERROR
+  {
+    MsgBox Failed 
+  }else{
+    updateCmdHistory(candidate)
+    writeCmdHistory2Disk()
+  }
+}
+
+anything_run_delete_from_history(candidate)
+{
+  global cmd_history
+  for key ,cmd in cmd_history
+  {
+    if (cmd = candidate)
+    {
+      cmd_history.remove(key)
+      Break
+    }
+  }
+  writeCmdHistory2Disk()
+}
+
+
+writeCmdHistory2Disk()
+{
+  global cmd_history
+  cmd_text=
+  for key ,cmd in cmd_history
+  {
+    cmd_text=%cmd_text%%cmd%
+  }
+  IniWrite,%cmd_text%,anything-run.ini, main, cmd_history
+}
+
+updateCmdHistory(newCmd)
+{
+  global cmd_history
+  for key ,cmd in cmd_history
+  {
+    if (cmd = newCmd)
+    {
+      cmd_history.remove(key)
+      Break
+    }
+  }
+  cmd_history.insert(1,newCmd)
+  if (directory_history.maxIndex()>150) ;;only record 50 cmd history items 
+  {
+    cmd_history.remove(51)
+  }
+}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;if you only use this source ,you can bind it like this  
+; f3::
+;    anything(anything_cmd_source)
+; return
+
+
+[/code]
+
+anything-favorite-directories.ahk
+[code]
+;;; anything-favorites-directory.ahk  --- visit your favorites directories by anything.ahk
+
+; if you use anything-favorites-directory as the only source for anything.ahk
+; you just need to bind it to a key like this :
+
+; #include anything-favorites-directory.ahk
+; f1::anything(anything_favorite_directories_source)
+;
+; if you also use other sources ,just need add "anything_favorite_directories_source" to 
+; the array of sources for anything_multiple_sources(sources)
+;
+; 1 how to add a new Folder to your favorite-directories
+; first activate "Anything" and Press <Ctrl-L> list all available actions
+; select "call action: Favdirs.anything_favorite_directories_add "
+;
+; 2 then you can use "Anything" selected one of your favorite directory 
+;   it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
+;   it will visit it in current cmd.exe (if current activated window is cmd.exe)
+;   it will visit it in current msys.bat (if current activated window is msys.bat)
+;   it will visit it in current Emacs (if current activated window is Emacs.exe)
+
+
+;;#include anything.ahk
+;;SetWorkingDir %A_ScriptDir%
+anything_favorite_directories:=Array()
+;;init  
+IfExist, anything-favorite-directories.ini
+{
+iniread, favorite_line, anything-favorite-directories.ini, main, favorites
+Loop, Parse, favorite_line,,
+   {
+     if A_LoopField <>
+     {
+        anything_favorite_directories.insert(A_LoopField)
+     }
+   }
+}
+
+;;source for anything .
+anything_favorite_directories_source:=Object()
+anything_favorite_directories_source["candidate"]:= anything_favorite_directories
+anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
+anything_favorite_directories_source["name"]:="FavDirs"
+;;action 
+anything_favorite_directories_visit(candidate_directory)
+{
+   SetTitleMatchMode Regex ;
+
+  WinGet, active_id, ID, A
+;;  global active_id 
+  WinGetClass, activeWinClass ,ahk_id %active_id%
+  if (activeWinClass ="ExploreWClass" or activeWinClass= "CabinetWClass")
+  {
+		ControlSetText, Edit1, %candidate_directory%, ahk_id %active_id%
+		; Tekl reported the following: "If I want to change to Folder L:\folder
+		; then the addressbar shows http://www.L:\folder.com. To solve this,
+		; I added a {right} before {Enter}":
+		ControlSend, Edit1, {Right}{Enter}, ahk_id %active_id%
+        sleep 300
+        ControlFocus, SysListView321,A
+        Send {Home} ;;selected first file dired
+		return
+  }else if (activeWinClass="ConsoleWindowClass"){
+         WinGetTitle, title ,ahk_id %active_id%
+         WinActivate, ahk_id %active_id% 
+         SetKeyDelay, 0
+         if ( InStr(title ,"MINGW32:",true))
+         {
+           candidate_directory:= anything_favorite_directories_win2msysPath(candidate_directory)
+           SendInput, cd "%candidate_directory%"{Enter}
+         }else
+         {
+           SendInput, cd /d "%candidate_directory%"{Enter}
+         }
+  }else if (activeWinClass="Emacs"){
+    dired_cmd:="emacsclientw  --eval ""(dired \""" . anything_favorite_directories_win2posixPath(candidate_directory) . "\"")"" "
+    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
+    if ErrorLevel = ERROR
+    {
+       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
+    }
+ }else{
+      Run explorer.exe   /n`, /e`,  "%candidate_directory%"
+      WinWait ahk_class (CabinetWClass|ExploreWClass) 
+      WinActivate
+      sleep 300
+      ControlFocus, SysListView321,A
+      Send {Home}
+   }
+}
+;;action 
+anything_favorite_directories_delete(candidate)
+{
+  global anything_favorite_directories
+  for key ,directory in anything_favorite_directories
+  {
+    if (directory = candidate)
+    {
+      anything_favorite_directories.remove(key)
+      Break
+    }
+  }
+    anything_favorite_directories_write2disk()
+}
+
+add2FavoriteDirectories(candidate)
+{
+  global anything_favorite_directories
+  for key ,directory in anything_favorite_directories
+  {
+    if (directory = candidate)
+    {
+      anything_favorite_directories.remove(key)
+      Break
+    }
+  }
+  anything_favorite_directories.insert(1,candidate)
+}
+;;action 
+anything_favorite_directories_add(unused_candidate)
+{
+  FileSelectFolder, newFavDir, , 3
+  if newFavDir <>
+  {
+   add2FavoriteDirectories(newFavDir) 
+  }
+    anything_favorite_directories_write2disk()
+}
+
+anything_favorite_directories_write2disk()
+{
+  global anything_favorite_directories
+  directory_text=
+  for key ,directory in anything_favorite_directories
+  {
+    directory_text=%directory_text%%directory%
+  }
+  IniWrite,%directory_text%,anything-favorite-directories.ini, main, favorites
+}
+;;Windows Path to msys Path 
+;; for example d:\a\b\ to /d/a/b
+anything_favorite_directories_win2msysPath(winPath){
+   msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
+   StringReplace, msysPath2, msysPath, \ , /, All
+   msysPath3 = /%msysPath2%
+   return %msysPath3%
+}
+
+;;d:\a\b -->d:/a/b
+anything_favorite_directories_win2posixPath(winPath)
+{
+   StringReplace, posixPath, winPath, \ , /, All
+   Return posixPath  
+}
+;;f1::anything(anything_favorite_directories_source)
+;; anything-favorites-directory.ahk ends here. 
+
+[/code]
+anything-window-switch.ahk
+[code]
+;;; anything-window-switch.ahk -- switch window with anything.ahk support 
+
+; source is hosted on
+; https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
+; and you can find the forum here
+; http://www.autohotkey.com/forum/viewtopic.php?t=72833
+
+;;how to use `anything-window-switch.ahk'
+;1 
+; if you only have one anything-source :
+;         anything_window_switcher_source      (defined in this file )
+; you can use it like this :
+;
+;     #include anything.ahk
+;     #include anything-window-switch.ahk' 
+;     f3::anything(anything_window_switcher_source)
+; if you want automatically switch to a window when there is only 1 search
+; result showing
+; you can
+;     #include anything.ahk
+;     #include anything-window-switch.ahk'
+;     anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
+;     f3::anything(anything_window_switcher_source)
+
+;
+; 2  if you also have other anything-sources ,
+;     you just need add
+;;        anything_window_switcher_source
+;     to the sources
+;    for example :
+;
+;    f3::
+;    sources:=Array()
+;    sources.insert(anything_window_switcher_source)
+;    sources.insert(anything_favorite_directories_source)
+;    sources.insert(anything_cmd_source)
+;    anything_multiple_sources(sources)
+;    return
+
+DetectHiddenWindows, off
+;;candidates         
+anything_ws_icon_imageListId=
+anything_ws_get_win_candidates()
+{
+  global anything_ws_icon_imageListId
+  global anything_wid
+  candidates :=Array()
+  WinGet, id, list, , , Program Manager
+  Loop, %id%
+  {
+    candidate:=Array()
+    StringTrimRight, this_id, id%a_index%, 0
+    WinGetTitle, title, ahk_id %this_id%
+    
+    ; FIXME: windows with empty titles?
+     if title =
+       continue
+       
+     if anything_wid and anything_wid = this_id
+     {
+       continue
+     }
+    
+    ; don't add the switcher window
+    ; if switcher_id = %this_id%
+    ;   continue
+      display:= anything_ws_get_processname(this_id) . " _ " . title
+      candidate.insert(display)
+      candidate.insert(this_id)
+      candidates.insert(candidate)
+  }
+  if(candidates.maxIndex() >1)
+  {
+    candidates.insert(2, candidates.remove(1))
+  }
+  anything_ws_icon_imageListId := IL_Create(candidates.maxIndex())  
+  for key,candidate in candidates
+  {
+   this_id:= candidate[2]
+   anything_add_window_icon_2_imageList(this_id,0,anything_ws_icon_imageListId)
+  }
+  return candidates 
+}
+
+;;default action : visit selected window
+anything_ws_visit(candidate)
+{
+  win_id:=candidate[2]
+  WinActivate ,ahk_id  %win_id%
+}
+anything_ws_close(candidate)
+{
+  win_id:=candidate[2]
+  WinClose ,ahk_id  %win_id%
+}
+
+; (window id, whether to get large icons,ImageListId where to store icon)
+anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId) 
+{
+  Local NR_temp, h_icon
+  ; check status of window - if window is responding or "Not Responding"
+  NR_temp =0 ; init
+  h_icon =
+  Responding := DllCall("SendMessageTimeout", "UInt", wid, "UInt", 0x0, "Int", 0, "Int", 0, "UInt", 0x2, "UInt", 150, "UInt *", NR_temp) ; 150 = timeout in millisecs
+  If (Responding)
+    {
+    ; WM_GETICON values -    ICON_SMALL =0,   ICON_BIG =1,   ICON_SMALL2 =2
+    If Use_Large_Icons_Current =1
+      {
+      SendMessage, 0x7F, 1, 0,, ahk_id %wid%
+      h_icon := ErrorLevel
+      }
+    If ( ! h_icon )
+      {
+      SendMessage, 0x7F, 2, 0,, ahk_id %wid%
+      h_icon := ErrorLevel
+        If ( ! h_icon )
+          {
+          SendMessage, 0x7F, 0, 0,, ahk_id %wid%
+          h_icon := ErrorLevel
+          If ( ! h_icon )
+            {
+            If Use_Large_Icons_Current =1
+              h_icon := DllCall( "GetClassLong", "uint", wid, "int", -14 ) ; GCL_HICON is -14
+            If ( ! h_icon )
+              {
+              h_icon := DllCall( "GetClassLong", "uint", wid, "int", -34 ) ; GCL_HICONSM is -34
+              If ( ! h_icon )
+                h_icon := DllCall( "LoadIcon", "uint", 0, "uint", 32512 ) ; IDI_APPLICATION is 32512
+              }
+            }
+          }
+        }
+      }
+  If ! ( h_icon = "" or h_icon = "FAIL") ; Add the HICON directly to the icon list
+  	 DllCall("ImageList_ReplaceIcon", UInt, ImageListId, Int, -1, UInt, h_icon)
+  Else	; use a generic icon
+  	 IL_Add(ImageListId, "shell32.dll" , 3)
+}
+
+anything_ws_get_icon()
+{
+global
+  return anything_ws_icon_imageListId
+}
+anything_ws_get_processname(wid){
+       ; show process name if enabled
+           WinGet, procname, ProcessName, ahk_id %wid%
+           stringgetpos, pos, procname, .
+           if ErrorLevel <> 1
+           {
+               stringleft, procname, procname, %pos%
+           }
+           stringupper, procname, procname
+    return procname
+}
+
+anything_window_switcher_source:=Object()
+anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
+anything_window_switcher_source["name"]:="Win"
+anything_window_switcher_source["icon"]:="anything_ws_get_icon"
+anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close")
+
+[/code]
+anything-config.ahk
+
+[code]
+#NoTrayIcon
+#SingleInstance force
+SetWorkingDir %A_ScriptDir%
+
+#include anything.ahk
+#include anything-run.ahk
+#include anything-favorite-directories.ahk
+#include anything-window-switch.ahk
+#include anything-explorer-history.ahk
+
+f3::
+sources:=Array()
+sources.insert(anything_explorer_history_source)
+sources.insert(anything_favorite_directories_source)
+sources.insert(anything_cmd_source)
+sources.insert(anything_window_switcher_source)
+anything_multiple_sources(sources)
+return
+
+#r::
+sources:=Array()
+sources.insert(anything_cmd_source)
+sources.insert(anything_explorer_history_source)
+sources.insert(anything_favorite_directories_source)
+sources.insert(anything_window_switcher_source)
+anything_multiple_sources(sources)
+return
+
+;;
+!Tab::
+^Tab:: 
+sources:=Array()
+sources.insert(anything_window_switcher_source)
+sources.insert(anything_cmd_source)
+sources.insert(anything_explorer_history_source)
+sources.insert(anything_favorite_directories_source)
+anything_multiple_sources(sources)
+return
+[/code]
+
+=============================================
+some little example ,show how to use anything.ahk
+anything-example2.ahk
+[code]
+#include anything.ahk
+
+action4source1(candidate)
+{
+MsgBox , you have selected: %candidate%
+}
+
+getCandidates()
+{
+candidates:=Array("red","green")
+return candidates
+}
+
+source1 :=Object()
+;;"candidate" can be a function name ,
+;;the function must return an array
+;;"action" is a function accept one parameter
+;;the parameter is your selected candidate
+;;"name" is just a name show behind each candidate
+
+;; when you select a candidate , "Anything" will execute the 
+;; "action" function on your selected candidate 
+source1["candidate"]:="getCandidates"
+source1["action"]:="action4source1"
+source1["name"]:="name"
+f1::anything(source1)
+[/code]
+anything-example3.ahk
+[code]
+#include anything.ahk
+
+action4source1(candidate)
+{
+  Msgbox, you have selected: %candidate%
+}
+
+source1 :=Object()
+;;this example is the same to anything-example2.ahk
+;;except : 
+;;candidates can be an array
+;;
+candidates:=Array("red","green")
+source1["candidate"]:=candidates
+
+source1["action"]:="action4source1"
+source1["name"]:="example2"
+
+f1::anything(source1)
+[/code]
+anything-example4.ahk
+
+[code]
+#include anything.ahk
+;;anything support multiply sources
+;; the candidate from different source will execute different action 
+;; when you select it .
+;;
+;; and Ctrl-o  will send the candidates of first source to Last 
+action4source1( candidate)
+{
+msgbox, you have selected: %candidate% from source111111111
+}
+
+getCandidates()
+{
+  candidates:=Array("red","green")
+  return candidates
+}
+
+source1 :=Object()
+source1["candidate"]:="getCandidates"
+source1["action"]:="action4source1"
+source1["name"]:="source1"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+action4source2(candidate)
+{
+msgbox, you have selected: %candidate% from source22222222222
+}
+getCandidates2()
+{
+  candidates:=Array("white","black")
+  return candidates
+}
+
+source2 :=Object()
+source2["candidate"]:="getCandidates2"
+source2["action"]:="action4source2"
+source2["name"]:="source2"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+action4source3(candidate)
+{
+display:=candidate[1]
+real:=candidate[2]
+msgbox, you have selected: %display%, the price is %real%
+}
+
+
+getCandidates3()
+{
+  candidates:=Array()
+  book:=Object()
+  book.insert("book111111111")
+  book.insert("$10.0")
+  
+  pen:=Object()
+  pen.insert("pen22222222222")
+  pen.insert("$3.0")
+  
+  candidates.insert(book)
+ candidates.insert(pen)
+  return candidates
+}
+    
+source3 :=Object()
+source3["candidate"]:="getCandidates3"
+source3["action"]:="action4source3"
+source3["name"]:="source3"
+
+
+sources:= Array()
+sources.insert(source1)
+sources.insert(source2)
+sources.insert(source3)
+
+f1::anything_multiple_sources(sources)
+
+
+[/code]
+anything-example5.ahk
+
+[code]
+#include anything.ahk
+;;multiple actions for one source
+;;Enter execute default action
+;;Ctrl-j execute second action
+;;Ctrl-m execute third action
+;;Tab list all available action for the selected candidate
+action4source1(candidate)
+{
+  Msgbox, you have selected: %candidate%
+}
+action24source1(candidate)
+{
+  Msgbox, you have selected: %candidate% ,and execute 2th action
+  
+}
+action34source1(candidate)
+{
+  Msgbox, you have selected: %candidate% ,and execute 3th action 
+}
+
+source1 :=Object()
+;;candidates can be an array
+candidates:=Array("red","green")
+source1["candidate"]:=candidates
+
+actions:=Array("action4source1" ,"action24source1","action34source1")
+source1["action"]:=actions
+source1["name"]:="example5"
+f1::anything(source1)
+
+
+[/code]
+anything-example6.ahk
+[code]
+#include anything.ahk
+
+;;each element of candidates can be an array ,
+;;the length of the array is 2 , 
+;; first element of array will be displayed on listview and
+;;be used to match user's search string .
+;; the second element of array can be anything .you can store usefull info here .
+;; and it can be passed to "action" function
+;;
+action4source1(candidate)
+{
+  display :=candidate[1]
+   real :=   candidate[2]
+   MsgBox , the display on listview is <%display%> ,and the real  useful info. is <%real%> 
+}
+
+getCandidates()
+{
+  candidates:=Array()
+  red:=Array()
+  red.insert("red")
+  red.insert("reddddddd")
+  candidates.insert(red)
+  
+  green:=Array()
+  green.insert("gree")
+  green.insert("ggggggggggggg")
+  candidates.insert(green)
+  
+  return candidates
+}
+
+source1 :=Object()
+;;candidate can be a function name ,
+;;the function must return an array 
+source1["candidate"]:="getCandidates"
+source1["action"]:="action4source1"
+source1["name"]:="name"
+f1::anything(source1)
+
+
+[/code]
+anything-example7.ahk
+[code]
+#include anything.ahk
+
+;;you can set properties for "Anything" by callling 
+;; another function
+;;        anything_multiple_sources_with_properties(sources,anything_properties)
+;; or
+;;      anything_with_properties(source ,anything_properties)
+;; about anything_properties ,see
+;;               default_anything_properties 
+;; in  anything.ahk ,you can overwrite properties defined there .
+
+
+action4source1( candidate)
+{
+msgbox, you have selected: %candidate% from source1 
+}
+
+
+action4source2(candidate)
+{
+msgbox, you have selected: %candidate% for source2
+}
+
+getCandidates()
+{
+  candidates:=Array("red","green")
+  return candidates
+}
+getCandidates2()
+{
+  candidates:=Array("white","black")
+  return candidates
+}
+  
+source1 :=Object()
+source1["candidate"]:="getCandidates"
+source1["action"]:="action4source1"
+source1["name"]:="1111111"
+
+source2 :=Object()
+source2["candidate"]:="getCandidates2"
+source2["action"]:="action4source2"
+source2["name"]:="22222222222"
+
+
+sources:= Array()
+sources.insert(source1)
+sources.insert(source2)
+
+anything_properties:=Object()
+anything_properties["quit_when_lose_focus"]:="no"
+anything_properties["win_width"]:="600"
+anything_properties["win_height"]:="300"
+
+f1::anything_multiple_sources_with_properties(sources,anything_properties)
+
+
+
+[/code]
+anything-example8.ahk
+[code]
+#include anything.ahk
+
+;;you can set properties for "Anything" by callling 
+;; another function
+;;        anything_multiple_sources_with_properties(sources,anything_properties)
+;; or
+;;      anything_with_properties(source ,anything_properties)
+;; about anything_properties ,see
+;;               default_anything_properties 
+;; in  anything.ahk ,you can overwrite properties defined there .
+;;
+;; and there is a property named "no_candidate_action"
+;; the value of this property is a function accept one parameter
+;; the default value is 
+;; default_anything_properties["no_candidate_action"]:="anything_do_nothing"
+;; that means when no candidates matched your search string ,and you press 
+;; "Ctrl-i" key ,then this function will be called ,and the search string 
+;; will be the parameter 
+
+
+;;one more  ,even there are matched candidates ,you can 
+;; still pass the "search string" to this function 
+;; by Ctrl-i
+
+
+action4source1( candidate)
+{
+msgbox, you have selected: %candidate% from source1 
+}
+
+
+action4source2(candidate)
+{
+msgbox, you have selected: %candidate% for source2
+}
+
+getCandidates()
+{
+  candidates:=Array("red","green")
+  return candidates
+}
+getCandidates2()
+{
+  candidates:=Array("white","black")
+  return candidates
+}
+  
+source1 :=Object()
+source1["candidate"]:="getCandidates"
+source1["action"]:="action4source1"
+source1["name"]:="1111111"
+
+source2 :=Object()
+source2["candidate"]:="getCandidates2"
+source2["action"]:="action4source2"
+source2["name"]:="22222222222"
+
+
+sources:= Array()
+sources.insert(source1)
+sources.insert(source2)
+
+anything_properties:=Object()
+anything_properties["no_candidate_action"]:="do_what_you_want_when_no_matched_candidates"
+
+do_what_you_want_when_no_matched_candidates(candidate)
+{
+MsgBox ,do what you want when no matech candidates ,with your search string : "%candidate%"
+}
+
+f1::anything_multiple_sources_with_properties(sources,anything_properties)
+
+
+
+[/code]
+anything-example8.ahk
+[code]
+#include anything.ahk
+;;support icon 
+action4source1(candidate)
+{
+  MsgBox , you have selected: %candidate%
+}
+
+getCandidates()
+{
+  candidates:=Array("red","green","blue")
+  return candidates
+}
+icon()
+{
+  ImageListID := IL_Create(10)  ; Create an ImageList to hold 10 small icons.
+Loop 10  ; Load the ImageList with a series of icons from the DLL.
+    IL_Add(ImageListID, "shell32.dll", A_Index)
+    return ImageListID
+}
+
+source1 :=Object()
+source1["candidate"]:="getCandidates"
+source1["action"]:="action4source1"
+source1["name"]:="name"
+source1["icon"]:="icon"
+f1::anything(source1)
+[/code]
