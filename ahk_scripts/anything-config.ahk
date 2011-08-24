@@ -29,11 +29,6 @@ return
 ;;
 !Tab::
 ^Tab:: 
-sources:=Array()
-sources.insert(anything_window_switcher_source)
-sources.insert(anything_cmd_source)
-sources.insert(anything_explorer_history_source)
-sources.insert(anything_favorite_directories_source)
-anything_multiple_sources(sources)
-return
-
+anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
+anything(anything_window_switcher_source)
+return 
