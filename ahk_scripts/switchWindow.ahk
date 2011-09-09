@@ -32,11 +32,11 @@
 ;;;;;;Win+1  VS
 #1::
 SetTitleMatchMode, 2
-IfWinExist, - Microsoft Visual Studio
-  IfWinActive , - Microsoft Visual Studio
-     WinMinimize , - Microsoft Visual Studio
+IfWinExist,  Microsoft Visual Studio
+  IfWinActive ,  Microsoft Visual Studio
+     WinMinimize ,  Microsoft Visual Studio
   else{
-    WinActivate , - Microsoft Visual Studio
+    WinActivate ,  Microsoft Visual Studio
     }
 else
   run devenv
