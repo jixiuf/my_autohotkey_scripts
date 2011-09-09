@@ -47,7 +47,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
   {
     ControlGetText, oldExplorePath, Edit1, A
     Send {Enter}
-        sleep 250
+        sleep 150
         if WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass")
         {
           ControlGetText, newExplorePath, Edit1, A
