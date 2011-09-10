@@ -11,6 +11,11 @@ AutoTrim, off
 ;; anything_multiple_sources(anything-sources)
 ;; anything_multiple_sources_with_properties(anything-sources, anything-properties)
 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; anthing Window Id                                  
+anything_wid=
+anything_pattern=
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   an anything-source is an Object with some defined properties
 ;;   now it support 5 anything-source-properties :
@@ -122,10 +127,6 @@ anything_default_properties["quit_when_lose_focus"]:="yes"
 ;; and  this function will be treated as "action" 
 anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; anthing Window Id                                  
-anything_wid=
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 anything(source)
 {
@@ -147,6 +148,7 @@ anything_multiple_sources(sources)
 anything_multiple_sources_with_properties(sources,anything_properties){
 global anything_default_properties
 global anything_wid
+global anything_pattern
 ;; copy all property from anything_default_properties to
 ;; anything_properties if  anything_properties doen't defined  
 
@@ -179,7 +181,6 @@ for key, default_value in anything_default_properties
      
      candidates_count=0
      ;; search string you have typed 
-     search=
      tabListActions:=""
      matched_candidates:=Object()
      tmpSources:=sources
@@ -189,7 +190,7 @@ for key, default_value in anything_default_properties
        candidates_count += % source["tmpCandidate"].maxIndex()
      }
 
-     matched_candidates:=anything_refresh(tmpSources,search,win_width)
+     matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
      Gui ,Show,,
       ; if matched_candidates.maxIndex()>0
       ; {
@@ -201,7 +202,7 @@ for key, default_value in anything_default_properties
      WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
      loop,
      {
-         search_updated=
+         anything_pattern_updated=
        Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyorv{LAlt}{tab}
        
        if ErrorLevel = EndKey:pgup
@@ -246,11 +247,9 @@ for key, default_value in anything_default_properties
                     source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
-                  matched_candidates:=anything_refresh(tmpSources,search,win_width)
-                  if matched_candidates.maxIndex()>0
-                  {
-                     LV_Modify(1, "Select Focus Vis")
-                   }
+                  anything_pattern := previous_anything_pattern
+                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
+                 LV_Modify(previousSelectedIndex, "Select Focus Vis") 
                }else
                {
                  anything_exit()
@@ -274,6 +273,8 @@ for key, default_value in anything_default_properties
            
              if (tabListActions = "")
              {
+             ;;list available actions for the
+             ;;selected candidate . 
                  previousSelectedIndex := selectedRowNum 
                  tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
@@ -283,12 +284,15 @@ for key, default_value in anything_default_properties
                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                    candidates_count += % source["tmpCandidate"].maxIndex()
                  }
-                 matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                 previous_anything_pattern:= anything_pattern
+                 anything_pattern=
+                 matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
                  if matched_candidates.maxIndex()>0
                  {
                     LV_Modify(1, "Select Focus Vis") 
                  }
               }else
+              ;;reback from listed action 
               {
               tabListActions:=""
               tmpSources:=sources
@@ -297,7 +301,8 @@ for key, default_value in anything_default_properties
                     source["tmpCandidate"]:= anything_get_candidates_as_array(source)
                     candidates_count += % source["tmpCandidate"].maxIndex()
                   }
-                  matched_candidates:=anything_refresh(tmpSources,search,win_width)
+                  anything_pattern := previous_anything_pattern
+                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis") 
                }
        }
@@ -324,7 +329,7 @@ for key, default_value in anything_default_properties
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                 search_updated=yes ;;
+                 anything_pattern_updated=yes ;;
             }else{
                  input=z
             }
@@ -343,7 +348,7 @@ for key, default_value in anything_default_properties
                   LV_GetText(source_index, selectedRowNum,2) 
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                  search_updated=yes
+                  anything_pattern_updated=yes
             }else{
                  input=j
             }
@@ -364,7 +369,7 @@ for key, default_value in anything_default_properties
                     LV_GetText(source_index, selectedRowNum,2) 
                     action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                     anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                    search_updated=yes
+                    anything_pattern_updated=yes
                }Else{
                input=m
              }
@@ -375,7 +380,7 @@ for key, default_value in anything_default_properties
             if (GetKeyState("LControl", "P")=1){
                                 build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
-                    tmpsources:= anything_build_source_4_no_candidates(sources , search)
+                    tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
                          for key ,source in tmpSources {
                              candidate:=source["candidate"]
                              source["tmpCandidate"]:= anything_get_candidates_as_array(source)
@@ -396,7 +401,7 @@ for key, default_value in anything_default_properties
            {
             if (GetKeyState("LControl", "P")=1){
                    anything_exit()
-                  anything_callFuncByNameWithOneParam(anything_properties["no_candidate_action"], search)
+                  anything_callFuncByNameWithOneParam(anything_properties["no_candidate_action"], anything_pattern)
                   break
             }else{
                  input=i
@@ -407,7 +412,7 @@ for key, default_value in anything_default_properties
            {
             if (GetKeyState("LControl", "P")=1){
                anything_selectNextCandidate(matched_candidates.maxIndex())
-              GuiControl,, Edit1, %search%
+              GuiControl,, Edit1, %anything_pattern%
               Send {End} ;;move cursor end
             }else{
                  input=n
@@ -425,7 +430,7 @@ for key, default_value in anything_default_properties
            {
             if (GetKeyState("LControl", "P")=1){
               anything_selectPreviousCandidate(matched_candidates.maxIndex())
-              GuiControl,, Edit1, %search%
+              GuiControl,, Edit1, %anything_pattern%
               Send {End} ;;move cursor end
              }else{
                  input=p
@@ -442,12 +447,12 @@ for key, default_value in anything_default_properties
              }
       
          }
-        ;;Ctrl+u clear "search" string ,just like bash
+        ;;Ctrl+u clear "anything_pattern" string ,just like bash
         if ErrorLevel = EndKey:u
         {
           if (GetKeyState("LControl", "P")=1){
-               search=
-               search_updated=yes
+               anything_pattern=
+               anything_pattern_updated=yes
            }else{
                 input=u
             }
@@ -455,10 +460,10 @@ for key, default_value in anything_default_properties
 ;;        backspace
       if ErrorLevel = EndKey:backspace
         {
-             if search <>
+             if anything_pattern <>
               {
-              StringTrimRight, search, search, 1
-              search_updated=yes
+              StringTrimRight, anything_pattern, anything_pattern, 1
+              anything_pattern_updated=yes
             }
             
         }
@@ -475,10 +480,10 @@ for key, default_value in anything_default_properties
         if ErrorLevel = EndKey:h
         {
           if (GetKeyState("LControl", "P")=1){
-             if search <>
+             if anything_pattern <>
               {
-              StringTrimRight, search, search, 1
-              search_updated=yes
+              StringTrimRight, anything_pattern, anything_pattern, 1
+              anything_pattern_updated=yes
               }
            }else{
                 input=h
@@ -489,32 +494,32 @@ for key, default_value in anything_default_properties
            {
             if (GetKeyState("LControl", "P")=1){
                tmpSources.insert(tmpSources.remove(1))
-               search_updated=yes
+               anything_pattern_updated=yes
             }else{
                  input=o
              }
           }
 
-           if (input<>"" or  search_updated="yes")
+           if (input<>"" or  anything_pattern_updated="yes")
            {
-             if (build_no_candidates_source="yes" and search_updated="yes")
+             if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
              {
                tmpSources := sources
                build_no_candidates_source:=""
                Gui, Color,black,black
              }
-            search = %search%%input%
-            GuiControl,, Edit1, %search%
+            anything_pattern = %anything_pattern%%input%
+            GuiControl,, Edit1, %anything_pattern%
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
             selectedRowNum:= LV_GetNext(0)
            ;;TODO: ANYTHING_REFRESH and select needed selected 
-            matched_candidates:=anything_refresh(tmpSources,search,win_width)
+            matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
               if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
-                    tmpsources:= anything_build_source_4_no_candidates(sources , search)
+                    tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
                          for key ,source in tmpSources {
                              candidate:=source["candidate"]
                              source["tmpCandidate"]:= anything_get_candidates_as_array(source)
@@ -567,7 +572,7 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
   }
 }
 
-anything_refresh(sources,search,win_width){
+anything_refresh(sources,anything_pattern,win_width){
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
@@ -590,10 +595,10 @@ anything_refresh(sources,search,win_width){
              if imagelist
               {
                  icon_index += 1
-                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,icon_index )
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,anything_imagelist,icon_index )
                }else
                {
-                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,anything_imagelist,0)
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,anything_imagelist,0)
                }
           }
       }
@@ -631,13 +636,13 @@ return matched_candidates
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
 ;;and the param `candidate' will be passed to action
-anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,search,source_name,matched_candidates,imagelistId ,imagelist_index){
+anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,imagelistId ,imagelist_index){
   if isObject(candidate){ 
     display:=candidate[1]
   }else{
     display:=candidate
   }
-   if % anything_match(display,search)=1
+   if % anything_match(display,anything_pattern)=1
    {
      if imagelistId
      {
@@ -705,6 +710,8 @@ anything_selectPreviousCandidate(candidates_count){
               }
 }
 anything_exit(){
+   global anything_pattern
+   anything_pattern=
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
    OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit 
    Gui Destroy
@@ -831,7 +838,7 @@ return actionSources
 
 ;;this is a inner "action" ,and the candidate is special
 ;;the "display" of candidate (the first element of this candidate)
-;; is a function name ,and the "real" of candidate is the search_string
+;; is a function name ,and the "real" of candidate is the anything_pattern_string
 ;;so this function is used to display(real)
 anything_execute_action_on_selected(candidate)
 {
@@ -841,7 +848,7 @@ anything_execute_action_on_selected(candidate)
 }
 
 
-anything_build_source_4_no_candidates(sources ,search)
+anything_build_source_4_no_candidates(sources ,anything_pattern)
 {
 newSources:=Array()
  source:=Object()
@@ -854,17 +861,17 @@ newSources:=Array()
    next:=Object()
    next.insert("call action :  "candidate["name"] . "." . action)
    next.insert(action)
-   next.insert(search)
+   next.insert(anything_pattern)
    candidates.insert(next)
      
    }
  }
  source["candidate"]:=candidates
- source["action"] :="anything_execute_default_action_with_search"
+ source["action"] :="anything_execute_default_action_with_anything_pattern"
  newSources.insert(source)
  return newSources
 }
-anything_execute_default_action_with_search(candidate)
+anything_execute_default_action_with_anything_pattern(candidate)
 {
   real_candidate :=candidate[3]
   real_action:=candidate[2]
