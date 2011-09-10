@@ -176,7 +176,6 @@ for key, default_value in anything_default_properties
    ;; ;;when LButton(mouse) is down ,select use mouse
    ;;anything_WM_LBUTTONDOWN() will be called
    OnMessage(0x201, "anything_WM_LBUTTONDOWN") 
-   icon:=source["icon"]
     Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      
      ;; search string you have typed 
