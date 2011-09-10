@@ -182,10 +182,10 @@ for key, default_value in anything_default_properties
      tabListActions:=""
      matched_candidates:=Object()
      tmpSources:=sources
-     for key ,source in tmpSources {
-       candidate:=source["candidate"]
-       source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-     }
+     ; for key ,source in tmpSources {
+     ;   candidate:=source["candidate"]
+     ;   source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+     ; }
 
      matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
      Gui ,Show,,
@@ -239,10 +239,10 @@ for key, default_value in anything_default_properties
             {
               tabListActions:=""
               tmpSources:=sources
-               for key ,source in tmpSources {
-                    candidate:=source["candidate"]
-                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                  }
+               ; for key ,source in tmpSources {
+               ;      candidate:=source["candidate"]
+               ;      source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+               ;    }
                   anything_pattern := previous_anything_pattern
                   matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis") 
@@ -275,10 +275,10 @@ for key, default_value in anything_default_properties
                  tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                  tmpSources:= anything_build_source_of_actions(tmpSources[source_index] , matched_candidates[selectedRowNum])
-                 for key ,source in tmpSources {
-                   candidate:=source["candidate"]
-                   source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                 }
+                 ; for key ,source in tmpSources {
+                 ;   candidate:=source["candidate"]
+                 ;   source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                 ; }
                  previous_anything_pattern:= anything_pattern
                  anything_pattern=
                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
@@ -291,10 +291,10 @@ for key, default_value in anything_default_properties
               {
               tabListActions:=""
               tmpSources:=sources
-               for key ,source in tmpSources {
-                    candidate:=source["candidate"]
-                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                  }
+               ; for key ,source in tmpSources {
+               ;      candidate:=source["candidate"]
+               ;      source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+               ;    }
                   anything_pattern := previous_anything_pattern
                   matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis") 
@@ -375,10 +375,10 @@ for key, default_value in anything_default_properties
                                 build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                         for key ,source in tmpSources {
-                             candidate:=source["candidate"]
-                             source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                           }
+                         ; for key ,source in tmpSources {
+                         ;     candidate:=source["candidate"]
+                         ;     source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                         ;   }
                            matched_candidates:=anything_refresh(tmpSources,"",win_width)
                            if matched_candidates.maxIndex()>0
                            {
@@ -513,10 +513,10 @@ for key, default_value in anything_default_properties
                     build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                         for key ,source in tmpSources {
-                             candidate:=source["candidate"]
-                             source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                           }
+                         ; for key ,source in tmpSources {
+                         ;     candidate:=source["candidate"]
+                         ;     source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+                         ;   }
                            matched_candidates:=anything_refresh(tmpSources,"",win_width)
                           ; if matched_candidates.maxIndex()>0
                           ; {
@@ -565,6 +565,11 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 }
 
 anything_refresh(sources,anything_pattern,win_width){
+     for key ,source in tmpSources {
+       candidate:=source["candidate"]
+       source["tmpCandidate"]:= anything_get_candidates_as_array(source)
+     }
+     
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
