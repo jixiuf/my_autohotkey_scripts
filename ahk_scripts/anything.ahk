@@ -21,7 +21,7 @@ anything_pattern=
 ;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   an anything-source is an Object with some defined properties
 ;;   now it support 5 anything-source-properties :
-;;   <name> <action> <candidate> and <icon><anything-execute-action-at-once-if-one>
+;;   <name> <action> <candidate>  <icon> and <anything-execute-action-at-once-if-one>
 ;;   for example:
 ;;         my_source:=Object()
 ;; ** 1 <name>  (needed)
