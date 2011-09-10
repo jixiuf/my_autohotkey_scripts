@@ -179,7 +179,6 @@ for key, default_value in anything_default_properties
    icon:=source["icon"]
     Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
      
-     candidates_count=0
      ;; search string you have typed 
      tabListActions:=""
      matched_candidates:=Object()
@@ -187,7 +186,6 @@ for key, default_value in anything_default_properties
      for key ,source in tmpSources {
        candidate:=source["candidate"]
        source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-       candidates_count += % source["tmpCandidate"].maxIndex()
      }
 
      matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
@@ -245,7 +243,6 @@ for key, default_value in anything_default_properties
                for key ,source in tmpSources {
                     candidate:=source["candidate"]
                     source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                    candidates_count += % source["tmpCandidate"].maxIndex()
                   }
                   anything_pattern := previous_anything_pattern
                   matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
@@ -282,7 +279,6 @@ for key, default_value in anything_default_properties
                  for key ,source in tmpSources {
                    candidate:=source["candidate"]
                    source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                   candidates_count += % source["tmpCandidate"].maxIndex()
                  }
                  previous_anything_pattern:= anything_pattern
                  anything_pattern=
@@ -299,7 +295,6 @@ for key, default_value in anything_default_properties
                for key ,source in tmpSources {
                     candidate:=source["candidate"]
                     source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                    candidates_count += % source["tmpCandidate"].maxIndex()
                   }
                   anything_pattern := previous_anything_pattern
                   matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
@@ -384,7 +379,6 @@ for key, default_value in anything_default_properties
                          for key ,source in tmpSources {
                              candidate:=source["candidate"]
                              source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                             candidates_count += % source["tmpCandidate"].maxIndex()
                            }
                            matched_candidates:=anything_refresh(tmpSources,"",win_width)
                            if matched_candidates.maxIndex()>0
@@ -523,7 +517,6 @@ for key, default_value in anything_default_properties
                          for key ,source in tmpSources {
                              candidate:=source["candidate"]
                              source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-                             candidates_count += % source["tmpCandidate"].maxIndex()
                            }
                            matched_candidates:=anything_refresh(tmpSources,"",win_width)
                           ; if matched_candidates.maxIndex()>0
