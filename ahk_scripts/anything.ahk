@@ -12,8 +12,10 @@ AutoTrim, off
 ;; anything_multiple_sources_with_properties(anything-sources, anything-properties)
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; you can use these global variable when you write your anything-source                                   
 ;; anthing Window Id                                  
 anything_wid=
+;; the search you have typed in the search textbox 
 anything_pattern=
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
