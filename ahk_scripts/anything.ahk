@@ -184,11 +184,6 @@ for key, default_value in anything_default_properties
      tmpSources:=sources
      matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
      Gui ,Show,,
-      ; if matched_candidates.maxIndex()>0
-      ; {
-      ;    LV_Modify(1, "Select Focus Vis") 
-      ; }else{
-      ; }
 
      WinGet, anything_wid, ID, A
      WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
@@ -269,10 +264,10 @@ for key, default_value in anything_default_properties
                  previous_anything_pattern:= anything_pattern
                  anything_pattern=
                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
-                 if matched_candidates.maxIndex()>0
-                 {
-                    LV_Modify(1, "Select Focus Vis") 
-                 }
+                 ; if matched_candidates.maxIndex()>0
+                 ; {
+                 ;    LV_Modify(1, "Select Focus Vis") 
+                 ; }
               }else
               ;;reback from listed action 
               {
@@ -358,11 +353,11 @@ for key, default_value in anything_default_properties
                                 build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                           matched_candidates:=anything_refresh(tmpSources,"",win_width)
-                           if matched_candidates.maxIndex()>0
-                           {
-                              LV_Modify(1, "Select Focus Vis") 
-                           }
+                    matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                    if matched_candidates.maxIndex()>0
+                    {
+                       LV_Modify(1, "Select Focus Vis") 
+                    }
             }else{
                  input=l
             }
@@ -534,7 +529,15 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
   }
 }
 
-anything_refresh(sources,anything_pattern,win_width){
+;;;anything_pattern will be displayed on Search Textbox
+;;; and pattern is used to filter
+;; some times when you press Tab or press C-l
+;; it will list <Actions> as candidates for you to select
+;; then pattern is used to filter <Actions>
+;; and anything_pattern will be displayed on Search Textbox always
+
+anything_refresh(sources,pattern,win_width){
+     global anything_pattern
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
@@ -553,10 +556,10 @@ anything_refresh(sources,anything_pattern,win_width){
              if imagelist
               {
                  icon_index += 1
-                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,anything_imagelist,icon_index )
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,pattern,source_name,matched_candidates,anything_imagelist,icon_index )
                }else
                {
-                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,anything_imagelist,0)
+                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,pattern,source_name,matched_candidates,anything_imagelist,0)
                }
           }
       }
@@ -564,6 +567,11 @@ anything_refresh(sources,anything_pattern,win_width){
      LV_ModifyCol(2,0) ;;source_index
      LV_ModifyCol(3,0) ;;candidate_index
      LV_ModifyCol(4,win_width*0.10) ;; source_name
+     
+     GuiControl,, Edit1, %anything_pattern%
+     GuiControl,Focus,Edit1 ;; focus Edit1 ,
+     Send {End} ;;move cursor right ,make it after the new inputed char
+     
      if (selectedRowNum = 0)
      {
        LV_Modify(1, "Select Focus Vis") 
