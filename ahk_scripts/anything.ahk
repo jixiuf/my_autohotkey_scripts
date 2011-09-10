@@ -44,6 +44,7 @@ anything_pattern=
 ;;             }
 ;;             my_candiates:="my_candidates_fun"
 ;;              
+;;            my_source["candidate"]:=my_candidates
 ;; *** a array
 ;;     the first element of this array must be a string ,the string will be
 ;;     displayed on listview ,and you can selected one of the candidates ,and
@@ -77,6 +78,7 @@ anything_pattern=
 ;;                   MsgBox , %candidate%
 ;;                 }
 ;;                    
+;;       my_source["action"]:=my_action
 ;; ** 4 <icon> (optional)
 ;;     <icon> is a function(string) which return a ImageList.
 ;;     this property is optional .if this property isn't empty
@@ -89,6 +91,7 @@ anything_pattern=
 ;;          return ImageListID
 ;;      }
 ;;     my_icon :="icon_fun"
+;;     my_source["icon"]:=my_icon
 
 ;; ** 5 <anything-execute-action-at-once-if-one> (optional)
 ;;     if it has value
@@ -97,9 +100,6 @@ anything_pattern=
 ;; then if only one candidate left on the listview it will execute the
 ;;     default action with the candidate  
 ;;
-;; my_source["candidate"]:=my_candidates
-;; my_source["action"]:=my_action
-;; my_source["icon"]:=my_icon
 ;;
 ;; anything(my_source)
 
