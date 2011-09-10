@@ -128,7 +128,9 @@ anything_default_properties["quit_when_lose_focus"]:="yes"
 ;; the search string will be treated as candidate, 
 ;; and  this function will be treated as "action" 
 anything_default_properties["no_candidate_action"]:="anything_do_nothing"
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 anything(source)
 {
