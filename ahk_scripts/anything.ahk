@@ -535,29 +535,20 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 }
 
 anything_refresh(sources,anything_pattern,win_width){
-     for key ,source in sources {
-       candidate:=source["candidate"]
-       source["tmpCandidate"]:= anything_get_candidates_as_array(source)
-     }
-     
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
      anything_imagelist:= IL_Create()  
+     icon_index=0
      for source_index ,source in sources {
-          candidates:= source["tmpCandidate"]
+         candidates:=  anything_get_candidates_as_array(source) 
          imagelist:=anything_get_imagelist(source)
           if imagelist
           {
             LV_SetImageList(anything_imagelist, 1)
             anything_imagelist_append(anything_imagelist, imagelist)
          }
-      }
-     icon_index=0
-     for source_index ,source in sources {
-          candidates:= source["tmpCandidate"]
           source_name:=source["name"]
-          imagelist:=anything_get_imagelist(source)
           for candidate_index ,candidate in candidates{
              if imagelist
               {
