@@ -535,7 +535,7 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 }
 
 anything_refresh(sources,anything_pattern,win_width){
-     for key ,source in tmpSources {
+     for key ,source in sources {
        candidate:=source["candidate"]
        source["tmpCandidate"]:= anything_get_candidates_as_array(source)
      }
