@@ -211,8 +211,10 @@ for key, default_value in anything_default_properties
        {
          if (GetKeyState("LControl", "P")=1){
            anything_pageDown(matched_candidates.maxIndex())
+               ControlSetText, Edit1,%anything_pattern%                
         }else if(GetKeyState("LAlt", "P")=1){
             anything_pageUp(matched_candidates.maxIndex())
+              ControlSetText, Edit1,%anything_pattern%                
          }Else{
            input=v
          }
@@ -221,6 +223,7 @@ for key, default_value in anything_default_properties
          if ErrorLevel = EndKey:r
            {
             if (GetKeyState("LControl", "P")=1){
+               ControlSetText, Edit1,%anything_pattern%                
               anything_pageUp(matched_candidates.maxIndex())
           }Else{
                input=r
@@ -305,6 +308,7 @@ for key, default_value in anything_default_properties
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                 ControlSetText, Edit1,%anything_pattern%                
                  anything_pattern_updated=yes ;;
             }else{
                  input=z
@@ -324,6 +328,7 @@ for key, default_value in anything_default_properties
                   LV_GetText(source_index, selectedRowNum,2) 
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  ControlSetText, Edit1,%anything_pattern%                
                   anything_pattern_updated=yes
             }else{
                  input=j
@@ -345,6 +350,7 @@ for key, default_value in anything_default_properties
                     LV_GetText(source_index, selectedRowNum,2) 
                     action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                     anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                    ControlSetText, Edit1,%anything_pattern%                
                     anything_pattern_updated=yes
                }Else{
                input=m
@@ -354,7 +360,8 @@ for key, default_value in anything_default_properties
          if ErrorLevel = EndKey:l
            {
             if (GetKeyState("LControl", "P")=1){
-                                build_no_candidates_source:="yes"
+               ControlSetText, Edit1,%anything_pattern%                
+                    build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
                     matched_candidates:=anything_refresh(tmpSources,"",win_width)
@@ -423,6 +430,7 @@ for key, default_value in anything_default_properties
         {
           if (GetKeyState("LControl", "P")=1){
                anything_pattern=
+               ControlSetText, Edit1               
                anything_pattern_updated=yes
            }else{
                 input=u
@@ -434,6 +442,7 @@ for key, default_value in anything_default_properties
              if anything_pattern <>
               {
               StringTrimRight, anything_pattern, anything_pattern, 1
+               ControlSetText, Edit1,%anything_pattern%                
               anything_pattern_updated=yes
             }
             
@@ -454,6 +463,7 @@ for key, default_value in anything_default_properties
              if anything_pattern <>
               {
               StringTrimRight, anything_pattern, anything_pattern, 1
+               ControlSetText, Edit1,%anything_pattern%                
               anything_pattern_updated=yes
               }
            }else{
@@ -464,6 +474,7 @@ for key, default_value in anything_default_properties
         if ErrorLevel = EndKey:o
            {
             if (GetKeyState("LControl", "P")=1){
+               ControlSetText, Edit1,%anything_pattern%                
                tmpSources.insert(tmpSources.remove(1))
                anything_pattern_updated=yes
             }else{
