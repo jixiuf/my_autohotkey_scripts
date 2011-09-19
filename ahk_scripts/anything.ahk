@@ -479,7 +479,10 @@ for key, default_value in anything_default_properties
                build_no_candidates_source:=""
                Gui, Color,black,black
              }
-            anything_pattern = %anything_pattern%%input%
+            ; anything_pattern = %anything_pattern%%input%
+             ControlGetText, pattern_on_edit, Edit1             
+             anything_pattern = %pattern_on_edit%%input%
+            
             GuiControl,, Edit1, %anything_pattern%
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
