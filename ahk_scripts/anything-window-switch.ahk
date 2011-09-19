@@ -86,6 +86,11 @@ anything_ws_get_win_candidates()
 anything_ws_visit(candidate)
 {
   win_id:=candidate[2]
+         WinGet,wstatus,MinMax,ahk_id %win_id%
+        if (wstatus=-1)
+        { ;;minimized 
+          WinRestore ,ahk_id %window_id%
+        }
   WinActivate ,ahk_id  %win_id%
 }
 anything_ws_close(candidate)
