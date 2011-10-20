@@ -80,14 +80,17 @@ WinMove ,ahk_id %wid%,,%deskX%,%deskY%,deskWidth,deskHeight
 toggleMaximize(wid=0){
     if wid=0
     wid:=WinActive("A")
+    WinGetClass, winClass, ahk_id %wid%
+    ; MsgBox ,%winClass%
     WinGet,wstatus,MinMax,ahk_id %wid%
-      if (wstatus=1){ ;;maximized ,
-         WinSet ,Style,+0xc00000,A ;add title bar
-         WinRestore ,ahk_id %wid% 
-      }else{ ;;minimized 
-         WinMaximize , ahk_id %wid% 
-         WinSet ,Style,-0xc00000,A ;no title bar 
-      }
+    if (wstatus=1){ ;;maximized ,
+      if (winClass != "WorkerW" && winClass!= "ProgMan")
+        WinSet ,Style,+0xc00000,A ;add title bar
+      WinRestore ,ahk_id %wid% 
+    }else{ ;;minimized 
+    WinMaximize , ahk_id %wid% 
+    WinSet ,Style,-0xc00000,A ;no title bar 
+  }
 }
 #f1::Send2Pos1( )
 #f2::Send2Pos2( )
