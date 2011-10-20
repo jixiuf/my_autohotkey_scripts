@@ -84,7 +84,7 @@ toggleMaximize(wid=0){
     ; MsgBox ,%winClass%
     WinGet,wstatus,MinMax,ahk_id %wid%
     if (wstatus=1){ ;;maximized ,
-      if (winClass != "WorkerW" && winClass!= "ProgMan")
+      if (winClass != "WorkerW" && winClass!= "ProgMan" && winClass != "Shell_TrayWnd")
         WinSet ,Style,+0xc00000,A ;add title bar
       WinRestore ,ahk_id %wid% 
     }else{ ;;minimized 
