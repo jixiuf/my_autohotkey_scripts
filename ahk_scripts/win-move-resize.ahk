@@ -82,9 +82,11 @@ toggleMaximize(wid=0){
     wid:=WinActive("A")
     WinGet,wstatus,MinMax,ahk_id %wid%
       if (wstatus=1){ ;;maximized ,
+         WinSet ,Style,+0xc00000,A ;add title bar
          WinRestore ,ahk_id %wid% 
       }else{ ;;minimized 
          WinMaximize , ahk_id %wid% 
+         WinSet ,Style,-0xc00000,A ;no title bar 
       }
 }
 #f1::Send2Pos1( )
