@@ -26,13 +26,13 @@ WinGetPos ,x,y,,,ahk_id %wid%
 WinMove  ,ahk_id %wid%,, x+50,y
 return
 
-^#j::
+!#j::
 wid:=WinActive("A")
 WinGetPos ,x,y,w,h,ahk_id %wid%
 WinMove  ,ahk_id %wid%,,x+w*0.1,y+h*0.1,w*0.8,h*0.8
 return
 
-^#k::
+!#k::
 wid:=WinActive("A")
 WinGetPos ,x,y,w,h,ahk_id %wid%
 WinMove  ,ahk_id %wid%,,x-w*0.05,y-h*0.05,w*1.1,h*1.1
