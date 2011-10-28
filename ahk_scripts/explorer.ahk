@@ -223,7 +223,7 @@ openSelectedfileWithEamcs()
     Send ^c
     sleep,300
     clipboard = %clipboard%
-    fullPath=%clipboard%
+    fullPath=`"%clipboard%`"
     Clipboard := ClipSaved   
     run , emacsclientw %fullPath%
   }
