@@ -226,6 +226,9 @@ openSelectedfileWithEamcs()
     fullPath=`"%clipboard%`"
     Clipboard := ClipSaved   
     run , emacsclientw %fullPath%
+  }else if (focusedControl="Edit1")
+  {
+    send {End}
   }
 }
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
