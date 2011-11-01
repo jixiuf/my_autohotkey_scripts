@@ -8,7 +8,6 @@ SetKeyDelay 0
 ^u::Send +{Home}^c{Del}
 ^k::Send +{End}^c{Del}
 !d::Send ^+{Right}^c{Del}
-^q::send {Home}
 ^a::send {Home}
 ^e::send  {end}
 ^i::Send ^{Left}^+{Right}       ; Select the current word
@@ -28,4 +27,61 @@ SetKeyDelay 0
 ^h::Send {BackSpace}
 #IfWinActive
 
+;;; for all Edit
+        
+$~^a::
+ControlGetFocus, focusedControl, A
+ifInString ,focusedControl ,Edit
+{
+  IfWinActive ,ahk_class Emacs
+  {
+    send {Home}
+  }
+  IfWinActive ,ahk_class MozillaWindowClass
+  {
+    send {Home}
+  }else{
+   send ^{Home}^+{End}^c{Home}
+  }
+}
+return
 
+        
+~^e::
+ControlGetFocus, focusedControl, A
+ifInString ,focusedControl ,Edit
+{
+  send {End}
+}
+return
+                
+~^k::
+ControlGetFocus, focusedControl, A
+ifInString ,focusedControl ,Edit
+{
+Send +{End}^c{Del}
+}
+return
+        
+#Include emacs-key-sequence.ahk
+         
+         
+$^x::
+map:=Object()
+map.insert("^xh","selectAll")
+prefixKey("^x",map)
+return
+
+
+selectAll(){
+  IfWinActive ,ahk_class Emacs
+  {
+     send  ^xh
+  }
+  IfWinActive ,ahk_class MozillaWindowClass
+  {
+     send  ^v^a
+  }else{
+    send  ^a
+  }
+}
