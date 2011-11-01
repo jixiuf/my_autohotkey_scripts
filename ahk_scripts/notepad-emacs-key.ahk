@@ -43,8 +43,8 @@ SetKeyDelay 0
 ^u::Send +{Home}^c{Del}
 ^k::Send +{End}^c{Del}
 !d::Send ^+{Right}^c{Del}
-^q::send {Home}
-^a::send {Home}
+; ^q::send {Home}
+; ^a::send {Home}
 ^e::send  {end}
 ^m::Send {Home}+{End}^c{End}{Enter}^v ; Duplicate the current line, like R#
 ^i::Send ^{Left}^+{Right}       ; Select the current word
