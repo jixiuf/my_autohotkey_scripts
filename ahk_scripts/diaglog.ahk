@@ -29,19 +29,32 @@ SetKeyDelay 0
 
 ;;; for all Edit
         
+~$^q::
+  IfWinActive ,ahk_class MozillaWindowClass
+  {
+     send  ^v^a
+  }else
+  IfWinActive ,ahk_class Emacs
+  {
+  }else
+  {
+    send  ^a
+  }
+return
+            
 $~^a::
 ControlGetFocus, focusedControl, A
 ifInString ,focusedControl ,Edit
 {
   IfWinActive ,ahk_class Emacs
   {
-    send {Home}
+    ; send {Home}
   }
   IfWinActive ,ahk_class MozillaWindowClass
   {
     send {Home}
   }else{
-   send ^{Home}^+{End}^c{Home}
+   send ^c{Home}
   }
 }
 return
@@ -55,7 +68,7 @@ ifInString ,focusedControl ,Edit
 }
 return
                 
-~^k::
+~^k::  
 ControlGetFocus, focusedControl, A
 ifInString ,focusedControl ,Edit
 {
@@ -77,7 +90,7 @@ selectAll(){
   IfWinActive ,ahk_class Emacs
   {
      send  ^xh
-  }
+  }else
   IfWinActive ,ahk_class MozillaWindowClass
   {
      send  ^v^a
