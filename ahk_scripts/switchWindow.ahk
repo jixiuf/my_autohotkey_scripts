@@ -86,7 +86,7 @@ return
 
 
 ;;;;;;;;;;;Win+x ,toggle IE
-#x::
+#i::
 IfWinExist,ahk_class IEFrame
   IfWinActive ,ahk_class IEFrame
      WinMinimize ,ahk_class IEFrame
