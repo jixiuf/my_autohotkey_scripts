@@ -79,10 +79,10 @@ return
 #Include emacs-key-sequence.ahk
          
          
-$^x::
+$#x::
 map:=Object()
-map.insert("^xh","selectAll")
-prefixKey("^x",map)
+map.insert("#xh","selectAll")
+prefixKey("#x",map)
 return
 
 
