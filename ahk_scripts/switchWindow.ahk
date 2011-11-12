@@ -233,8 +233,8 @@ IfWinExist,ahk_class rctrl_renwnd32
 else
   run outlook
 return
-
-;;Ô¶³Ì×ÀÃæ
+        
+;; remote desk
 #v::
 IfWinExist,ahk_class TSSHELLWND
   IfWinActive ,ahk_class TSSHELLWND
