@@ -234,4 +234,15 @@ else
   run outlook
 return
 
-
+;;Ô¶³Ì×ÀÃæ
+#v::
+IfWinExist,ahk_class TSSHELLWND
+  IfWinActive ,ahk_class TSSHELLWND
+     WinMinimize ,ahk_class TSSHELLWND
+  else{
+;;    WinMaximize,ahk_class OpusApp
+    WinActivate ,ahk_class TSSHELLWND
+    }
+else
+  run mstsc
+return
