@@ -2,6 +2,9 @@
 #NoTrayIcon
 SetWorkingDir %A_ScriptDir%
 
+run %A_ScriptDir%\xkeymacs\xkeymacs.exe
+
+    
 run %A_ScriptDir%\EasyWindowDrag_(KDE).ahk
 ; run %A_ScriptDir%\DoOver.ahk
 run %A_ScriptDir%\MoveInactiveWin.ahk
