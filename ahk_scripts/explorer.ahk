@@ -39,8 +39,8 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 #IfWinActive
 
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
-^n::Send {Down}
-^p::Send {Up}
+; ^n::Send {Down}
+; ^p::Send {Up}
 ^j::
   ControlGetFocus, focusedControl,A 
     if(focusedControl="SysListView321")
@@ -76,22 +76,22 @@ return
   }
 return
 
-^b::send {Left}
-^h::
-   ControlGetFocus, focusedControl,A 
-    if(focusedControl="SysTreeView321")
-  {
+; ^b::send {Left}
+; ^h::
+;    ControlGetFocus, focusedControl,A 
+;     if(focusedControl="SysTreeView321")
+;   {
 
-    send {Left}
-    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-    ;;add to history list 
-    sleep 400
-    updateHistory(getExplorerAddressPath())
-  }else
-  {
-    Send ^h
-  }
-return
+;     send {Left}
+;     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+;     ;;add to history list 
+;     sleep 400
+;     updateHistory(getExplorerAddressPath())
+;   }else
+;   {
+;     Send ^h
+;   }
+; return
  
 ^u::
    ControlGetFocus, focusedControl,A 
