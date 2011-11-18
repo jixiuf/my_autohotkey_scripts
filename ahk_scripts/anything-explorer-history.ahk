@@ -163,53 +163,69 @@ delete_from_directory_history(candidate)
 }
 visit_directory( candidate_directory)
 {
+ ; WinGet, id, list, , , Program Manager
+  ; WinGet, processName, ProcessName, ahk_id %id2%
+  ; WinGet, pid, PID, ahk_id %id2%
   WinGet, active_id, ID, A
-;;  global active_id 
+  WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
+  WinGet, pid, PID,  ahk_id %active_id%
+; ;;  global active_id 
+           
   updateHistory(candidate_directory)
-  ;;writeHistory2Disk()
-  if (activeWinClass ="ExploreWClass" or activeWinClass= "CabinetWClass")
-  {
-		ControlSetText, Edit1, %candidate_directory%, ahk_id %active_id%
-		; Tekl reported the following: "If I want to change to Folder L:\folder
-		; then the addressbar shows http://www.L:\folder.com. To solve this,
-		; I added a {right} before {Enter}":
-		ControlSend, Edit1, {Right}{Enter}, ahk_id %active_id%
-        sleep 500
-        ControlFocus, SysListView321,A
-        Send {Home} ;;selected first file dired
-        
-
-		return
-  }else if (activeWinClass="ConsoleWindowClass"){
-         WinGetTitle, title ,ahk_id %active_id%
-         WinActivate, ahk_id %active_id% 
+  
+  WinActivate, ahk_pid %pid%
+  
+  if (processName="sh.exe" or processName="bash.exe" ){ ; msys
+         WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
-         if ( InStr(title ,"MINGW32:",true))
+         candidate_directory:= win2msysPath(candidate_directory)
+         SendInput, cd "%candidate_directory%"{Enter}
+  }else if (processName="cmd.exe"){
+           SendInput, cd /d "%candidate_directory%"{Enter}
+  }
+ ;  else if (processName="emacs.exe"){
+ ; ;  	WinActivate, ahk_id %active_id% 
+ ; ;    SetKeyDelay, 0 
+ ; ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
+ ;    dired_cmd:="emacsclientw  --eval ""(dired \""" . win2posixPath(candidate_directory) . "\"")"" "
+ ;    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
+ ;    if ErrorLevel = ERROR
+ ;    {
+ ;       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
+ ;    }
+ ; }
+ else{
+       h := WinExist("ahk_class ExploreWClass")
+       if (h != 0 )
+       {
+         WinActivate ,ahk_class ExploreWClass
+       }
+       else
+       {
+         h := WinExist("ahk_class CabinetWClass")
+         if (h != 0)
          {
-           candidate_directory:= win2msysPath(candidate_directory)
-           SendInput, cd "%candidate_directory%"{Enter}
+           WinActivate ,ahk_class CabinetWClass 
          }else
          {
-           SendInput, cd /d "%candidate_directory%"{Enter}
+           Run explorer.exe   /n`, /e`,  "%candidate_directory%"
+           WinWait ,ahk_class ExploreWClass
+           h := WinExist("ahk_class CabinetWClass")
          }
-  }else if (activeWinClass="Emacs"){
- ;  	WinActivate, ahk_id %active_id% 
- ;    SetKeyDelay, 0 
- ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
-    dired_cmd:="emacsclientw  --eval ""(dired \""" . win2posixPath(candidate_directory) . "\"")"" "
-    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
-    if ErrorLevel = ERROR
-    {
-       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
-    }
- }else{
-      Run explorer.exe   /n`, /e`,  "%candidate_directory%"
-      WinWait ahk_class (CabinetWClass|ExploreWClass) 
-      WinActivate
-      sleep 300
-      ControlFocus, SysListView321,A
-      Send {Home}
+       }
+         ; MsgBox % h  
+          ; WinActivate
+          ; h :=   WinExist("A")
+            
+            For win in ComObjCreate("Shell.Application").Windows
+            if   (win.hwnd=h)
+              win.Navigate[candidate_directory]
+            Until   (win.hwnd=h)
+          
+          sleep 50
+          ControlFocus, SysListView321,A
+          Send {Home}
    }
 }
 
