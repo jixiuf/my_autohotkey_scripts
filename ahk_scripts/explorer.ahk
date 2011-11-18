@@ -39,8 +39,8 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 #IfWinActive
 
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
-; ^n::Send {Down}
-; ^p::Send {Up}
+^n::Send {Down}
+^p::Send {Up}z
 ^j::
   ControlGetFocus, focusedControl,A 
     if(focusedControl="SysListView321")
