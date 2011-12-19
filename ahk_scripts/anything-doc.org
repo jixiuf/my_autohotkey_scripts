@@ -1,13 +1,10 @@
 * Introduction
 there is a screencast here :
 http://www.screenr.com/xxss
-
 A new One
 http://www.screenr.com/vp8s
-
 and another one show anything-favorite-directories.ahk
 http://www.screenr.com/BH7s
-
 and another show anything-window-switch.ahk
 http://www.screenr.com/MyHs
 
