@@ -1,0 +1,698 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="zh" xml:lang="zh">
+<head>
+<title>anything-doc</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2011-12-19 11:59:14 中国标准时间"/>
+<meta name="author" content="纪秀峰"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">anything-doc</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">Introduction </a></li>
+<li><a href="#sec-2">Active &lt;Anything&gt; </a></li>
+<li><a href="#sec-3">keybindings when &lt;Anything&gt; is activated </a>
+<ul>
+<li><a href="#sec-3-1">keybindings for select candiates </a></li>
+<li><a href="#sec-3-2">keybindings for execute actions </a></li>
+<li><a href="#sec-3-3">keybindings for edit </a></li>
+</ul>
+</li>
+<li><a href="#sec-4">anything-source I have written </a>
+<ul>
+<li><a href="#sec-4-1">anything-explorer-history.ahk </a></li>
+<li><a href="#sec-4-2">anything-favorite-directories.ahk  do something like anything-explorer-history.ahk </a></li>
+<li><a href="#sec-4-3">anything-run.ahk is a replacement of &lt;Win-r&gt; </a></li>
+<li><a href="#sec-4-4">anything-window-switch.ahk is a replacement of Alt-Tab </a></li>
+<li><a href="#sec-4-5">you just need download: </a></li>
+</ul>
+</li>
+<li><a href="#sec-5">how to  write an anything-source </a>
+<ul>
+<li><a href="#sec-5-1">1 &lt;name&gt;  (needed) </a></li>
+<li><a href="#sec-5-2">2 &lt;candidate&gt;  (needed) </a></li>
+<li><a href="#sec-5-3">3 &lt;action&gt;  (needed) </a></li>
+<li><a href="#sec-5-4">4 &lt;icon&gt; (optional) </a></li>
+<li><a href="#sec-5-5">5 &lt;anything-execute-action-at-once-if-one&gt; (optional) </a></li>
+<li><a href="#sec-5-6">6 call anything </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Introduction </h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>  
+If you use GNU/Emacs  maybe you have known "Anything"
+maybe not , 
+you can visit "Anything" on <a href="http://www.emacswiki.org/emacs/Anything ">Emacswiki</a>
+and see what "Anything" it is .
+and this isn't anything.el ,it 's anything.ahk.
+if you think anything.ahk is great ,
+and have written an anything-source for it ,you can post it here .
+</p>
+<p>  
+there is a screencast here :
+</p><ul>
+<li><a href="http://www.screenr.com/xxss">http://www.screenr.com/xxss</a>
+</li>
+<li><a href="http://www.screenr.com/vp8s">http://www.screenr.com/vp8s</a> (new one )
+</li>
+<li><a href="http://www.screenr.com/BH7s">http://www.screenr.com/BH7s</a> and another one show anything-favorite-directories.ahk
+</li>
+<li><a href="http://www.screenr.com/MyHs">http://www.screenr.com/MyHs</a> and another show anything-window-switch.ahk
+</li>
+</ul>
+
+
+<p>
+you can also download these videos
+</p><ul>
+<li><a href="http://screencast-repos.googlecode.com/files/anything-expl-run.mp4">http://screencast-repos.googlecode.com/files/anything-expl-run.mp4</a>
+</li>
+<li><a href="http://screencast-repos.googlecode.com/files/anything.ahk-anything-explorer-history.mp4">http://screencast-repos.googlecode.com/files/anything.ahk-anything-explorer-history.mp4</a>
+</li>
+<li><a href="http://screencast-repos.googlecode.com/files/anything-window-switch.mp4">http://screencast-repos.googlecode.com/files/anything-window-switch.mp4</a>
+</li>
+<li><a href="http://screencast-repos.googlecode.com/files/anything-fav-dir.mp4">http://screencast-repos.googlecode.com/files/anything-fav-dir.mp4</a>
+</li>
+</ul>
+
+
+<p>
+and source code is host on
+</p><ul>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts">https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts</a>
+</li>
+</ul>
+
+
+<p>
+you can follow these links ,and save them on you disk .
+</p><ul>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything.ahk">https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything.ahk</a>
+</li>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-explorer-history.ahk">https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-explorer-history.ahk</a>
+</li>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-favorite-directories.ahk">https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-favorite-directories.ahk</a>
+</li>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-run.ahk">https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-run.ahk</a>
+</li>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-window-switch.ahk">https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-window-switch.ahk</a>
+</li>
+<li><a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-config.ahk">https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-config.ahk</a>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">Active &lt;Anything&gt; </h2>
+<div class="outline-text-2" id="text-2">
+
+<p>  to active anything.ahk , press F3 , or Windows+r , or Alt+TAB
+  see  <a href="https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-config.ahk">anything-config.ahk</a>  for detail 
+</p></div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">keybindings when &lt;Anything&gt; is activated </h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  you can input search string just like google to narrow the candidates
+</p>
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1">keybindings for select candiates </h3>
+<div class="outline-text-3" id="text-3-1">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">Down or Ctrl+n</td><td class="left">select next candidate</td></tr>
+<tr><td class="left">Up or Ctrl+p</td><td class="left">select previous candidate</td></tr>
+<tr><td class="left">Ctrl+o</td><td class="left">will select next source ,that means ,all candidate from first source will be send to last</td></tr>
+<tr><td class="left">pageUp ,Ctrl-r ,Alt-v</td><td class="left">pageup</td></tr>
+<tr><td class="left">pageDn ,Ctrl-v</td><td class="left">pageDn</td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2">keybindings for execute actions </h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">&lt;Click&gt;and  &lt;Enter&gt;</td><td class="left">to execute the default action with the selected candiate as parameter</td></tr>
+<tr><td class="left">&lt;Ctrl-j&gt;</td><td class="left">to execute the second action with the selected candidate as parameter</td></tr>
+<tr><td class="left">&lt;Ctrl-m&gt;</td><td class="left">to execute the third action with the selected candidate as parameter</td></tr>
+<tr><td class="left">&lt;Ctrl-z&gt; &lt;Alt-Enter&gt;</td><td class="left">do the same to Enter ,but doesn't quit "Anything"</td></tr>
+<tr><td class="left">&lt;Alt-j&gt;</td><td class="left">do the same to Ctrl-j ,but doesn't quit "Anything"</td></tr>
+<tr><td class="left">&lt;Alt-m&gt;</td><td class="left">do the same to Ctrl-m ,but doesn't quit "Anything"</td></tr>
+<tr><td class="left">&lt;tab&gt;</td><td class="left">will list all available actions , and you can select one to execute .</td></tr>
+<tr><td class="left">&lt;Ctrl-L&gt;</td><td class="left">will ignore all the candidates ,and treate the search string as candidate , and list all available "action" to execute on the special "candidate"</td></tr>
+<tr><td class="left">&lt;Ctrl-i&gt;</td><td class="left">do something similar to &lt;Ctrl-l&gt; ,but don't list all available "action" ,just execute the "action" special by "property": no<sub>candidate</sub><sub>action</sub></td></tr>
+<tr><td class="left">&lt;Esc&gt; and &lt;Ctrl-g&gt;</td><td class="left">quit Anything</td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3">keybindings for edit </h3>
+<div class="outline-text-3" id="text-3-3">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">Ctrl-u</td><td class="left">delete all search string</td></tr>
+<tr><td class="left">backspace and Ctrl-h</td><td class="left">back delete a char</td></tr>
+<tr><td class="left">Ctrl-y</td><td class="left">paste</td></tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">anything-source I have written </h2>
+<div class="outline-text-2" id="text-4">
+
+<p>Now I have wrote 4 &lt;anything-source&gt; for anything.ahk
+</p><ul>
+<li>anything-explorer-history.ahk ,
+</li>
+<li>anything-favorite-directories.ahk,
+</li>
+<li>anything-run.ahk (a replacement of Windows+r)
+</li>
+<li>anything-window-switch.ahk (a replacement of Alt-Tab)
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1">anything-explorer-history.ahk </h3>
+<div class="outline-text-3" id="text-4-1">
+
+<p>   when you visit  directory (double click on a directory,up or back ) in
+   explorer.exe ,it can remember directories 
+   you have visited ,then you can press  &lt;F3&gt; to active "Anything"
+   list all directory history ,you can revisit it easyly.
+   how to use anything-explorer-history.ahk
+</p>
+<ul>
+<li id="sec-4-1-1">if you only have one anything-source : <br/>
+       anything<sub>explorer</sub><sub>history</sub><sub>source</sub>  (defined in  anything-explorer-history.ahk)
+       you can use it like this :
+
+
+
+<pre class="src src-c"><span class="org-preprocessor">#include</span> anything.ahk
+<span class="org-preprocessor">#include</span> anything-explorer-history.ahk
+f3::anything(anything_explorer_history_source)
+</pre>
+
+
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-4-1-2">if you also have other anything-sources , <br/>
+        default  : it is included in anything-config.ahk
+        you just need add 
+            anything<sub>explorer</sub><sub>history</sub><sub>source</sub>
+        to the sources
+       for example :
+
+
+
+<pre class="src src-c">f3::
+sources:=Array()
+sources.insert(anything_explorer_history_source)
+sources.insert(anything_favorite_directories_source)
+sources.insert(anything_cmd_source)
+anything_multiple_sources(sources)
+<span class="org-keyword">return</span>
+</pre>
+
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-4-1-3">actions for anything-explorer-history.ahk <br/>
+
+
+
+<pre class="src src-c">anything_explorer_history_source[<span class="org-string">"action"</span>]:=Array(<span class="org-string">"visit_directory"</span>,<span class="org-string">"delete_from_directory_history"</span> ,<span class="org-string">"delete_all_directory_history"</span>)
+</pre>
+
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">actions</th><th scope="col" class="left">description</th><th scope="col" class="left">key binding</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">visit<sub>directory</sub></td><td class="left">visit selected directory</td><td class="left">&lt;Click&gt;and  &lt;Enter&gt;</td></tr>
+<tr><td class="left">delete<sub>from</sub><sub>directory</sub><sub>history</sub></td><td class="left">delete select directory from  directory history</td><td class="left">&lt;Ctrl-j&gt;</td></tr>
+<tr><td class="left">delete<sub>all</sub><sub>directory</sub><sub>history</sub></td><td class="left">add a new directory to  directory history</td><td class="left">&lt;Ctrl-m&gt;</td></tr>
+<tr><td class="left">list all actions</td><td class="left"></td><td class="left">&lt;Ctrl-L&gt;</td></tr>
+</tbody>
+</table>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2">anything-favorite-directories.ahk  do something like anything-explorer-history.ahk </h3>
+<div class="outline-text-3" id="text-4-2">
+
+<p>   add your favorite directories ,and visit it using "Anything".
+   about how to use it .see comments in anything-favorite-directories.ahk
+   if you use anything-favorites-directory as the only source for anything.ahk
+   you just need to bind it to a key like this :
+</p>
+
+
+<pre class="src src-c"><span class="org-preprocessor">#include</span> anything.ahk
+<span class="org-preprocessor">#include</span> anything-favorites-directory.ahk
+f1::anything(anything_favorite_directories_source)
+</pre>
+
+
+
+
+<p>
+   if you also use other sources ,just need add "anything<sub>favorite</sub><sub>directories</sub><sub>source</sub>" to 
+   the array of sources for anything<sub>multiple</sub><sub>sources</sub>(sources)
+   default have added to  anything-config.ahk 
+</p>
+<ul>
+<li id="sec-4-2-1">how to add a new Folder to your favorite-directories <br/>
+   first activate "Anything" and Press &lt;Ctrl-L&gt; list all available actions
+   select "call action: Favdirs.anything<sub>favorite</sub><sub>directories</sub><sub>add</sub> "
+   about what the meaning of &lt;Ctrl-L&gt;
+   anything<sub>favorite</sub><sub>directories</sub><sub>source</sub> have three actions
+   anything<sub>favorite</sub><sub>directories</sub><sub>source[</sub>"action"]:=Array("anything<sub>favorite</sub><sub>directories</sub><sub>visit</sub>","anything<sub>favorite</sub><sub>directories</sub><sub>delete</sub>","anything<sub>favorite</sub><sub>directories</sub><sub>add</sub>")
+</li>
+</ul>
+<ul>
+<li id="sec-4-2-2">actions for   anything-favorite-directories.ahk <br/>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">actions</th><th scope="col" class="left">description</th><th scope="col" class="left">key binding</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">anything<sub>favorite</sub><sub>directories</sub><sub>visit</sub></td><td class="left">visit selected directory</td><td class="left">&lt;Click&gt;and  &lt;Enter&gt;</td></tr>
+<tr><td class="left">anything<sub>favorite</sub><sub>directories</sub><sub>delete</sub></td><td class="left">delete select directory from favorite directories</td><td class="left">&lt;Ctrl-j&gt;</td></tr>
+<tr><td class="left">anything<sub>favorite</sub><sub>directories</sub><sub>add</sub></td><td class="left">add a new directory to favorite directories</td><td class="left">&lt;Ctrl-m&gt;</td></tr>
+<tr><td class="left">list all actions</td><td class="left"></td><td class="left">&lt;Ctrl-L&gt;</td></tr>
+</tbody>
+</table>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-4-2-3">then you can use "Anything" selected one of your favorite directory <br/>
+<ul>
+<li>it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
+</li>
+<li>it will visit it in current cmd.exe (if current activated window is cmd.exe)
+</li>
+<li>it will visit it in current msys.bat (if current activated window is msys.bat)
+</li>
+</ul>
+
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-4-3" class="outline-3">
+<h3 id="sec-4-3">anything-run.ahk is a replacement of &lt;Win-r&gt; </h3>
+<div class="outline-text-3" id="text-4-3">
+
+<p>   it could remember old  command too. when you press &lt;F3&gt;
+   about how to use it .see comments in anything-run.ahk
+</p></div>
+
+</div>
+
+<div id="outline-container-4-4" class="outline-3">
+<h3 id="sec-4-4">anything-window-switch.ahk is a replacement of Alt-Tab </h3>
+<div class="outline-text-3" id="text-4-4">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-5" class="outline-3">
+<h3 id="sec-4-5">you just need download: </h3>
+<div class="outline-text-3" id="text-4-5">
+
+<ul>
+<li>anything.ahk
+</li>
+<li>anything-explorer-history.ahk
+</li>
+<li>anything-favorite-directories.ahk
+</li>
+<li>anything-run.ahk
+</li>
+<li>anything-window-switch.ahk
+</li>
+<li>anything-config.ahk
+</li>
+<li>and run anything-config.ahk
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">how to  write an anything-source </h2>
+<div class="outline-text-2" id="text-5">
+
+<p>  an anything-source is an Object with some defined properties
+  now it support 5 anything-source-properties :
+</p><ul>
+<li>name
+</li>
+<li>action
+</li>
+<li>candidate
+</li>
+<li>icon
+</li>
+<li>anything-execute-action-at-once-if-one
+</li>
+</ul>
+
+<p>  for example:
+</p>
+
+
+<pre class="src src-c"><span class="org-constant">my_source</span>:=Object()
+</pre>
+
+
+
+
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1">1 &lt;name&gt;  (needed) </h3>
+<div class="outline-text-3" id="text-5-1">
+
+<p>   &lt;name&gt; is a string ,it is just a name of this anything-source
+</p>
+
+
+<pre class="src src-c">my_source[<span class="org-string">"name"</span>]:=<span class="org-string">"my_source_name"</span>
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2">2 &lt;candidate&gt;  (needed) </h3>
+<div class="outline-text-3" id="text-5-2">
+
+<p>   &lt;candidate&gt; is an array of available candidates ,or a function name(string)
+   without parameter which return an array .
+   each element of the array can be :
+</p><ul>
+<li id="sec-5-2-1">a string <br/>
+    this string will be displayed on listview , so that you can select one
+    of the candidates ,and execute action on your selected candidate.
+   for example:
+
+
+
+<pre class="src src-c"><span class="org-constant">my_candidates</span>:=Array(<span class="org-string">"red"</span>,<span class="org-string">"green"</span>)
+</pre>
+
+
+
+<p>
+      or
+</p>
+
+
+<pre class="src src-c"> <span class="org-function-name">my_candidates_fun</span>()
+ {
+     <span class="org-keyword">return</span> Array(<span class="org-string">"red"</span>,<span class="org-string">"green"</span>)
+ }
+ <span class="org-constant">my_candiates</span>:=<span class="org-string">"my_candidates_fun"</span>
+my_source[<span class="org-string">"candidate"</span>]:=my_candidates
+</pre>
+
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-5-2-2">an array <br/>
+    the first element of this array must be a string ,the string will be
+    displayed on listview ,and you can selected one of the candidates ,and
+    execute action on your selected candidate.
+    other element of this array can be anything , you can store useful info.
+    there. and when you execute action on your selected candidate,this will
+    be the parameter . see &lt;action&gt;
+      for example:
+
+
+
+<pre class="src src-c"><span class="org-constant">my_candidates</span>:=Array(
+          Array(<span class="org-string">"red"</span>,<span class="org-string">"useful info ,string ,object or anything"</span>),
+          Array(<span class="org-string">"green"</span>,<span class="org-string">"useful info ,string ,object or anything"</span>)
+          )
+</pre>
+
+
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-5-3" class="outline-3">
+<h3 id="sec-5-3">3 &lt;action&gt;  (needed) </h3>
+<div class="outline-text-3" id="text-5-3">
+
+<p>   &lt;action&gt; is a function name(string) or a list of function name (array).
+   and those functions must have one parameter. actually the parameter is
+   the selected &lt;candidate&gt; .
+</p>
+
+
+<pre class="src src-c"><span class="org-constant">my_action</span>:=<span class="org-string">"my_action_fun"</span>
+         my_action_fun(candidate)
+       {
+         MsgBox , %candidate%
+       }
+</pre>
+
+
+
+<p>
+      or
+</p>
+
+
+<pre class="src src-c">  <span class="org-constant">my_action</span>:=Array(<span class="org-string">"my_action_fun"</span>,<span class="org-string">"my_action_fun2"</span>)
+            <span class="org-function-name">my_action_fun</span>(candidate)
+          {
+            MsgBox , %candidate%
+          }
+            <span class="org-function-name">my_action_fun2</span>(candidate)
+          {
+            MsgBox , %candidate%
+          }
+
+my_source[<span class="org-string">"action"</span>]:=my_action
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-4" class="outline-3">
+<h3 id="sec-5-4">4 &lt;icon&gt; (optional) </h3>
+<div class="outline-text-3" id="text-5-4">
+
+<p>    &lt;icon&gt; is a function(string) which return a ImageList.
+    this property is optional .if this property isn't empty
+    &lt;Anything&gt; will display icon before each candidates.
+</p>
+
+
+<pre class="src src-c"> <span class="org-function-name">icon_fun</span>()
+ {
+     <span class="org-constant">ImageListID</span> := IL_Create(10)  ; Create an ImageList <span class="org-type">to</span> <span class="org-variable-name">hold</span> 10 small icons.
+     Loop 10  ; Load the ImageList with a series of icons from <span class="org-type">the</span> <span class="org-variable-name">DLL</span>.
+     IL_Add(ImageListID, <span class="org-string">"shell32.dll"</span>, A_Index)
+     <span class="org-keyword">return</span> ImageListID
+ }
+<span class="org-constant">my_icon</span> :=<span class="org-string">"icon_fun"</span>
+my_source[<span class="org-string">"icon"</span>]:=my_icon
+</pre>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-5" class="outline-3">
+<h3 id="sec-5-5">5 &lt;anything-execute-action-at-once-if-one&gt; (optional) </h3>
+<div class="outline-text-3" id="text-5-5">
+
+<p>    if it has value
+  for example
+</p>
+
+
+<pre class="src src-c">my_source[<span class="org-string">"anything-execute-action-at-once-if-one"</span>]:=<span class="org-string">"yes"</span>
+</pre>
+
+
+
+<p>
+then if only one candidate left on the listview it will execute the
+    default action with the candidate
+</p></div>
+
+</div>
+
+<div id="outline-container-5-6" class="outline-3">
+<h3 id="sec-5-6">6 call anything </h3>
+<div class="outline-text-3" id="text-5-6">
+
+
+
+
+<pre class="src src-c">anything(my_source)
+</pre>
+
+
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2011-12-19 11:59:14 中国标准时间</p>
+<p class="author">Author: 纪秀峰</p>
+<p class="creator">Org version 7.7 with Emacs version 24</p>
+
+
+</div>
+<p><br/><br/>
+<!-- hhmts start --> <!-- hhmts end --></p>
+
+</body>
+</html>
