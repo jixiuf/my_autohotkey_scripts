@@ -263,6 +263,37 @@ Now I have wrote 4 <anything-source> for anything.ahk
   #+end_src
 then if only one candidate left on the listview it will execute the
     default action with the candidate
+ 
+** 6  <anything-action-when-2-candidates> (optional)
+   the value of it is a function accept two parameters 
+    fun(candidate1,candidate2)
+
+   if only two candidats for you to select ,and  this property is not null
+   then this function is called .
+   anything-window-switch.ahk use this proerty 
+   when only two windows ,And you press Alt-Tab ,then select another window directly
+   without press RETURN by youself
+
+** 7 <match> (optional) default: "anything_match"
+    if it has value
+        for example
+        #+begin_src c
+        my_source["match"]:="anything_match"
+or 
+        my_source["match"]:="anything_match_case_sensetive"
+        #+end_src
+or any other value .
+the value of it is a function name accept two parameters
+this function is used to find out matched candidates from all candidates depends
+on what you have type in the textfield.
+and these tow function is defined in anything.ahk
+#+begin_src c
+anything_match_case_sensetive(candidate_string,pattern){}
+anything_match(candidate_string,pattern){}
+#+end_src
+
+
+
 ** 6 call anything
    #+begin_src c
     anything(my_source)
