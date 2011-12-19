@@ -11,37 +11,36 @@ and this isn't anything.el ,it 's anything.ahk
 * keybindings when <Anything> is activated 
   you can input search string just like google to narrow the candidates
 ** keybindings for select candiates
-Down or Ctrl+n          select next candidate 
-Up or Ctrl+p            select previous candidate
-Ctrl+o                  will select next source ,that means ,all candidate from first source will be send to last 
-pageUp ,Ctrl-r ,Alt-v== pageup
-pageDn ,Ctrl-v       == pageDn
+*** Down or Ctrl+n          select next candidate 
+*** Up or Ctrl+p            select previous candidate
+*** Ctrl+o                  will select next source ,that means ,all candidate from first source will be send to last 
+*** pageUp ,Ctrl-r ,Alt-v== pageup
+*** pageDn ,Ctrl-v       == pageDn
 
 ** keybindings for execute actions
 
-<Click>and  <Enter>     to execute the default action with the selected candiate as parameter
-<Ctrl-j>                to execute the second action with the selected candidate as parameter
-<Ctrl-m>                to execute the third action with the selected candidate as parameter
+*** <Click>and  <Enter>     to execute the default action with the selected candiate as parameter
+*** <Ctrl-j>                to execute the second action with the selected candidate as parameter
+*** <Ctrl-m>                to execute the third action with the selected candidate as parameter
+*** <Ctrl-z> <Alt-Enter>    do the same to Enter ,but doesn't quit "Anything"
+*** <Alt-j>                 do the same to Ctrl-j ,but doesn't quit "Anything"
+*** <Alt-m>                 do the same to Ctrl-m ,but doesn't quit "Anything"
+*** <tab>                   will list all available actions , and you can select one to execute .
 
-<Ctrl-z> <Alt-Enter>    do the same to Enter ,but doesn't quit "Anything"
-<Alt-j>                 do the same to Ctrl-j ,but doesn't quit "Anything"
-<Alt-m>                 do the same to Ctrl-m ,but doesn't quit "Anything"
-<tab>                   will list all available actions , and you can select one to execute .
-
-<Ctrl-L>                will ignore all the candidates ,and treate the search string as candidate , and
-                        list all available "action" to execute on the special "candidate"
-<Ctrl-i>                do something similar to <Ctrl-l> ,but don't list all available "action" ,just
+*** <Ctrl-L>                will ignore all the candidates ,and treate the search string as candidate , and
+***                         list all available "action" to execute on the special "candidate"
+*** <Ctrl-i>                do something similar to <Ctrl-l> ,but don't list all available "action" ,just
                         execute the "action" special by "property": no_candidate_action
                         ;;see 
                         ;; anything_with_properties()
                         ;; anything_multiple_sources_with_properties()
                         ;; anything_default_properties 
                         ;; in anything.ahk
-<Esc> and <Ctrl-g>      quit Anything
+*** <Esc> and <Ctrl-g>      quit Anything
 ** keybindings for edit
-Ctrl-u                  empty search string
-backspace and Ctrl-h   back delete a char
-Ctrl-y                 paste
+*** Ctrl-u                  empty search string
+*** backspace and Ctrl-h   back delete a char
+*** Ctrl-y                 paste
 
 * anything-source I have written
 Now I have wrote 4 <anything-source> for anything.ahk
@@ -50,20 +49,20 @@ Now I have wrote 4 <anything-source> for anything.ahk
     anything-run.ahk
     anything-window-switch.ahk (a replacement of Alt-Tab)
 
-1. anything-explorer-history.ahk
+**  anything-explorer-history.ahk
    when you visit  directory (double click on a directory,up or back ) in
    explorer.exe ,it can remember directories 
    you have visited ,then you can press  <F3> to active "Anything"
    list all directory history ,you can revisit it easyly.
 
-2. anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
+**  anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
    add your favorite directories ,and visit it using "Anything".
    about how to use it .see comments in anything-favorite-directories.ahk
 
-3. anything-run.ahk is a replacement of <Win-r>
+** anything-run.ahk is a replacement of <Win-r>
    it could remember old  command too. when you press <F3>
    about how to use it .see comments in anything-run.ahk
-4. anything-window-switch.ahk is a replacement of Alt-Tab   
+** anything-window-switch.ahk is a replacement of Alt-Tab   
    
 ** you just need download:
    anything.ahk
