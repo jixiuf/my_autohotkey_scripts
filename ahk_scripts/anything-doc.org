@@ -37,10 +37,10 @@ and this isn't anything.el ,it 's anything.ahk
 
 * anything-source I have written
 Now I have wrote 4 <anything-source> for anything.ahk
-    anything-explorer-history.ahk ,
-    anything-favorite-directories.ahk,
-    anything-run.ahk
-    anything-window-switch.ahk (a replacement of Alt-Tab)
+  +  anything-explorer-history.ahk ,
+  +  anything-favorite-directories.ahk,
+  +  anything-run.ahk
+  +  anything-window-switch.ahk (a replacement of Alt-Tab)
 
 **  anything-explorer-history.ahk
    when you visit  directory (double click on a directory,up or back ) in
