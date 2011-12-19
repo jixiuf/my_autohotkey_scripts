@@ -641,19 +641,39 @@ anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anythi
 ;; when string matched all the keywords ,then it return 1
 ;; else return 0
 anything_match(candidate_string,pattern){
-   if pattern=
-     return 1
-   else{
-    Loop,parse,pattern ,%A_Space%,%A_Space%%A_TAB%
-    {
-      if candidate_string not contains %A_LoopField%,
-      {
-       return 0
-      }
+    result:= 1
+    if not (pattern== "")
+           {
+               StringCaseSense ,Off
+               Loop,parse,pattern ,%A_Space%,%A_Space%%A_TAB%
+               {
+                   if candidate_string not contains %A_LoopField%,
+                   {
+                       result :=0
+                   }
+               }
+           }
+    return result
     }
-    return 1
- }
-}
+
+
+anything_match_case_sensetive(candidate_string,pattern){
+    result:= 1
+    if not (pattern== "")
+           {
+               StringCaseSense ,On
+               Loop,parse,pattern ,%A_Space%,%A_Space%%A_TAB%
+               {
+                   if candidate_string not contains %A_LoopField%,
+                   {
+                       result :=0
+                   }
+               }
+               StringCaseSense ,Off
+           }
+    return result
+    }
+
 anything_pageDown(candidates_count)
 {
   selectedRowNum:= LV_GetNext(0)
