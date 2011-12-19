@@ -581,14 +581,18 @@ anything_refresh(sources,pattern,win_width){
             anything_imagelist_append(anything_imagelist, imagelist)
          }
           source_name:=source["name"]
-          for candidate_index ,candidate in candidates{
+        match_function:= source["match"]
+        if(match_function==""){
+            match_function:= "anything_match"
+        }
+         for candidate_index ,candidate in candidates{
              if imagelist
               {
                  icon_index += 1
-                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,pattern,source_name,matched_candidates,anything_imagelist,icon_index )
+                 matched_candidates:=anything_lv_add_candidate_if_match(match_function,candidate,source_index,candidate_index,pattern,source_name,matched_candidates,anything_imagelist,icon_index )
                }else
                {
-                  matched_candidates:=anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,pattern,source_name,matched_candidates,anything_imagelist,0)
+                   matched_candidates:=anything_lv_add_candidate_if_match(match_function,candidate,source_index,candidate_index,pattern,source_name,matched_candidates,anything_imagelist,0)
                }
           }
       }
@@ -631,13 +635,13 @@ return matched_candidates
 ;;the array[1] will show on the listview ,and
 ;;array[2] will store something useful info.
 ;;and the param `candidate' will be passed to action
-anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,imagelistId ,imagelist_index){
+anything_lv_add_candidate_if_match(match_function,candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,imagelistId ,imagelist_index){
   if isObject(candidate){
     display:=candidate[1]
   }else{
     display:=candidate
   }
-   if % anything_match(display,anything_pattern)=1
+  if % anything_callFuncByNameWithTwoParam(match_function, display,anything_pattern)==1
    {
      if imagelistId
      {
