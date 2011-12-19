@@ -19,28 +19,21 @@ and this isn't anything.el ,it 's anything.ahk
 
 ** keybindings for execute actions
 
-*** <Click>and  <Enter>     to execute the default action with the selected candiate as parameter
-*** <Ctrl-j>                to execute the second action with the selected candidate as parameter
-*** <Ctrl-m>                to execute the third action with the selected candidate as parameter
-*** <Ctrl-z> <Alt-Enter>    do the same to Enter ,but doesn't quit "Anything"
-*** <Alt-j>                 do the same to Ctrl-j ,but doesn't quit "Anything"
-*** <Alt-m>                 do the same to Ctrl-m ,but doesn't quit "Anything"
-*** <tab>                   will list all available actions , and you can select one to execute .
+| <Click>and  <Enter>  | to execute the default action with the selected candiate as parameter                                                                             |
+| <Ctrl-j>             | to execute the second action with the selected candidate as parameter                                                                             |
+| <Ctrl-m>             | to execute the third action with the selected candidate as parameter                                                                              |
+| <Ctrl-z> <Alt-Enter> | do the same to Enter ,but doesn't quit "Anything"                                                                                                 |
+| <Alt-j>              | do the same to Ctrl-j ,but doesn't quit "Anything"                                                                                                |
+| <Alt-m>              | do the same to Ctrl-m ,but doesn't quit "Anything"                                                                                                |
+| <tab>                | will list all available actions , and you can select one to execute .                                                                             |
+| <Ctrl-L>             | will ignore all the candidates ,and treate the search string as candidate , and list all available "action" to execute on the special "candidate" |
+| <Ctrl-i>             | do something similar to <Ctrl-l> ,but don't list all available "action" ,just execute the "action" special by "property": no_candidate_action     |
+| <Esc> and <Ctrl-g>   | quit Anything                                                                                                                                     |
 
-*** <Ctrl-L>                will ignore all the candidates ,and treate the search string as candidate , and
-***                         list all available "action" to execute on the special "candidate"
-*** <Ctrl-i>                do something similar to <Ctrl-l> ,but don't list all available "action" ,just
-                        execute the "action" special by "property": no_candidate_action
-                        ;;see 
-                        ;; anything_with_properties()
-                        ;; anything_multiple_sources_with_properties()
-                        ;; anything_default_properties 
-                        ;; in anything.ahk
-*** <Esc> and <Ctrl-g>      quit Anything
 ** keybindings for edit
-*** Ctrl-u                  empty search string
-*** backspace and Ctrl-h   back delete a char
-*** Ctrl-y                 paste
+| Ctrl-u               | empty search string |
+| backspace and Ctrl-h | back delete a char  |
+| Ctrl-y               | paste               |
 
 * anything-source I have written
 Now I have wrote 4 <anything-source> for anything.ahk
