@@ -31,9 +31,9 @@ and this isn't anything.el ,it 's anything.ahk
 | <Esc> and <Ctrl-g>   | quit Anything                                                                                                                                     |
 
 ** keybindings for edit
-| Ctrl-u               | empty search string |
-| backspace and Ctrl-h | back delete a char  |
-| Ctrl-y               | paste               |
+| Ctrl-u               | delete all search string |
+| backspace and Ctrl-h | back delete a char       |
+| Ctrl-y               | paste                    |
 
 * anything-source I have written
 Now I have wrote 4 <anything-source> for anything.ahk
