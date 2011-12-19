@@ -110,7 +110,8 @@ Now I have wrote 4 <anything-source> for anything.ahk
 | delete_all_directory_history  | add a new directory to  directory history       | <Ctrl-m>            |
 | list all actions              |                                                 | <Ctrl-L>            |
    
-**  anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
+**  anything-favorite-directories.ahk  
+    anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
    add your favorite directories ,and visit it using "Anything".
    about how to use it .see comments in anything-favorite-directories.ahk
    if you use anything-favorites-directory as the only source for anything.ahk
