@@ -1,4 +1,4 @@
-;; need AutoHotKey_L         
+;; need AutoHotKey_L
 #SingleInstance force
 #NoEnv
 SetBatchLines, -1
@@ -12,10 +12,10 @@ AutoTrim, off
 ;; anything_multiple_sources_with_properties(anything-sources, anything-properties)
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; you can use these global variable when you write your anything-source                                   
-;; anthing Window Id                                  
+;; you can use these global variable when you write your anything-source
+;; anthing Window Id
 anything_wid=
-;; the search you have typed in the search textbox 
+;; the search you have typed in the search textbox
 anything_pattern=
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
@@ -43,7 +43,7 @@ anything_pattern=
 ;;                 return Array("red","green")
 ;;             }
 ;;             my_candiates:="my_candidates_fun"
-;;              
+;;
 ;;            my_source["candidate"]:=my_candidates
 ;; *** a array
 ;;     the first element of this array must be a string ,the string will be
@@ -77,7 +77,7 @@ anything_pattern=
 ;;                 {
 ;;                   MsgBox , %candidate%
 ;;                 }
-;;                    
+;;
 ;;       my_source["action"]:=my_action
 ;; ** 4 <icon> (optional)
 ;;     <icon> is a function(string) which return a ImageList.
@@ -96,15 +96,15 @@ anything_pattern=
 ;; ** 5 <anything-execute-action-at-once-if-one> (optional)
 ;;     if it has value
 ;;   for example
-           my_source["anything-execute-action-at-once-if-one"]:="yes"
+;;           my_source["anything-execute-action-at-once-if-one"]:="yes"
 ;; then if only one candidate left on the listview it will execute the
-;;     default action with the candidate  
+;;     default action with the candidate
 ;;
 ;;
 ;; anything(my_source)
 
 ;;;;;;;;;;;;;;;;;;;;;;default anything-properties;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;don't change the default value here ,you can use 
+;;don't change the default value here ,you can use
 ;;         anything_with_properties(source,properties)
 ;; and
 ;;         anything_multiple_sources_with_properties(sources,properties)
@@ -125,8 +125,8 @@ anything_default_properties["win_height"]:= 510
 anything_default_properties["quit_when_lose_focus"]:="yes"
 
 ;;the value is a function accpet one parameter ,when no matched candidates
-;; the search string will be treated as candidate, 
-;; and  this function will be treated as "action" 
+;; the search string will be treated as candidate,
+;; and  this function will be treated as "action"
 anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -148,13 +148,13 @@ anything_multiple_sources(sources)
 {
   anything_multiple_sources_with_properties(sources ,Array())
 }
-;;main function 
+;;main function
 anything_multiple_sources_with_properties(sources,anything_properties){
 global anything_default_properties
 global anything_wid
 global anything_pattern
 ;; copy all property from anything_default_properties to
-;; anything_properties if  anything_properties doen't defined  
+;; anything_properties if  anything_properties doen't defined
 
 for key, default_value in anything_default_properties
 {
@@ -165,7 +165,7 @@ for key, default_value in anything_default_properties
 }
    win_width:=anything_properties["win_width"]
    win_height:=anything_properties["win_height"]
-   Gui,+LastFound +AlwaysOnTop -Caption ToolWindow   
+   Gui,+LastFound +AlwaysOnTop -Caption ToolWindow
    WinSet, Transparent, 225
    Gui, Color,black,black
    Gui,Font,s12 c7cfc00 bold
@@ -175,14 +175,14 @@ for key, default_value in anything_default_properties
    {
    ;;;;when window lost focus ,function anything_WM_ACTIVATE()
    ;; will be executed
-     OnMessage( 0x06, "anything_WM_ACTIVATE" ) 
+     OnMessage( 0x06, "anything_WM_ACTIVATE" )
    }
    ;; ;;when LButton(mouse) is down ,select use mouse
    ;;anything_WM_LBUTTONDOWN() will be called
-   OnMessage(0x201, "anything_WM_LBUTTONDOWN") 
+   OnMessage(0x201, "anything_WM_LBUTTONDOWN")
     Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
-     
-     ;; search string you have typed 
+
+     ;; search string you have typed
      tabListActions:=""
      matched_candidates:=Object()
      tmpSources:=sources
@@ -195,12 +195,12 @@ for key, default_value in anything_default_properties
      {
          anything_pattern_updated=
        Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyorv{LAlt}{tab}
-       
+
        if ErrorLevel = EndKey:pgup
        {
          anything_pageUp(matched_candidates.maxIndex())
        }
-        
+
        if ErrorLevel = EndKey:pgdn
        {
          anything_pageDown(matched_candidates.maxIndex())
@@ -235,7 +235,7 @@ for key, default_value in anything_default_properties
               tmpSources:=sources
                   anything_pattern := previous_anything_pattern
                   matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
-                 LV_Modify(previousSelectedIndex, "Select Focus Vis") 
+                 LV_Modify(previousSelectedIndex, "Select Focus Vis")
                }else
                {
                  anything_exit()
@@ -246,7 +246,7 @@ for key, default_value in anything_default_properties
             {
                continue
             }
-       ;;list all avaiable actions for the selected candidate 
+       ;;list all avaiable actions for the selected candidate
        ;; usual one source only have one action ,
        ;; but some times user can give more than one action.
        ;; <Enter> execute the default action .
@@ -256,12 +256,12 @@ for key, default_value in anything_default_properties
        if ErrorLevel = EndKey:tab
        {
            selectedRowNum:= LV_GetNext(0)
-           
+
              if (tabListActions = "")
              {
              ;;list available actions for the
-             ;;selected candidate . 
-                 previousSelectedIndex := selectedRowNum 
+             ;;selected candidate .
+                 previousSelectedIndex := selectedRowNum
                  tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                  tmpSources:= anything_build_source_of_actions(tmpSources[source_index] , matched_candidates[selectedRowNum])
@@ -270,25 +270,25 @@ for key, default_value in anything_default_properties
                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
                  ; if matched_candidates.maxIndex()>0
                  ; {
-                 ;    LV_Modify(1, "Select Focus Vis") 
+                 ;    LV_Modify(1, "Select Focus Vis")
                  ; }
               }else
-              ;;reback from listed action 
+              ;;reback from listed action
               {
               tabListActions:=""
               tmpSources:=sources
                   anything_pattern := previous_anything_pattern
                   matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
-                 LV_Modify(previousSelectedIndex, "Select Focus Vis") 
+                 LV_Modify(previousSelectedIndex, "Select Focus Vis")
                }
        }
-       
+
          if ErrorLevel = EndKey:enter
          {
             selectedRowNum:= LV_GetNext(0)
-            LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+            LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
             action:= anything_get_default_action(tmpSources[source_index]["action"])
-            if (GetKeyState("LAlt", "P")=1){ ;;LAlt+Enter 
+            if (GetKeyState("LAlt", "P")=1){ ;;LAlt+Enter
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             }else
             {
@@ -297,12 +297,12 @@ for key, default_value in anything_default_properties
                break
             }
          }
-         
+
          if ErrorLevel = EndKey:z
            {
             if (GetKeyState("LControl", "P")=1){ ;;Ctrl+z
                   selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                  anything_pattern_updated=yes ;;
@@ -314,14 +314,14 @@ for key, default_value in anything_default_properties
            {
             if (GetKeyState("LControl", "P")=1){ ;;Ctrl+j
                  selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2) 
+                  LV_GetText(source_index, selectedRowNum,2)
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_exit()
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   break
              }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
                  selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2) 
+                  LV_GetText(source_index, selectedRowNum,2)
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   anything_pattern_updated=yes
@@ -329,12 +329,12 @@ for key, default_value in anything_default_properties
                  input=j
             }
           }
-         
+
          if ErrorLevel = EndKey:m
            {
             if (GetKeyState("LControl", "P")=1){ ;; Ctrl+m
-                 selectedRowNum:= LV_GetNext(0) 
-                       LV_GetText(source_index, selectedRowNum,2) 
+                 selectedRowNum:= LV_GetNext(0)
+                       LV_GetText(source_index, selectedRowNum,2)
                        action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                        anything_exit()
                        anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
@@ -342,7 +342,7 @@ for key, default_value in anything_default_properties
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+m
                {
                     selectedRowNum:= LV_GetNext(0)
-                    LV_GetText(source_index, selectedRowNum,2) 
+                    LV_GetText(source_index, selectedRowNum,2)
                     action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                     anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                     anything_pattern_updated=yes
@@ -350,7 +350,7 @@ for key, default_value in anything_default_properties
                input=m
              }
           }
-          
+
          if ErrorLevel = EndKey:l
            {
             if (GetKeyState("LControl", "P")=1){
@@ -360,13 +360,13 @@ for key, default_value in anything_default_properties
                     matched_candidates:=anything_refresh(tmpSources,"",win_width)
                     if matched_candidates.maxIndex()>0
                     {
-                       LV_Modify(1, "Select Focus Vis") 
+                       LV_Modify(1, "Select Focus Vis")
                     }
             }else{
                  input=l
             }
           }
-         
+
 
          if ErrorLevel = EndKey:i
            {
@@ -378,7 +378,7 @@ for key, default_value in anything_default_properties
                  input=i
              }
           }
-          
+
          if ErrorLevel = EndKey:n
            {
             if (GetKeyState("LControl", "P")=1){
@@ -406,7 +406,7 @@ for key, default_value in anything_default_properties
              }else{
                  input=p
              }
-      
+
          }
            if ErrorLevel = EndKey:g
            {
@@ -416,7 +416,7 @@ for key, default_value in anything_default_properties
              }else{
                  input=g
              }
-      
+
          }
         ;;Ctrl+u clear "anything_pattern" string ,just like bash
         if ErrorLevel = EndKey:u
@@ -436,9 +436,9 @@ for key, default_value in anything_default_properties
               StringTrimRight, anything_pattern, anything_pattern, 1
               anything_pattern_updated=yes
             }
-            
+
         }
- ;;Ctrl-y ,paste 
+ ;;Ctrl-y ,paste
         if ErrorLevel = EndKey:y
         {
           if (GetKeyState("LControl", "P")=1){
@@ -460,7 +460,7 @@ for key, default_value in anything_default_properties
                 input=h
             }
         }
-        ;;send the first source to last 
+        ;;send the first source to last
         if ErrorLevel = EndKey:o
            {
             if (GetKeyState("LControl", "P")=1){
@@ -484,7 +484,7 @@ for key, default_value in anything_default_properties
             GuiControl,Focus,Edit1 ;; focus Edit1 ,
             Send {End} ;;move cursor right ,make it after the new inputed char
             selectedRowNum:= LV_GetNext(0)
-           ;;TODO: ANYTHING_REFRESH and select needed selected 
+           ;;TODO: ANYTHING_REFRESH and select needed selected
             matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
               if  matched_candidates.maxIndex() <1
               {
@@ -499,11 +499,11 @@ for key, default_value in anything_default_properties
             if matched_candidates.maxIndex() = 1
             {
                    selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index  
+                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
               if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
               {
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
-                  anything_exit() ;;first quit .then execute action 
+                  anything_exit() ;;first quit .then execute action
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   break
                 }
@@ -514,7 +514,7 @@ for key, default_value in anything_default_properties
 } ;; end of anything function
 
 
-;;when Anything lost focus 
+;;when Anything lost focus
 anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
 {
 ;;Tooltip, % wParam
@@ -545,10 +545,10 @@ anything_refresh(sources,pattern,win_width){
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
-     anything_imagelist:= IL_Create()  
+     anything_imagelist:= IL_Create()
      icon_index=0
      for source_index ,source in sources {
-         candidates:=  anything_get_candidates_as_array(source) 
+         candidates:=  anything_get_candidates_as_array(source)
          imagelist:=anything_get_imagelist(source)
           if imagelist
           {
@@ -567,18 +567,18 @@ anything_refresh(sources,pattern,win_width){
                }
           }
       }
-     LV_ModifyCol(1,win_width*0.88) ;;candidates 
+     LV_ModifyCol(1,win_width*0.88) ;;candidates
      LV_ModifyCol(2,0) ;;source_index
      LV_ModifyCol(3,0) ;;candidate_index
      LV_ModifyCol(4,win_width*0.10) ;; source_name
-     
+
      GuiControl,, Edit1, %anything_pattern%
      GuiControl,Focus,Edit1 ;; focus Edit1 ,
      Send {End} ;;move cursor right ,make it after the new inputed char
-     
+
      if (selectedRowNum = 0)
      {
-       LV_Modify(1, "Select Focus Vis") 
+       LV_Modify(1, "Select Focus Vis")
      }else
      {
        if matched_candidates.maxIndex() >= selectedRowNum
@@ -590,10 +590,10 @@ anything_refresh(sources,pattern,win_width){
          LV_Modify(selectedRowNum-1, "Select Focus Vis")
        }else if matched_candidates.maxIndex()>0
        {
-         LV_Modify(1, "Select Focus Vis") 
+         LV_Modify(1, "Select Focus Vis")
        }else{
        }
-       
+
      }
 
 
@@ -607,7 +607,7 @@ return matched_candidates
 ;;array[2] will store something useful info.
 ;;and the param `candidate' will be passed to action
 anything_lv_add_candidate_if_match(candidate,source_index,candidate_index,anything_pattern,source_name,matched_candidates,imagelistId ,imagelist_index){
-  if isObject(candidate){ 
+  if isObject(candidate){
     display:=candidate[1]
   }else{
     display:=candidate
@@ -647,7 +647,7 @@ anything_pageDown(candidates_count)
 {
   selectedRowNum:= LV_GetNext(0)
   if (selectedRowNum= candidates_count){
-        LV_Modify(1, "Select Focus Vis") 
+        LV_Modify(1, "Select Focus Vis")
   }else{
         ControlFocus, SysListView321,A
         Send {pgdn}
@@ -656,7 +656,7 @@ anything_pageDown(candidates_count)
 anything_pageUp(candidates_count){
   selectedRowNum:= LV_GetNext(0)
   if (selectedRowNum=1){
-        LV_Modify(candidates_count, "Select Focus Vis") 
+        LV_Modify(candidates_count, "Select Focus Vis")
   }else{
         ControlFocus, SysListView321,A
         Send {pgup}
@@ -674,7 +674,7 @@ anything_selectNextCandidate(candidates_count){
 anything_selectPreviousCandidate(candidates_count){
             selectedRowNum:= LV_GetNext(0)
               if(selectedRowNum<2){
-                 LV_Modify(candidates_count, "Select Focus Vis") 
+                 LV_Modify(candidates_count, "Select Focus Vis")
               }else{
                  LV_Modify(selectedRowNum-1, "Select Focus Vis")
               }
@@ -683,7 +683,7 @@ anything_exit(){
    global anything_pattern
    anything_pattern=
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
-   OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit 
+   OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit
    Gui Destroy
 }
 anything_callFuncByNameWithOneParam(funcName,param1){
@@ -724,7 +724,7 @@ anything_get_candidates_as_array(source)
 ;; and press Ctrl+j to execute the second action(if exists) when you have select a candidate .
 ;; when you selected a candidate ,you can press TAB to list all available "action" for
 ;; this candidate ,and select one of them to execute .
-;; 
+;;
 ;;
 anything_get_default_action(actionProperty)
 {
@@ -737,8 +737,8 @@ anything_get_default_action(actionProperty)
   }
 }
 
-;;if it has the second action then return it ,else 
-;; return the default action 
+;;if it has the second action then return it ,else
+;; return the default action
 anything_get_second_or_defalut_action(actionProperty)
 {
   if isObject(actionProperty)
@@ -764,8 +764,8 @@ anything_get_all_actions(actionProperty)
      return actions
    }
 }
-;;if it has the second action then return it ,else 
-;; return the default action 
+;;if it has the second action then return it ,else
+;; return the default action
 anything_get_third_or_defalut_action(actionProperty)
 {
   if isObject(actionProperty)
@@ -782,7 +782,7 @@ anything_get_third_or_defalut_action(actionProperty)
 }
 
 ;;this function will be used list all available "action"s
-;; for selected_candidate 
+;; for selected_candidate
 ;; so that you can selected one of the "actions" and execute it .
 ;; so source["action"] will be used as newSource["candidate"]
 ;; and the new "action" for newSource is"anything_execute_action_on_selected"
@@ -793,7 +793,7 @@ actionSources:=Array()
 actionSource:=Array()
 candidates :=Array()
 for key ,action in anything_get_all_actions(source["action"])
-{   
+{
    next:=Array()
    next.insert(action)
    next.insert(selected_candidate)
@@ -833,7 +833,7 @@ newSources:=Array()
    next.insert(action)
    next.insert(anything_pattern)
    candidates.insert(next)
-     
+
    }
  }
  source["candidate"]:=candidates
@@ -848,12 +848,12 @@ anything_execute_default_action_with_anything_pattern(candidate)
   anything_callFuncByNameWithOneParam(real_action ,real_candidate)
 }
 ;;this  is just a example
-;;you can parse a property to anything  
+;;you can parse a property to anything
 ;;anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 ; anything_properties:=Object()
 ; anything_properties["no_candidate_action"]:="do_what_you_want_when_no_matched_candidates"
 ; f1::anything_multiple_sources_with_properties(sources,anything_properties)
- 
+
 anything_do_nothing(candidate)
 {
   Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
