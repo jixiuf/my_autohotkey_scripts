@@ -115,11 +115,11 @@ Now I have wrote 4 <anything-source> for anything.ahk
    about how to use it .see comments in anything-favorite-directories.ahk
    if you use anything-favorites-directory as the only source for anything.ahk
    you just need to bind it to a key like this :
-#+begin_src c
-   #include anything.ahk
-   #include anything-favorites-directory.ahk
-   f1::anything(anything_favorite_directories_source)
-#+end_src
+    #+begin_src c
+      #include anything.ahk
+      #include anything-favorites-directory.ahk
+      f1::anything(anything_favorite_directories_source)
+    #+end_src
 
    if you also use other sources ,just need add "anything_favorite_directories_source" to 
    the array of sources for anything_multiple_sources(sources)
