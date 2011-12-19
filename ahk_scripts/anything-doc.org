@@ -51,6 +51,32 @@ Now I have wrote 4 <anything-source> for anything.ahk
 **  anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
    add your favorite directories ,and visit it using "Anything".
    about how to use it .see comments in anything-favorite-directories.ahk
+   if you use anything-favorites-directory as the only source for anything.ahk
+   you just need to bind it to a key like this :
+
+   #include anything.ahk
+   #include anything-favorites-directory.ahk
+   f1::anything(anything_favorite_directories_source)
+
+   if you also use other sources ,just need add "anything_favorite_directories_source" to 
+   the array of sources for anything_multiple_sources(sources)
+   default have added to  anything-config.ahk 
+
+***    how to add a new Folder to your favorite-directories
+   first activate "Anything" and Press <Ctrl-L> list all available actions
+   select "call action: Favdirs.anything_favorite_directories_add "
+   about what the meaning of <Ctrl-L>
+   anything_favorite_directories_source have three actions
+   anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
+   | anything_favorite_directories_visit  | visit selected directory                          |
+   | anything_favorite_directories_delete | delete select directory from favorite directories |
+   | anything_favorite_directories_add    | add a new directory to favorite directories       |
+
+***    then you can use "Anything" selected one of your favorite directory 
+   it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
+   it will visit it in current cmd.exe (if current activated window is cmd.exe)
+   it will visit it in current msys.bat (if current activated window is msys.bat)
+
 
 ** anything-run.ahk is a replacement of <Win-r>
    it could remember old  command too. when you press <F3>
