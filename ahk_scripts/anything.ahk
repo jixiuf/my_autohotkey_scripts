@@ -583,7 +583,7 @@ anything_refresh(sources,pattern,win_width){
           source_name:=source["name"]
         match_function:= source["match"]
         if(match_function==""){
-            match_function:= "anything_match"
+            match_function:= "anything_match" ; default use anything_match(P1,P2) to match 
         }
          for candidate_index ,candidate in candidates{
              if imagelist
