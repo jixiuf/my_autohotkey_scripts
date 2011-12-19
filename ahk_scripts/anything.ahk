@@ -204,6 +204,20 @@ for key, default_value in anything_default_properties
      WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
      loop,
      {
+         if matched_candidates.maxIndex() = 2
+         {
+             selectedRowNum:= LV_GetNext(0)
+             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+             if( anything_pattern=="" and  ( not (tmpSources[source_index]["anything-action-when-2-candidates"]="")))
+             {
+                 action:= tmpSources[source_index]["anything-action-when-2-candidates"]
+                 candidate1 :=matched_candidates[selectedRowNum]
+                 candidate2 :=matched_candidates[selectedRowNum+1]
+                 anything_exit() ;;first quit .then execute action
+                 anything_callFuncByNameWithTwoParam(action ,candidate1,candidate2)
+                 break
+             }
+         }
          anything_pattern_updated=
        Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyorv{LAlt}{tab}
 
@@ -719,6 +733,9 @@ anything_exit(){
 }
 anything_callFuncByNameWithOneParam(funcName,param1){
    return %funcName%(param1)
+}
+anything_callFuncByNameWithTwoParam(funcName,param1,param2){
+    return %funcName%(param1,param2)
 }
 
 anything_callFuncByName(funcName){
