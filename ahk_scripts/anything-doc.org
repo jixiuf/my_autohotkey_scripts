@@ -47,7 +47,36 @@ Now I have wrote 4 <anything-source> for anything.ahk
    explorer.exe ,it can remember directories 
    you have visited ,then you can press  <F3> to active "Anything"
    list all directory history ,you can revisit it easyly.
+   ;;how to use `anything-explorer-history.ahk'
+    
+**    if you only have one anything-source :
+            anything_explorer_history_source  (defined in this file )
+    you can use it like this :
+   
+        #include anything.ahk
+        #include anything-explorer-history.ahk
+        f3::anything(anything_explorer_history_source)
+   
+**      if you also have other anything-sources ,
+        default  : it is included in anything-config.ahk
+        you just need add 
+            anything_explorer_history_source
+        to the sources
+       for example :
+       f3::
+       sources:=Array()
+       sources.insert(anything_explorer_history_source)
+       sources.insert(anything_favorite_directories_source)
+       sources.insert(anything_cmd_source)
+       anything_multiple_sources(sources)
+       return
 
+
+   anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
+   | visit_directory               | visit selected directory                        | <Click>and  <Enter> |
+   | delete_from_directory_history | delete select directory from  directory history | <Ctrl-j>            |
+   | delete_all_directory_history  | add a new directory to  directory history       | <Ctrl-m>            |
+   
 **  anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
    add your favorite directories ,and visit it using "Anything".
    about how to use it .see comments in anything-favorite-directories.ahk
