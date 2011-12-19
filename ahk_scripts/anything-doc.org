@@ -8,7 +8,7 @@ and see what "Anything" it is .
 and this isn't anything.el ,it 's anything.ahk
 * Active <Anything>
   to active anything.ahk , press F3 , or Windows+r , or Alt+TAB
-  see anything-config.ahk for detail 
+  see  [[https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-config.ahk][anything-config.ahk]]  for detail 
 * keybindings when <Anything> is activated 
   you can input search string just like google to narrow the candidates
 ** keybindings for select candiates
