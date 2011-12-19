@@ -75,9 +75,11 @@ Now I have wrote 4 <anything-source> for anything.ahk
        #+end_src
 *** actions for anything-explorer-history.ahk       
    anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
-   | visit_directory               | visit selected directory                        | <Click>and  <Enter> |
-   | delete_from_directory_history | delete select directory from  directory history | <Ctrl-j>            |
-   | delete_all_directory_history  | add a new directory to  directory history       | <Ctrl-m>            |
+| actions                       | description                                     | key binding         |
+|-------------------------------+-------------------------------------------------+---------------------|
+| visit_directory               | visit selected directory                        | <Click>and  <Enter> |
+| delete_from_directory_history | delete select directory from  directory history | <Ctrl-j>            |
+| delete_all_directory_history  | add a new directory to  directory history       | <Ctrl-m>            |
    
 **  anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
    add your favorite directories ,and visit it using "Anything".
@@ -99,9 +101,12 @@ Now I have wrote 4 <anything-source> for anything.ahk
    about what the meaning of <Ctrl-L>
    anything_favorite_directories_source have three actions
    anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
-   | anything_favorite_directories_visit  | visit selected directory                          | <Click>and  <Enter> |
-   | anything_favorite_directories_delete | delete select directory from favorite directories | <Ctrl-j>            |
-   | anything_favorite_directories_add    | add a new directory to favorite directories       | <Ctrl-m>            |
+*** actions for   anything-favorite-directories.ahk 
+| actions                              | description                                       | key binding         |
+|--------------------------------------+---------------------------------------------------+---------------------|
+| anything_favorite_directories_visit  | visit selected directory                          | <Click>and  <Enter> |
+| anything_favorite_directories_delete | delete select directory from favorite directories | <Ctrl-j>            |
+| anything_favorite_directories_add    | add a new directory to favorite directories       | <Ctrl-m>            |
 
 ***    then you can use "Anything" selected one of your favorite directory 
    it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
