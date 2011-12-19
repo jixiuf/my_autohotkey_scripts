@@ -99,7 +99,30 @@ anything_pattern=
 ;;           my_source["anything-execute-action-at-once-if-one"]:="yes"
 ;; then if only one candidate left on the listview it will execute the
 ;;     default action with the candidate
+ 
+;; ** 6  <anything-action-when-2-candidates> (optional)
+;;  the value of it is a function accept tow parameters 
+;;     fun(candidate1,candidate2)
 ;;
+;;   if only two candidats for you to select ,and the this property is not null
+;;   then this function is called .
+;;   anything-window-switch.ahk use this proerty 
+;;  when only two windows ,And you press Alt-Tab ,then select another window directly
+;;  without press RETURN by youself
+;;
+;; ** 7 <match> (optional) default: "anything_match"
+;;     if it has value
+;;         for example
+;;      my_source["match"]:="anything_match"
+;; or
+;;      my_source["match"]:="anything_match_case_sensetive"
+;; or any other value .
+;; the value of it is a function name accept two parameters
+;; this function is used to find out matched candidates from all candidates depends
+;; on what you have type in the textfield
+;;
+;  
+ 
 ;;
 ;; anything(my_source)
 
@@ -583,7 +606,7 @@ anything_refresh(sources,pattern,win_width){
           source_name:=source["name"]
         match_function:= source["match"]
         if(match_function==""){
-            match_function:= "anything_match" ; default use anything_match(P1,P2) to match 
+            match_function:= "anything_match" ; default use anything_match(P1,P2) to match
         }
          for candidate_index ,candidate in candidates{
              if imagelist
