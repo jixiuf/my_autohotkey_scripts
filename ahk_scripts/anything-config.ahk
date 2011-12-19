@@ -27,7 +27,6 @@ return
 ;;
 !Tab::
 ^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
-anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything(anything_window_switcher_source)
 return
 
