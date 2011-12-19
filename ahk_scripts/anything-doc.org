@@ -47,16 +47,17 @@ Now I have wrote 4 <anything-source> for anything.ahk
    explorer.exe ,it can remember directories 
    you have visited ,then you can press  <F3> to active "Anything"
    list all directory history ,you can revisit it easyly.
-   ;;how to use `anything-explorer-history.ahk'
+   how to use anything-explorer-history.ahk
     
 ***    if you only have one anything-source :
-            anything_explorer_history_source  (defined in this file )
-    you can use it like this :
-   
-        #include anything.ahk
-        #include anything-explorer-history.ahk
-        f3::anything(anything_explorer_history_source)
-   
+       anything_explorer_history_source  (defined in  anything-explorer-history.ahk)
+       you can use it like this :
+   #+begin_src c
+       #include anything.ahk
+       #include anything-explorer-history.ahk
+       f3::anything(anything_explorer_history_source)
+   #+end_src
+       
 ***      if you also have other anything-sources ,
         default  : it is included in anything-config.ahk
         you just need add 
