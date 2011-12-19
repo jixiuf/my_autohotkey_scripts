@@ -93,6 +93,17 @@ anything_ws_visit(candidate)
         }
   WinActivate ,ahk_id  %win_id%
 }
+anything_ws_visit_another_when_2_candidates(candidate1,candidate2)
+{
+  win_id:=candidate1[2]
+         WinGet,wstatus,MinMax,ahk_id %win_id%
+        if (wstatus=-1)
+        { ;;minimized 
+          WinRestore ,ahk_id %window_id%
+        }
+  WinActivate ,ahk_id  %win_id%
+}
+
 anything_ws_close(candidate)
 {
   win_id:=candidate[2]
@@ -165,4 +176,4 @@ anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["name"]:="Win"
 anything_window_switcher_source["icon"]:="anything_ws_get_icon"
 anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close")
-
+anything_window_switcher_source["anything-action-when-2-candidates"]:="anything_ws_visit_another_when_2_candidates"
