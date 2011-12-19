@@ -123,7 +123,7 @@ anything_default_properties["win_height"]:= 510
 anything_default_properties["Transparent"]:= 225
 anything_default_properties["WindowColor"]:= "black"
 anything_default_properties["ControlColor"]:= "black"
-anything_default_properties["FontSize"]:= 11
+anything_default_properties["FontSize"]:= 12
 anything_default_properties["FontColor"]:= "c7cfc00"
 anything_default_properties["FontWeight"]:= "bold"  ;bold, italic, strike, underline, and norm
 ;; when Anything window lose focus ,close Anything window automatically.
