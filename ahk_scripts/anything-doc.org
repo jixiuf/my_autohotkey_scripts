@@ -64,7 +64,8 @@ Now I have wrote 4 <anything-source> for anything.ahk
             anything_explorer_history_source
         to the sources
        for example :
-       #+begin_src c
+       #+begin_quote
+       
        f3::
        sources:=Array()
        sources.insert(anything_explorer_history_source)
@@ -72,7 +73,7 @@ Now I have wrote 4 <anything-source> for anything.ahk
        sources.insert(anything_cmd_source)
        anything_multiple_sources(sources)
        return
-       #+end_src
+       #+end_quote
 *** actions for anything-explorer-history.ahk       
    anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
 | actions                       | description                                     | key binding         |
@@ -80,6 +81,7 @@ Now I have wrote 4 <anything-source> for anything.ahk
 | visit_directory               | visit selected directory                        | <Click>and  <Enter> |
 | delete_from_directory_history | delete select directory from  directory history | <Ctrl-j>            |
 | delete_all_directory_history  | add a new directory to  directory history       | <Ctrl-m>            |
+| list all actions                     |                                                   | <Ctrl-L>            |
    
 **  anything-favorite-directories.ahk  do something like anything-explorer-history.ahk
    add your favorite directories ,and visit it using "Anything".
@@ -107,11 +109,12 @@ Now I have wrote 4 <anything-source> for anything.ahk
 | anything_favorite_directories_visit  | visit selected directory                          | <Click>and  <Enter> |
 | anything_favorite_directories_delete | delete select directory from favorite directories | <Ctrl-j>            |
 | anything_favorite_directories_add    | add a new directory to favorite directories       | <Ctrl-m>            |
+| list all actions                     |                                                   | <Ctrl-L>            |
 
 ***    then you can use "Anything" selected one of your favorite directory 
-   it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
-   it will visit it in current cmd.exe (if current activated window is cmd.exe)
-   it will visit it in current msys.bat (if current activated window is msys.bat)
+   + it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
+   + it will visit it in current cmd.exe (if current activated window is cmd.exe)
+   + it will visit it in current msys.bat (if current activated window is msys.bat)
 
 
 ** anything-run.ahk is a replacement of <Win-r>
