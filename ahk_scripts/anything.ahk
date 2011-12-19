@@ -104,7 +104,7 @@ anything_pattern=
 ;;  the value of it is a function accept tow parameters 
 ;;     fun(candidate1,candidate2)
 ;;
-;;   if only two candidats for you to select ,and the this property is not null
+;;   if only two candidats for you to select ,and this property is not null
 ;;   then this function is called .
 ;;   anything-window-switch.ahk use this proerty 
 ;;  when only two windows ,And you press Alt-Tab ,then select another window directly
@@ -120,6 +120,9 @@ anything_pattern=
 ;; the value of it is a function name accept two parameters
 ;; this function is used to find out matched candidates from all candidates depends
 ;; on what you have type in the textfield
+; and these tow function is defined in anything.ahk
+; anything_match_case_sensetive(candidate_string,pattern){}
+; anything_match(candidate_string,pattern){}
 ;;
 ;  
  
