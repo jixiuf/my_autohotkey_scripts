@@ -1,4 +1,13 @@
 * Introduction
+  
+If you use GNU/Emacs  maybe you have known "Anything"
+maybe not , 
+you can visit "Anything" on [[http://www.emacswiki.org/emacs/Anything%20][Emacswiki]]
+and see what "Anything" it is .
+and this isn't anything.el ,it 's anything.ahk
+if you think
+anything.ahk is great ,and have written an anything-source for it ,you can post it here .
+  
 there is a screencast here :
 + http://www.screenr.com/xxss
 + http://www.screenr.com/vp8s (new one )
@@ -22,15 +31,6 @@ you can follow these links ,and save them on you disk .
 + https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-window-switch.ahk
 + https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-config.ahk
 
-if you think
-anything.ahk is great ,and have written an anything-source for it ,you can post it here .
-  
-If you use GNU/Emacs  maybe you have known "Anything"
-maybe not , 
-you can visit "Anything" on [[http://www.emacswiki.org/emacs/Anything%20][Emacswiki]]
-and see what "Anything" it is .
-
-and this isn't anything.el ,it 's anything.ahk
 * Active <Anything>
   to active anything.ahk , press F3 , or Windows+r , or Alt+TAB
   see  [[https://github.com/jixiuf/my_autohotkey_scripts/raw/master/ahk_scripts/anything-config.ahk][anything-config.ahk]]  for detail 
