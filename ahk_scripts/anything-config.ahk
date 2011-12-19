@@ -5,6 +5,7 @@ SetWorkingDir %A_ScriptDir%
 #include anything.ahk
 #include anything-run.ahk
 #include anything-favorite-directories.ahk
+#include anything-window-switch.ahk
 #include anything-explorer-history.ahk
 
 f3::
@@ -25,7 +26,8 @@ return
 
 ;;
 !Tab::
-^Tab:: 
+^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything(anything_window_switcher_source)
-return 
+return
+
