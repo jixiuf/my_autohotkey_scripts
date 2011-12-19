@@ -49,7 +49,7 @@ Now I have wrote 4 <anything-source> for anything.ahk
    list all directory history ,you can revisit it easyly.
    ;;how to use `anything-explorer-history.ahk'
     
-**    if you only have one anything-source :
+***    if you only have one anything-source :
             anything_explorer_history_source  (defined in this file )
     you can use it like this :
    
@@ -57,7 +57,7 @@ Now I have wrote 4 <anything-source> for anything.ahk
         #include anything-explorer-history.ahk
         f3::anything(anything_explorer_history_source)
    
-**      if you also have other anything-sources ,
+***      if you also have other anything-sources ,
         default  : it is included in anything-config.ahk
         you just need add 
             anything_explorer_history_source
