@@ -68,9 +68,9 @@ Now I have wrote 4 <anything-source> for anything.ahk
    about what the meaning of <Ctrl-L>
    anything_favorite_directories_source have three actions
    anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
-   | anything_favorite_directories_visit  | visit selected directory                          |
-   | anything_favorite_directories_delete | delete select directory from favorite directories |
-   | anything_favorite_directories_add    | add a new directory to favorite directories       |
+   | anything_favorite_directories_visit  | visit selected directory                          | <Click>and  <Enter> |
+   | anything_favorite_directories_delete | delete select directory from favorite directories | <Ctrl-j>            |
+   | anything_favorite_directories_add    | add a new directory to favorite directories       | <Ctrl-m>            |
 
 ***    then you can use "Anything" selected one of your favorite directory 
    it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
