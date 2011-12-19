@@ -64,6 +64,7 @@ Now I have wrote 4 <anything-source> for anything.ahk
             anything_explorer_history_source
         to the sources
        for example :
+       #+begin_src c
        f3::
        sources:=Array()
        sources.insert(anything_explorer_history_source)
@@ -71,8 +72,8 @@ Now I have wrote 4 <anything-source> for anything.ahk
        sources.insert(anything_cmd_source)
        anything_multiple_sources(sources)
        return
-
-
+       #+end_src
+*** actions for anything-explorer-history.ahk       
    anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
    | visit_directory               | visit selected directory                        | <Click>and  <Enter> |
    | delete_from_directory_history | delete select directory from  directory history | <Ctrl-j>            |
