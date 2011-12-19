@@ -27,6 +27,9 @@ return
 ;;
 !Tab::
 ^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
-anything(anything_window_switcher_source)
+ my_anything_properties:=Object()
+my_anything_properties["win_width"]:= 900
+my_anything_properties["win_height"]:= 180
+anything_with_properties(anything_window_switcher_source ,my_anything_properties)
 return
 
