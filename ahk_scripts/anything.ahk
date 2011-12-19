@@ -120,7 +120,12 @@ anything_default_properties:=Object()
 ;; the width and height  of Anything window
 anything_default_properties["win_width"]:= 900
 anything_default_properties["win_height"]:= 510
-
+anything_default_properties["Transparent"]:= 225
+anything_default_properties["WindowColor"]:= "black"
+anything_default_properties["ControlColor"]:= "black"
+anything_default_properties["FontSize"]:= 11
+anything_default_properties["FontColor"]:= "c7cfc00"
+anything_default_properties["FontWeight"]:= "bold"  ;bold, italic, strike, underline, and norm
 ;; when Anything window lose focus ,close Anything window automatically.
 anything_default_properties["quit_when_lose_focus"]:="yes"
 
@@ -165,10 +170,16 @@ for key, default_value in anything_default_properties
 }
    win_width:=anything_properties["win_width"]
    win_height:=anything_properties["win_height"]
+   Transparent:=anything_properties["Transparent"]
+   WindowColor:=anything_properties["WindowColor"]
+   ControlColor:=anything_properties["ControlColor"]
+   FontSize:=anything_properties["FontSize"]
+   FontColor:=anything_properties["FontColor"]
+   FontWeight:=anything_properties["FontWeight"]
    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow
-   WinSet, Transparent, 225
-   Gui, Color,black,black
-   Gui,Font,s12 c7cfc00 bold
+   WinSet, Transparent, %Transparent%
+   Gui, Color,%WindowColor% , %ControlColor%
+   Gui,Font,s%FontSize% %FontColor% %FontWeight%
    Gui, Add, Text,     x10  y10 w80 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
    if(anything_properties["quit_when_lose_focus"] = "yes")
