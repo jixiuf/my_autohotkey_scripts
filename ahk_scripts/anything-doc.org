@@ -11,11 +11,11 @@ and this isn't anything.el ,it 's anything.ahk
 * keybindings when <Anything> is activated 
   you can input search string just like google to narrow the candidates
 ** keybindings for select candiates
-*** Down or Ctrl+n          select next candidate 
-*** Up or Ctrl+p            select previous candidate
-*** Ctrl+o                  will select next source ,that means ,all candidate from first source will be send to last 
-*** pageUp ,Ctrl-r ,Alt-v== pageup
-*** pageDn ,Ctrl-v       == pageDn
+| Down or Ctrl+n          | select next candidate                                                                     |
+| Up or Ctrl+p            | select previous candidate                                                                 |
+| Ctrl+o                  | will select next source ,that means ,all candidate from first source will be send to last |
+| pageUp ,Ctrl-r ,Alt-v   | pageup                                                                                    |
+| pageDn ,Ctrl-v          | pageDn                                                                                    |
 
 ** keybindings for execute actions
 
