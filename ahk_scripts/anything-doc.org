@@ -130,7 +130,9 @@ Now I have wrote 4 <anything-source> for anything.ahk
    select "call action: Favdirs.anything_favorite_directories_add "
    about what the meaning of <Ctrl-L>
    anything_favorite_directories_source have three actions
+   #+begin_src c
    anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
+   #+end_src
 *** actions for   anything-favorite-directories.ahk 
 | actions                              | description                                       | key binding         |
 |--------------------------------------+---------------------------------------------------+---------------------|
