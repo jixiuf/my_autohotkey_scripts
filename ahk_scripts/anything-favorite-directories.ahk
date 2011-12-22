@@ -140,12 +140,18 @@ add2FavoriteDirectories(candidate)
 ;;action 
 anything_favorite_directories_add(unused_candidate)
 {
+    global 
+    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+    anything_set_property_4_quit_when_lose_focus("no")    
+
   FileSelectFolder, newFavDir, , 3
   if newFavDir <>
   {
    add2FavoriteDirectories(newFavDir) 
   }
     anything_favorite_directories_write2disk()
+    anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
+
 }
 
 anything_favorite_directories_write2disk()
