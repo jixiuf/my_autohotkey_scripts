@@ -69,11 +69,11 @@ anything_ws_get_win_candidates()
       candidate.insert(this_id)
       candidates.insert(candidate)
   }
-  if(candidates.maxIndex() >1)
+  if(candidates.MaxIndex() >1)
   {
     candidates.insert(2, candidates.remove(1))
   }
-  anything_ws_icon_imageListId := IL_Create(candidates.maxIndex())  
+  anything_ws_icon_imageListId := IL_Create(candidates.MaxIndex())  
   for key,candidate in candidates
   {
    this_id:= candidate[2]
@@ -178,3 +178,64 @@ anything_window_switcher_source["icon"]:="anything_ws_get_icon"
 anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close")
 anything_window_switcher_source["anything-action-when-2-candidates"]:="anything_ws_visit_another_when_2_candidates"
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
+ 
+anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close" ,"anything_ws_assign_key")
+ 
+anything_window_switcher_with_assign_keys_candidates:=Object()
+ 
+ anything_ws_assign_key(candidate)
+{
+    global 
+    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+    anything_set_property_4_quit_when_lose_focus("no")    
+    InputBox,assigned_key, Assigned Keys, Please enter your Assigned Keys for current window., , 320, 120
+    if ErrorLevel
+    {
+        ;  CANCEL was pressed.
+    }
+    else
+    {
+        win_id:=candidate[2]
+        new_candidate:=Array()
+        new_candidate.Insert(assigned_key)
+        new_candidate.Insert(win_id) ;  new candidate with (assignedkey,win_id) as candidate element
+        anything_window_switcher_with_assign_keys_candidates.insert(new_candidate)  
+    }
+    anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
+}
+ 
+ 
+ anything_window_switcher_with_assign_keys_candidates_fun()
+ {
+     global
+     for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
+         win_id:=candidate[2]
+         if not WinExist("ahk_id " . win_id)
+         {
+              anything_window_switcher_with_assign_keys_candidates.Remove(candidate_index) ; if window doesn't exists anymore ,delete the assigned key (candidate)
+         }
+     }
+      ; ToolTip % anything_window_switcher_with_assign_keys_candidates[0]
+  return anything_window_switcher_with_assign_keys_candidates
+     
+ }
+
+anything_window_switcher_with_assign_keys_source:=Object()
+anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
+anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
+; anything_window_switcher_with_assign_keys_source["icon"]:="anything_ws_get_icon"
+anything_window_switcher_with_assign_keys_source["action"]:="anything_ws_visit"
+anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
+ 
+; !Tab::
+; ^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
+; my_anything_properties:=Object()
+; my_anything_properties["win_width"]:= 900
+; my_anything_properties["win_height"]:= 180
+ 
+ 
+; sources:=Array()
+; sources.insert(anything_window_switcher_with_assign_keys_source)
+; sources.insert(anything_window_switcher_source)
+; anything_multiple_sources_with_properties(sources,my_anything_properties)
+; return
