@@ -6,36 +6,19 @@
 ; http://www.autohotkey.com/forum/viewtopic.php?t=72833
 
 ;;how to use `anything-window-switch.ahk'
-;1 
-; if you only have one anything-source :
-;         anything_window_switcher_source      (defined in this file )
-; you can use it like this :
-;
-;     #include anything.ahk
-;     #include anything-window-switch.ahk' 
-;     f3::anything(anything_window_switcher_source)
-; if you want automatically switch to a window when there is only 1 search
-; result showing
-; you can
-;     #include anything.ahk
-;     #include anything-window-switch.ahk'
-;     anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
-;     f3::anything(anything_window_switcher_source)
+;#include anything.ahk
+;#include anything-window-switch.ahk' 
+; !Tab::
+; my_anything_properties:=Object()
+; my_anything_properties["win_width"]:= 900
+; my_anything_properties["win_height"]:= 180
 
-;
-; 2  if you also have other anything-sources ,
-;     you just need add
-;;        anything_window_switcher_source
-;     to the sources
-;    for example :
-;
-;    f3::
-;    sources:=Array()
-;    sources.insert(anything_window_switcher_source)
-;    sources.insert(anything_favorite_directories_source)
-;    sources.insert(anything_cmd_source)
-;    anything_multiple_sources(sources)
-;    return
+; sources:=Array()
+; sources.insert(anything_window_switcher_with_assign_keys_source)
+; sources.insert(anything_window_switcher_source)
+; anything_multiple_sources_with_properties(sources,my_anything_properties)
+; return
+
 
 DetectHiddenWindows, off
 ;;candidates         
@@ -227,15 +210,3 @@ anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
 anything_window_switcher_with_assign_keys_source["action"]:="anything_ws_visit"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
  
-; !Tab::
-; ^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
-; my_anything_properties:=Object()
-; my_anything_properties["win_width"]:= 900
-; my_anything_properties["win_height"]:= 180
- 
- 
-; sources:=Array()
-; sources.insert(anything_window_switcher_with_assign_keys_source)
-; sources.insert(anything_window_switcher_source)
-; anything_multiple_sources_with_properties(sources,my_anything_properties)
-; return
