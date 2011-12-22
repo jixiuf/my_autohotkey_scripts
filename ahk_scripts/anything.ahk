@@ -230,6 +230,21 @@ for key, default_value in anything_default_properties
      WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
      loop,
      {
+       ;;if only one candidate left automatically execute it
+       ;; if source["anything-execute-action-at-once-if-one"]="yes"
+       if matched_candidates.maxIndex() = 1
+       {
+           selectedRowNum:= LV_GetNext(0)
+           LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+           if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
+           {
+               action:= anything_get_default_action(tmpSources[source_index]["action"])
+               anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+               anything_exit() ;;first quit .then execute action
+               break
+           }
+       }
+         
          if matched_candidates.maxIndex() = 2
          {
              selectedRowNum:= LV_GetNext(0)
