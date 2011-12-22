@@ -233,7 +233,7 @@ for key, default_value in anything_default_properties
      tabListActions:=""
      matched_candidates:=Object()
      tmpSources:=sources
-     matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
+     matched_candidates:=anything_refresh(tmpSources,anything_pattern)
      Gui ,Show,,
 
      WinGet, anything_wid, ID, A
@@ -310,7 +310,7 @@ for key, default_value in anything_default_properties
               tabListActions:=""
               tmpSources:=sources
                   anything_pattern := previous_anything_pattern
-                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
+                  matched_candidates:=anything_refresh(tmpSources,anything_pattern)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis")
                }else
                {
@@ -343,7 +343,7 @@ for key, default_value in anything_default_properties
                  tmpSources:= anything_build_source_of_actions(tmpSources[source_index] , matched_candidates[selectedRowNum])
                  previous_anything_pattern:= anything_pattern
                  anything_pattern=
-                 matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
+                 matched_candidates:=anything_refresh(tmpSources,anything_pattern)
                  ; if matched_candidates.maxIndex()>0
                  ; {
                  ;    LV_Modify(1, "Select Focus Vis")
@@ -354,7 +354,7 @@ for key, default_value in anything_default_properties
               tabListActions:=""
               tmpSources:=sources
                   anything_pattern := previous_anything_pattern
-                  matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
+                  matched_candidates:=anything_refresh(tmpSources,anything_pattern)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis")
                }
        }
@@ -433,7 +433,7 @@ for key, default_value in anything_default_properties
                                 build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                    matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                    matched_candidates:=anything_refresh(tmpSources,"")
                     if matched_candidates.maxIndex()>0
                     {
                        LV_Modify(1, "Select Focus Vis")
@@ -561,13 +561,13 @@ for key, default_value in anything_default_properties
             Send {End} ;;move cursor right ,make it after the new inputed char
             selectedRowNum:= LV_GetNext(0)
            ;;TODO: ANYTHING_REFRESH and select needed selected
-            matched_candidates:=anything_refresh(tmpSources,anything_pattern,win_width)
+            matched_candidates:=anything_refresh(tmpSources,anything_pattern)
               if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,483d8b,483d8b
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                           matched_candidates:=anything_refresh(tmpSources,"",win_width)
+                           matched_candidates:=anything_refresh(tmpSources,"")
               }
             }
             ;;if only one candidate left automatically execute it
@@ -616,8 +616,10 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 ;; then pattern is used to filter <Actions>
 ;; and anything_pattern will be displayed on Search Textbox always
 
-anything_refresh(sources,pattern,win_width){
+anything_refresh(sources,pattern){
      global anything_pattern
+     global anything_properties
+     win_width :=anything_properties["win_width"] 
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
