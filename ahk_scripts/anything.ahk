@@ -756,7 +756,7 @@ anything_selectPreviousCandidate(candidates_count){
 }
 anything_exit(){
    global anything_pattern
-   anything_pattern=
+   ; anything_pattern=
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
    OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit
    Gui Destroy
