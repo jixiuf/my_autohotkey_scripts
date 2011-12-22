@@ -17,6 +17,8 @@ AutoTrim, off
 anything_wid=
 ;; the search you have typed in the search textbox
 anything_pattern=
+ ; record current anyting_properties
+anything_properties :=Object()
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;; * how to  write an anything-source;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   an anything-source is an Object with some defined properties
@@ -99,14 +101,14 @@ anything_pattern=
 ;;           my_source["anything-execute-action-at-once-if-one"]:="yes"
 ;; then if only one candidate left on the listview it will execute the
 ;;     default action with the candidate
- 
+
 ;; ** 6  <anything-action-when-2-candidates> (optional)
-;;  the value of it is a function accept tow parameters 
+;;  the value of it is a function accept tow parameters
 ;;     fun(candidate1,candidate2)
 ;;
 ;;   if only two candidats for you to select ,and this property is not null
 ;;   then this function is called .
-;;   anything-window-switch.ahk use this proerty 
+;;   anything-window-switch.ahk use this proerty
 ;;  when only two windows ,And you press Alt-Tab ,then select another window directly
 ;;  without press RETURN by youself
 ;;
@@ -124,8 +126,8 @@ anything_pattern=
 ; anything_match_case_sensetive(candidate_string,pattern){}
 ; anything_match(candidate_string,pattern){}
 ;;
-;  
- 
+;
+
 ;;
 ;; anything(my_source)
 
@@ -168,11 +170,11 @@ anything(source)
    anything_with_properties(source,Array())
 }
 
-anything_with_properties(source ,anything_properties)
+anything_with_properties(source ,anything_tmp_properties)
 {
   sources:= Array()
   sources.insert(source)
-  anything_multiple_sources_with_properties(sources ,anything_properties)
+  anything_multiple_sources_with_properties(sources ,anything_tmp_properties)
 }
 
 anything_multiple_sources(sources)
@@ -180,18 +182,23 @@ anything_multiple_sources(sources)
   anything_multiple_sources_with_properties(sources ,Array())
 }
 ;;main function
-anything_multiple_sources_with_properties(sources,anything_properties){
+anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 global anything_default_properties
 global anything_wid
 global anything_pattern
+global anything_properties
 ;; copy all property from anything_default_properties to
 ;; anything_properties if  anything_properties doen't defined
 
 for key, default_value in anything_default_properties
 {
-  if (anything_properties[key]="")
+  if (anything_tmp_properties[key]="")
   {
-     anything_properties[key]:=default_value
+     anything_properties[key]:=default_value ;
+  }
+  else
+  {
+     anything_properties[key]:=anything_tmp_properties[key] ;
   }
 }
    win_width:=anything_properties["win_width"]
@@ -208,12 +215,15 @@ for key, default_value in anything_default_properties
    Gui,Font,s%FontSize% %FontColor% %FontWeight%
    Gui, Add, Text,     x10  y10 w80 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
-   if(anything_properties["quit_when_lose_focus"] = "yes")
-   {
-   ;;;;when window lost focus ,function anything_WM_ACTIVATE()
-   ;; will be executed
-     OnMessage( 0x06, "anything_WM_ACTIVATE" )
-   }
+   Gui +OwnDialogs
+   
+   anything_set_property_4_quit_when_lose_focus("yes")
+   ; if(anything_properties["quit_when_lose_focus"] = "yes")
+   ; {
+   ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+   ; ;; will be executed
+   ; OnMessage( 0x06, "anything_WM_ACTIVATE" )
+   ; }
    ;; ;;when LButton(mouse) is down ,select use mouse
    ;;anything_WM_LBUTTONDOWN() will be called
    OnMessage(0x201, "anything_WM_LBUTTONDOWN")
@@ -244,7 +254,7 @@ for key, default_value in anything_default_properties
                break
            }
        }
-         
+
          if matched_candidates.maxIndex() = 2
          {
              selectedRowNum:= LV_GetNext(0)
@@ -715,6 +725,19 @@ anything_match(candidate_string,pattern){
     return result
     }
 
+anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
+{
+    if(value  == "yes")
+    {
+        anything_properties["quit_when_lose_focus"]:="yes"       
+        ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+        ;; will be executed
+        OnMessage( 0x06, "anything_WM_ACTIVATE" )
+    }else {
+        anything_properties["quit_when_lose_focus"]:="no"       
+        OnMessage( 0x06, "" )
+    }
+}
 
 anything_match_case_sensetive(candidate_string,pattern){
     result:= 1
