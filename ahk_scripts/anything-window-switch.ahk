@@ -154,15 +154,6 @@ anything_ws_get_processname(wid){
     return procname
 }
 
-anything_window_switcher_source:=Object()
-anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
-anything_window_switcher_source["name"]:="Win"
-anything_window_switcher_source["icon"]:="anything_ws_get_icon"
-anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close")
-anything_window_switcher_source["anything-action-when-2-candidates"]:="anything_ws_visit_another_when_2_candidates"
-anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
- 
-anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close" ,"anything_ws_assign_key")
  
 anything_window_switcher_with_assign_keys_candidates:=Object()
  
@@ -210,3 +201,12 @@ anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
 anything_window_switcher_with_assign_keys_source["action"]:="anything_ws_visit"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
  
+
+
+anything_window_switcher_source:=Object()
+anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
+anything_window_switcher_source["name"]:="Win"
+anything_window_switcher_source["icon"]:="anything_ws_get_icon"
+anything_window_switcher_source["anything-action-when-2-candidates"]:="anything_ws_visit_another_when_2_candidates"
+anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
+anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close" ,"anything_ws_assign_key")
