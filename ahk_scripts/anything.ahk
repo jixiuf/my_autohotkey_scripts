@@ -239,8 +239,8 @@ for key, default_value in anything_default_properties
                  action:= tmpSources[source_index]["anything-action-when-2-candidates"]
                  candidate1 :=matched_candidates[selectedRowNum]
                  candidate2 :=matched_candidates[selectedRowNum+1]
-                 anything_exit() ;;first quit .then execute action
                  anything_callFuncByNameWithTwoParam(action ,candidate1,candidate2)
+                 anything_exit() ;;first quit .then execute action
                  break
              }
          }
@@ -343,8 +343,8 @@ for key, default_value in anything_default_properties
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             }else
             {
-               anything_exit()
                anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+               anything_exit()
                break
             }
          }
@@ -367,8 +367,8 @@ for key, default_value in anything_default_properties
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2)
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
-                  anything_exit()
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  anything_exit()
                   break
              }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
                  selectedRowNum:= LV_GetNext(0)
@@ -387,8 +387,8 @@ for key, default_value in anything_default_properties
                  selectedRowNum:= LV_GetNext(0)
                        LV_GetText(source_index, selectedRowNum,2)
                        action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
-                       anything_exit()
                        anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       anything_exit()
                        break
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+m
                {
@@ -422,8 +422,8 @@ for key, default_value in anything_default_properties
          if ErrorLevel = EndKey:i
            {
             if (GetKeyState("LControl", "P")=1){
-                   anything_exit()
                   anything_callFuncByNameWithOneParam(anything_properties["no_candidate_action"], anything_pattern)
+                   anything_exit()
                   break
             }else{
                  input=i
@@ -554,8 +554,8 @@ for key, default_value in anything_default_properties
               if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
               {
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
-                  anything_exit() ;;first quit .then execute action
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  anything_exit() ;;first quit .then execute action
                   break
                 }
               }
@@ -756,7 +756,7 @@ anything_selectPreviousCandidate(candidates_count){
 }
 anything_exit(){
    global anything_pattern
-   ; anything_pattern=
+    anything_pattern=
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
    OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit
    Gui Destroy
