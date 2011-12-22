@@ -727,20 +727,6 @@ anything_match(candidate_string,pattern){
     return result
     }
 
-anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
-{
-    if(value  == "yes")
-    {
-        anything_properties["quit_when_lose_focus"]:="yes"       
-        ;;;;when window lost focus ,function anything_WM_ACTIVATE()
-        ;; will be executed
-        OnMessage( 0x06, "anything_WM_ACTIVATE" )
-    }else {
-        anything_properties["quit_when_lose_focus"]:="no"       
-        OnMessage( 0x06, "" )
-    }
-}
-
 anything_match_case_sensetive(candidate_string,pattern){
     result:= 1
     if not (pattern== "")
@@ -975,6 +961,20 @@ anything_execute_default_action_with_anything_pattern(candidate)
 anything_do_nothing(candidate)
 {
   Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
+}
+
+anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
+{
+    if(value  == "yes")
+    {
+        anything_properties["quit_when_lose_focus"]:="yes"       
+        ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+        ;; will be executed
+        OnMessage( 0x06, "anything_WM_ACTIVATE" )
+    }else {
+        anything_properties["quit_when_lose_focus"]:="no"       
+        OnMessage( 0x06, "" )
+    }
 }
 
 ;; I find this function here .
