@@ -164,7 +164,7 @@ for key, default_value in anything_default_properties
              }
          }
          anything_pattern_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyorv{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyorvw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -408,6 +408,27 @@ for key, default_value in anything_default_properties
              }
 
          }
+; 
+       ; Ctrl-w ,copy
+        if ErrorLevel = EndKey:w
+       {
+           if (GetKeyState("LControl", "P")=1){
+               selectedRowNum:= LV_GetNext(0)
+               LV_GetText(source_index, selectedRowNum,2)
+               anything_callFuncByNameWithOneParam("anything_copy_selected_candidate_as_string" ,matched_candidates[selectedRowNum])                 
+               anything_exit()
+               break
+           }
+           else if (GetKeyState("LAlt", "P")=1) ;;Alt+w
+            {
+                selectedRowNum:= LV_GetNext(0)
+                LV_GetText(source_index, selectedRowNum,2)
+                anything_callFuncByNameWithOneParam("anything_copy_selected_candidate_as_string" ,matched_candidates[selectedRowNum])                 
+           }else
+            {
+                    input=w
+             }
+            }
         ;;Ctrl+u clear "anything_pattern" string ,just like bash
         if ErrorLevel = EndKey:u
         {
@@ -909,6 +930,20 @@ anything_do_nothing(candidate)
   anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
      
 }
+
+anything_copy_selected_candidate_as_string(candidate)
+{
+    if isObject(candidate)
+    {
+        candidate_string:=candidate[1] 
+        }
+    else
+    {
+        candidate_string:=candidate
+        }
+    Clipboard := candidate_string
+}
+
 
 anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
 {
