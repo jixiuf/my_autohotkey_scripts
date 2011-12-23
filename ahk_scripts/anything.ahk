@@ -608,7 +608,7 @@ anything_lv_add_candidate_if_match(match_function,candidate,source_index,candida
   }else{
     display:=candidate
   }
-  if % anything_callFuncByNameWithTwoParam(match_function, display,anything_pattern)==1
+  if % anything_callFuncByNameWithTwoParam(match_function, candidate,anything_pattern)==1
    {
      if imagelistId
      {
@@ -625,7 +625,8 @@ anything_lv_add_candidate_if_match(match_function,candidate,source_index,candida
 ;;just like google ,the pattern ,are keywords separated by space
 ;; when string matched all the keywords ,then it return 1
 ;; else return 0
-anything_match(candidate_string,pattern){
+anything_match(candidate,pattern){
+    candidate_string := candidate[1]
     result:= 1
     if not (pattern== "")
            {
@@ -641,7 +642,8 @@ anything_match(candidate_string,pattern){
     return result
     }
 
-anything_match_case_sensetive(candidate_string,pattern){
+anything_match_case_sensetive(candidate,pattern){
+    candidate_string := candidate[1]
     result:= 1
     if not (pattern== "")
            {
