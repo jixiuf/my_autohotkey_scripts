@@ -111,7 +111,7 @@ for key, default_value in anything_default_properties
    Gui, Add, Edit,     x90 y5 w500 h30,
    Gui +OwnDialogs
    
-   anything_set_property_4_quit_when_lose_focus("yes")
+   anything_set_property_4_quit_when_lose_focus(anything_properties["quit_when_lose_focus"])
    ; if(anything_properties["quit_when_lose_focus"] = "yes")
    ; {
    ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
@@ -164,7 +164,7 @@ for key, default_value in anything_default_properties
              }
          }
          anything_pattern_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}npguhjlzimyorv{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyorv{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -298,6 +298,26 @@ for key, default_value in anything_default_properties
             }else{
                  input=j
             }
+          }
+         if ErrorLevel = EndKey:k
+           {
+            if (GetKeyState("LControl", "P")=1){ ;; Ctrl+k
+                 selectedRowNum:= LV_GetNext(0)
+                       LV_GetText(source_index, selectedRowNum,2)
+                       action:= anything_get_forth_or_defalut_action(tmpSources[source_index]["action"])
+                       anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       anything_exit()
+                       break
+               }else if (GetKeyState("LAlt", "P")=1) ;;Alt+k
+               {
+                    selectedRowNum:= LV_GetNext(0)
+                    LV_GetText(source_index, selectedRowNum,2)
+                    action:= anything_get_forth_or_defalut_action(tmpSources[source_index]["action"])
+                    anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                    anything_pattern_updated=yes
+               }Else{
+               input=k
+             }
           }
 
          if ErrorLevel = EndKey:m
@@ -762,7 +782,7 @@ anything_get_all_actions(actionProperty)
      return actions
    }
 }
-;;if it has the second action then return it ,else
+;;if it has the third action then return it ,else
 ;; return the default action
 anything_get_third_or_defalut_action(actionProperty)
 {
@@ -771,6 +791,23 @@ anything_get_third_or_defalut_action(actionProperty)
     if (actionProperty.maxIndex()>2)
     {
       Return actionProperty[3]
+    }else{
+      return actionProperty[1]
+    }
+ }else{
+  return actionProperty
+}
+}
+
+;;if it has the forth action then return it ,else
+;; return the default action
+anything_get_forth_or_defalut_action(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    if (actionProperty.maxIndex()>3)
+    {
+      Return actionProperty[4]
     }else{
       return actionProperty[1]
     }
