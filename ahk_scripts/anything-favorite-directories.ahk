@@ -44,10 +44,11 @@ anything_favorite_directories_source["name"]:="FavDirs"
 ;;action 
 anything_favorite_directories_visit(candidate_directory)
 {
+    global anything_previous_activated_win_id
  ; WinGet, id, list, , , Program Manager
   ; WinGet, processName, ProcessName, ahk_id %id2%
   ; WinGet, pid, PID, ahk_id %id2%
-  WinGet, active_id, ID, A
+    active_id :=anything_previous_activated_win_id
   WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
   WinGet, pid, PID,  ahk_id %active_id%
