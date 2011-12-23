@@ -67,7 +67,7 @@ anything_ws_get_win_candidates()
 }
 
 ;;default action : visit selected window
-anything_ws_visit(candidate)
+anything_ws_activate_window(candidate)
 {
   win_id:=candidate[2]
          WinGet,wstatus,MinMax,ahk_id %win_id%
@@ -80,7 +80,7 @@ anything_ws_visit(candidate)
 ;  when only windows left ,then visit another window automatical without press <Enter>
 ; candidate1 is current activate window
 ; candidate2 is another window 
-anything_ws_visit_another_when_2_candidates(candidate1,candidate2)
+anything_ws_activate_window_another_when_2_candidates(candidate1,candidate2)
 {
   win_id:=candidate1[2]
          WinGet,wstatus,MinMax,ahk_id %win_id%
@@ -91,7 +91,7 @@ anything_ws_visit_another_when_2_candidates(candidate1,candidate2)
   WinActivate ,ahk_id  %win_id%
 }
 ; close selected window
-anything_ws_close(candidate)
+anything_ws_close_window(candidate)
 {
   win_id:=candidate[2]
   WinClose ,ahk_id  %win_id%
@@ -169,7 +169,7 @@ anything_window_switcher_with_assign_keys_candidates:=Object()
 ;  assign keywords to these windows (e.g. Chrome -> Browser, Emacs-> Editor),
 ;  and then use your tool to switch between them by typing Editor or Browser
 ;  (with the powerful autocomplete feature your tool already has).
-anything_ws_assign_key(candidate)
+anything_ws_assign_key_4_current_window(candidate)
 {
     global 
     old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
@@ -194,6 +194,15 @@ anything_window_switcher_get_icon_4assign_keys()
 {
   global  anything_ws_icon_imageListId_4_assign_keys 
   return  anything_ws_icon_imageListId_4_assign_keys 
+}
+anything_ws_delete_assigned_keys(candidate)
+{
+    global
+    win_id:=candidate[2]
+    if  WinExist("ahk_id " . win_id)
+    {
+     anything_window_switcher_with_assign_keys_candidates.Remove(candidate_index) ; if window doesn't exists anymore ,delete the assigned key (candidate)
+    }
 }
 
 ; delete dead window from candidates ,and return it .
@@ -227,7 +236,7 @@ anything_window_switcher_with_assign_keys_source:=Object()
 anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
 anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
  anything_window_switcher_with_assign_keys_source["icon"]:="anything_window_switcher_get_icon_4assign_keys"
-anything_window_switcher_with_assign_keys_source["action"]:="anything_ws_visit"
+anything_window_switcher_with_assign_keys_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_delete_assigned_keys")
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
  
@@ -237,7 +246,7 @@ anything_window_switcher_source:=Object()
 anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["name"]:="Win"
 anything_window_switcher_source["icon"]:="anything_ws_get_icon"
-anything_window_switcher_source["anything-action-when-2-candidates-even-no-keyword"]:="anything_ws_visit_another_when_2_candidates"
+anything_window_switcher_source["anything-action-when-2-candidates-even-no-keyword"]:="anything_ws_activate_window_another_when_2_candidates"
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
-anything_window_switcher_source["action"]:=Array("anything_ws_visit", "anything_ws_close" ,"anything_ws_assign_key")
+anything_window_switcher_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_assign_key_4_current_window")
