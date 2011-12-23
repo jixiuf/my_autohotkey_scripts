@@ -14,10 +14,13 @@ AutoTrim, off
 ;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; you can use these global variable when you write your anything-source
 ;; anthing Window Id
+;readonly 
 anything_wid=
 ;; the search you have typed in the search textbox
+;readonly 
 anything_pattern=
  ; previous activated window id 
+;readonly 
 anything_previous_activated_win_id= 
  ; record current anyting_properties
 anything_properties :=Object()
