@@ -14,6 +14,7 @@ anything_cmd_source["name"]:="Run"
 anything_cmd_source["candidate"]:= cmd_history
 anything_cmd_source["action"] := Array("anything_run","anything_run_delete_from_history")
 anything_cmd_source["anything-execute-action-at-once-if-one"] := "yes"
+anything_cmd_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
 
 
 ;;init cmd_history from anything-run.ini 
