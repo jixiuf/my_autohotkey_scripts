@@ -62,7 +62,7 @@ anything_favorite_directories_visit(candidate_directory)
          WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
          candidate_directory:= win2msysPath(candidate_directory)
-         SendInput, cd "%candidate_directory%"{Enter}
+         SendInput, %A_Space%cd "%candidate_directory%"{Enter}
   }else if (processName="cmd.exe"){
            SendInput, cd /d "%candidate_directory%"{Enter}
   }
