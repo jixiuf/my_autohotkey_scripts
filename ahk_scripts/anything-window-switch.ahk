@@ -175,7 +175,7 @@ anything_window_switcher_with_assign_keys_candidates:=Object()
         new_candidate.Insert(win_id) ;  new candidate with (assignedkey,win_id) as candidate element
         anything_window_switcher_with_assign_keys_candidates.insert(new_candidate)  
     }
-    anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
+    anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus)
 }
  
  
