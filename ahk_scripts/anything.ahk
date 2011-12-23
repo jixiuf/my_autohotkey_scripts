@@ -264,9 +264,9 @@ for key, default_value in anything_default_properties
          {
              selectedRowNum:= LV_GetNext(0)
              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-             if( anything_pattern=="" and  ( not (tmpSources[source_index]["anything-action-when-2-candidates"]="")))
+             if( anything_pattern=="" and  ( not (tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]="")))
              {
-                 action:= tmpSources[source_index]["anything-action-when-2-candidates"]
+                 action:= tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]
                  candidate1 :=matched_candidates[selectedRowNum]
                  candidate2 :=matched_candidates[selectedRowNum+1]
                  anything_callFuncByNameWithTwoParam(action ,candidate1,candidate2)
