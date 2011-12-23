@@ -239,20 +239,20 @@ anything_ws_delete_assigned_keys(candidate)
  }
 
 anything_window_switcher_with_assign_keys_source:=Object()
-anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
 anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
- anything_window_switcher_with_assign_keys_source["icon"]:="anything_window_switcher_get_icon_4assign_keys"
-anything_window_switcher_with_assign_keys_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_delete_assigned_keys")
+anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
+anything_window_switcher_with_assign_keys_source["icon"]:="anything_window_switcher_get_icon_4assign_keys"
+anything_window_switcher_with_assign_keys_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_delete_assigned_keys" ,"anything_ws_kill_process")
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
  
 
 
 anything_window_switcher_source:=Object()
-anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["name"]:="Win"
+anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["icon"]:="anything_ws_get_icon"
+anything_window_switcher_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_assign_key_4_current_window", "anything_ws_kill_process")
 anything_window_switcher_source["anything-action-when-2-candidates-even-no-keyword"]:="anything_ws_activate_window_another_when_2_candidates"
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
- anything_window_switcher_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_assign_key_4_current_window", "anything_ws_kill_process")
