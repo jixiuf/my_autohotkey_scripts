@@ -626,7 +626,11 @@ anything_lv_add_candidate_if_match(match_function,candidate,source_index,candida
 ;; when string matched all the keywords ,then it return 1
 ;; else return 0
 anything_match(candidate,pattern){
-    candidate_string := candidate[1]
+    if isObject(candidate){
+        candidate_string:=candidate[1]
+                   }else{
+        candidate_string:=candidate
+        }
     result:= 1
     if not (pattern== "")
            {
@@ -643,7 +647,11 @@ anything_match(candidate,pattern){
     }
 
 anything_match_case_sensetive(candidate,pattern){
-    candidate_string := candidate[1]
+    if isObject(candidate){
+        candidate_string:=candidate[1]
+                   }else{
+        candidate_string:=candidate
+        }
     result:= 1
     if not (pattern== "")
            {
