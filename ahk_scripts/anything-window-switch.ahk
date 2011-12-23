@@ -22,7 +22,8 @@
 
 DetectHiddenWindows, off
 ;;candidates         
-anything_ws_icon_imageListId=
+anything_ws_icon_imageListId =
+anything_ws_icon_imageListId_4_assign_keys =
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
@@ -76,6 +77,9 @@ anything_ws_visit(candidate)
         }
   WinActivate ,ahk_id  %win_id%
 }
+;  when only windows left ,then visit another window automatical without press <Enter>
+; candidate1 is current activate window
+; candidate2 is another window 
 anything_ws_visit_another_when_2_candidates(candidate1,candidate2)
 {
   win_id:=candidate1[2]
@@ -86,7 +90,7 @@ anything_ws_visit_another_when_2_candidates(candidate1,candidate2)
         }
   WinActivate ,ahk_id  %win_id%
 }
-
+; close selected window
 anything_ws_close(candidate)
 {
   win_id:=candidate[2]
@@ -139,8 +143,8 @@ anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId)
 
 anything_ws_get_icon()
 {
-global
-  return anything_ws_icon_imageListId
+    global anything_ws_icon_imageListId
+    return anything_ws_icon_imageListId
 }
 anything_ws_get_processname(wid){
        ; show process name if enabled
@@ -157,7 +161,15 @@ anything_ws_get_processname(wid){
  
 anything_window_switcher_with_assign_keys_candidates:=Object()
  
- anything_ws_assign_key(candidate)
+ ; assign a short key (text) for the selected window ,so that you can visit this window
+ ;  with the short key(text).
+; ;I am now interested in using your tool to switch between windows using
+;  keywords that I could define and assign dynamically. For example, imagine I
+;  have Chrome open in one window, and Emacs in another window. I would like to
+;  assign keywords to these windows (e.g. Chrome -> Browser, Emacs-> Editor),
+;  and then use your tool to switch between them by typing Editor or Browser
+;  (with the powerful autocomplete feature your tool already has).
+anything_ws_assign_key(candidate)
 {
     global 
     old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
@@ -177,11 +189,19 @@ anything_window_switcher_with_assign_keys_candidates:=Object()
     }
     anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus)
 }
- 
- 
+
+anything_window_switcher_get_icon_4assign_keys()
+{
+  global  anything_ws_icon_imageListId_4_assign_keys 
+  return  anything_ws_icon_imageListId_4_assign_keys 
+}
+
+; delete dead window from candidates ,and return it .
  anything_window_switcher_with_assign_keys_candidates_fun()
  {
      global
+    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+    anything_set_property_4_quit_when_lose_focus("no")    
      for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
          win_id:=candidate[2]
          if not WinExist("ahk_id " . win_id)
@@ -189,7 +209,16 @@ anything_window_switcher_with_assign_keys_candidates:=Object()
               anything_window_switcher_with_assign_keys_candidates.Remove(candidate_index) ; if window doesn't exists anymore ,delete the assigned key (candidate)
          }
      }
-      ; ToolTip % anything_window_switcher_with_assign_keys_candidates[0]
+     ; update icon 
+     anything_ws_icon_imageListId_4_assign_keys := IL_Create(anything_window_switcher_with_assign_keys_candidates.MaxIndex())
+     for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
+         win_id:=candidate[2]
+         if WinExist("ahk_id " . win_id)
+         { 
+             anything_add_window_icon_2_imageList(win_id,0,anything_ws_icon_imageListId_4_assign_keys)
+         }
+     }
+     
   return anything_window_switcher_with_assign_keys_candidates
      
  }
@@ -197,7 +226,7 @@ anything_window_switcher_with_assign_keys_candidates:=Object()
 anything_window_switcher_with_assign_keys_source:=Object()
 anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
 anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
-; anything_window_switcher_with_assign_keys_source["icon"]:="anything_ws_get_icon"
+ anything_window_switcher_with_assign_keys_source["icon"]:="anything_window_switcher_get_icon_4assign_keys"
 anything_window_switcher_with_assign_keys_source["action"]:="anything_ws_visit"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
