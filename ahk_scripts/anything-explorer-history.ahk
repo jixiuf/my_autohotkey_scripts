@@ -163,10 +163,12 @@ delete_from_directory_history(candidate)
 }
 visit_directory( candidate_directory)
 {
+    global anything_previous_activated_win_id
  ; WinGet, id, list, , , Program Manager
   ; WinGet, processName, ProcessName, ahk_id %id2%
   ; WinGet, pid, PID, ahk_id %id2%
-  WinGet, active_id, ID, A
+    active_id :=anything_previous_activated_win_id
+  ; WinGet, active_id, ID, A
   WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
   WinGet, pid, PID,  ahk_id %active_id%
@@ -184,7 +186,7 @@ visit_directory( candidate_directory)
   }else if (processName="cmd.exe"){
            SendInput, cd /d "%candidate_directory%"{Enter}
   }
- ;  else if (processName="emacs.exe"){
+ ;  Else if (processName="emacs.exe"){
  ; ;  	WinActivate, ahk_id %active_id% 
  ; ;    SetKeyDelay, 0 
  ; ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
