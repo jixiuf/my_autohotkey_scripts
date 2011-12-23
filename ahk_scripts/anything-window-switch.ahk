@@ -96,6 +96,12 @@ anything_ws_close_window(candidate)
   win_id:=candidate[2]
   WinClose ,ahk_id  %win_id%
 }
+anything_ws_kill_process(candidate)
+{
+  win_id:=candidate[2]
+  WinGet, pid, PID,  ahk_id %win_id%
+  Process ,Close, %PID%
+}
 
 ; (window id, whether to get large icons,ImageListId where to store icon)
 anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId) 
@@ -249,4 +255,4 @@ anything_window_switcher_source["icon"]:="anything_ws_get_icon"
 anything_window_switcher_source["anything-action-when-2-candidates-even-no-keyword"]:="anything_ws_activate_window_another_when_2_candidates"
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
-anything_window_switcher_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_assign_key_4_current_window")
+ anything_window_switcher_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_assign_key_4_current_window", "anything_ws_kill_process")
