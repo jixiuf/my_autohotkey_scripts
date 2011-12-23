@@ -103,6 +103,7 @@ for key, default_value in anything_default_properties
    FontSize:=anything_properties["FontSize"]
    FontColor:=anything_properties["FontColor"]
    FontWeight:=anything_properties["FontWeight"]
+   quit_when_lose_focus :=anything_properties["quit_when_lose_focus"]
    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow
    WinSet, Transparent, %Transparent%
    Gui, Color,%WindowColor% , %ControlColor%
@@ -111,16 +112,6 @@ for key, default_value in anything_default_properties
    Gui, Add, Edit,     x90 y5 w500 h30,
    Gui +OwnDialogs
    
-   anything_set_property_4_quit_when_lose_focus(anything_properties["quit_when_lose_focus"])
-   ; if(anything_properties["quit_when_lose_focus"] = "yes")
-   ; {
-   ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
-   ; ;; will be executed
-   ; OnMessage( 0x06, "anything_WM_ACTIVATE" )
-   ; }
-   ;; ;;when LButton(mouse) is down ,select use mouse
-   ;;anything_WM_LBUTTONDOWN() will be called
-   OnMessage(0x201, "anything_WM_LBUTTONDOWN")
     Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
 
      ;; search string you have typed
@@ -129,6 +120,12 @@ for key, default_value in anything_default_properties
      tmpSources:=sources
      matched_candidates:=anything_refresh(tmpSources,anything_pattern)
      Gui ,Show,,
+   ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
+   ; ;; will be executed
+    anything_set_property_4_quit_when_lose_focus(quit_when_lose_focus)
+   ;; ;;when LButton(mouse) is down ,select use mouse
+   ;;anything_WM_LBUTTONDOWN() will be called
+    OnMessage(0x201, "anything_WM_LBUTTONDOWN")
 
      WinGet, anything_wid, ID, A
      WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
@@ -896,7 +893,7 @@ anything_do_nothing(candidate)
 
 anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
 {
-    if(value  == "yes")
+    if(value  = "yes")
     {
         anything_properties["quit_when_lose_focus"]:="yes"       
         ;;;;when window lost focus ,function anything_WM_ACTIVATE()
