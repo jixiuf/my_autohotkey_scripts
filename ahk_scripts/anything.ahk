@@ -247,11 +247,11 @@ for key, default_value in anything_default_properties
      {
        ;;if only one candidate left automatically execute it
        ;; if source["anything-execute-action-at-once-if-one"]="yes"
-       if matched_candidates.maxIndex() = 1
+       if ( matched_candidates.maxIndex() == 1)
        {
            selectedRowNum:= LV_GetNext(0)
            LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-           if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
+           if (tmpSources[source_index]["anything-execute-action-at-once-if-one-even-no-keyword"]="yes")
            {
                action:= anything_get_default_action(tmpSources[source_index]["action"])
                anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
