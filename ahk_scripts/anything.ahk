@@ -893,7 +893,13 @@ anything_execute_default_action_with_anything_pattern(candidate)
 
 anything_do_nothing(candidate)
 {
+  global 
+  old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+  anything_set_property_4_quit_when_lose_focus("no")
+  ;write  your code here ...
   Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
+  anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
+     
 }
 
 anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
