@@ -17,6 +17,8 @@ AutoTrim, off
 anything_wid=
 ;; the search you have typed in the search textbox
 anything_pattern=
+ ; previous activated window id 
+anything_previous_activated_win_id= 
  ; record current anyting_properties
 anything_properties :=Object()
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -187,6 +189,9 @@ global anything_default_properties
 global anything_wid
 global anything_pattern
 global anything_properties
+global anything_previous_activated_win_id
+; store previous activated window id in  global variable  
+WinGet, anything_previous_activated_win_id, ID, A
 ;; copy all property from anything_default_properties to
 ;; anything_properties if  anything_properties doen't defined
 
