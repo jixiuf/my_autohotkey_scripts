@@ -12,8 +12,8 @@ getCandidates()
 }
 icon()
 {
-  ImageListID := IL_Create(10)  ; Create an ImageList to hold 10 small icons.
-Loop 10  ; Load the ImageList with a series of icons from the DLL.
+  ImageListID := IL_Create(3)  ; Create an ImageList to hold 3 small icons.
+Loop 3  ; Load the ImageList with a series of icons from the DLL.
     IL_Add(ImageListID, "shell32.dll", A_Index)
     return ImageListID
 }
