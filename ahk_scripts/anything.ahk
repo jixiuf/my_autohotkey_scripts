@@ -525,7 +525,9 @@ for key, default_value in anything_default_properties
 } ;; end of anything function
 
 
+; OnMessage( 0x06, "anything_WM_ACTIVATE" )
 ;;when Anything lost focus
+; anything_WM_ACTIVATE() will be called
 anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
 {
 ;;Tooltip, % wParam
