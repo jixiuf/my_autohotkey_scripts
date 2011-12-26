@@ -11,7 +11,7 @@ action4source1(candidate)
 {
   display :=candidate[1]
    real :=   candidate[2]
-   MsgBox , the display on listview is <%display%> ,and the real  useful info. is <%real%> 
+  anything_MsgBox("the string display on listview is :" .display . "and real useful info is " real)
 }
 
 getCandidates()
