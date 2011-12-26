@@ -1002,5 +1002,16 @@ Loop %count2%
    }
 }
 
+anything_MsgBox(Msg)
+{
+  global 
+  old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+  anything_set_property_4_quit_when_lose_focus("no")
+  ;write  your code here ...
+  Msgbox % Msg
+  anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
+     
+}
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
