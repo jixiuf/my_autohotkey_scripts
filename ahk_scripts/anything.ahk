@@ -952,6 +952,8 @@ anything_do_nothing(candidate)
      
 }
 
+; this is an global action
+; default bind to C-w and M-w ,means copy selected candidate to Clipboard
 anything_copy_selected_candidate_as_string(candidate)
 {
     if isObject(candidate)
