@@ -646,6 +646,14 @@ anything_lv_add_candidate_if_match(match_function,candidate,source_index,candida
 ;;just like google ,the pattern ,are keywords separated by space
 ;; when string matched all the keywords ,then it return 1
 ;; else return 0
+; this function is the default match function for anything-source
+; to filter matched candidates
+; you can custom  anything-source with anything-source-properties
+; [match]
+; for example :
+; my_anything_source["match"]:= "my_match_fun"
+; my_match_fun(candidate,pattern){}
+; then my_anything_source will use  my_match_fun to filter
 anything_match(candidate,pattern){
     if isObject(candidate){
         candidate_string:=candidate[1]
@@ -666,7 +674,14 @@ anything_match(candidate,pattern){
            }
     return result
     }
-
+; same to function anything_match ,but this is case_sensetive
+; you must take care ,if you write your own case sensetive match
+; function .
+; because anything.ahk default use non case sensitive everywhere
+; so when the function is finished
+; you must run
+;               StringCaseSense ,off
+; at the end of your match function
 anything_match_case_sensetive(candidate,pattern){
     if isObject(candidate){
         candidate_string:=candidate[1]
