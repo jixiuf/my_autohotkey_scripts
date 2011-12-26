@@ -1,0 +1,11 @@
+         @ECHO OFF
+             ECHO Processing %2 1 of 3
+            ping 127.0.0.1 -n 2 -w 1000 > nul
+           ping 127.0.0.1 -n 1 -w 1000 > nul
+            ECHO Processing %2 2 of 3
+         ping 127.0.0.1 -n 2 -w 1000 > nul
+             ping 127.0.0.1 -n 1 -w 1000 > nul
+             ECHO Processing %2 3 of 3
+             ping 127.0.0.1 -n 2 -w 1000 > nul
+            ping 127.0.0.1 -n 1 -w 1000 > nul
+           ECHO Processing Complete;;;     ;   
