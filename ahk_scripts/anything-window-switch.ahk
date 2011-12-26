@@ -57,11 +57,11 @@ anything_ws_get_win_candidates()
   {
     candidates.insert(2, candidates.remove(1))
   }
-  anything_ws_icon_imageListId := IL_Create(candidates.MaxIndex())  
+  anything_ws_icon_imageListId := IL_Create(candidates.MaxIndex(),5,anything_properties["anything_use_large_icon"])  
   for key,candidate in candidates
   {
    this_id:= candidate[2]
-   anything_add_window_icon_2_imageList(this_id,0,anything_ws_icon_imageListId)
+   anything_add_window_icon_2_imageList(this_id,anything_properties["anything_use_large_icon"],anything_ws_icon_imageListId)
   }
   return candidates 
 }
