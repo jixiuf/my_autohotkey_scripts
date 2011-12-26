@@ -12,13 +12,13 @@
 
 action4source1( candidate)
 {
-msgbox, you have selected: %candidate% from source1 
+  anything_MsgBox("you have select candidate:" . candidate . "from source1")
 }
 
 
 action4source2(candidate)
 {
-msgbox, you have selected: %candidate% for source2
+  anything_MsgBox("you have select candidate:" . candidate . "from source2")
 }
 
 getCandidates()
