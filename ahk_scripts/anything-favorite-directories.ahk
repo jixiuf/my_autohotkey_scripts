@@ -54,7 +54,7 @@ anything_favorite_directories_visit(candidate_directory)
   WinGet, pid, PID,  ahk_id %active_id%
 ; ;;  global active_id 
            
-  updateHistory(candidate_directory)
+  ; updateHistory(candidate_directory)
   
   WinActivate, ahk_pid %pid%
   
