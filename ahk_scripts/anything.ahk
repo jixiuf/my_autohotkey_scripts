@@ -965,10 +965,10 @@ anything_copy_selected_candidate_as_string(candidate)
     Clipboard := candidate_string
 }
 
-
+; set or get value of anything_properties["quit_when_lose_focus"]
 anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
 {
-    if(value  = "yes")
+    if(value  == "yes")
     {
         anything_properties["quit_when_lose_focus"]:="yes"       
         ;;;;when window lost focus ,function anything_WM_ACTIVATE()
