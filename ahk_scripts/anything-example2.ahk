@@ -7,8 +7,7 @@ action4source1(candidate)
 
 getCandidates()
 {
-  candidates:=Array("red","green")
-  return candidates
+  return Array("red","green")
 }
 
 source1 :=Object()
