@@ -1002,6 +1002,10 @@ Loop %count2%
    }
 }
 
+; when call MsgBox () ,the Message Box steal the focus from anything
+; then anything quit .,and the Message Box is the child window of anything
+; so it quit too ,you can't see the Message Box finally
+; so you can use this function for test
 anything_MsgBox(Msg)
 {
   global 
