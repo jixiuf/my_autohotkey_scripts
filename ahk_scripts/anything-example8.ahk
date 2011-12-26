@@ -25,13 +25,13 @@
 
 action4source1( candidate)
 {
-msgbox, you have selected: %candidate% from source1 
+  anything_MsgBox("you have select candidate:" . candidate . "from source1")
 }
 
 
 action4source2(candidate)
 {
-msgbox, you have selected: %candidate% for source2
+  anything_MsgBox("you have select candidate:" . candidate . "from source2")
 }
 
 getCandidates()
@@ -65,7 +65,7 @@ anything_properties["no_candidate_action"]:="do_what_you_want_when_no_matched_ca
 
 do_what_you_want_when_no_matched_candidates(candidate)
 {
-MsgBox ,do what you want when no matech candidates ,with your search string : "%candidate%"
+  anything_MsgBox("press [Ctrl-i] do what you want when no matech candidates ,with your search string ::" . candidate)
 }
 
 f1::anything_multiple_sources_with_properties(sources,anything_properties)
