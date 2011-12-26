@@ -6,7 +6,7 @@
 ;; and Ctrl-o  will send the candidates of first source to Last 
 action4source1( candidate)
 {
-msgbox, you have selected: %candidate% from source111111111
+  anything_MsgBox("you have select candidate:" . candidate . "from source1")
 }
 
 getCandidates()
@@ -23,7 +23,7 @@ source1["name"]:="source1"
 
 action4source2(candidate)
 {
-msgbox, you have selected: %candidate% from source22222222222
+  anything_MsgBox("you have select candidate:" . candidate . "from source2")
 }
 getCandidates2()
 {
@@ -42,7 +42,7 @@ action4source3(candidate)
 {
 display:=candidate[1]
 real:=candidate[2]
-msgbox, you have selected: %display%, the price is %real%
+anything_MsgBox("you have select candidate:" . candidate . "from source3`n the string display on listview is " . display . "`n real usful info is price:" . real)
 }
 
 
