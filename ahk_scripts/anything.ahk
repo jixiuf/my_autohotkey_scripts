@@ -652,7 +652,7 @@ anything_lv_add_candidate_if_match(match_function,candidate,source_index,candida
 ; [match]
 ; for example :
 ; my_anything_source["match"]:= "my_match_fun"
-; my_match_fun(candidate,pattern){}
+; my_match_fun(candidate,pattern){} ,return 1  if match,or 0
 ; then my_anything_source will use  my_match_fun to filter
 anything_match(candidate,pattern){
     if isObject(candidate){
