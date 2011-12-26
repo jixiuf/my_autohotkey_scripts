@@ -983,6 +983,7 @@ anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
 ;; I find this function here .
 ;;http://www.autohotkey.com/forum/viewtopic.php?p=454619#454619
 ;;and thanks  maul.esel
+; append an ImageList to another
 anything_imagelist_append(il1, il2)
 {
 DllCall("LoadLibrary", "str", "Comctl32")
