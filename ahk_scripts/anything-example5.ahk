@@ -6,16 +6,16 @@
 ;;Tab list all available action for the selected candidate
 action4source1(candidate)
 {
-  Msgbox, you have selected: %candidate%
+  anything_MsgBox("you  select candidate:" . candidate)
 }
 action24source1(candidate)
 {
-  Msgbox, you have selected: %candidate% ,and execute 2th action
+  anything_MsgBox("you select candidate:" . candidate . "`n and execute 2th action {Default bind Ctrl-j}")
   
 }
 action34source1(candidate)
 {
-  Msgbox, you have selected: %candidate% ,and execute 3th action 
+  anything_MsgBox("you select candidate:" . candidate . "`n and execute 3th action {Default bind Ctrl-m}")
 }
 
 source1 :=Object()
