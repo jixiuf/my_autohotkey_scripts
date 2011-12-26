@@ -1,20 +1,20 @@
 ; #SingleInstance force
 ; #NoTrayIcon
 
-;;;ÔÚExplorer.exe ³ÌĞòÖĞ¶¨ÒåÒÔÏÂ¿ì½İ¼ü
-;;Alt+1 ¸´ÖÆ Ñ¡ÖĞµÄÎÄ¼şÃûµ½¼ôÇĞ°å
-;;Alt+2 ¸´ÖÆµØÖ·À¸ÖĞÂ·¾¶µ½¼ôÇĞ°å
-;;Alt+3 ¸´ÖÆÑ¡ÖĞÎÄ¼şµÄÈ«Â·¾¶µ½¼ôÇĞ°å
-;;Ctrl+Alt+n  ĞÂ½¨Ò»¸öÎÄ¼ş¼Ğ
-;;Ctrl+Alt+t ĞÂ½¨Ò»¸öÎÄ±¾
-;;Ctrl+Alt+c ÔÚ´Ë´¦´ò¿ªCmd.exe(ÔÚÁíÒ»¸ö½Å±¾cmd2msys.ahkÖĞ£¬
-;;           ¶¨ÒåÁËÔÚcmd.exe´°¿ÚÖĞ°´ÏÂCtrl+Return¼ü£¬×ª»»³É msys.bat»·¾³)
+;;;åœ¨Explorer.exe ç¨‹åºä¸­å®šä¹‰ä»¥ä¸‹å¿«æ·é”®
+;;Alt+1 å¤åˆ¶ é€‰ä¸­çš„æ–‡ä»¶ååˆ°å‰ªåˆ‡æ¿
+;;Alt+2 å¤åˆ¶åœ°å€æ ä¸­è·¯å¾„åˆ°å‰ªåˆ‡æ¿
+;;Alt+3 å¤åˆ¶é€‰ä¸­æ–‡ä»¶çš„å…¨è·¯å¾„åˆ°å‰ªåˆ‡æ¿
+;;Ctrl+Alt+n  æ–°å»ºä¸€ä¸ªæ–‡ä»¶å¤¹
+;;Ctrl+Alt+t æ–°å»ºä¸€ä¸ªæ–‡æœ¬
+;;Ctrl+Alt+c åœ¨æ­¤å¤„æ‰“å¼€Cmd.exe(åœ¨å¦ä¸€ä¸ªè„šæœ¬cmd2msys.ahkä¸­ï¼Œ
+;;           å®šä¹‰äº†åœ¨cmd.exeçª—å£ä¸­æŒ‰ä¸‹Ctrl+Returné”®ï¼Œè½¬æ¢æˆ msys.batç¯å¢ƒ)
 ;;
-;;Ctrl+l ¶¨Î»µ½µØÖ·À¸
-SetTitleMatchMode Regex ;¿ÉÒÔÊ¹ÓÃÕıÔò±í´ïÊ½¶Ô±êÌâ½øĞĞÆ¥Åä
-; ÏÂÃæµÄ´°¿ÚÀàÒÀ´ÎÎª£º×ÀÃæ¡¢Win+DºóµÄ×ÀÃæ¡¢ÎÒµÄµçÄÔ¡¢×ÊÔ´¹ÜÀíÆ÷¡¢Áí´æÎªµÈ
+;;Ctrl+l å®šä½åˆ°åœ°å€æ 
+SetTitleMatchMode Regex ;å¯ä»¥ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼å¯¹æ ‡é¢˜è¿›è¡ŒåŒ¹é…
+; ä¸‹é¢çš„çª—å£ç±»ä¾æ¬¡ä¸ºï¼šæ¡Œé¢ã€Win+Dåçš„æ¡Œé¢ã€æˆ‘çš„ç”µè„‘ã€èµ„æºç®¡ç†å™¨ã€å¦å­˜ä¸ºç­‰
 #IfWinActive ahk_class Progman|WorkerW|CabinetWClass|ExploreWClass|#32770
-;;Alt+1 copyÎÄ¼şÃû
+;;Alt+1 copyæ–‡ä»¶å
 !1::
   send ^c
   sleep,300
@@ -22,7 +22,7 @@ SetTitleMatchMode Regex ;¿ÉÒÔÊ¹ÓÃÕıÔò±í´ïÊ½¶Ô±êÌâ½øĞĞÆ¥Åä
   SplitPath, clipboard, name
   clipboard = %name%
   return
-;;alt+2 copy ´ËÎÄ¼şËùÔÚµÄÂ·¾¶Ãû
+;;alt+2 copy æ­¤æ–‡ä»¶æ‰€åœ¨çš„è·¯å¾„å
 !2::
   send ^c
   sleep,300
@@ -30,7 +30,7 @@ SetTitleMatchMode Regex ;¿ÉÒÔÊ¹ÓÃÕıÔò±í´ïÊ½¶Ô±êÌâ½øĞĞÆ¥Åä
   SplitPath, clipboard, , dir
   clipboard = %dir%
   return
-;;copy ´ËÎÄ¼şµÄÈ«Â·¾¶Ãû
+;;copy æ­¤æ–‡ä»¶çš„å…¨è·¯å¾„å
 !3::
   send ^c
   sleep,300
@@ -53,7 +53,7 @@ SetTitleMatchMode Regex ;¿ÉÒÔÊ¹ÓÃÕıÔò±í´ïÊ½¶Ô±êÌâ½øĞĞÆ¥Åä
           ControlGetText, newExplorePath, Edit1, A
           ControlFocus, SysListView321,A
             Send {Home}
-          ;;;ÕâÁ½¾ä»°£¬ÊÇÓÃÓÚ¸üĞÂanything-explorer-history.ahkÖĞµÄ±äÁ¿¶øÉè
+          ;;;è¿™ä¸¤å¥è¯ï¼Œæ˜¯ç”¨äºæ›´æ–°anything-explorer-history.ahkä¸­çš„å˜é‡è€Œè®¾
           ;;add to history list
           anything_add_directory_history(newExplorePath)
         }
@@ -69,7 +69,7 @@ return
 
     if(focusedControl="SysTreeView321")
   {
-    ;;;ÕâÁ½¾ä»°£¬ÊÇÓÃÓÚ¸üĞÂanything-explorer-history.ahkÖĞµÄ±äÁ¿¶øÉè
+    ;;;è¿™ä¸¤å¥è¯ï¼Œæ˜¯ç”¨äºæ›´æ–°anything-explorer-history.ahkä¸­çš„å˜é‡è€Œè®¾
     ;;add to history list 
     sleep 400
     anything_add_directory_history(getExplorerAddressPath())
@@ -83,7 +83,7 @@ return
 ;   {
 
 ;     send {Left}
-;     ;;;ÕâÁ½¾ä»°£¬ÊÇÓÃÓÚ¸üĞÂanything-explorer-history.ahkÖĞµÄ±äÁ¿¶øÉè
+;     ;;;è¿™ä¸¤å¥è¯ï¼Œæ˜¯ç”¨äºæ›´æ–°anything-explorer-history.ahkä¸­çš„å˜é‡è€Œè®¾
 ;     ;;add to history list 
 ;     sleep 400
 ;     anything_add_directory_history(getExplorerAddressPath())0
@@ -101,30 +101,30 @@ return
     ControlGetText, newExplorePath, Edit1, A
     ControlFocus, SysListView321,A
       Send {Home}
-    ;;;ÕâÁ½¾ä»°£¬ÊÇÓÃÓÚ¸üĞÂanything-explorer-history.ahkÖĞµÄ±äÁ¿¶øÉè
+    ;;;è¿™ä¸¤å¥è¯ï¼Œæ˜¯ç”¨äºæ›´æ–°anything-explorer-history.ahkä¸­çš„å˜é‡è€Œè®¾
     ;;add to history list 
     sleep 400
     anything_add_directory_history(newExplorePath)
   }
 return
 
-;;Ctrl+, Ñ¡ÖĞµÚÒ»¸öÎÄ¼ş
+;;Ctrl+, é€‰ä¸­ç¬¬ä¸€ä¸ªæ–‡ä»¶
 ^,::
    ControlFocus, SysListView321,A
     Send {Home}
 return
-;;Ctrl+. Ñ¡ÖĞ×îºóÒ»¸öÎÄ¼ş
+;;Ctrl+. é€‰ä¸­æœ€åä¸€ä¸ªæ–‡ä»¶
 ^.::
   ControlFocus, SysListView321,A
   Send {End}
   return
   
-;;ctrl+; ¶¨Î»µ½Ä¿Â¼Ê÷
+;;ctrl+; å®šä½åˆ°ç›®å½•æ ‘
 ^;::
   ControlFocus, SysTreeView321,A
 return
 
- ;;ctrl+L ¶¨Î»ÔÚµØÖ·À¸
+ ;;ctrl+L å®šä½åœ¨åœ°å€æ 
 ^l:: ControlFocus, Edit1,A
 ;"+"  like Emacs dired: create new folder 
 +=::Send !fwf
@@ -192,8 +192,8 @@ OpenCmdInCurrent()
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;ÔÚ×ÊÔ´¹ÜÀíÆ÷ÖĞ£¬ÔÚÒşÓë²»Òş¼äÇĞ»»£¨Òş²ØÎÄ¼ş£©
-;;Ö÷ÒªÍ¨¹ıĞŞ¸Ä×¢²á±í
+;;åœ¨èµ„æºç®¡ç†å™¨ä¸­ï¼Œåœ¨éšä¸ä¸éšé—´åˆ‡æ¢ï¼ˆéšè—æ–‡ä»¶ï¼‰
+;;ä¸»è¦é€šè¿‡ä¿®æ”¹æ³¨å†Œè¡¨
 toggle_hide_file_in_explore(){
 
 ;------------------------------------------------------------------------
@@ -213,7 +213,7 @@ PostMessage, 0x111, 28931,,, A
 Return
 }
 
-;;ĞèÒª emacsclientw ÔÚPathÂ·¾¶ÏÂ
+;;éœ€è¦ emacsclientw åœ¨Pathè·¯å¾„ä¸‹
 openSelectedfileWithEamcs()
 {
   ControlGetFocus, focusedControl,A
@@ -234,4 +234,3 @@ openSelectedfileWithEamcs()
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^e:: openSelectedfileWithEamcs()
 #IfWinActive
-
