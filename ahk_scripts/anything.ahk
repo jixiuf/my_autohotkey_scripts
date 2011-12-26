@@ -595,7 +595,7 @@ anything_refresh(sources,pattern){
 
      if (selectedRowNum = 0)
      {
-       LV_Modify(1, "Select Focus Vis")
+       LV_Modify(1, "Select Focus Vis") ;  select ,focus and make selected row visiable
      }else
      {
        if matched_candidates.maxIndex() >= selectedRowNum
