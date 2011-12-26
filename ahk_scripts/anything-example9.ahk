@@ -2,7 +2,7 @@
 ;;support icon 
 action4source1(candidate)
 {
-  anything_MsgBox("you have select candidate:" . candidate . "from source1")    
+  anything_MsgBox("you have select candidate:" . candidate . " with icon")    
 }
 
 getCandidates()
