@@ -14,7 +14,7 @@ candidates:=Array("red","green")
 source1["candidate"]:=candidates
 
 source1["action"]:="action4source1"
-source1["name"]:="example2"
+source1["name"]:="demo2"
 
 f1::anything(source1)
 
