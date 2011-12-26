@@ -50,6 +50,7 @@ anything_default_properties["FontColor"]:= "c7cfc00"
 anything_default_properties["FontWeight"]:= "bold"  ;bold, italic, strike, underline, and norm
 ;; when Anything window lose focus ,close Anything window automatically.
 anything_default_properties["quit_when_lose_focus"]:="yes"
+anything_default_properties["anything_use_large_icon"]:=0 ;  0 for small icon ,1 for large icon
 
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate,
@@ -564,7 +565,7 @@ anything_refresh(sources,pattern){
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
-     anything_imagelist:= IL_Create()
+     anything_imagelist:= IL_Create(5,5,anything_properties["anything_use_large_icon"] )
      icon_index=0
      for source_index ,source in sources {
          candidates:=  anything_get_candidates_as_array(source)
