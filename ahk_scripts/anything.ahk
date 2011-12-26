@@ -585,8 +585,8 @@ anything_refresh(sources,pattern){
           }
       }
      LV_ModifyCol(1,win_width*0.89) ;;candidates
-     LV_ModifyCol(2,0) ;;source_index
-     LV_ModifyCol(3,0) ;;candidate_index
+     LV_ModifyCol(2,0) ;;source_index hidden
+     LV_ModifyCol(3,0) ;;candidate_index hidden
      LV_ModifyCol(4,win_width*0.09) ;; source_name
 
      GuiControl,, Edit1, %anything_pattern%
