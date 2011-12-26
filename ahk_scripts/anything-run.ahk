@@ -89,7 +89,7 @@ anything_run_get_candidates()
 anything_run_get_icons()
 {
     global anything_run_cmd_fullpath_array
-    icons:=IL_Create(5,5)       ; init 5 icon ,incremnt by 5 each time, 
+    icons:=IL_Create(5,5,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 5 each time, 
     for key ,cmd_full_path in anything_run_cmd_fullpath_array
     {
         If FileExist(cmd_full_path)
