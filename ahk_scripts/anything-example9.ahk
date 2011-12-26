@@ -2,7 +2,7 @@
 ;;support icon 
 action4source1(candidate)
 {
-  MsgBox , you have selected: %candidate%
+  anything_MsgBox("you have select candidate:" . candidate . "from source1")    
 }
 
 getCandidates()
