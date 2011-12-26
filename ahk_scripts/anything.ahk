@@ -534,7 +534,11 @@ anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
     Send {esc}
   }
 }
+;OnMessage(0x201, "anything_WM_LBUTTONDOWN")
 ;;when lbutton is down ,
+; anything_WM_LBUTTONDOWN(w,l) will be called 
+; so that you can use mouse click on anything window
+; though this is not recommended
 anything_WM_LBUTTONDOWN(wParam, lParam)
 {
   MouseGetPos,,,,controlUnderMouse,
