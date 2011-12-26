@@ -6,7 +6,7 @@
 ;;Tab list all available action for the selected candidate
 action4source1(candidate)
 {
-  anything_MsgBox("you  select candidate:" . candidate)
+  anything_MsgBox("you  select candidate:" . candidate . "execute the default action ,bind [Enter]")
 }
 action24source1(candidate)
 {
