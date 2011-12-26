@@ -55,7 +55,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
             Send {Home}
           ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
           ;;add to history list
-          updateHistory(newExplorePath)
+          anything_add_directory_history(newExplorePath)
         }
   }else
   {
@@ -72,7 +72,7 @@ return
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
     sleep 400
-    updateHistory(getExplorerAddressPath())
+    anything_add_directory_history(getExplorerAddressPath())
   }
 return
 
@@ -86,7 +86,7 @@ return
 ;     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
 ;     ;;add to history list 
 ;     sleep 400
-;     updateHistory(getExplorerAddressPath())
+;     anything_add_directory_history(getExplorerAddressPath())0
 ;   }else
 ;   {
 ;     Send ^h
@@ -104,7 +104,7 @@ return
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
     ;;add to history list 
     sleep 400
-    updateHistory(newExplorePath)
+    anything_add_directory_history(newExplorePath)
   }
 return
 
