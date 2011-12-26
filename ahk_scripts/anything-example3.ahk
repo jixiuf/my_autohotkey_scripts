@@ -2,7 +2,7 @@
 
 action4source1(candidate)
 {
-  Msgbox, you have selected: %candidate%
+  anything_MsgBox("you have select candidate:" . candidate)
 }
 
 source1 :=Object()
