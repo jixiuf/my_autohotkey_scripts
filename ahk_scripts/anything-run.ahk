@@ -99,7 +99,7 @@ anything_run_get_icons()
         }
         else
         {
-        IL_Add(icons, "shell32.dll" , 217) ; generic control panel icon            
+        IL_Add(icons, "shell32.dll" , 3) ; 	; use a generic icon
         }
     }
     return icons
