@@ -591,10 +591,10 @@ anything_refresh(sources,pattern){
                }
           }
       }
-     LV_ModifyCol(1,win_width*0.90) ;;candidates
+     LV_ModifyCol(1,win_width*0.88) ;;candidates
      LV_ModifyCol(2,0) ;;source_index hidden
      LV_ModifyCol(3,0) ;;candidate_index hidden
-     LV_ModifyCol(4, win_width*0.09) ;; source_name width
+     LV_ModifyCol(4, win_width*0.10) ;; source_name width
      LV_ModifyCol(4, "Right") ;; source_name align Right
 
      GuiControl,, Edit1, %anything_pattern%
