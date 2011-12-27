@@ -591,10 +591,11 @@ anything_refresh(sources,pattern){
                }
           }
       }
-     LV_ModifyCol(1,win_width*0.89) ;;candidates
+     LV_ModifyCol(1,win_width*0.90) ;;candidates
      LV_ModifyCol(2,0) ;;source_index hidden
      LV_ModifyCol(3,0) ;;candidate_index hidden
-     LV_ModifyCol(4,win_width*0.09) ;; source_name
+     LV_ModifyCol(4, win_width*0.09) ;; source_name width
+     LV_ModifyCol(4, "Right") ;; source_name align Right
 
      GuiControl,, Edit1, %anything_pattern%
      GuiControl,Focus,Edit1 ;; focus Edit1 ,
@@ -889,7 +890,7 @@ for key ,action in anything_get_all_actions(source["action"])
 }
 actionSource["candidate"]:=candidates
 actionSource["action"]:="anything_execute_action_on_selected"
-actionSource["name"]:="Actions"
+actionSource["name"]:="Action"
 actionSources.insert(actionSource)
 return actionSources
 }
@@ -1020,3 +1021,4 @@ anything_MsgBox(Msg)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
