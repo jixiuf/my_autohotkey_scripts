@@ -112,6 +112,8 @@ for key, default_value in anything_default_properties
    FontColor:=anything_properties["FontColor"]
    FontWeight:=anything_properties["FontWeight"]
    quit_when_lose_focus :=anything_properties["quit_when_lose_focus"]
+   StatusHeight := win_height+40 ; a status bar
+   ListViewHeight:= win_height
    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow
    WinSet, Transparent, %Transparent%
    Gui, Color,%WindowColor% , %ControlColor%
@@ -120,7 +122,8 @@ for key, default_value in anything_default_properties
    Gui, Add, Edit,     x90 y5 w500 h30,
    Gui +OwnDialogs
    
-    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
+    Gui, Add, ListView, x0 y40 w%win_width% h%ListViewHeight% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
+    Gui, Add, Text,     x1  y%StatusHeight% Cwhite w%win_width% h20
 
      ;; search string you have typed
      tabListActions:=""
@@ -137,6 +140,7 @@ for key, default_value in anything_default_properties
 
      WinGet, anything_wid, ID, A
      WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
+       anything_on_select(tmpSources,matched_candidates) ;  on select event
      loop,
      {
        ;;if only one candidate left automatically execute it
@@ -529,7 +533,7 @@ for key, default_value in anything_default_properties
                   break
                 }
               }
-
+       anything_on_select(tmpSources,matched_candidates) ;  on select event
      } ;; end of loop
      anything_exit()
 } ;; end of anything function
@@ -729,6 +733,8 @@ anything_pageDown(candidates_count)
   }else{
         ControlFocus, SysListView321,A
         Send {pgdn}
+        ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event        
+        sleep ,1 
   }
 }
 anything_pageUp(candidates_count){
@@ -738,6 +744,8 @@ anything_pageUp(candidates_count){
   }else{
         ControlFocus, SysListView321,A
         Send {pgup}
+        ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event        
+        sleep ,1 
   }
 }
 anything_selectNextCandidate(candidates_count){
@@ -762,6 +770,7 @@ anything_exit(){
     anything_pattern=
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
    OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit
+   ToolTip,                ;  clear tooltip
    Gui Destroy
 }
 anything_callFuncByNameWithOneParam(funcName,param1){
@@ -1027,7 +1036,42 @@ anything_MsgBox(Msg)
   anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
      
 }
+; show a tooltip ,at header of current window
+anything_tooltip_header(Text)
+{
+    global anything_wid
+    Tooltip , %Text% ,0,-20
+}
 
+anything_tooltip_tail(Text)
+{
+    global anything_wid
+    WinGetPos ,,,,window_height
+    Tooltip , %Text% ,0,%window_height%
+}
+; change the Content of statusbar on anything window window
+anything_statusbar(Text)
+{
+    GuiControl ,Text,Static2,%Text%
+}
+
+anything_on_select(tmpSources,matched_candidates)
+{
+    selectedRowNum:= LV_GetNext(0)
+    LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+    if ( not (tmpSources[source_index]["onselect"]==""))
+    {
+        onselectfun := tmpSources[source_index]["onselect"]
+        anything_callFuncByNameWithOneParam(onselectfun,matched_candidates[selectedRowNum])        
+    }
+    else
+    {
+        ToolTip,                ;  clear tooltip
+        anything_statusbar("")  ; set the statusbar content empty
+    }
+    
+    
+}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
