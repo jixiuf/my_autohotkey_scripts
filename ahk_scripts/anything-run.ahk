@@ -89,6 +89,7 @@ anything_run_get_candidates()
 anything_run_get_icons()
 {
     global anything_run_cmd_fullpath_array
+    global anything_properties
     icons:=IL_Create(5,5,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 5 each time, 
     for key ,cmd_full_path in anything_run_cmd_fullpath_array
     {
@@ -176,3 +177,4 @@ anything_run_source["action"] := Array("anything_run","anything_run_delete")
 anything_run_source["icon"]:= "anything_run_get_icons"
 anything_run_source["anything-execute-action-at-once-if-one"] := "no"
 anything_run_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
+
