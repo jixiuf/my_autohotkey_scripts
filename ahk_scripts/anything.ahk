@@ -45,6 +45,8 @@ anything_default_properties["win_height"]:= 510
 anything_default_properties["Transparent"]:= 225
 anything_default_properties["WindowColor"]:= "black"
 anything_default_properties["ControlColor"]:= "black"
+anything_default_properties["WindowColor_when_no_matched_candidate"]:= "483d8b"
+anything_default_properties["ControlColor_when_no_matched_candidate"]:= "483d8b"
 anything_default_properties["FontSize"]:= 12
 anything_default_properties["FontColor"]:= "c7cfc00"
 anything_default_properties["FontWeight"]:= "bold"  ;bold, italic, strike, underline, and norm
@@ -104,6 +106,8 @@ for key, default_value in anything_default_properties
    Transparent:=anything_properties["Transparent"]
    WindowColor:=anything_properties["WindowColor"]
    ControlColor:=anything_properties["ControlColor"]
+   WindowColor_when_no_matched_candidate :=anything_properties["WindowColor_when_no_matched_candidate"]
+   ControlColor_when_no_matched_candidate:=anything_properties["ControlColor_when_no_matched_candidate"] 
    FontSize:=anything_properties["FontSize"]
    FontColor:=anything_properties["FontColor"]
    FontWeight:=anything_properties["FontWeight"]
@@ -116,7 +120,7 @@ for key, default_value in anything_default_properties
    Gui, Add, Edit,     x90 y5 w500 h30,
    Gui +OwnDialogs
    
-    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-name
+    Gui, Add, ListView, x0 y40 w%win_width% h%win_height% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
 
      ;; search string you have typed
      tabListActions:=""
@@ -346,7 +350,8 @@ for key, default_value in anything_default_properties
            {
             if (GetKeyState("LControl", "P")=1){
                                 build_no_candidates_source:="yes"
-                    Gui, Color,483d8b,483d8b
+                    Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
+                    GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321                              
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
                     matched_candidates:=anything_refresh(tmpSources,"")
                     if matched_candidates.maxIndex()>0
@@ -492,6 +497,7 @@ for key, default_value in anything_default_properties
                tmpSources := sources
                build_no_candidates_source:=""
                Gui, Color,WindowColor,ControlColor
+                    GuiControl, +Background%WindowColor%, SysListView321                              
              }
             anything_pattern = %anything_pattern%%input%
             GuiControl,, Edit1, %anything_pattern%
@@ -503,7 +509,8 @@ for key, default_value in anything_default_properties
               if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
-                    Gui, Color,483d8b,483d8b
+                    Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
+                    GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321                              
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
                            matched_candidates:=anything_refresh(tmpSources,"")
               }
@@ -1023,4 +1030,6 @@ anything_MsgBox(Msg)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
