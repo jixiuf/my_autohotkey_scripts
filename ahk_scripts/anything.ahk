@@ -491,7 +491,7 @@ for key, default_value in anything_default_properties
              {
                tmpSources := sources
                build_no_candidates_source:=""
-               Gui, Color,black,black
+               Gui, Color,WindowColor,ControlColor
              }
             anything_pattern = %anything_pattern%%input%
             GuiControl,, Edit1, %anything_pattern%
