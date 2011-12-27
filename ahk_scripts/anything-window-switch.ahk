@@ -28,6 +28,7 @@ anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
   global anything_wid
+  global anything_properties
   candidates :=Array()
   WinGet, id, list, , , Program Manager
   Loop, %id%
