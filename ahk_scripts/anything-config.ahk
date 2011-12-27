@@ -4,6 +4,7 @@ SetWorkingDir %A_ScriptDir%
 
 #include anything.ahk
 #include anything-run.ahk
+#include anything-run-launch-plugin.ahk
 #include anything-favorite-directories.ahk
 #include anything-window-switch.ahk
 #include anything-explorer-history.ahk
@@ -21,7 +22,7 @@ return
 my_anything_properties2:=Object()
 my_anything_properties2["anything_use_large_icon"]:=1
 my_anything_properties2["FontSize"]:= 15
-anything_with_properties((anything_run_source),my_anything_properties2)
+anything_multiple_sources_with_properties(Array(anything_run_source, anything_run_launch_source),my_anything_properties)
 return
 
 
@@ -38,3 +39,4 @@ sources.insert(anything_window_switcher_with_assign_keys_source)
 sources.insert(anything_window_switcher_source)
 anything_multiple_sources_with_properties(sources,my_anything_properties)
 return
+ 
