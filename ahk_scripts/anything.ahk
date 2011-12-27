@@ -375,6 +375,7 @@ for key, default_value in anything_default_properties
             if (GetKeyState("LControl", "P")=1){
                anything_selectNextCandidate(matched_candidates.maxIndex())
               GuiControl,, Edit1, %anything_pattern%
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
             }else{
                  input=n
@@ -393,6 +394,7 @@ for key, default_value in anything_default_properties
             if (GetKeyState("LControl", "P")=1){
               anything_selectPreviousCandidate(matched_candidates.maxIndex())
               GuiControl,, Edit1, %anything_pattern%
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
              }else{
                  input=p
