@@ -27,9 +27,15 @@ SetWorkingDir %A_ScriptDir%
 }
 
 ;anything_get_file_name("c:\a.txt")==a.txt 
-;anything_get_file_name("a.txt")==a.txt 
+;anything_get_file_name("a.txt")==a.txt
+;anything_get_file_name("http://www.google.com")==http://www.google.com 
 anything_get_file_name(fullPath)
 {
+    if( RegExMatch(fullPath ,"(^https?://)|(^ftp://)"))
+    {
+        return fullPath
+    }
+    ; else handle file name 
     SplitPath, fullPath , OutFileName,
     return OutFileName
 }
