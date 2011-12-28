@@ -115,7 +115,9 @@ anything_run_get_icons()
     return icons
 }
 
-;;the default action function 
+;;the default action function
+; the format of candidate can be
+; Array("cmd","full-path-of-cmd") or string
 anything_run(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
