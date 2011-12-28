@@ -28,7 +28,6 @@ MsgBox % sOutput := StdoutToVar_CreateProcess("cmd.exe /c dir /a /o", "", A_WinD
 /*	Example5 with Input String
 MsgBox % sOutput := StdoutToVar_CreateProcess("sort.exe", "", "", "abc`r`nefg`r`nhijk`r`n0123`r`nghjki`r`ndflgkhu`r`n")
 */
-
 StdoutToVar_CreateProcess(sCmd, bStream = "", sDir = "", sInput = "")
 {
 	DllCall("CreatePipe", "UintP", hStdInRd , "UintP", hStdInWr , "Uint", 0, "Uint", 0)
