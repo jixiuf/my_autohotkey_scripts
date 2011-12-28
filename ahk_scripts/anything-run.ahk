@@ -145,12 +145,20 @@ anything_run(candidate)
   }
 }
 ; delete selected cmd from candidates
-; the format of candidates is Array("cmd","full-path-of-cmd")
+; the format of candidates can be
+; Array("cmd","full-path-of-cmd") or string 
 ; for example : Array("cmd.exe","c:\windows\system32\cmd.exe")
 anything_run_delete(candidate)
 {
   global anything_run_cmd_fullpath_array
-  fullpath_cmd := candidate[2]  
+    if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
+    {
+        fullpath_cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd 
+    }
+    else ; when candidate is string 
+    {
+        fullpath_cmd := candidate
+    }
   for key ,cmd in anything_run_cmd_fullpath_array
   {
     if (cmd == fullpath_cmd)
@@ -189,44 +197,6 @@ anything_run_source["action"] := Array("anything_run","anything_run_delete")
 anything_run_source["icon"]:= "anything_run_get_icons"
 anything_run_source["anything-execute-action-at-once-if-one"] := "no"
 anything_run_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
-
-
-; Dir:
-;    IfExist, %Path%
-;    {
-;       hIcon := DllCall("Shell32\ExtractAssociatedIconA", UInt, 0, Str, Path, UShortP, iIndex)
-;       i += 1
-;       DllCall("ImageList_ReplaceIcon", UInt, ImageListID, Int, -1, UInt, hIcon)
-;       DllCall("DestroyIcon", Uint, hIcon)
-;       StringGetPos, pos, Path, `\, R2
-;       StringTrimLeft, Name, Path, %pos%
-;       StringReplace, Name, Name, `\,, 1
-;       StringGetPos, pos, Name, %SearchText%
-;       If pos = 0
-;          LV_Add("Icon" . i, Name, Path, Path)
-;       pos =
-;    }
-; return
-
- 
-; if not IconNumber  ; There is not yet any icon for this extension, so load it.
-;     {
-;                ; Get the icon associated with this file extension:
-;                hIcon := DllCall("Shell32\ExtractAssociatedIconA", UInt, 0, Str, FileName, UShortP, iIndex)
-;                if not hIcon  ; Failed to load/find icon.
-;                   IconNumber = 9999999  ; Set it out of bounds to display a blank icon.
-;                else
-;                {
-;                   ; Add the HICON directly to the small-icon and large-icon lists.
-;                   ; Below uses +1 to convert the returned index from zero-based to one-based:
-;                   IconNumber := DllCall("ImageList_ReplaceIcon", "uint", ImageListID1, "int", -1, "uint", hIcon) + 1
-;                   DllCall("ImageList_ReplaceIcon", UInt, ImageListID2, Int, -1, UInt, hIcon)
-;                   ; Now that it's been copied into the ImageLists, the original should be destroyed:
-;                   DllCall("DestroyIcon", Uint, hIcon)
-;                   ; Cache the icon to save memory and improve loading performance:
-;                   IconArray%ExtID% := IconNumber
-;                           }
-;     }
  
  anything_add_icon(File ,ImageList)
 {
