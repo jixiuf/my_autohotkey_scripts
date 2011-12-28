@@ -1167,7 +1167,37 @@ anything_SetTimerF( Function, Period=0, ParmObject=0, Priority=0 ) {
  }
 }
 
-
+ ; add the icon of File to ImageList ,
+ ; @param Large_Icon can be "yes"/1/,
+ ; FileType can be lnk,exe,ico ,and so on
+ ; if File doesn't exist ,use a generic icon instead 
+anything_add_icon(File ,ImageList,Large_Icon)
+{
+    if (FileExist(File)=="") ; file doesn't exists
+    {
+        IL_Add(ImageList, "shell32.dll" , 3) ; 	; use a generic icon
+    }
+    else
+    {
+        ptr := A_PtrSize = 8 ? "ptr" : "uint"
+        sfi_size := A_PtrSize + 8 + (A_IsUnicode ? 680 : 340)
+        if !sfi_size   ;for AHK Basic
+        sfi_size := 340
+        VarSetCapacity(sfi, sfi_size)
+        if( (Large_Icon="yes") or (Large_Icon=1 )or (Large_Icon=="1"))
+        {
+            DllCall("Shell32\SHGetFileInfo" . (A_IsUnicode ? "W":"A"), "str", File, "uint", 0, "str", sfi, "uint", sfi_size, "uint", 0x100)  ; 0x100 is SHGFI_ICON+SHGFI_LARGEICON
+        }
+        else
+        {
+            DllCall("Shell32\SHGetFileInfo" . (A_IsUnicode ? "W":"A"), "str", File, "uint", 0, "str", sfi, "uint", sfi_size, "uint", 0x101)  ; 0x101 is SHGFI_ICON+SHGFI_SMALLICON
+        }
+        hIcon := NumGet(sfi, 0)
+        DllCall("ImageList_ReplaceIcon", UInt, ImageList, Int, -1, UInt, hicon)
+        ; DllCall("ImageList_ReplaceIcon", "ptr", ImageList, "int", -1, "ptr", hIcon) 
+        DllCall("DestroyIcon", ptr, hicon)
+    }
+}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
