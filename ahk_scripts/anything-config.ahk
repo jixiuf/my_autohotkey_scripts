@@ -20,8 +20,8 @@ return
 
 #r::
 my_anything_properties2:=Object()
-my_anything_properties2["anything_use_large_icon"]:=1
-my_anything_properties2["FontSize"]:= 15
+my_anything_properties2["anything_use_large_icon"]:=0
+my_anything_properties2["FontSize"]:= 12
 anything_multiple_sources_with_properties(Array(anything_run_source, anything_run_launch_source),my_anything_properties2)
 return
 
