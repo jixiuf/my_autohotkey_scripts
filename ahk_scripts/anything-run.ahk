@@ -34,6 +34,9 @@ anything_get_file_name(fullPath)
     if( RegExMatch(fullPath ,"(^https?://)|(^ftp://)"))
     {
         return fullPath
+    }else if InStr(FileExist(fullPath), "D") ; if is a directory
+    {
+        return fullPath
     }
     ; else handle file name 
     SplitPath, fullPath , OutFileName,
@@ -64,7 +67,7 @@ anything_run_add_new_cmd(new_cmd_fullPath)
   global anything_run_cmd_fullpath_array
   for key ,cmdFullPath in anything_run_cmd_fullpath_array
   {
-    if (cmdFullPath = new_cmd_fullPath)
+    if (cmdFullPath == new_cmd_fullPath)
     {
       anything_run_cmd_fullpath_array.remove(key)
       Break
