@@ -92,7 +92,7 @@ WinGet, anything_previous_activated_win_id, ID, A
 
 for key, default_value in anything_default_properties
 {
-  if (anything_tmp_properties[key]="")
+  if (anything_tmp_properties[key]=="")
   {
      anything_properties[key]:=default_value ;
   }
@@ -101,6 +101,14 @@ for key, default_value in anything_default_properties
      anything_properties[key]:=anything_tmp_properties[key] ;
   }
 }
+ if((anything_properties["anything_use_large_icon"]=1) or (anything_properties["anything_use_large_icon"]="1") or (anything_properties["anything_use_large_icon"]="yes"))
+ {
+     anything_properties["anything_use_large_icon"] :=1
+ }
+ else
+ {
+     anything_properties["anything_use_large_icon"] :=0
+ }
    win_width:=anything_properties["win_width"]
    win_height:=anything_properties["win_height"]
    Transparent:=anything_properties["Transparent"]
@@ -578,14 +586,26 @@ anything_refresh(sources,pattern){
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
-     anything_imagelist:= IL_Create(5,5,anything_properties["anything_use_large_icon"] )
+     if(anything_properties["anything_use_large_icon"]=1) 
+     {
+         anything_imagelist:= IL_Create(5,5, true)
+     }else
+     {
+         anything_imagelist:= IL_Create(5,5)
+     }
      icon_index=0
      for source_index ,source in sources {
          candidates:=  anything_get_candidates_as_array(source)
          imagelist:=anything_get_imagelist(source)
           if imagelist
           {
-            LV_SetImageList(anything_imagelist, 1)
+              if  (anything_properties["anything_use_large_icon"]=1) 
+              {
+                  LV_SetImageList(anything_imagelist, 1)
+              }else
+              {
+                  LV_SetImageList(anything_imagelist)
+              }
             anything_imagelist_append(anything_imagelist, imagelist)
          }
           source_name:=source["name"]
