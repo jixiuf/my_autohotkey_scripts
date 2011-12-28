@@ -120,7 +120,7 @@ anything_run(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
     {
-    cmd := candidate[2]
+    cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd 
     }
     else ; when candidate is string 
     {
