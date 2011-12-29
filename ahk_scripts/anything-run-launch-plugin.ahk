@@ -33,12 +33,13 @@
              ;reaching here means that file is not to be excluded and
              ;has a desired extension
              candidate := Array()
-             candidate.Insert(A_LoopFileName ) ; display on anything listview
+             SplitPath, A_LoopFileDir,parentDirName
+             candidate.Insert(parentDirName .  "/" . A_LoopFileName ) ; display on anything listview
              candidate.Insert(A_LoopFileFullPath)                         ; the full path of file
              anything_run_launch_candidates.Insert(candidate)
          }
      }
-     anything_run_launch_get_icons_fun()     
+     ; anything_run_launch_get_icons_fun()     
      return anything_run_launch_candidates
  }
 
@@ -60,25 +61,25 @@ anything_run_launch(candidate)
      }
   }
   }
-; get icon from cmd file 
-anything_run_launch_get_icons_fun()
-{
-     global anything_properties
-     global anything_run_launch_icons
-     global anything_run_launch_candidates
-     IL_Destroy(anything_run_launch_icons)
-     anything_run_launch_icons:= IL_Create(30,10,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 10
-    for key ,candidate in anything_run_launch_candidates
-    {
-        cmd_full_path :=  candidate[2]
-        anything_add_icon(cmd_full_path,anything_run_launch_icons,anything_properties["anything_use_large_icon"])
-    }
-}
-anything_run_launch_get_icons()
-{
-     global anything_run_launch_icons
-     return anything_run_launch_icons
-}
+; ; get icon from cmd file 
+; anything_run_launch_get_icons_fun()
+; {
+;      global anything_properties
+;      global anything_run_launch_icons
+;      global anything_run_launch_candidates
+;      IL_Destroy(anything_run_launch_icons)
+;      anything_run_launch_icons:= IL_Create(30,10,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 10
+;     for key ,candidate in anything_run_launch_candidates
+;     {
+;         cmd_full_path :=  candidate[2]
+;         anything_add_icon(cmd_full_path,anything_run_launch_icons,anything_properties["anything_use_large_icon"])
+;     }
+; }
+; anything_run_launch_get_icons()
+; {
+;      global anything_run_launch_icons
+;      return anything_run_launch_icons
+; }
 ; when select a candidate ,show the full path of candidate on statusbar
 anything_run_launch_on_select(candidate)
 {
@@ -103,6 +104,6 @@ anything_run_launch_source["name"]:="Launch"
 anything_run_launch_source["candidate"]:=  anything_run_launch_candidates
 anything_run_launch_source["action"] := Array("anything_run_launch")
 anything_run_launch_source["onselect"] := "anything_run_launch_on_select"
-anything_run_launch_source["icon"]:= "anything_run_launch_get_icons"
+; anything_run_launch_source["icon"]:= "anything_run_launch_get_icons"  ;I fount it make it slow  ,so comment it  
 anything_run_launch_source["anything-execute-action-at-once-if-one"] := "no"
 anything_run_launch_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
