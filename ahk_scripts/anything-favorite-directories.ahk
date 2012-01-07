@@ -61,7 +61,7 @@ anything_favorite_directories_visit(candidate_directory)
   if (processName="sh.exe" or processName="bash.exe" ){ ; msys
          WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
-         candidate_directory:= win2msysPath(candidate_directory)
+         candidate_directory:= anything_favorite_directories_win2posixPath(candidate_directory)
          SendInput, %A_Space%cd "%candidate_directory%"{Enter}
   }else if (processName="cmd.exe"){
            SendInput, cd /d "%candidate_directory%"{Enter}
