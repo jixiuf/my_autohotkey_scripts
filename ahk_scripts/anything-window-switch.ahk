@@ -110,7 +110,6 @@ anything_ws_exclude_window_by_class(candidate)
   WinGetClass, activeWinClass ,ahk_id %win_id%
  exclude_windows_by_class := ( exclude_windows_by_class . "|"  . activeWinClass)
   IniWrite,%exclude_windows_by_class%,anything-window-switch.ini, Settings, exclude_windows_by_class
- anything_MsgBox(exclude_windows_by_class)
 }
 
 ;  when only windows left ,then visit another window automatical without press <Enter>
