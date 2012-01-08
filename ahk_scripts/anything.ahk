@@ -629,7 +629,24 @@ anything_refresh(sources,pattern){
      LV_ModifyCol(3,0) ;;candidate_index hidden
      LV_ModifyCol(4, win_width*0.10) ;; source_name width
      LV_ModifyCol(4, "Right") ;; source_name align Right
-
+     
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;these line is a bug fix for fast finger ,when you type so fast that
+     ;,Input() cann't catch what you have typed ,then the TextField catch it
+     ;but "anything" doesn't treat this char as part of anything_pattern,
+     ;it will be erased when you type next char if without these lines.
+     ;these line ,keep the lost char ,and append it to anything_pattern.
+     ;those this time it can't be used to filter ,but next time it can .
+     ; but it still not fix very well .
+     ControlGetText,text,Edit1
+     AppendedText := ""
+     if (( InStr(text,anything_pattern)==1) and (StrLen(text) <> StrLen(anything_pattern)) ) ;text starts with anything_pattern
+     {
+     AppendedText := SubStr(text,StrLen(anything_pattern)+1)
+     }
+     anything_pattern = %anything_pattern%%AppendedText%%input%
+     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     
      GuiControl,, Edit1, %anything_pattern%
      GuiControl,Focus,Edit1 ;; focus Edit1 ,
      Send {End} ;;move cursor right ,make it after the new inputed char
