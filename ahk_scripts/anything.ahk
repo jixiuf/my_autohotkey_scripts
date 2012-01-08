@@ -924,6 +924,22 @@ anything_get_forth_or_defalut_action(actionProperty)
   return actionProperty
 }
 }
+;;if it has the fifth action then return it ,else
+;; return the default action
+anything_get_fifth_or_defalut_action(actionProperty)
+{
+  if isObject(actionProperty)
+  {
+    if (actionProperty.maxIndex()>4)
+    {
+      Return actionProperty[5]
+    }else{
+      return actionProperty[1]
+    }
+ }else{
+  return actionProperty
+}
+}
 
 ;;this function will be used list all available "action"s
 ;; for selected_candidate
