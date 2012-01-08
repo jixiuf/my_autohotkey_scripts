@@ -88,11 +88,17 @@ anything_ws_get_win_candidates()
 anything_ws_activate_window(candidate)
 {
   win_id:=candidate[2]
-         WinGet,wstatus,MinMax,ahk_id %win_id%
-        if (wstatus=-1)
-        { ;;minimized 
-          WinRestore ,ahk_id %window_id%
-        }
+  WinGetClass, activeWinClass ,ahk_id %win_id%
+  WinGet,wstatus,MinMax,ahk_id %win_id%
+  if (wstatus=-1)
+  { ;;minimized 
+  WinRestore ,ahk_id %win_id%
+  }
+  if (activeWinClass="TXGuiFoundation" ) ;qq
+  {       
+   WinGetPos , X, Y, ,,ahk_id %win_id%
+    MouseClick,Left,X,Y
+  }  
   WinActivate ,ahk_id  %win_id%
 }
 
