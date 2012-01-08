@@ -24,11 +24,13 @@ DetectHiddenWindows, off
 ;;candidates         
 anything_ws_icon_imageListId =
 anything_ws_icon_imageListId_4_assign_keys =
+exclude_windows_by_class=
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
   global anything_wid
   global anything_properties
+  global  exclude_windows_by_class
   candidates :=Array()
   WinGet, id, list, , , Program Manager
   Loop, %id%
@@ -36,11 +38,30 @@ anything_ws_get_win_candidates()
     candidate:=Array()
     StringTrimRight, this_id, id%a_index%, 0
     WinGetTitle, title, ahk_id %this_id%
+    WinGetClass, activeWinClass ,ahk_id %this_id%
     
+        
     ; FIXME: windows with empty titles?
      if title =
        continue
        
+;;;;;;;;;;;;;;;;;;;start of exclude window by window class;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;       
+     Continue=0       
+     Loop, Parse,exclude_windows_by_class, |
+     {
+    StringTrimRight, exclude_class_item,A_LoopField, 0
+     if (activeWinClass = exclude_class_item)
+       {
+       Continue=1
+       break
+       }
+     }
+     if (Continue =1)
+     {
+        continue
+     }
+;;;;;;;;;;;;;;;;;;;end of exclude window by window class;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;       
+     ; exclude "current anything window"                  
      if anything_wid and anything_wid = this_id
      {
        continue
@@ -78,6 +99,18 @@ anything_ws_activate_window(candidate)
         }
   WinActivate ,ahk_id  %win_id%
 }
+
+;;default action : visit selected window
+anything_ws_exclude_window_by_class(candidate)
+{
+  global exclude_windows_by_class
+  win_id:=candidate[2]
+  WinGetClass, activeWinClass ,ahk_id %win_id%
+ exclude_windows_by_class := ( exclude_windows_by_class . "|"  . activeWinClass)
+  IniWrite,%exclude_windows_by_class%,anything-window-switch.ini, Settings, exclude_windows_by_class
+ anything_MsgBox(exclude_windows_by_class)
+}
+
 ;  when only windows left ,then visit another window automatical without press <Enter>
 ; candidate1 is current activate window
 ; candidate2 is another window 
@@ -238,7 +271,19 @@ anything_ws_delete_assigned_keys(candidate)
   return anything_window_switcher_with_assign_keys_candidates
      
  }
-
+        
+; exclude some window by window class ,
+; default excluded class is "ATL:00573BA8" ,the separater  char is "|"
+; if you want add "Emacs" to excluded window class ,then you can set the
+; value in anything-window-switch.ini
+;  [Settings]
+;  exclude_windows_by_class=ATL:00573BA8|Emacs
+; there is a "action" named "anything_ws_exclude_window_by_class"
+; you can press "TAB" and selected "anything_ws_exclude_window_by_class"
+; then current selected window is excluded ,it wouldn't display on the
+; window switcher 
+IniRead, exclude_windows_by_class, anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8
+ 
 anything_window_switcher_with_assign_keys_source:=Object()
 anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
 anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
@@ -253,7 +298,7 @@ anything_window_switcher_source:=Object()
 anything_window_switcher_source["name"]:="Win"
 anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["icon"]:="anything_ws_get_icon"
-anything_window_switcher_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_assign_key_4_current_window", "anything_ws_kill_process")
+anything_window_switcher_source["action"]:=Array("anything_ws_activate_window","anything_ws_close_window" ,"anything_ws_assign_key_4_current_window","anything_ws_kill_process" ,"anything_ws_exclude_window_by_class")
 anything_window_switcher_source["anything-action-when-2-candidates-even-no-keyword"]:="anything_ws_activate_window_another_when_2_candidates"
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
