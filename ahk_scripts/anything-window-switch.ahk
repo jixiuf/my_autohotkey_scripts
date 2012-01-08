@@ -5,26 +5,22 @@
 ; and you can find the forum here
 ; http://www.autohotkey.com/forum/viewtopic.php?t=72833
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;how to use `anything-window-switch.ahk'
-;#include anything.ahk
-;#include anything-window-switch.ahk' 
 ; !Tab::
 ; my_anything_properties:=Object()
 ; my_anything_properties["win_width"]:= 900
-; my_anything_properties["win_height"]:= 180
-
+; my_anything_properties["win_height"]:= 280
+; my_anything_properties["anything_use_large_icon"]:=1
+; my_anything_properties["FontSize"]:= 15
 ; sources:=Array()
 ; sources.insert(anything_window_switcher_with_assign_keys_source)
 ; sources.insert(anything_window_switcher_source)
 ; anything_multiple_sources_with_properties(sources,my_anything_properties)
 ; return
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 DetectHiddenWindows, off
-;;candidates         
-anything_ws_icon_imageListId =
-anything_ws_icon_imageListId_4_assign_keys =
-exclude_windows_by_class=
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
@@ -272,6 +268,10 @@ anything_ws_delete_assigned_keys(candidate)
      
  }
         
+;;candidates         
+anything_ws_icon_imageListId =
+anything_ws_icon_imageListId_4_assign_keys =
+exclude_windows_by_class=
 ; exclude some window by window class ,
 ; default excluded class is "ATL:00573BA8" ,the separater  char is "|"
 ; if you want add "Emacs" to excluded window class ,then you can set the
