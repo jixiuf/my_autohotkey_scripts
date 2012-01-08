@@ -181,7 +181,7 @@ for key, default_value in anything_default_properties
              }
          }
          anything_pattern_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyorvw{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyoervw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -336,7 +336,28 @@ for key, default_value in anything_default_properties
                input=k
              }
           }
-
+         if ErrorLevel = EndKey:e
+           {
+            if (GetKeyState("LControl", "P")=1){ ;; Ctrl+e
+                 selectedRowNum:= LV_GetNext(0)
+                       LV_GetText(source_index, selectedRowNum,2)
+                       action:= anything_get_fifth_or_defalut_action(tmpSources[source_index]["action"])
+                       anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       anything_exit()
+                       break
+               }else if (GetKeyState("LAlt", "P")=1) ;;Alt+e
+               {
+                    selectedRowNum:= LV_GetNext(0)
+                    LV_GetText(source_index, selectedRowNum,2)
+                    action:= anything_get_fifth_or_defalut_action(tmpSources[source_index]["action"])
+                    anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                    anything_pattern_updated=yes
+               }Else{
+               input=e
+             }
+          }
+          
+          
          if ErrorLevel = EndKey:m
            {
             if (GetKeyState("LControl", "P")=1){ ;; Ctrl+m
