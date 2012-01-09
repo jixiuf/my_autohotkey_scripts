@@ -1,4 +1,4 @@
-;;; anything-window-switch.ahk -- switch window with anything.ahk support 
+;;; anything-window-switch.ahk -- switch window with anything.ahk support
 
 ; source is hosted on
 ; https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
@@ -21,6 +21,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 DetectHiddenWindows, off
+; this function is  used to find out all windows and use their
+; window title + process name as candidates
+; at the same time it also populate the variable "anything_ws_icon_imageListId"
+; which is an ImageList. so that anything_ws_get_icon() can use anything_ws_icon_imageListId   
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
@@ -35,14 +39,14 @@ anything_ws_get_win_candidates()
     StringTrimRight, this_id, id%a_index%, 0
     WinGetTitle, title, ahk_id %this_id%
     WinGetClass, activeWinClass ,ahk_id %this_id%
-    
-        
+
+
     ; FIXME: windows with empty titles?
      if title =
        continue
-       
-;;;;;;;;;;;;;;;;;;;start of exclude window by window class;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;       
-     Continue=0       
+
+;;;;;;;;;;;;;;;;;;;start of exclude window by window class;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     Continue=0
      Loop, Parse,exclude_windows_by_class, |
      {
     StringTrimRight, exclude_class_item,A_LoopField, 0
@@ -56,13 +60,13 @@ anything_ws_get_win_candidates()
      {
         continue
      }
-;;;;;;;;;;;;;;;;;;;end of exclude window by window class;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;       
-     ; exclude "current anything window"                  
+;;;;;;;;;;;;;;;;;;;end of exclude window by window class;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ; exclude "current anything window"
      if anything_wid and anything_wid = this_id
      {
        continue
      }
-    
+
     ; don't add the switcher window
     ; if switcher_id = %this_id%
     ;   continue
@@ -75,13 +79,13 @@ anything_ws_get_win_candidates()
   {
     candidates.insert(2, candidates.remove(1))
   }
-  anything_ws_icon_imageListId := IL_Create(candidates.MaxIndex(),5,anything_properties["anything_use_large_icon"])  
+  anything_ws_icon_imageListId := IL_Create(candidates.MaxIndex(),5,anything_properties["anything_use_large_icon"])
   for key,candidate in candidates
   {
    this_id:= candidate[2]
    anything_add_window_icon_2_imageList(this_id,anything_properties["anything_use_large_icon"],anything_ws_icon_imageListId)
   }
-  return candidates 
+  return candidates
 }
 
 ;;default  [Action} : visit selected window
@@ -95,20 +99,20 @@ anything_ws_activate_window(candidate)
   WinGetClass, activeWinClass ,ahk_id %win_id%
   WinGet,wstatus,MinMax,ahk_id %win_id%
   if (wstatus=-1)
-  { ;;minimized 
+  { ;;minimized
   WinRestore ,ahk_id %win_id%
   }
   if (activeWinClass="TXGuiFoundation" ) ;qq
-  {       
+  {
    WinGetPos , X, Y, ,,ahk_id %win_id%
     MouseClick,Left,X,Y
-  }  
+  }
   WinActivate ,ahk_id  %win_id%
 }
 
 ; [Action} : add current selected window to excluded_window by window class
-;  so that it wouldn't be member of candidtes any more 
-; keybinding [Ctrl-e],or [Alt-e] 
+;  so that it wouldn't be member of candidtes any more
+; keybinding [Ctrl-e],or [Alt-e]
 anything_ws_exclude_window_by_class(candidate)
 {
   global exclude_windows_by_class
@@ -120,13 +124,13 @@ anything_ws_exclude_window_by_class(candidate)
 
 ;  when only windows left ,then visit another window automatical without press <Enter>
 ; candidate1 is current activate window
-; candidate2 is another window 
+; candidate2 is another window
 anything_ws_activate_window_another_when_2_candidates(candidate1,candidate2)
 {
   win_id:=candidate1[2]
          WinGet,wstatus,MinMax,ahk_id %win_id%
         if (wstatus=-1)
-        { ;;minimized 
+        { ;;minimized
           WinRestore ,ahk_id %window_id%
         }
   WinActivate ,ahk_id  %win_id%
@@ -135,7 +139,7 @@ anything_ws_activate_window_another_when_2_candidates(candidate1,candidate2)
 ; [Action]:
 ; keybinding:
 ;      [Ctrl-j] ,[Alt-j]
-;   or [Tab] then select anything_ws_close_window 
+;   or [Tab] then select anything_ws_close_window
 anything_ws_close_window(candidate)
 {
   win_id:=candidate[2]
@@ -154,7 +158,7 @@ anything_ws_kill_process(candidate)
 
 ; (window id, whether to get large icons,ImageListId where to store icon)
 ; ; util func
-anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId) 
+anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId)
 {
   Local NR_temp, h_icon
   ; check status of window - if window is responding or "Not Responding"
@@ -215,8 +219,8 @@ anything_ws_get_processname(wid){
     return procname
 }
 
- 
- 
+
+
 ; assign a short key (text) for the selected window ,so that you can visit this window
 ;  with the short key(text).
 ; ;I am now interested in using your tool to switch between windows using
@@ -228,12 +232,12 @@ anything_ws_get_processname(wid){
 ; [Action]
 ; keybinding:
 ;         [Ctrl-m] or [Alt-m]
-;or       [Tab] then select anything_ws_assign_key_4_current_window 
+;or       [Tab] then select anything_ws_assign_key_4_current_window
 anything_ws_assign_key_4_current_window(candidate)
 {
-    global 
-    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
-    anything_set_property_4_quit_when_lose_focus("no")    
+    global
+    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
+    anything_set_property_4_quit_when_lose_focus("no")
     InputBox,assigned_key, Assigned Keys, Please enter your Assigned Keys for current window., , 320, 120
     if ErrorLevel
     {
@@ -245,15 +249,15 @@ anything_ws_assign_key_4_current_window(candidate)
         new_candidate:=Array()
         new_candidate.Insert(assigned_key)
         new_candidate.Insert(win_id) ;  new candidate with (assignedkey,win_id) as candidate element
-        anything_window_switcher_with_assign_keys_candidates.insert(new_candidate)  
+        anything_window_switcher_with_assign_keys_candidates.insert(new_candidate)
     }
     anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus)
 }
 
 anything_window_switcher_get_icon_4assign_keys()
 {
-  global  anything_ws_icon_imageListId_4_assign_keys 
-  return  anything_ws_icon_imageListId_4_assign_keys 
+  global  anything_ws_icon_imageListId_4_assign_keys
+  return  anything_ws_icon_imageListId_4_assign_keys
 }
 anything_ws_delete_assigned_keys(candidate)
 {
@@ -269,8 +273,8 @@ anything_ws_delete_assigned_keys(candidate)
  anything_window_switcher_with_assign_keys_candidates_fun()
  {
      global
-    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
-    anything_set_property_4_quit_when_lose_focus("no")    
+    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
+    anything_set_property_4_quit_when_lose_focus("no")
      for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
          win_id:=candidate[2]
          if not WinExist("ahk_id " . win_id)
@@ -278,21 +282,21 @@ anything_ws_delete_assigned_keys(candidate)
               anything_window_switcher_with_assign_keys_candidates.Remove(candidate_index) ; if window doesn't exists anymore ,delete the assigned key (candidate)
          }
      }
-     ; update icon 
+     ; update icon
      anything_ws_icon_imageListId_4_assign_keys := IL_Create(anything_window_switcher_with_assign_keys_candidates.MaxIndex())
      for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
          win_id:=candidate[2]
          if WinExist("ahk_id " . win_id)
-         { 
+         {
              anything_add_window_icon_2_imageList(win_id,0,anything_ws_icon_imageListId_4_assign_keys)
          }
      }
-     
+
   return anything_window_switcher_with_assign_keys_candidates
-     
+
  }
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
-;;candidates         
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;candidates
 anything_window_switcher_with_assign_keys_candidates:=Object()
 anything_ws_icon_imageListId =
 anything_ws_icon_imageListId_4_assign_keys =
@@ -306,9 +310,9 @@ exclude_windows_by_class=
 ; there is a "action" named "anything_ws_exclude_window_by_class"
 ; you can press "TAB" and selected "anything_ws_exclude_window_by_class"
 ; then current selected window is excluded ,it wouldn't display on the
-; window switcher 
+; window switcher
 IniRead, exclude_windows_by_class, anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8
- 
+
 anything_window_switcher_with_assign_keys_source:=Object()
 anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
 anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
@@ -316,7 +320,7 @@ anything_window_switcher_with_assign_keys_source["icon"]:="anything_window_switc
 anything_window_switcher_with_assign_keys_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_delete_assigned_keys" ,"anything_ws_kill_process")
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
- 
+
 
 
 anything_window_switcher_source:=Object()
