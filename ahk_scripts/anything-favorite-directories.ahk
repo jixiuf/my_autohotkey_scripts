@@ -41,6 +41,8 @@ anything_favorite_directories_source:=Object()
 anything_favorite_directories_source["candidate"]:= anything_favorite_directories
 anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
 anything_favorite_directories_source["name"]:="FavDirs"
+anything_favorite_directories_source["anything-execute-action-at-once-if-one"] := "yes"
+anything_favorite_directories_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
 ;;action 
 anything_favorite_directories_visit(candidate_directory)
 {
