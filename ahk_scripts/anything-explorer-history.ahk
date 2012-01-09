@@ -184,7 +184,14 @@ visit_directory( candidate_directory)
   ; WinGet, processName, ProcessName, ahk_id %id2%
   ; WinGet, pid, PID, ahk_id %id2%
     active_id :=anything_previous_activated_win_id
-  ; WinGet, active_id, ID, A
+    
+     if (not  FileExist(candidate_directory))
+     {
+         delete_from_directory_history(candidate_directory)
+         anything_MsgBox("directory doesn't exists")
+         return
+     }
+    
   WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
   WinGet, pid, PID,  ahk_id %active_id%
@@ -214,12 +221,6 @@ visit_directory( candidate_directory)
  ;    }
  ; }
  else{
-     if (not  FileExist(candidate_directory))
-     {
-         delete_from_directory_history(candidate_directory)
-         anything_MsgBox("directory doesn't exists")
-         return
-     }
        h := WinExist("ahk_class ExploreWClass")
        if (h != 0 )
        {
