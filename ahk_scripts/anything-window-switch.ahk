@@ -20,7 +20,7 @@
 ; return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-DetectHiddenWindows, off
+DetectHiddenWindows, on
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
@@ -84,7 +84,11 @@ anything_ws_get_win_candidates()
   return candidates 
 }
 
-;;default action : visit selected window
+;;default  [Action} : visit selected window
+; keybinding:
+;       [Enter] ,[Alt-Enter] ,[Ctrl-Z]
+; or    [MouseClick],
+; or    [Tab] then select anything_ws_activate_window
 anything_ws_activate_window(candidate)
 {
   win_id:=candidate[2]
@@ -102,7 +106,9 @@ anything_ws_activate_window(candidate)
   WinActivate ,ahk_id  %win_id%
 }
 
-;;default action : visit selected window
+; [Action} : add current selected window to excluded_window by window class
+;  so that it wouldn't be member of candidtes any more 
+; keybinding [Ctrl-e],or [Alt-e] 
 anything_ws_exclude_window_by_class(candidate)
 {
   global exclude_windows_by_class
@@ -126,11 +132,19 @@ anything_ws_activate_window_another_when_2_candidates(candidate1,candidate2)
   WinActivate ,ahk_id  %win_id%
 }
 ; close selected window
+; [Action]:
+; keybinding:
+;      [Ctrl-j] ,[Alt-j]
+;   or [Tab] then select anything_ws_close_window 
 anything_ws_close_window(candidate)
 {
   win_id:=candidate[2]
   WinClose ,ahk_id  %win_id%
 }
+; kill the process of current selected window
+; keybinding
+;        [Ctrl-k] [Alt-k]
+;  or    [Tab] then select anything_ws_kill_process
 anything_ws_kill_process(candidate)
 {
   win_id:=candidate[2]
@@ -139,6 +153,7 @@ anything_ws_kill_process(candidate)
 }
 
 ; (window id, whether to get large icons,ImageListId where to store icon)
+; ; util func
 anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId) 
 {
   Local NR_temp, h_icon
@@ -181,12 +196,13 @@ anything_add_window_icon_2_imageList(wid, Use_Large_Icons_Current,ImageListId)
   Else	; use a generic icon
   	 IL_Add(ImageListId, "shell32.dll" , 3)
 }
-
+; [Icon]
 anything_ws_get_icon()
 {
     global anything_ws_icon_imageListId
     return anything_ws_icon_imageListId
 }
+; util func
 anything_ws_get_processname(wid){
        ; show process name if enabled
            WinGet, procname, ProcessName, ahk_id %wid%
@@ -200,16 +216,19 @@ anything_ws_get_processname(wid){
 }
 
  
-anything_window_switcher_with_assign_keys_candidates:=Object()
  
- ; assign a short key (text) for the selected window ,so that you can visit this window
- ;  with the short key(text).
+; assign a short key (text) for the selected window ,so that you can visit this window
+;  with the short key(text).
 ; ;I am now interested in using your tool to switch between windows using
 ;  keywords that I could define and assign dynamically. For example, imagine I
 ;  have Chrome open in one window, and Emacs in another window. I would like to
 ;  assign keywords to these windows (e.g. Chrome -> Browser, Emacs-> Editor),
 ;  and then use your tool to switch between them by typing Editor or Browser
 ;  (with the powerful autocomplete feature your tool already has).
+; [Action]
+; keybinding:
+;         [Ctrl-m] or [Alt-m]
+;or       [Tab] then select anything_ws_assign_key_4_current_window 
 anything_ws_assign_key_4_current_window(candidate)
 {
     global 
@@ -272,8 +291,9 @@ anything_ws_delete_assigned_keys(candidate)
   return anything_window_switcher_with_assign_keys_candidates
      
  }
-        
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
 ;;candidates         
+anything_window_switcher_with_assign_keys_candidates:=Object()
 anything_ws_icon_imageListId =
 anything_ws_icon_imageListId_4_assign_keys =
 exclude_windows_by_class=
