@@ -65,6 +65,15 @@ SetTitleMatchMode Regex ;
    return
   }
 return
+
+~Enter::
+sleep ,200
+ if (WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass"))
+ {
+     anything_explorer_history_address:=getExplorerAddressPath()
+     anything_add_directory_history(anything_explorer_history_address)
+ }
+return
 #IfWinActive
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
@@ -75,7 +84,8 @@ return
 ; it will add the newAddress to directory candidates
 addressChangeTimer()
 {
-    if ( WinActive("ahk_class ExploreWClass|CabinetWClass"))
+    global anything_explorer_history_address
+    if (WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass"))
     {
         newAddr:= getExplorerAddressPath()
         if (anything_explorer_history_address <> newAddr)
@@ -122,6 +132,10 @@ write_history_2_disk()
 anything_add_directory_history(newAddr)
 {
   global directory_history
+  if (newAddr =="")
+  {
+      return
+  }
   for key ,directory in directory_history
   {
     if (directory = newAddr)
