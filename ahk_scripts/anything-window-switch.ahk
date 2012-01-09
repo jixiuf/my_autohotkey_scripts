@@ -20,7 +20,7 @@
 ; return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-DetectHiddenWindows, on
+DetectHiddenWindows, off
 anything_ws_get_win_candidates()
 {
   global anything_ws_icon_imageListId
