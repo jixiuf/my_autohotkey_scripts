@@ -188,7 +188,7 @@ visit_directory( candidate_directory)
      if (not  FileExist(candidate_directory))
      {
          delete_from_directory_history(candidate_directory)
-         anything_MsgBox("directory doesn't exists")
+         anything_MsgBox( candidate_directory  . " doesn't exists")
          return
      }
     
