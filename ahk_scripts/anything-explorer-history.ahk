@@ -44,6 +44,8 @@ anything_explorer_history_source:=Object()
 anything_explorer_history_source["candidate"]:= directory_history
 anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
 anything_explorer_history_source["name"]:="ExpHist"
+anything_explorer_history_source["anything-execute-action-at-once-if-one"] := "yes"
+anything_explorer_history_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
 
 
 
@@ -212,6 +214,12 @@ visit_directory( candidate_directory)
  ;    }
  ; }
  else{
+     if (not  FileExist(candidate_directory))
+     {
+         delete_from_directory_history(candidate_directory)
+         anything_MsgBox("directory doesn't exists")
+         return
+     }
        h := WinExist("ahk_class ExploreWClass")
        if (h != 0 )
        {
