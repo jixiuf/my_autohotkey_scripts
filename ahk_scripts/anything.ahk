@@ -82,35 +82,35 @@ anything_multiple_sources(sources)
 }
 ;;main function
 anything_multiple_sources_with_properties(sources,anything_tmp_properties){
-global anything_default_properties
-global anything_wid
-global anything_pattern
-global anything_properties
-global anything_previous_activated_win_id
-; store previous activated window id in  global variable  
-WinGet, anything_previous_activated_win_id, ID, A
-;; copy all property from anything_default_properties to
-;; anything_properties if  anything_properties doen't defined
+    global anything_default_properties
+    global anything_wid
+    global anything_pattern
+    global anything_properties
+    global anything_previous_activated_win_id
+    ; store previous activated window id in  global variable  
+    WinGet, anything_previous_activated_win_id, ID, A
+    ;; copy all property from anything_default_properties to
+    ;; anything_properties if  anything_properties doen't defined
 
-for key, default_value in anything_default_properties
-{
-  if (anything_tmp_properties[key]=="")
-  {
-     anything_properties[key]:=default_value ;
-  }
-  else
-  {
-     anything_properties[key]:=anything_tmp_properties[key] ;
-  }
-}
- if((anything_properties["anything_use_large_icon"]=1) or (anything_properties["anything_use_large_icon"]="1") or (anything_properties["anything_use_large_icon"]="yes"))
- {
-     anything_properties["anything_use_large_icon"] :=1
- }
- else
- {
-     anything_properties["anything_use_large_icon"] :=0
- }
+    for key, default_value in anything_default_properties
+    {
+        if (anything_tmp_properties[key]=="")
+        {
+            anything_properties[key]:=default_value ;
+        }
+        else
+        {
+            anything_properties[key]:=anything_tmp_properties[key] ;
+        }
+    }
+    if((anything_properties["anything_use_large_icon"]=1) or (anything_properties["anything_use_large_icon"]="1") or (anything_properties["anything_use_large_icon"]="yes"))
+    {
+        anything_properties["anything_use_large_icon"] :=1
+    }
+    else
+    {
+        anything_properties["anything_use_large_icon"] :=0
+    }
    win_width:=anything_properties["win_width"]
    win_height:=anything_properties["win_height"]
    Transparent:=anything_properties["Transparent"]
