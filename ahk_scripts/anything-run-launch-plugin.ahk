@@ -39,6 +39,10 @@
              anything_run_launch_candidates.Insert(candidate)
          }
      }
+     IniWrite, %default_scan_path%, anything-run-launch_-plugin.ini, Settings, default_scan_path
+     IniWrite, %accept_type_list%, anything-run-launch_-plugin.ini, Settings, accept_type_list
+     IniWrite, %exclude_filename_list%,  anything-run-launch_-plugin.ini,Settings, exclude_filename_list
+     
      ; anything_run_launch_get_icons_fun()     
      return anything_run_launch_candidates
  }
