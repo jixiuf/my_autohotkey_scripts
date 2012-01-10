@@ -5,7 +5,7 @@
  {
      global anything_run_launch_candidates
      anything_run_launch_candidates:=Array()
-     IniRead, default_scan_path, anything-run-launch_-plugin.ini, Settings, default_scan_path, %UserProfile%\Recent|%A_StartMenuCommon%|%A_StartMenu%|%A_Desktop%
+     IniRead, default_scan_path, anything-run-launch_-plugin.ini, Settings, default_scan_path,%A_StartMenuCommon%|%A_StartMenu%|%A_Desktop%|%UserProfile%\Recent
      IniRead, accept_type_list, anything-run-launch_-plugin.ini, Settings, accept_type_list, exe|lnk|ahk|url|chm
      IniRead, exclude_filename_list,  anything-run-launch_-plugin.ini,Settings, exclude_filename_list, about|history|readme|remove|uninstall|license
      ;scan always updated list
