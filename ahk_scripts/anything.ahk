@@ -1,6 +1,6 @@
 ;; need AutoHotKey_L
 #SingleInstance force
-#NoEnv
+; #NoEnv
 SetBatchLines, -1
 SetKeyDelay  -1
 SendMode Input
