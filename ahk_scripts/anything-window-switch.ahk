@@ -279,8 +279,8 @@ anything_ws_delete_assigned_keys(candidate)
  anything_window_switcher_with_assign_keys_candidates_fun()
  {
      global
-    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
-    anything_set_property_4_quit_when_lose_focus("no")
+    ; old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
+    ; anything_set_property_4_quit_when_lose_focus("no")
      for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
          win_id:=candidate[2]
          if not WinExist("ahk_id " . win_id)
