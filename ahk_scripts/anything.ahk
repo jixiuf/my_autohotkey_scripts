@@ -57,6 +57,8 @@ anything_default_properties["anything_use_large_icon"]:=0 ;  0 for small icon ,1
 ;;the value is a function accpet one parameter ,when no matched candidates
 ;; the search string will be treated as candidate,
 ;; and  this function will be treated as "action"
+;  you need press Ctrl-i to call this function
+;  I haven't use this function util now (2012-01-10 10:53)
 anything_default_properties["no_candidate_action"]:="anything_do_nothing"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
