@@ -183,7 +183,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
              }
          }
          anything_pattern_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyoervw{LAlt}{tab}
+       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -206,15 +206,15 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
            input=v
          }
        }
-       ;;Ctrl-r  ==anything_pageUp
-         if ErrorLevel = EndKey:r
-           {
-            if (GetKeyState("LControl", "P")=1){
-              anything_pageUp(matched_candidates.maxIndex())
-          }Else{
-               input=r
-             }
-          }
+       ; ;;Ctrl-r  ==anything_pageUp
+       ;   if ErrorLevel = EndKey:r
+       ;     {
+       ;      if (GetKeyState("LControl", "P")=1){
+       ;        anything_pageUp(matched_candidates.maxIndex())
+       ;    }Else{
+       ;         input=r
+       ;       }
+       ;    }
 
          if ErrorLevel = EndKey:escape
          {
