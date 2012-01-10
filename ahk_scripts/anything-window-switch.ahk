@@ -311,7 +311,8 @@ exclude_windows_by_class=
 ; you can press "TAB" and selected "anything_ws_exclude_window_by_class"
 ; then current selected window is excluded ,it wouldn't display on the
 ; window switcher
-IniRead, exclude_windows_by_class, anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8
+; default value ATL:00573BA8|DV2ControlHost (ATL:00573BA8 are googletalk window ,DV2ControlHost are start menu)
+IniRead, exclude_windows_by_class, anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8|DV2ControlHost
 
 anything_window_switcher_with_assign_keys_source:=Object()
 anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
