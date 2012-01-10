@@ -22,7 +22,7 @@
 
 DetectHiddenWindows, off
 ; this function is  used to find out all windows and use their
-; window title + process name as candidates
+; Array("window title + process name",windowid) as candidates
 ; at the same time it also populate the variable "anything_ws_icon_imageListId"
 ; which is an ImageList. so that anything_ws_get_icon() can use anything_ws_icon_imageListId   
 anything_ws_get_win_candidates()
