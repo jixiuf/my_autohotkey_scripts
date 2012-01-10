@@ -75,16 +75,22 @@ anything_ws_get_win_candidates()
       candidate.insert(this_id)
       candidates.insert(candidate)
   }
+;;;;;;;;;;;;;;;;;;;start (if window count >=2 ,move previous activated window first);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   if(candidates.MaxIndex() >1)
   {
     candidates.insert(2, candidates.remove(1))
   }
+;;;;;;;;;;;;;;;;;;;end (if window count >=2 ,move previous activated window first);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+;;;;;;;;;;;;;;;;;;;start (get icons for all windows);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   anything_ws_icon_imageListId := IL_Create(candidates.MaxIndex(),5,anything_properties["anything_use_large_icon"])
   for key,candidate in candidates
   {
    this_id:= candidate[2]
    anything_add_window_icon_2_imageList(this_id,anything_properties["anything_use_large_icon"],anything_ws_icon_imageListId)
   }
+;;;;;;;;;;;;;;;;;;;;end (get icons for all windows);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
   return candidates
 }
 
