@@ -11,16 +11,17 @@ SetWorkingDir %A_ScriptDir%
  ; read cmd history from ini file
  anything_run_init()
 {
-    global anything_run_cmd_fullpath_array
-    ;;init anything_run_cmd_fullpath_array from anything-run.ini 
+    global anything_run_cmd_array
+    ;;init anything_run_cmd_array from anything-run.ini 
     IfExist,anything-run.ini
     {
-        IniRead, history_line, anything-run.ini, main, anything_run_cmd_fullpath_array
+        IniRead, history_line, anything-run.ini, main, anything_run_cmd_array
         Loop, Parse,  history_line,,
         {
             if A_LoopField <>
             {
-                anything_run_cmd_fullpath_array.insert(A_LoopField)
+                StringSplit, candidate_, A_LoopField ,
+                anything_run_cmd_array.insert(Array(candidate_1,candidate_2,candidate_3)) ; display,cmd,cmd_fullpath
             }
         }
     }
@@ -51,32 +52,40 @@ anything_run_get_process_full_path(p_id) {
 
 anything_run_write2disk()
 {
-  global anything_run_cmd_fullpath_array
-  cmd_text=
-  for key ,cmd in anything_run_cmd_fullpath_array
+  global anything_run_cmd_array
+  cmd_text:= ""
+  for key ,cmd in anything_run_cmd_array
   {
-    cmd_text=%cmd_text%%cmd%
+      cmd_text:=cmd_text . "" . cmd[1] . "" . cmd[2] . "" . cmd[3]
   }
-  IniWrite,%cmd_text%,anything-run.ini, main, anything_run_cmd_fullpath_array
+  IniWrite,%cmd_text%,anything-run.ini, main, anything_run_cmd_array
 }
 
 ; this is a private method ,
-; add a new cmd fullpath to anything_run_cmd_fullpath_array
-anything_run_add_new_cmd(new_cmd_fullPath)
+; add a new cmd fullpath to anything_run_cmd_array
+anything_run_add_new_cmd(new_cmd_candidate)
 {
-  global anything_run_cmd_fullpath_array
-  for key ,cmdFullPath in anything_run_cmd_fullpath_array
+  global anything_run_cmd_array
+  if(IsObject(new_cmd_candidate))
   {
-    if (cmdFullPath == new_cmd_fullPath)
+      candidate := new_cmd_candidate
+  }else
+  {
+      candidate := Array(new_cmd_candidate,new_cmd_candidate,new_cmd_candidate)
+  }
+  
+  for key ,cmdFullPath in anything_run_cmd_array
+  {
+    if (cmdFullPath[2] == candidate[2])
     {
-      anything_run_cmd_fullpath_array.remove(key)
+      anything_run_cmd_array.remove(key)
       Break
     }
   }
-  anything_run_cmd_fullpath_array.insert(1,new_cmd_fullPath)
+  anything_run_cmd_array.insert(1,candidate)
   if (directory_history.maxIndex()>150) ;;only record 50 cmd history items 
   {
-    anything_run_cmd_fullpath_array.remove(151)
+    anything_run_cmd_array.remove(151)
   }
 }
 
@@ -85,7 +94,7 @@ anything_run_on_select(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
     {
-        fullpath_cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd 
+        fullpath_cmd := candidate[3] ;  use "full-path-of-cmd" as cmd 
     }
     else ; when candidate is string 
     {
@@ -97,25 +106,26 @@ anything_run_on_select(candidate)
 ; get_candidates fun
 ; the format of each candidate is Array("cmd","full-path-of-cmd")
 ; for example : Array("cmd.exe","c:\windows\system32\cmd.exe")
-anything_run_get_candidates()
-{
-    global anything_run_cmd_fullpath_array
-    cmd_candidates:=Array()
-    for key ,cmd_full_path in anything_run_cmd_fullpath_array
-    {
-        cmd_candidates.Insert(Array(anything_get_file_name(cmd_full_path),cmd_full_path))
-    }
-    return cmd_candidates
-}
+; anything_run_get_candidates()
+; {
+;     global anything_run_cmd_array
+;     ; cmd_candidates:=Array()
+;     ; for key ,cmd_no_display in anything_run_cmd_array
+;     ; {
+;     ;     ; anything_MsgBox(cmd_no_display[1])
+;     ;     cmd_candidates.Insert(cmd_no_display[1],cmd_no_display)
+;     ; }
+;     return anything_run_cmd_array
+; }
 ; get icon from cmd file 
 anything_run_get_icons()
 {
-    global anything_run_cmd_fullpath_array
+    global anything_run_cmd_array
     global anything_properties
     icons:=IL_Create(5,5,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 5 each time, 
-    for key ,cmd_full_path in anything_run_cmd_fullpath_array
+    for key ,cmd_no_display in anything_run_cmd_array
     {
-          anything_add_icon(cmd_full_path,icons,anything_properties["anything_use_large_icon"])
+          anything_add_icon(cmd_no_display[3],icons,anything_properties["anything_use_large_icon"])
     }
     return icons
 }
@@ -127,26 +137,29 @@ anything_run(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
     {
-    cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd 
+    cmd := candidate[2]      
     }
     else ; when candidate is string 
     {
     cmd := candidate
     }
-  Run,%cmd%, , UseErrorLevel,pid  ;  don't display dialog if it fails. and populate pid 
+  Run,%cmd%, , UseErrorLevel,pid  ;  don't display default dialog if it fails. and populate pid 
  if ErrorLevel = ERROR
   {
       anything_MsgBox(" Failed") 
   }else{
-    if (pid == "")
-    {
-        anything_run_add_new_cmd(cmd)     
-    }
-     else 
-    {
-        anything_run_add_new_cmd(anything_run_get_process_full_path(pid))     
+     if (not (IsObject(candidate))) ; if is string ,means a new cmd , 
+     {
+         if (pid == "")
+         {
+             anything_run_add_new_cmd(Array(cmd,cmd,cmd))     
+         }
+         else 
+         {
+             anything_run_add_new_cmd(Array(cmd,cmd,anything_run_get_process_full_path(pid)))     
+         }
+         anything_run_write2disk()
      }
-    anything_run_write2disk()
   }
 }
 ; delete selected cmd from candidates
@@ -155,20 +168,20 @@ anything_run(candidate)
 ; for example : Array("cmd.exe","c:\windows\system32\cmd.exe")
 anything_run_delete(candidate)
 {
-  global anything_run_cmd_fullpath_array
-    if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
+  global anything_run_cmd_array
+    if (IsObject(candidate))  ;  when format of candidate is Array("display","cmd","full-path-of-cmd")
     {
-        fullpath_cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd 
+        cmd := candidate[2]     
     }
     else ; when candidate is string 
     {
-        fullpath_cmd := candidate
+        cmd := candidate
     }
-  for key ,cmd in anything_run_cmd_fullpath_array
+  for key ,cmd1 in anything_run_cmd_array
   {
-    if (cmd == fullpath_cmd)
+    if (cmd1[2] == cmd)
     {
-      anything_run_cmd_fullpath_array.remove(key)
+      anything_run_cmd_array.remove(key)
       Break
     }
   }
@@ -178,10 +191,8 @@ anything_run_delete(candidate)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;anything_run_cmd_fullpath_array is an array ,
-; its element is the full path of each cmd
-; for example ,if you run "cmd" ,then c:\windows\system32\cmd.exe
-; will be added to this array
+;anything_run_cmd_array is an array ,
+; the format of each candidate is Array(display_string,cmd,cmd_fullpath)
 ; why I  use full path of each cmd :
 ; I can get icon from the full path of cmd file
 ; but for some special command ,
@@ -190,14 +201,14 @@ anything_run_delete(candidate)
 ; the value of pid is empty ,
 ; so I can't set get full path of it by anything_run_get_process_full_path(pid)
 ; then I store "msconfig" in config file
-; so variable "anything_run_cmd_fullpath_array" not all "fullpath"  
-anything_run_cmd_fullpath_array:=Array()
+; so variable "anything_run_cmd_array" not all "fullpath"  
+anything_run_cmd_array:=Array()
 anything_run_init()
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;source for anything .
 anything_run_source:=Object()
 anything_run_source["name"]:="Run"
-anything_run_source["candidate"]:= "anything_run_get_candidates"
+anything_run_source["candidate"]:= anything_run_cmd_array
 anything_run_source["action"] := Array("anything_run","anything_run_delete")
 anything_run_source["onselect"] := "anything_run_on_select"
 anything_run_source["icon"]:= "anything_run_get_icons"
