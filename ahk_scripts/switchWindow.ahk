@@ -55,17 +55,29 @@ return
 ; return
 
 ;;;;;;;;;;Win+c ,toggle Toad 
+; #c::
+; IfWinExist,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+;   IfWinActive ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+;      WinMinimize ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+;   else{
+;     WinActivate ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+;     }
+; else
+;   Run, D:\usr\toad\toad.exe
+; return
+  
 #c::
-IfWinExist,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
-  IfWinActive ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
-     WinMinimize ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+IfWinExist,SQL Manager
+  IfWinActive ,SQL Manager
+     WinMinimize ,SQL Manager
   else{
-    WinActivate ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
+    WinActivate ,SQL Manager
     }
 else
-  Run, D:\usr\toad\toad.exe
+  Run,D:\usr\mysql_manager\MyManager.exe 
 return
-
+  
+  
 ;;Win+f toggle Firefox
 #f::
 SetTitleMatchMode, RegEx
