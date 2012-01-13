@@ -60,7 +60,7 @@ anything_run_launch(candidate)
  {
      if (IsFunc("anything_run_add_new_cmd")) ;  anything_run_add_new_cmd() defined in anything-run.ahk
      {
-        anything_run_add_new_cmd(filefullpath)
+         anything_run_add_new_cmd(Array(candidate[1],filefullpath,filefullpath))
         anything_run_write2disk()
      }
   }
