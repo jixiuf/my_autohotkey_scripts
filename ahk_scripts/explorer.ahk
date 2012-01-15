@@ -2,9 +2,9 @@
 ; #NoTrayIcon
 
 ;;;在Explorer.exe 程序中定义以下快捷键
-;;Alt+1 复制 选中的文件名到剪切板
-;;Alt+2 复制地址栏中路径到剪切板
-;;Alt+3 复制选中文件的全路径到剪切板
+;;ctrl+1 复制 选中的文件名到剪切板
+;;ctrl+2 复制地址栏中路径到剪切板
+;;ctrl+3 复制选中文件的全路径到剪切板
 ;;Ctrl+Alt+n  新建一个文件夹
 ;;Ctrl+Alt+t 新建一个文本
 ;;Ctrl+Alt+c 在此处打开Cmd.exe(在另一个脚本cmd2msys.ahk中，
