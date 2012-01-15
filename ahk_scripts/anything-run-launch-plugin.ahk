@@ -1,6 +1,6 @@
 ; format of candidate is  Array("display","cmd")
  anything_run_launch_candidates:=Array()
- anything_run_launch_icons:=IL_Create(1,10)       ; init 5 icon , 
+ ; anything_run_launch_icons:=IL_Create(1,10)       ; init 5 icon , 
  anything_run_launch_get_candidates()
  {
      global anything_run_launch_candidates
