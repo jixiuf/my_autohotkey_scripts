@@ -233,4 +233,5 @@ openSelectedfileWithEamcs()
 }
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^e:: openSelectedfileWithEamcs()
+^`:: openSelectedfileWithEamcs()
 #IfWinActive
