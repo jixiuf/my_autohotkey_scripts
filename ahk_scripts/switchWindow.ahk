@@ -30,18 +30,30 @@
 ; return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;Win+1  VS
-#1::
-SetTitleMatchMode, 2
-IfWinExist,  Microsoft Visual Studio
-  IfWinActive ,  Microsoft Visual Studio
-     WinMinimize ,  Microsoft Visual Studio
-  else{
-    WinActivate ,  Microsoft Visual Studio
-    }
-else
-  run devenv
-return
+; #1::
+; SetTitleMatchMode, 2
+; IfWinExist,  Microsoft Visual Studio
+;   IfWinActive ,  Microsoft Visual Studio
+;      WinMinimize ,  Microsoft Visual Studio
+;   else{
+;     WinActivate ,  Microsoft Visual Studio
+;     }
+; else
+;   run devenv
+; return
 
+;VBA 
+#1::
+IfWinExist,ahk_class wndclass_desked_gsk
+  IfWinActive ,ahk_class wndclass_desked_gsk
+     WinMinimize ,ahk_class wndclass_desked_gsk 
+  else{
+    WinActivate ,  ahk_class wndclass_desked_gsk
+    }
+; else
+;   run devenv
+return
+  
 ; ;;;;;;;;;;Win+c ,toggle Pl/sql
 ; #c::
 ; IfWinExist,ahk_class TPLSQLDevForm
