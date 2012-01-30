@@ -201,11 +201,15 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        if ErrorLevel = EndKey:pgup
        {
          anything_pageUp(matched_candidates.maxIndex())
+         GuiControl,Focus,Edit1 ;; focus Edit1 ,
+         Send {End} ;;move cursor end
        }
 
        if ErrorLevel = EndKey:pgdn
        {
          anything_pageDown(matched_candidates.maxIndex())
+        GuiControl,Focus,Edit1 ;; focus Edit1 ,
+        Send {End} ;;move cursor end
        }
        ;;Ctrl-v =pageDn
        ;;Alt-v  == anything_pageUp
@@ -219,6 +223,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
            }else if(GetKeyState("LAlt", "P")=1){
                ; GuiControl,, Edit1, %anything_pattern%
                anything_pageUp(matched_candidates.maxIndex())
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              Send {End} ;;move cursor end
            }Else{
                input=v
            }
@@ -888,8 +894,11 @@ anything_pageDown(candidates_count)
   if (selectedRowNum= candidates_count){
         LV_Modify(1, "Select Focus Vis")
   }else{
-        ControlFocus, SysListView321,A
+         ControlFocus, SysListView321,A
         Send {pgdn}
+        
+        ; GuiControl,Focus,Edit1 ;; focus Edit1 ,
+        ; Send {End} ;;move cursor end
         ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event
         sleep ,1
   }
