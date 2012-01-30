@@ -18,14 +18,14 @@ AutoTrim, off
 anything_wid=
 ;; the search you have typed in the search textbox
 ;readonly
-anything_pattern=
+; anything_pattern=
  ; previous activated window id
 ;readonly
 anything_previous_activated_win_id=
 
  ; read only ,don't use this global variable
  ; this is a privatge variable
-previous_filtered_anything_pattern=
+previous_filtered_anything_pattern:=""
  ; record current anyting_properties
 anything_properties :=Object()
 
@@ -212,7 +212,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        if ErrorLevel = EndKey:v
        {
            if (GetKeyState("LControl", "P")=1){
-               ; GuiControl,, Edit1, %anything_pattern%
+               GuiControl,, Edit1, %anything_pattern%
                anything_pageDown(matched_candidates.maxIndex())
            }else if(GetKeyState("LAlt", "P")=1){
                ; GuiControl,, Edit1, %anything_pattern%
@@ -290,6 +290,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               ; anything_pattern :=previous_anything_pattern
               ; GuiControl,, Edit1, %anything_pattern%;
               GuiControl,, Edit1, %previous_anything_pattern%
+                GuiControl,Focus,Edit1 ;; focus Edit1 ,
+                Send {End} ;;move cursor end
 
               matched_candidates:=anything_refresh(tmpSources,previous_anything_pattern,true)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis")
@@ -544,6 +546,9 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               clipboard = %clipboard%
               input=%clipboard%
               GuiControl,, Edit1, %anything_pattern%%input%
+                GuiControl,Focus,Edit1 ;; focus Edit1 ,
+                Send {End} ;;move cursor end
+              
            }else{
                 input=y
             }
@@ -576,15 +581,23 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        if ErrorLevel = Timeout
        {
            ControlGetText,pattern,Edit1
-           if (not (previous_filtered_anything_pattern = pattern))
-           {
-               anything_pattern_updated:="yes"
-           }else
+           if ((previous_filtered_anything_pattern = pattern))
            {
                anything_pattern_updated:="no"
+           }else
+           {
+               anything_pattern_updated:="yes"
            }
        }
-
+       
+       if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
+       {
+       tmpSources := sources
+       build_no_candidates_source:=""
+       Gui, Color,WindowColor,ControlColor
+       GuiControl, +Background%WindowColor%, SysListView321
+       }
+       
 
            if (input<>"" or  anything_pattern_updated="yes")
            {
@@ -683,6 +696,7 @@ anything_refresh(sources,pattern,use_default){
      if (use_default=true)
      {
          ControlGetText,pattern,Edit1
+         previous_filtered_anything_pattern := pattern
      }
      win_width :=anything_properties["win_width"]
      selectedRowNum:= LV_GetNext(0)
@@ -773,7 +787,6 @@ anything_refresh(sources,pattern,use_default){
 
      }
 
-    previous_filtered_anything_pattern := pattern
 return matched_candidates
 }
 
