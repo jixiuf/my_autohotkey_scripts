@@ -196,7 +196,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
        anything_beep(0)
-       Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimyoevw{LAlt}{tab}
+       Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -227,6 +227,17 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               Send {End} ;;move cursor end
            }Else{
                input=v
+           }
+       }
+       if ErrorLevel = EndKey:d
+       {
+           if (GetKeyState("LControl", "P")=1){
+               GuiControl,, Edit1, %previous_filtered_anything_pattern%
+               anything_pageDown(matched_candidates.maxIndex())
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              Send {End} ;;move cursor end
+           }Else{
+               input=d
            }
        }
        ; ;;Ctrl-r  ==anything_pageUp
