@@ -214,6 +214,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
            if (GetKeyState("LControl", "P")=1){
                GuiControl,, Edit1, %anything_pattern%
                anything_pageDown(matched_candidates.maxIndex())
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              Send {End} ;;move cursor end
            }else if(GetKeyState("LAlt", "P")=1){
                ; GuiControl,, Edit1, %anything_pattern%
                anything_pageUp(matched_candidates.maxIndex())
