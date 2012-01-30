@@ -14,14 +14,18 @@ AutoTrim, off
 ;;;;;;;;;;;;;;;;;;;;;;;;;;global variable;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; you can use these global variable when you write your anything-source
 ;; anthing Window Id
-;readonly 
+;readonly
 anything_wid=
 ;; the search you have typed in the search textbox
-;readonly 
+;readonly
 anything_pattern=
- ; previous activated window id 
-;readonly 
-anything_previous_activated_win_id= 
+ ; previous activated window id
+;readonly
+anything_previous_activated_win_id=
+
+ ; read only ,don't use this global variable
+ ; this is a privatge variable
+previous_filtered_anything_pattern=
  ; record current anyting_properties
 anything_properties :=Object()
 
@@ -86,8 +90,11 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
     global anything_wid
     global anything_pattern
     global anything_properties
+    global previous_filtered_anything_pattern
     global anything_previous_activated_win_id
-    ; store previous activated window id in  global variable  
+
+
+    ; store previous activated window id in  global variable
     WinGet, anything_previous_activated_win_id, ID, A
     ;; copy all property from anything_default_properties to
     ;; anything_properties if  anything_properties doen't defined
@@ -117,7 +124,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    WindowColor:=anything_properties["WindowColor"]
    ControlColor:=anything_properties["ControlColor"]
    WindowColor_when_no_matched_candidate :=anything_properties["WindowColor_when_no_matched_candidate"]
-   ControlColor_when_no_matched_candidate:=anything_properties["ControlColor_when_no_matched_candidate"] 
+   ControlColor_when_no_matched_candidate:=anything_properties["ControlColor_when_no_matched_candidate"]
    FontSize:=anything_properties["FontSize"]
    FontColor:=anything_properties["FontColor"]
    FontWeight:=anything_properties["FontWeight"]
@@ -131,7 +138,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    Gui, Add, Text,     x10  y10 w80 h30, Search`:
    Gui, Add, Edit,     x90 y5 w500 h30,
    Gui +OwnDialogs
-   
+   WinSetTitle, Anything.ahk
+
     Gui, Add, ListView, x0 y40 w%win_width% h%ListViewHeight% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
     Gui, Add, Text,     x1  y%StatusHeight% Cwhite w%win_width% h20
 
@@ -139,7 +147,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
      tabListActions:=""
      matched_candidates:=Object()
      tmpSources:=sources
-     matched_candidates:=anything_refresh(tmpSources,anything_pattern)
+   matched_candidates:=anything_refresh(tmpSources,"",false)
      Gui ,Show,,
    ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
    ; ;; will be executed
@@ -172,6 +180,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          {
              selectedRowNum:= LV_GetNext(0)
              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+             ControlGetText,anything_pattern,Edit1
              if( anything_pattern=="" and  ( not (tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]="")))
              {
                  action:= tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]
@@ -182,8 +191,12 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                  break
              }
          }
-         anything_pattern_updated=
-       Input, input, L1,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyoevw{LAlt}{tab}
+       anything_pattern_updated=
+       
+       ; disable beeping ,when press some special key .(it's boring if don't disable it );
+       ; for example when you press Ctrl-n ,       
+       anything_beep(0)
+       Input, input, L1 M T0.5 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -198,13 +211,15 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        ;;Alt-v  == anything_pageUp
        if ErrorLevel = EndKey:v
        {
-         if (GetKeyState("LControl", "P")=1){
-           anything_pageDown(matched_candidates.maxIndex())
-        }else if(GetKeyState("LAlt", "P")=1){
-            anything_pageUp(matched_candidates.maxIndex())
-         }Else{
-           input=v
-         }
+           if (GetKeyState("LControl", "P")=1){
+               ; GuiControl,, Edit1, %anything_pattern%
+               anything_pageDown(matched_candidates.maxIndex())
+           }else if(GetKeyState("LAlt", "P")=1){
+               ; GuiControl,, Edit1, %anything_pattern%
+               anything_pageUp(matched_candidates.maxIndex())
+           }Else{
+               input=v
+           }
        }
        ; ;;Ctrl-r  ==anything_pageUp
        ;   if ErrorLevel = EndKey:r
@@ -218,18 +233,18 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 
          if ErrorLevel = EndKey:escape
          {
-              if (tabListActions="yes")
-            {
-              tabListActions:=""
-              tmpSources:=sources
-                  anything_pattern := previous_anything_pattern
-                  matched_candidates:=anything_refresh(tmpSources,anything_pattern)
-                 LV_Modify(previousSelectedIndex, "Select Focus Vis")
-               }else
-               {
+            ;   if (tabListActions="yes")
+            ; {
+            ;   tabListActions:=""
+            ;   tmpSources:=sources
+            ;   anything_pattern := previous_anything_pattern
+            ;   matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
+            ;      LV_Modify(previousSelectedIndex, "Select Focus Vis")
+            ;    }else
+            ;    {
                  anything_exit()
                  Break
-               }
+               ; }
          }
          if ErrorLevel = EndKey:LControl
             {
@@ -254,9 +269,14 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                  tabListActions:="yes"
                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                  tmpSources:= anything_build_source_of_actions(tmpSources[source_index] , matched_candidates[selectedRowNum])
-                 previous_anything_pattern:= anything_pattern
-                 anything_pattern=
-                 matched_candidates:=anything_refresh(tmpSources,anything_pattern)
+
+                  ControlGetText,previous_anything_pattern,Edit1
+                 ; anything_pattern=
+                 ; GuiControl,, Edit1, %anything_pattern%
+                 ; set edit1 empty string
+                 GuiControl,, Edit1,
+
+                 matched_candidates:=anything_refresh(tmpSources,"",false)
                  ; if matched_candidates.maxIndex()>0
                  ; {
                  ;    LV_Modify(1, "Select Focus Vis")
@@ -266,8 +286,12 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               {
               tabListActions:=""
               tmpSources:=sources
-                  anything_pattern := previous_anything_pattern
-                  matched_candidates:=anything_refresh(tmpSources,anything_pattern)
+
+              ; anything_pattern :=previous_anything_pattern
+              ; GuiControl,, Edit1, %anything_pattern%;
+              GuiControl,, Edit1, %previous_anything_pattern%
+
+              matched_candidates:=anything_refresh(tmpSources,previous_anything_pattern,true)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis")
                }
        }
@@ -290,6 +314,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:z
            {
             if (GetKeyState("LControl", "P")=1){ ;;Ctrl+z
+                  ; GuiControl,, Edit1, %anything_pattern%
                   selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
@@ -302,6 +327,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:j
            {
             if (GetKeyState("LControl", "P")=1){ ;;Ctrl+j
+                  ; GuiControl,, Edit1, %anything_pattern%
                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2)
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
@@ -309,7 +335,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                   anything_exit()
                   break
              }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
-                 selectedRowNum:= LV_GetNext(0)
+                  ; GuiControl,, Edit1, %anything_pattern%
+                  selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2)
                   action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
@@ -321,6 +348,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:k
            {
             if (GetKeyState("LControl", "P")=1){ ;; Ctrl+k
+                  ; GuiControl,, Edit1, %anything_pattern%
                  selectedRowNum:= LV_GetNext(0)
                        LV_GetText(source_index, selectedRowNum,2)
                        action:= anything_get_forth_or_defalut_action(tmpSources[source_index]["action"])
@@ -329,6 +357,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                        break
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+k
                {
+                  ; GuiControl,, Edit1, %anything_pattern%
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2)
                     action:= anything_get_forth_or_defalut_action(tmpSources[source_index]["action"])
@@ -341,6 +370,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:e
            {
             if (GetKeyState("LControl", "P")=1){ ;; Ctrl+e
+                  ; GuiControl,, Edit1, %anything_pattern%
                  selectedRowNum:= LV_GetNext(0)
                        LV_GetText(source_index, selectedRowNum,2)
                        action:= anything_get_fifth_or_defalut_action(tmpSources[source_index]["action"])
@@ -349,6 +379,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                        break
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+e
                {
+                  ; GuiControl,, Edit1, %anything_pattern%
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2)
                     action:= anything_get_fifth_or_defalut_action(tmpSources[source_index]["action"])
@@ -358,11 +389,12 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                input=e
              }
           }
-          
-          
+
+
          if ErrorLevel = EndKey:m
            {
             if (GetKeyState("LControl", "P")=1){ ;; Ctrl+m
+                  ; GuiControl,, Edit1, %anything_pattern%
                  selectedRowNum:= LV_GetNext(0)
                        LV_GetText(source_index, selectedRowNum,2)
                        action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
@@ -371,6 +403,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                        break
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+m
                {
+                  ; GuiControl,, Edit1, %anything_pattern%
                     selectedRowNum:= LV_GetNext(0)
                     LV_GetText(source_index, selectedRowNum,2)
                     action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
@@ -384,15 +417,18 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:l
            {
             if (GetKeyState("LControl", "P")=1){
-                                build_no_candidates_source:="yes"
-                    Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
-                    GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321                              
-                    tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                    matched_candidates:=anything_refresh(tmpSources,"")
-                    if matched_candidates.maxIndex()>0
-                    {
-                       LV_Modify(1, "Select Focus Vis")
-                    }
+                build_no_candidates_source:="yes"
+                Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
+                GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321
+
+                ControlGetText,anything_pattern,Edit1
+                tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
+
+                matched_candidates:=anything_refresh(tmpSources,"",false)
+                if matched_candidates.maxIndex()>0
+                {
+                    LV_Modify(1, "Select Focus Vis")
+                }
             }else{
                  input=l
             }
@@ -402,6 +438,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:i
            {
             if (GetKeyState("LControl", "P")=1){
+                  ; GuiControl,, Edit1, %anything_pattern%
+                  ControlGetText,anything_pattern,Edit1
                   anything_callFuncByNameWithOneParam(anything_properties["no_candidate_action"], anything_pattern)
                    anything_exit()
                   break
@@ -413,10 +451,10 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
          if ErrorLevel = EndKey:n
            {
             if (GetKeyState("LControl", "P")=1){
-               anything_selectNextCandidate(matched_candidates.maxIndex())
-              GuiControl,, Edit1, %anything_pattern%
-              GuiControl,Focus,Edit1 ;; focus Edit1 ,
-              Send {End} ;;move cursor end
+                anything_selectNextCandidate(matched_candidates.maxIndex())
+                ; GuiControl,, Edit1, %anything_pattern%
+                ; GuiControl,Focus,Edit1 ;; focus Edit1 ,
+                ; Send {End} ;;move cursor end
             }else{
                  input=n
              }
@@ -433,9 +471,9 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
            {
             if (GetKeyState("LControl", "P")=1){
               anything_selectPreviousCandidate(matched_candidates.maxIndex())
-              GuiControl,, Edit1, %anything_pattern%
-              GuiControl,Focus,Edit1 ;; focus Edit1 ,
-              Send {End} ;;move cursor end
+              ; GuiControl,, Edit1, %anything_pattern%
+              ; GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              ; Send {End} ;;move cursor end
              }else{
                  input=p
              }
@@ -451,22 +489,24 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
              }
 
          }
-; 
+;
        ; Ctrl-w ,copy
         if ErrorLevel = EndKey:w
        {
            if (GetKeyState("LControl", "P")=1){
+                  ; GuiControl,, Edit1, %anything_pattern%
                selectedRowNum:= LV_GetNext(0)
                LV_GetText(source_index, selectedRowNum,2)
-               anything_callFuncByNameWithOneParam("anything_copy_selected_candidate_as_string" ,matched_candidates[selectedRowNum])                 
+               anything_callFuncByNameWithOneParam("anything_copy_selected_candidate_as_string" ,matched_candidates[selectedRowNum])
                anything_exit()
                break
            }
            else if (GetKeyState("LAlt", "P")=1) ;;Alt+w
             {
+                  ; GuiControl,, Edit1, %anything_pattern%
                 selectedRowNum:= LV_GetNext(0)
                 LV_GetText(source_index, selectedRowNum,2)
-                anything_callFuncByNameWithOneParam("anything_copy_selected_candidate_as_string" ,matched_candidates[selectedRowNum])                 
+                anything_callFuncByNameWithOneParam("anything_copy_selected_candidate_as_string" ,matched_candidates[selectedRowNum])
            }else
             {
                     input=w
@@ -476,7 +516,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
         if ErrorLevel = EndKey:u
         {
           if (GetKeyState("LControl", "P")=1){
-               anything_pattern=
+               ; anything_pattern=
+               GuiControl,, Edit1,
                anything_pattern_updated=yes
            }else{
                 input=u
@@ -485,19 +526,24 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 ;;        backspace
       if ErrorLevel = EndKey:backspace
         {
+            ControlGetText,anything_pattern,Edit1
              if anything_pattern <>
               {
-              StringTrimRight, anything_pattern, anything_pattern, 1
-              anything_pattern_updated=yes
-            }
+                  ; ControlGetText,anything_pattern,Edit1
+                  ; StringTrimRight, anything_pattern, anything_pattern, 1
+                  ; GuiControl,, Edit1, %anything_pattern%
+                  anything_pattern_updated=yes
+              }
 
         }
  ;;Ctrl-y ,paste
         if ErrorLevel = EndKey:y
         {
           if (GetKeyState("LControl", "P")=1){
+              ControlGetText,anything_pattern,Edit1
               clipboard = %clipboard%
               input=%clipboard%
+              GuiControl,, Edit1, %anything_pattern%%input%
            }else{
                 input=y
             }
@@ -505,49 +551,67 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
         if ErrorLevel = EndKey:h
         {
           if (GetKeyState("LControl", "P")=1){
-             if anything_pattern <>
-              {
-              StringTrimRight, anything_pattern, anything_pattern, 1
-              anything_pattern_updated=yes
-              }
-           }else{
-                input=h
-            }
+              ; ControlGetText,anything_pattern,Edit1
+              ; if anything_pattern <>
+              ; {
+              ;     StringTrimRight, anything_pattern, anything_pattern, 1
+              ;     GuiControl,, Edit1, %anything_pattern%
+              ;     anything_pattern_updated=yes
+              ; }
+          }else{
+              input=h
+          }
         }
         ;;send the first source to last
         if ErrorLevel = EndKey:o
            {
             if (GetKeyState("LControl", "P")=1){
+                  ; GuiControl,, Edit1, %anything_pattern%
                tmpSources.insert(tmpSources.remove(1))
                anything_pattern_updated=yes
             }else{
                  input=o
              }
           }
+       if ErrorLevel = Timeout
+       {
+           ControlGetText,pattern,Edit1
+           if (not (previous_filtered_anything_pattern = pattern))
+           {
+               anything_pattern_updated:="yes"
+           }else
+           {
+               anything_pattern_updated:="no"
+           }
+       }
+
 
            if (input<>"" or  anything_pattern_updated="yes")
            {
-             if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
-             {
-               tmpSources := sources
-               build_no_candidates_source:=""
-               Gui, Color,WindowColor,ControlColor
-                    GuiControl, +Background%WindowColor%, SysListView321                              
-             }
-            anything_pattern = %anything_pattern%%input%
-            GuiControl,, Edit1, %anything_pattern%
-            GuiControl,Focus,Edit1 ;; focus Edit1 ,
-            Send {End} ;;move cursor right ,make it after the new inputed char
+               anything_pattern_updated:="no"
+               if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
+               {
+                   tmpSources := sources
+                   build_no_candidates_source:=""
+                   Gui, Color,WindowColor,ControlColor
+                   GuiControl, +Background%WindowColor%, SysListView321
+               }
+             ; ControlGetText,pattern,Edit1
+             ; GuiControl,, Edit1, %pattern%%input%
+               ControlGetText,anything_pattern,Edit1
+
+               GuiControl,Focus,Edit1 ;; focus Edit1 ,
+               ; Send {End} ;;move cursor right ,make it after the new inputed char
             selectedRowNum:= LV_GetNext(0)
            ;;TODO: ANYTHING_REFRESH and select needed selected
-            matched_candidates:=anything_refresh(tmpSources,anything_pattern)
+             matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
               if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
-                    GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321                              
+                    GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                           matched_candidates:=anything_refresh(tmpSources,"")
+                    matched_candidates:=anything_refresh(tmpSources,"",false)
               }
             }
             ;;if only one candidate left automatically execute it
@@ -567,8 +631,18 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        anything_on_select(tmpSources,matched_candidates) ;  on select event
      } ;; end of loop
      anything_exit()
+     anything_beep(1)           ;enable beep
+
 } ;; end of anything function
 
+; if state =0 ,disable beep
+; if state =1 enable beep
+anything_beep(state =0)
+{
+    ; state=1
+    SPI_SETBEEP := 0x2
+    DllCall( "SystemParametersInfo", UInt,SPI_SETBEEP, UInt,state, UInt,0, UInt,0 )
+}
 
 ; OnMessage( 0x06, "anything_WM_ACTIVATE" )
 ;;when Anything lost focus
@@ -583,7 +657,7 @@ anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
 }
 ;OnMessage(0x201, "anything_WM_LBUTTONDOWN")
 ;;when lbutton is down ,
-; anything_WM_LBUTTONDOWN(w,l) will be called 
+; anything_WM_LBUTTONDOWN(w,l) will be called
 ; so that you can use mouse click on anything window
 ; though this is not recommended
 anything_WM_LBUTTONDOWN(wParam, lParam)
@@ -602,14 +676,19 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 ;; then pattern is used to filter <Actions>
 ;; and anything_pattern will be displayed on Search Textbox always
 
-anything_refresh(sources,pattern){
+anything_refresh(sources,pattern,use_default){
      global anything_pattern
+     global previous_filtered_anything_pattern
      global anything_properties
-     win_width :=anything_properties["win_width"] 
+     if (use_default=true)
+     {
+         ControlGetText,pattern,Edit1
+     }
+     win_width :=anything_properties["win_width"]
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
-     if(anything_properties["anything_use_large_icon"]=1) 
+     if(anything_properties["anything_use_large_icon"]=1)
      {
          anything_imagelist:= IL_Create(5,5, true)
      }else
@@ -622,7 +701,7 @@ anything_refresh(sources,pattern){
          imagelist:=anything_get_imagelist(source)
           if imagelist
           {
-              if  (anything_properties["anything_use_large_icon"]=1) 
+              if  (anything_properties["anything_use_large_icon"]=1)
               {
                   LV_SetImageList(anything_imagelist, 1)
               }else
@@ -652,27 +731,27 @@ anything_refresh(sources,pattern){
      LV_ModifyCol(3,0) ;;candidate_index hidden
      LV_ModifyCol(4, win_width*0.10) ;; source_name width
      LV_ModifyCol(4, "Right") ;; source_name align Right
-     
+
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     ;these line is a bug fix for fast finger ,when you type so fast that
-     ;,Input() cann't catch what you have typed ,then the TextField catch it
-     ;but "anything" doesn't treat this char as part of anything_pattern,
-     ;it will be erased when you type next char if without these lines.
-     ;these line ,keep the lost char ,and append it to anything_pattern.
-     ;those this time it can't be used to filter ,but next time it can .
-     ; but it still not fix very well .
-     ControlGetText,text,Edit1
-     AppendedText := ""
-     if (( InStr(text,anything_pattern)==1) and (StrLen(text) <> StrLen(anything_pattern)) ) ;text starts with anything_pattern
-     {
-     AppendedText := SubStr(text,StrLen(anything_pattern)+1)
-     }
-     anything_pattern = %anything_pattern%%AppendedText%%input%
+     ; ;these line is a bug fix for fast finger ,when you type so fast that
+     ; ;,Input() cann't catch what you have typed ,then the TextField catch it
+     ; ;but "anything" doesn't treat this char as part of anything_pattern,
+     ; ;it will be erased when you type next char if without these lines.
+     ; ;these line ,keep the lost char ,and append it to anything_pattern.
+     ; ;those this time it can't be used to filter ,but next time it can .
+     ; ; but it still not fix very well .
+     ; ControlGetText,text,Edit1
+     ; AppendedText := ""
+     ; if (( InStr(text,anything_pattern)==1) and (StrLen(text) <> StrLen(anything_pattern)) ) ;text starts with anything_pattern
+     ; {
+     ; AppendedText := SubStr(text,StrLen(anything_pattern)+1)
+     ; }
+     ; anything_pattern = %anything_pattern%%AppendedText%%input%
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     
-     GuiControl,, Edit1, %anything_pattern%
+
+     ; GuiControl,, Edit1, %anything_pattern%
      GuiControl,Focus,Edit1 ;; focus Edit1 ,
-     Send {End} ;;move cursor right ,make it after the new inputed char
+     ; Send {End} ;;move cursor right ,make it after the new inputed char
 
      if (selectedRowNum = 0)
      {
@@ -694,7 +773,7 @@ anything_refresh(sources,pattern){
 
      }
 
-
+    previous_filtered_anything_pattern := pattern
 return matched_candidates
 }
 
@@ -793,8 +872,8 @@ anything_pageDown(candidates_count)
   }else{
         ControlFocus, SysListView321,A
         Send {pgdn}
-        ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event        
-        sleep ,1 
+        ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event
+        sleep ,1
   }
 }
 anything_pageUp(candidates_count){
@@ -804,8 +883,8 @@ anything_pageUp(candidates_count){
   }else{
         ControlFocus, SysListView321,A
         Send {pgup}
-        ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event        
-        sleep ,1 
+        ;  I don't know why ,if delete this line(sleep) , anything_on_select(tmpSources,matched_candidates) ;  on select event
+        sleep ,1
   }
 }
 anything_selectNextCandidate(candidates_count){
@@ -1039,13 +1118,13 @@ anything_execute_default_action_with_anything_pattern(candidate)
 
 anything_do_nothing(candidate)
 {
-  global 
-  old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+  global
+  old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
   anything_set_property_4_quit_when_lose_focus("no")
   ;write  your code here ...
   Msgbox , this would be called when you press C-i ,and you have typed in:  %candidate%
   anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
-     
+
 }
 
 ; this is an global action
@@ -1054,7 +1133,7 @@ anything_copy_selected_candidate_as_string(candidate)
 {
     if isObject(candidate)
     {
-        candidate_string:=candidate[1] 
+        candidate_string:=candidate[1]
         }
     else
     {
@@ -1068,12 +1147,12 @@ anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
 {
     if(value  == "yes")
     {
-        anything_properties["quit_when_lose_focus"]:="yes"       
+        anything_properties["quit_when_lose_focus"]:="yes"
         ;;;;when window lost focus ,function anything_WM_ACTIVATE()
         ;; will be executed
         OnMessage( 0x06, "anything_WM_ACTIVATE" )
     }else {
-        anything_properties["quit_when_lose_focus"]:="no"       
+        anything_properties["quit_when_lose_focus"]:="no"
         OnMessage( 0x06, "" )
     }
 }
@@ -1104,13 +1183,13 @@ Loop %count2%
 ; so you can use this function for test
 anything_MsgBox(Msg)
 {
-  global 
-  old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
+  global
+  old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
   anything_set_property_4_quit_when_lose_focus("no")
   ;write  your code here ...
   Msgbox % Msg
   anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
-     
+
 }
 ; show a tooltip ,at header of current window
 anything_tooltip_header(Text)
@@ -1138,20 +1217,20 @@ anything_on_select(tmpSources,matched_candidates)
     if ( not (tmpSources[source_index]["onselect"]==""))
     {
         onselectfun := tmpSources[source_index]["onselect"]
-        anything_callFuncByNameWithOneParam(onselectfun,matched_candidates[selectedRowNum])        
+        anything_callFuncByNameWithOneParam(onselectfun,matched_candidates[selectedRowNum])
     }
     else
     {
         ToolTip,                ;  clear tooltip
         anything_statusbar("")  ; set the statusbar content empty
     }
-    
-    
+
+
 }
 
 
 /*
- ; http://www.autohotkey.com/forum/viewtopic.php?t=64123 
+ ; http://www.autohotkey.com/forum/viewtopic.php?t=64123
  ; EXAMPLE:
  ; anything_SetTimerF("func",2000,Object(1,1),10) ;create a higher priority timer
  ; anything_SetTimerF("func2",1000,Object(1,2)) ;another timer with low priority
@@ -1165,21 +1244,21 @@ anything_on_select(tmpSources,matched_candidates)
  ; anything_SetTimerF:
  ;    An attempt at replicating the entire SetTimer functionality
  ;       for functions. Includes one-time and recurring timers.
-   
+
  ;    Thanks to SKAN for initial code and conceptual research.
  ;    Modified by infogulch and HotKeyIt to copy SetTimer features
-   
+
  ; On User Call:
  ;    returns: true if success or false if failure
  ;    Function: Function name
  ;    Period: Delay (int)(0 to stop timer, positive to start, negative to run once)
  ;    ParmObject: (optional) Object of params to pass to function
  ;    dwTime: (used internally)
-   
+
  ; On Timer: (user)
  ;    ParmObject is expanded into params for the called function
  ;    ErrorLevel is set to the TickCount
-   
+
  ; On Timer: (internal)
  ;    Function: HWND (unused)
  ;    Period: uMsg (unused)
@@ -1226,7 +1305,7 @@ anything_SetTimerF( Function, Period=0, ParmObject=0, Priority=0 ) {
  ; add the icon of File to ImageList ,
  ; @param Large_Icon can be "yes"/1/,
  ; FileType can be lnk,exe,ico ,and so on
- ; if File doesn't exist ,use a generic icon instead 
+ ; if File doesn't exist ,use a generic icon instead
 anything_add_icon(File ,ImageList,Large_Icon)
 {
     if (FileExist(File)=="") ; file doesn't exists
@@ -1250,7 +1329,7 @@ anything_add_icon(File ,ImageList,Large_Icon)
         }
         hIcon := NumGet(sfi, 0)
         DllCall("ImageList_ReplaceIcon", UInt, ImageList, Int, -1, UInt, hicon)
-        ; DllCall("ImageList_ReplaceIcon", "ptr", ImageList, "int", -1, "ptr", hIcon) 
+        ; DllCall("ImageList_ReplaceIcon", "ptr", ImageList, "int", -1, "ptr", hIcon)
         DllCall("DestroyIcon", ptr, hicon)
     }
 }
@@ -1258,4 +1337,3 @@ anything_add_icon(File ,ImageList,Large_Icon)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
