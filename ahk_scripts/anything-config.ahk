@@ -30,7 +30,7 @@ return
 ^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
 my_anything_properties:=Object()
 my_anything_properties["win_width"]:= 900
-my_anything_properties["win_height"]:= 280
+my_anything_properties["win_height"]:= 380
 my_anything_properties["anything_use_large_icon"]:=1
 my_anything_properties["FontSize"]:= 15
  
