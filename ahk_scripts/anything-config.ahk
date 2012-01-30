@@ -35,7 +35,6 @@ my_anything_properties["anything_use_large_icon"]:=1
 my_anything_properties["FontSize"]:= 15
  
 sources:=Array()
-sources.insert(anything_window_switcher_with_assign_keys_source)
 sources.insert(anything_window_switcher_source)
 anything_multiple_sources_with_properties(sources,my_anything_properties)
 return
