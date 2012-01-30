@@ -108,11 +108,11 @@ anything_ws_activate_window(candidate)
   { ;;minimized
   WinRestore ,ahk_id %win_id%
   }
-  if (activeWinClass="TXGuiFoundation" ) ;qq
-  {
-   WinGetPos , X, Y, ,,ahk_id %win_id%
-    MouseClick,Left,X,Y
-  }
+  ; if (activeWinClass="TXGuiFoundation" ) ;qq
+  ; {
+  ;  WinGetPos , X, Y, ,,ahk_id %win_id%
+  ;   MouseClick,Left,X,Y
+  ; }
   WinActivate ,ahk_id  %win_id%
 }
 
