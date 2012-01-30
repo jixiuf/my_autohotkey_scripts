@@ -18,7 +18,7 @@ AutoTrim, off
 anything_wid=
 ;; the search you have typed in the search textbox
 ;readonly
-; anything_pattern=
+anything_pattern=
  ; previous activated window id
 ;readonly
 anything_previous_activated_win_id=
@@ -196,7 +196,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
        anything_beep(0)
-       Input, input, L1 M T0.5 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpguhjlzimyoevw{LAlt}{tab}
+       Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -287,11 +287,11 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               tabListActions:=""
               tmpSources:=sources
 
-              ; anything_pattern :=previous_anything_pattern
               ; GuiControl,, Edit1, %anything_pattern%;
+              anything_pattern :=previous_anything_pattern
               GuiControl,, Edit1, %previous_anything_pattern%
-                GuiControl,Focus,Edit1 ;; focus Edit1 ,
-                Send {End} ;;move cursor end
+              GuiControl,Focus,Edit1 ;; focus Edit1 ,
+              Send {End} ;;move cursor end
 
               matched_candidates:=anything_refresh(tmpSources,previous_anything_pattern,true)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis")
@@ -468,6 +468,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
           if ErrorLevel = EndKey:Up
           {
                anything_selectPreviousCandidate(matched_candidates.maxIndex())
+                 GuiControl,Focus,Edit1 ;; focus Edit1 ,
+                 Send {End} ;;move cursor end
           }
            if ErrorLevel = EndKey:p
            {
@@ -518,7 +520,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
         if ErrorLevel = EndKey:u
         {
           if (GetKeyState("LControl", "P")=1){
-               ; anything_pattern=
+               anything_pattern:=""
                GuiControl,, Edit1,
                anything_pattern_updated=yes
            }else{
@@ -531,7 +533,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             ControlGetText,anything_pattern,Edit1
              if anything_pattern <>
               {
-                  ; ControlGetText,anything_pattern,Edit1
+                   ControlGetText,anything_pattern,Edit1
                   ; StringTrimRight, anything_pattern, anything_pattern, 1
                   ; GuiControl,, Edit1, %anything_pattern%
                   anything_pattern_updated=yes
@@ -553,20 +555,20 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                 input=y
             }
         }
-        if ErrorLevel = EndKey:h
-        {
-          if (GetKeyState("LControl", "P")=1){
-              ; ControlGetText,anything_pattern,Edit1
-              ; if anything_pattern <>
-              ; {
-              ;     StringTrimRight, anything_pattern, anything_pattern, 1
-              ;     GuiControl,, Edit1, %anything_pattern%
-              ;     anything_pattern_updated=yes
-              ; }
-          }else{
-              input=h
-          }
-        }
+        ; if ErrorLevel = EndKey:h
+        ; {
+        ;   if (GetKeyState("LControl", "P")=1){
+        ;       ; ControlGetText,anything_pattern,Edit1
+        ;       ; if anything_pattern <>
+        ;       ; {
+        ;       ;     StringTrimRight, anything_pattern, anything_pattern, 1
+        ;       ;     GuiControl,, Edit1, %anything_pattern%
+        ;       ;     anything_pattern_updated=yes
+        ;       ; }
+        ;   }else{
+        ;       input=h
+        ;   }
+        ; }
         ;;send the first source to last
         if ErrorLevel = EndKey:o
            {
@@ -688,7 +690,9 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 ;; it will list <Actions> as candidates for you to select
 ;; then pattern is used to filter <Actions>
 ;; and anything_pattern will be displayed on Search Textbox always
-
+; @param use_default ,when is true , pattern is ignored
+; and the text in textfield are treat as pattern to filter
+;  if false , pattern is used 
 anything_refresh(sources,pattern,use_default){
      global anything_pattern
      global previous_filtered_anything_pattern
@@ -786,8 +790,7 @@ anything_refresh(sources,pattern,use_default){
        }
 
      }
-
-return matched_candidates
+   return matched_candidates
 }
 
 ;;candidate can be a string, when it is  a string ,it will be
@@ -918,8 +921,10 @@ anything_selectPreviousCandidate(candidates_count){
               }
 }
 anything_exit(){
+   global previous_filtered_anything_pattern
    global anything_pattern
-    anything_pattern=
+   anything_pattern:=""
+   previous_filtered_anything_pattern:=""
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
    OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit
    ToolTip,                ;  clear tooltip
