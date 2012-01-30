@@ -685,11 +685,18 @@ anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
 ; though this is not recommended
 anything_WM_LBUTTONDOWN(wParam, lParam)
 {
-  MouseGetPos,,,,controlUnderMouse,
-  if(controlUnderMouse="SysListView321")
-  {
-    send {Enter}
-  }
+   Send {Enter}
+  ; MouseGetPos,,,,controlUnderMouse,
+  ; if(controlUnderMouse="SysListView321")
+  ; {
+  ;  GuiControl,Focus,Edit1 ;; focus Edit1 ,
+  ;  sleep 1000
+  ;      ; selectedRowNum:= LV_GetNext(0)
+  ;      ; LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+  ;      ; action:= anything_get_default_action(tmpSources[source_index]["action"])
+  ;      ; anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+  ;      ;  anything_exit()
+  ; }
 }
 
 ;;;anything_pattern will be displayed on Search Textbox
