@@ -147,7 +147,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
      tabListActions:=""
      matched_candidates:=Object()
      tmpSources:=sources
-   matched_candidates:=anything_refresh(tmpSources,"",no)
+   matched_candidates:=anything_refresh(tmpSources,"",false)
      Gui ,Show,,
    ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
    ; ;; will be executed
@@ -258,7 +258,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             ;   tabListActions:=""
             ;   tmpSources:=sources
             ;   anything_pattern := previous_anything_pattern
-            ;   matched_candidates:=anything_refresh(tmpSources,anything_pattern,yes)
+            ;   matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
             ;      LV_Modify(previousSelectedIndex, "Select Focus Vis")
             ;    }else
             ;    {
@@ -296,7 +296,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                  ; set edit1 empty string
                  GuiControl,, Edit1,
 
-                 matched_candidates:=anything_refresh(tmpSources,"",no)
+                 matched_candidates:=anything_refresh(tmpSources,"",false)
                  ; if matched_candidates.maxIndex()>0
                  ; {
                  ;    LV_Modify(1, "Select Focus Vis")
@@ -313,7 +313,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               GuiControl,Focus,Edit1 ;; focus Edit1 ,
               Send {End} ;;move cursor end
 
-              matched_candidates:=anything_refresh(tmpSources,previous_anything_pattern,yes)
+              matched_candidates:=anything_refresh(tmpSources,previous_anything_pattern,true)
                  LV_Modify(previousSelectedIndex, "Select Focus Vis")
                }
        }
@@ -446,7 +446,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                 ControlGetText,anything_pattern,Edit1
                 tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
 
-                matched_candidates:=anything_refresh(tmpSources,"",no)
+                matched_candidates:=anything_refresh(tmpSources,"",false)
                 if matched_candidates.maxIndex()>0
                 {
                     LV_Modify(1, "Select Focus Vis")
@@ -639,14 +639,14 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                ; Send {End} ;;move cursor right ,make it after the new inputed char
             selectedRowNum:= LV_GetNext(0)
            ;;TODO: ANYTHING_REFRESH and select needed selected
-             matched_candidates:=anything_refresh(tmpSources,anything_pattern,yes)
+             matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
               if  matched_candidates.maxIndex() <1
               {
                     build_no_candidates_source:="yes"
                     Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
                     GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321
                     tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                    matched_candidates:=anything_refresh(tmpSources,"",no)
+                    matched_candidates:=anything_refresh(tmpSources,"",false)
               }
             }
             ;;if only one candidate left automatically execute it
@@ -717,14 +717,14 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 ;; it will list <Actions> as candidates for you to select
 ;; then pattern is used to filter <Actions>
 ;; and anything_pattern will be displayed on Search Textbox always
-; @param use_default ,when is yes , pattern is ignored
+; @param use_default ,when is true , pattern is ignored
 ; and the text in textfield are treat as pattern to filter
-;  if no , pattern is used 
+;  if false , pattern is used 
 anything_refresh(sources,pattern,use_default){
      global anything_pattern
      global previous_filtered_anything_pattern
      global anything_properties
-     if (use_default=yes)
+     if (use_default=true)
      {
          ControlGetText,pattern,Edit1
          previous_filtered_anything_pattern := pattern
