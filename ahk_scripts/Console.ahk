@@ -13,7 +13,21 @@ SendMode, Input
 ^y::StringTypePaste(Clipboard)
 ^Return::startMsysHere()
 ^!Return::cmd_explore_here() 
-#Esc::Send ,exit`n 
+#Esc::Send ,exit`n
+ 
+^!f::Send ^{Right} 
+^!b::Send ^{Left}
+
+^a::Send {Home} 
+^e::Send {End}
+^!a::Send {Home} 
+^!e::Send {End}
+
+^f::Send {Right}
+^b::Send {Left}
+
+^u::Send ^{Home}
+^k::Send ^{End}
 #IfWinActive 
 
 
