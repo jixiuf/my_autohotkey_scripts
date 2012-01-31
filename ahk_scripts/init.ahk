@@ -17,17 +17,16 @@ run %A_ScriptDir%\autoclosewin.ahk
 #Include %A_ScriptDir%\anything-config.ahk
 
 #Include %A_ScriptDir%\explorer.ahk
-; #Include %A_ScriptDir%\cmd2msys.ahk
 #Include %A_ScriptDir%\switchWindow.ahk
-; #Include %A_ScriptDir%\notepad-emacs-key.ahk
+#Include %A_ScriptDir%\notepad-emacs-key.ahk
 #Include %A_ScriptDir%\eclipse.ahk
 #Include %A_ScriptDir%\alias.ahk
 #Include %A_ScriptDir%\toggleTaskBar.ahk
 #Include %A_ScriptDir%\plsql.ahk
 #Include %A_ScriptDir%\toadsqlserver.ahk
 #Include %A_ScriptDir%\Console.ahk
-; #Include %A_ScriptDir%\diaglog.ahk
+#Include %A_ScriptDir%\diaglog.ahk
 #Include %A_ScriptDir%\win-move-resize.ahk
-; #Include %A_ScriptDir%\ie.ahk
-; #Include %A_ScriptDir%\word-emacs-key.ahk
+#Include %A_ScriptDir%\ie.ahk
+#Include %A_ScriptDir%\word-emacs-key.ahk
 #Include %A_ScriptDir%\googletranslate.ahk
