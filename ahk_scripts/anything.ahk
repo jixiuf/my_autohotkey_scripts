@@ -167,7 +167,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        {
            selectedRowNum:= LV_GetNext(0)
            LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-           if (tmpSources[source_index]["anything-execute-action-at-once-if-one-even-no-keyword"]="yes")
+           ControlGetText,anything_pattern,Edit1
+           if( (anything_pattern="") and  (tmpSources[source_index]["anything-execute-action-at-once-if-one-even-no-keyword"]="yes"))
            {
                action:= anything_get_default_action(tmpSources[source_index]["action"])
                anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
@@ -655,13 +656,13 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                    selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
                   ; anything_MsgBox(tmpSources[source_index]["anything-execute-action-at-once-if-one"])                   
-              if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
-              {
-                  action:= anything_get_default_action(tmpSources[source_index]["action"])
-                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                  anything_exit() ;;first quit .then execute action
-                  break
-                }
+                   if ( (not (anything_pattern="")) and (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes"))
+                   {
+                       action:= anything_get_default_action(tmpSources[source_index]["action"])
+                       anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                       anything_exit() ;;first quit .then execute action
+                       break
+                   }
               }
        anything_on_select(tmpSources,matched_candidates) ;  on select event
      } ;; end of loop
