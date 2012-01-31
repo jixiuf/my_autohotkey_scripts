@@ -623,13 +623,13 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
            if (input<>"" or  anything_pattern_updated="yes")
            {
                anything_pattern_updated:="no"
-               if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
-               {
-                   tmpSources := sources
-                   build_no_candidates_source:=""
-                   Gui, Color,WindowColor,ControlColor
-                   GuiControl, +Background%WindowColor%, SysListView321
-               }
+               ; if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
+               ; {
+               ;     tmpSources := sources
+               ;     build_no_candidates_source:=""
+               ;     Gui, Color,WindowColor,ControlColor
+               ;     GuiControl, +Background%WindowColor%, SysListView321
+               ; }
              ; ControlGetText,pattern,Edit1
              ; GuiControl,, Edit1, %pattern%%input%
                ControlGetText,anything_pattern,Edit1
@@ -654,6 +654,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             {
                    selectedRowNum:= LV_GetNext(0)
                   LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+                  ; anything_MsgBox(tmpSources[source_index]["anything-execute-action-at-once-if-one"])                   
               if (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes")
               {
                   action:= anything_get_default_action(tmpSources[source_index]["action"])
@@ -665,7 +666,6 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        anything_on_select(tmpSources,matched_candidates) ;  on select event
      } ;; end of loop
      anything_exit()
-     anything_beep(1)           ;enable beep
 
 } ;; end of anything function
 
@@ -956,6 +956,7 @@ anything_exit(){
    previous_filtered_anything_pattern:=""
    OnMessage( 0x06, "" ) ;;disable 0x06 OnMessage
    OnMessage(0x201, "") ;;disable 0x201 onMessage ,when anything_exit
+   anything_beep(1)           ;enable beep
    ToolTip,                ;  clear tooltip
    Gui Destroy
 }
