@@ -11,8 +11,10 @@ SetWorkingDir %A_ScriptDir%
 
 ; anything-source: <anything_explorer_history_source>       defined in anything-explorer-history.ahk .
 ; anything-source: <anything_favorite_directories_source>   defined in anything-favorite-directories.ahk
+
 ; anything-source: <anything_run_source>                    defined in anything-run.ahk
 ; anything-source: <anything_run_launch_source>             defined in anything-run-launch-plugin.ahk
+
 ; anything-source: <anything_window_switcher_source>        define in anything-window-switch.ahk 
 
 
@@ -21,7 +23,7 @@ f3::
 sources:=Array()
 sources.insert(anything_explorer_history_source)
 sources.insert(anything_favorite_directories_source)
-sources.insert(anything_run_source)
+; sources.insert(anything_run_source)
 anything_multiple_sources(sources)
 return
 
