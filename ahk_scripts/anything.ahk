@@ -199,7 +199,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
-       Input, input, L1 M T0.5 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
+       Input, input, L1 M T0.3 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
