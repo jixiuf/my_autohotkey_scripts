@@ -786,7 +786,7 @@ anything_refresh(sources,pattern,use_default){
       }
      if (use_default=true)
      {
-         sleep ,10              ; sleep 30ms ,if text in textfield changed ,refresh again
+         ; sleep ,10              ; sleep 30ms ,if text in textfield changed ,refresh again
          ControlGetText,new_pattern,Edit1
          if (new_pattern <> pattern)
          {
