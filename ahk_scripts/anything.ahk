@@ -159,7 +159,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
     WinGet, anything_wid, ID, A
     WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
     anything_on_select(tmpSources,matched_candidates) ;  on select event
-    anything_beep(0)
+    anything_beep(0)                                  ; donot beep when press Ctrl-n Ctrl-p ...
     loop,
     {
        ;;if only one candidate left automatically execute it
@@ -193,7 +193,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                  break
              }
          }
-       anything_pattern_updated=
+        anything_pattern_updated:="no"
        
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
@@ -335,13 +335,14 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 
          if ErrorLevel = EndKey:z
            {
-            if (GetKeyState("LControl", "P")=1){ ;;Ctrl+z
-                  ; GuiControl,, Edit1, %anything_pattern%
-                  selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-                  action:= anything_get_default_action(tmpSources[source_index]["action"])
-                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                 anything_pattern_updated=yes ;;
+            if (GetKeyState("LControl", "P")=1)
+            { ; Ctrl+z
+              ; GuiControl,, Edit1, %anything_pattern%
+                selectedRowNum:= LV_GetNext(0)
+              LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+              action:= anything_get_default_action(tmpSources[source_index]["action"])
+              anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+              anything_pattern_updated:="yes" ;;
             }else{
                  input=z
             }
@@ -356,13 +357,15 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
                   anything_exit()
                   break
-             }else if (GetKeyState("LAlt", "P")=1){ ;;Alt+j
-                  ; GuiControl,, Edit1, %anything_pattern%
-                  selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2)
-                  action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
-                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                  anything_pattern_updated=yes
+            }
+            else if (GetKeyState("LAlt", "P")=1)
+            { ;;Alt+j
+              ; GuiControl,, Edit1, %anything_pattern%
+                selectedRowNum:= LV_GetNext(0)
+              LV_GetText(source_index, selectedRowNum,2)
+              action:= anything_get_second_or_defalut_action(tmpSources[source_index]["action"])
+              anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+              anything_pattern_updated:="yes"
             }else{
                  input=j
             }
@@ -380,11 +383,11 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+k
                {
                   ; GuiControl,, Edit1, %anything_pattern%
-                    selectedRowNum:= LV_GetNext(0)
-                    LV_GetText(source_index, selectedRowNum,2)
-                    action:= anything_get_forth_or_defalut_action(tmpSources[source_index]["action"])
-                    anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                    anything_pattern_updated=yes
+                   selectedRowNum:= LV_GetNext(0)
+                  LV_GetText(source_index, selectedRowNum,2)
+                  action:= anything_get_forth_or_defalut_action(tmpSources[source_index]["action"])
+                  anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  anything_pattern_updated:="yes"
                }Else{
                input=k
              }
@@ -401,12 +404,12 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                        break
                }else if (GetKeyState("LAlt", "P")=1) ;;Alt+e
                {
-                  ; GuiControl,, Edit1, %anything_pattern%
-                    selectedRowNum:= LV_GetNext(0)
-                    LV_GetText(source_index, selectedRowNum,2)
-                    action:= anything_get_fifth_or_defalut_action(tmpSources[source_index]["action"])
-                    anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                    anything_pattern_updated=yes
+                   ; GuiControl,, Edit1, %anything_pattern%
+                   selectedRowNum:= LV_GetNext(0)
+                   LV_GetText(source_index, selectedRowNum,2)
+                   action:= anything_get_fifth_or_defalut_action(tmpSources[source_index]["action"])
+                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  anything_pattern_updated:="yes"
                }Else{
                input=e
              }
@@ -430,7 +433,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                     LV_GetText(source_index, selectedRowNum,2)
                     action:= anything_get_third_or_defalut_action(tmpSources[source_index]["action"])
                     anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                    anything_pattern_updated=yes
+                  anything_pattern_updated:="yes"
                }Else{
                input=m
              }
@@ -542,7 +545,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
           if (GetKeyState("LControl", "P")=1){
                anything_pattern:=""
                GuiControl,, Edit1,
-               anything_pattern_updated=yes
+               anything_pattern_updated:="yes"
            }else{
                 input=u
             }
@@ -556,7 +559,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                    ControlGetText,anything_pattern,Edit1
                   ; StringTrimRight, anything_pattern, anything_pattern, 1
                   ; GuiControl,, Edit1, %anything_pattern%
-                  anything_pattern_updated=yes
+                   anything_pattern_updated:="yes"
               }
 
         }
@@ -583,7 +586,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
         ;       ; {
         ;       ;     StringTrimRight, anything_pattern, anything_pattern, 1
         ;       ;     GuiControl,, Edit1, %anything_pattern%
-        ;       ;     anything_pattern_updated=yes
+        ;       ;     anything_pattern_updated:="yes"
         ;       ; }
         ;   }else{
         ;       input=h
@@ -595,7 +598,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             if (GetKeyState("LControl", "P")=1){
                   ; GuiControl,, Edit1, %anything_pattern%
                tmpSources.insert(tmpSources.remove(1))
-               anything_pattern_updated=yes
+                  anything_pattern_updated:="yes"
             }else{
                  input=o
              }
