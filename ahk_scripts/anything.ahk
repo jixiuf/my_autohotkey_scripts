@@ -206,7 +206,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
        ; Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
-       Input, input, L1 M V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
+       Input, input, L1 M V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}khnpgujlzimdyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -587,20 +587,23 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                 input=y
             }
         }
-        ; if ErrorLevel = EndKey:h
-        ; {
-        ;   if (GetKeyState("LControl", "P")=1){
-        ;       ; ControlGetText,anything_pattern,Edit1
-        ;       ; if anything_pattern <>
-        ;       ; {
-        ;       ;     StringTrimRight, anything_pattern, anything_pattern, 1
-        ;       ;     GuiControl,, Edit1, %anything_pattern%
-        ;       ;     anything_pattern_updated:="yes"
-        ;       ; }
-        ;   }else{
-        ;       input=h
-        ;   }
-        ; }
+        if ErrorLevel = EndKey:h
+        {
+            ;windows default Ctrl-h == backspace ,make sure
+            ; Anything.ahk know the change
+            anything_pattern_updated:="yes"
+          ; if (GetKeyState("LControl", "P")=1){
+          ;     ; ControlGetText,anything_pattern,Edit1
+          ;     ; if anything_pattern <>
+          ;     ; {
+          ;     ;     StringTrimRight, anything_pattern, anything_pattern, 1
+          ;     ;     GuiControl,, Edit1, %anything_pattern%
+          ;     ;     anything_pattern_updated:="yes"
+          ;     ; }
+          ; }else{
+          ;     input=h
+          ; }
+        }
         ;;send the first source to last
         if ErrorLevel = EndKey:o
            {
