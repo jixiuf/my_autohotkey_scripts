@@ -160,39 +160,41 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
     WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
     anything_on_select(tmpSources,matched_candidates) ;  on select event
     anything_beep(0)                                  ; donot beep when press Ctrl-n Ctrl-p ...
+    
+    ;;if only one candidate left automatically execute it
+    ;; if source["anything-execute-action-at-once-if-one"]="yes"
+    if ( matched_candidates.maxIndex() == 1)
+    {
+        selectedRowNum:= LV_GetNext(0)
+        LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+        ControlGetText,anything_pattern,Edit1
+        if( (anything_pattern="") and  (tmpSources[source_index]["anything-execute-action-at-once-if-one-even-no-keyword"]="yes"))
+        {
+            action:= anything_get_default_action(tmpSources[source_index]["action"])
+            anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+            anything_exit() ;;first quit .then execute action
+            break
+        }
+    }
+
+    if ( matched_candidates.maxIndex() = 2)
+    {
+        selectedRowNum:= LV_GetNext(0)
+        LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+        ControlGetText,anything_pattern,Edit1
+        if( anything_pattern=="" and  ( not (tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]="")))
+        {
+            action:= tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]
+            candidate1 :=matched_candidates[selectedRowNum]
+            candidate2 :=matched_candidates[selectedRowNum+1]
+            anything_callFuncByNameWithTwoParam(action ,candidate1,candidate2)
+            anything_exit() ;;first quit .then execute action
+            break
+        }
+    }
+    
     loop,
     {
-       ;;if only one candidate left automatically execute it
-       ;; if source["anything-execute-action-at-once-if-one"]="yes"
-       if ( matched_candidates.maxIndex() == 1)
-       {
-           selectedRowNum:= LV_GetNext(0)
-           LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-           ControlGetText,anything_pattern,Edit1
-           if( (anything_pattern="") and  (tmpSources[source_index]["anything-execute-action-at-once-if-one-even-no-keyword"]="yes"))
-           {
-               action:= anything_get_default_action(tmpSources[source_index]["action"])
-               anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-               anything_exit() ;;first quit .then execute action
-               break
-           }
-       }
-
-         if matched_candidates.maxIndex() = 2
-         {
-             selectedRowNum:= LV_GetNext(0)
-             LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-             ControlGetText,anything_pattern,Edit1
-             if( anything_pattern=="" and  ( not (tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]="")))
-             {
-                 action:= tmpSources[source_index]["anything-action-when-2-candidates-even-no-keyword"]
-                 candidate1 :=matched_candidates[selectedRowNum]
-                 candidate2 :=matched_candidates[selectedRowNum+1]
-                 anything_callFuncByNameWithTwoParam(action ,candidate1,candidate2)
-                 anything_exit() ;;first quit .then execute action
-                 break
-             }
-         }
         anything_pattern_updated:="no"
        
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
