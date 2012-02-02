@@ -148,6 +148,12 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
      matched_candidates:=Object()
      tmpSources:=sources
    matched_candidates:=anything_refresh(tmpSources,"",false)
+     LV_ModifyCol(1,win_width*0.88) ;;candidates
+     LV_ModifyCol(2,0) ;;source_index hidden
+     LV_ModifyCol(3,0) ;;candidate_index hidden
+     LV_ModifyCol(4, win_width*0.10) ;; source_name width
+     LV_ModifyCol(4, "Right") ;; source_name align Right
+     
      Gui ,Show,,
    ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
    ; ;; will be executed
@@ -301,7 +307,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                  matched_candidates:=anything_refresh(tmpSources,"",false)
                  ; if matched_candidates.maxIndex()>0
                  ; {
-                 ;    LV_Modify(1, "Select Focus Vis")
+                 ;    LV_Modify(1, "Select Vis")
                  ; }
               }else
               ;;reback from listed action
@@ -316,7 +322,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
               Send {End} ;;move cursor end
 
               matched_candidates:=anything_refresh(tmpSources,previous_anything_pattern,true)
-                 LV_Modify(previousSelectedIndex, "Select Focus Vis")
+                 LV_Modify(previousSelectedIndex, "Select Vis")
                }
        }
 
@@ -454,7 +460,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
                 matched_candidates:=anything_refresh(tmpSources,"",false)
                 if matched_candidates.maxIndex()>0
                 {
-                    LV_Modify(1, "Select Focus Vis")
+                    LV_Modify(1, "Select Vis")
                 }
             }else{
                  input=l
@@ -736,7 +742,7 @@ anything_refresh(sources,pattern,use_default){
          ControlGetText,pattern,Edit1
          previous_filtered_anything_pattern := pattern
      }
-     win_width :=anything_properties["win_width"]
+     ; win_width :=anything_properties["win_width"]
      selectedRowNum:= LV_GetNext(0)
      lv_delete()
      matched_candidates:=Object()
@@ -778,11 +784,11 @@ anything_refresh(sources,pattern,use_default){
                }
           }
       }
-     LV_ModifyCol(1,win_width*0.88) ;;candidates
-     LV_ModifyCol(2,0) ;;source_index hidden
-     LV_ModifyCol(3,0) ;;candidate_index hidden
-     LV_ModifyCol(4, win_width*0.10) ;; source_name width
-     LV_ModifyCol(4, "Right") ;; source_name align Right
+     ; LV_ModifyCol(1,win_width*0.88) ;;candidates
+     ; LV_ModifyCol(2,0) ;;source_index hidden
+     ; LV_ModifyCol(3,0) ;;candidate_index hidden
+     ; LV_ModifyCol(4, win_width*0.10) ;; source_name width
+     ; LV_ModifyCol(4, "Right") ;; source_name align Right
 
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      ; ;these line is a bug fix for fast finger ,when you type so fast that
@@ -802,28 +808,27 @@ anything_refresh(sources,pattern,use_default){
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
      ; GuiControl,, Edit1, %anything_pattern%
-     GuiControl,Focus,Edit1 ;; focus Edit1 ,
+     ; GuiControl,Focus,Edit1 ;; focus Edit1 ,
      ; Send {End} ;;move cursor right ,make it after the new inputed char
 
      if (selectedRowNum = 0)
      {
-       LV_Modify(1, "Select Focus Vis") ;  select ,focus and make selected row visiable
+       LV_Modify(1, "Select Vis") ;  select ,focus and make selected row visiable
      }else
      {
        if matched_candidates.maxIndex() >= selectedRowNum
        {
-         LV_Modify(selectedRowNum, "Select Focus Vis")
+         LV_Modify(selectedRowNum, "Select Vis")
        }
        else if matched_candidates.maxIndex() >= selectedRowNum-1
        {
-         LV_Modify(selectedRowNum-1, "Select Focus Vis")
+         LV_Modify(selectedRowNum-1, "Select Vis")
        }else if matched_candidates.maxIndex()>0
        {
-         LV_Modify(1, "Select Focus Vis")
-       }else{
+         LV_Modify(1, "Select Vis")
        }
-
      }
+     GuiControl,Focus,Edit1 ;; focus Edit1 ,
    return matched_candidates
 }
 
@@ -918,7 +923,7 @@ anything_pageDown(candidates_count)
 {
   selectedRowNum:= LV_GetNext(0)
   if (selectedRowNum= candidates_count){
-        LV_Modify(1, "Select Focus Vis")
+        LV_Modify(1, "Select Vis")
   }else{
          ControlFocus, SysListView321,A
         Send {pgdn}
@@ -932,7 +937,7 @@ anything_pageDown(candidates_count)
 anything_pageUp(candidates_count){
   selectedRowNum:= LV_GetNext(0)
   if (selectedRowNum=1){
-        LV_Modify(candidates_count, "Select Focus Vis")
+        LV_Modify(candidates_count, "Select Vis")
   }else{
         ControlFocus, SysListView321,A
         Send {pgup}
@@ -943,18 +948,18 @@ anything_pageUp(candidates_count){
 anything_selectNextCandidate(candidates_count){
        selectedRowNum:= LV_GetNext(0)
        if(selectedRowNum< candidates_count){
-          LV_Modify(selectedRowNum+1, "Select Focus Vis")
+          LV_Modify(selectedRowNum+1, "Select Vis")
        }else{
-          LV_Modify(1, "Select Focus Vis")
+          LV_Modify(1, "Select Vis")
        }
 }
 
 anything_selectPreviousCandidate(candidates_count){
             selectedRowNum:= LV_GetNext(0)
               if(selectedRowNum<2){
-                 LV_Modify(candidates_count, "Select Focus Vis")
+                 LV_Modify(candidates_count, "Select Vis")
               }else{
-                 LV_Modify(selectedRowNum-1, "Select Focus Vis")
+                 LV_Modify(selectedRowNum-1, "Select Vis")
               }
 }
 anything_exit(){
