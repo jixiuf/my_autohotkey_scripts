@@ -205,7 +205,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
-       Input, input, L1 M T0.3 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
+       ; Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
+       Input, input, L1 M V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -723,7 +724,6 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
   ;      ;  anything_exit()
   ; }
 }
-
 ;;;anything_pattern will be displayed on Search Textbox
 ;;; and pattern is used to filter
 ;; some times when you press Tab or press C-l
@@ -732,7 +732,7 @@ anything_WM_LBUTTONDOWN(wParam, lParam)
 ;; and anything_pattern will be displayed on Search Textbox always
 ; @param use_default ,when is true , pattern is ignored
 ; and the text in textfield are treat as pattern to filter
-;  if false , pattern is used 
+;  if false , pattern is used
 anything_refresh(sources,pattern,use_default){
      global anything_pattern
      global previous_filtered_anything_pattern
@@ -784,6 +784,17 @@ anything_refresh(sources,pattern,use_default){
                }
           }
       }
+     if (use_default=true)
+     {
+         sleep ,30              ; sleep 30ms ,if text in textfield changed ,refresh again
+         ControlGetText,new_pattern,Edit1
+         if (new_pattern <> pattern)
+         {
+             matched_candidates := anything_refresh(sources,new_pattern,use_default)
+         }
+         previous_filtered_anything_pattern := pattern
+     }
+     
      ; LV_ModifyCol(1,win_width*0.88) ;;candidates
      ; LV_ModifyCol(2,0) ;;source_index hidden
      ; LV_ModifyCol(3,0) ;;candidate_index hidden
