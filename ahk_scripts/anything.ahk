@@ -606,64 +606,66 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
            if ((previous_filtered_anything_pattern = pattern))
            {
                anything_pattern_updated:="no"
+               ; ToolTip  no %previous_filtered_anything_pattern% %pattern% 
            }else
            {
                anything_pattern_updated:="yes"
+               ; ToolTip ,yes
            }
        }
        
        if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
        {
-       tmpSources := sources
-       build_no_candidates_source:=""
-       Gui, Color,WindowColor,ControlColor
-       GuiControl, +Background%WindowColor%, SysListView321
+           tmpSources := sources
+           build_no_candidates_source:=""
+           Gui, Color,WindowColor,ControlColor
+           GuiControl, +Background%WindowColor%, SysListView321
        }
        
 
-           if (input<>"" or  anything_pattern_updated="yes")
-           {
-               anything_pattern_updated:="no"
-               ; if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
-               ; {
-               ;     tmpSources := sources
-               ;     build_no_candidates_source:=""
-               ;     Gui, Color,WindowColor,ControlColor
-               ;     GuiControl, +Background%WindowColor%, SysListView321
-               ; }
-             ; ControlGetText,pattern,Edit1
-             ; GuiControl,, Edit1, %pattern%%input%
-               ControlGetText,anything_pattern,Edit1
+       if (input<>"" or  anything_pattern_updated="yes")
+       {
+           anything_pattern_updated:="no"
+           ; if (build_no_candidates_source="yes" and anything_pattern_updated="yes")
+           ; {
+           ;     tmpSources := sources
+           ;     build_no_candidates_source:=""
+           ;     Gui, Color,WindowColor,ControlColor
+           ;     GuiControl, +Background%WindowColor%, SysListView321
+           ; }
+           ; ControlGetText,pattern,Edit1
+           ; GuiControl,, Edit1, %pattern%%input%
+           ControlGetText,anything_pattern,Edit1
 
-               GuiControl,Focus,Edit1 ;; focus Edit1 ,
-               ; Send {End} ;;move cursor right ,make it after the new inputed char
-            selectedRowNum:= LV_GetNext(0)
+           GuiControl,Focus,Edit1 ;; focus Edit1 ,
+           ; Send {End} ;;move cursor right ,make it after the new inputed char
+           selectedRowNum:= LV_GetNext(0)
            ;;TODO: ANYTHING_REFRESH and select needed selected
-             matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
-              if  matched_candidates.maxIndex() <1
-              {
-                    build_no_candidates_source:="yes"
-                    Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
-                    GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321
-                    tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
-                    matched_candidates:=anything_refresh(tmpSources,"",false)
-              }
-            }
-            ;;if only one candidate left automatically execute it
-            ;; if source["anything-execute-action-at-once-if-one"]="yes"
-            if matched_candidates.maxIndex() = 1
-            {
-                   selectedRowNum:= LV_GetNext(0)
-                  LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-                  ; anything_MsgBox(tmpSources[source_index]["anything-execute-action-at-once-if-one"])                   
-                   if ( (not (anything_pattern="")) and (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes"))
-                   {
-                       action:= anything_get_default_action(tmpSources[source_index]["action"])
-                       anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
-                       anything_exit() ;;first quit .then execute action
-                       break
-                   }
-              }
+           matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
+           if  matched_candidates.maxIndex() <1
+           {
+               build_no_candidates_source:="yes"
+               Gui, Color,%WindowColor_when_no_matched_candidate%,%ControlColor_when_no_matched_candidate%
+               GuiControl, +Background%WindowColor_when_no_matched_candidate%, SysListView321
+               tmpsources:= anything_build_source_4_no_candidates(sources , anything_pattern)
+               matched_candidates:=anything_refresh(tmpSources,"",false)
+           }else if( matched_candidates.maxIndex() = 1)
+           {
+               ;;if only one candidate left automatically execute it
+               ;; if source["anything-execute-action-at-once-if-one"]="yes"
+               selectedRowNum:= LV_GetNext(0)
+               LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+               ; anything_MsgBox(tmpSources[source_index]["anything-execute-action-at-once-if-one"])
+               ; ControlGetText,anything_pattern,Edit1
+               if ( (not (anything_pattern="")) and (tmpSources[source_index]["anything-execute-action-at-once-if-one"]="yes"))
+               {
+                   action:= anything_get_default_action(tmpSources[source_index]["action"])
+                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                   anything_exit() ;;first quit .then execute action
+                   break
+               }
+           }
+       }
        anything_on_select(tmpSources,matched_candidates) ;  on select event
      } ;; end of loop
      anything_exit()
