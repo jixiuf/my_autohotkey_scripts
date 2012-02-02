@@ -173,7 +173,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             action:= anything_get_default_action(tmpSources[source_index]["action"])
             anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
             anything_exit() ;;first quit .then execute action
-            break
+            return 
         }
     }
 
@@ -189,7 +189,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             candidate2 :=matched_candidates[selectedRowNum+1]
             anything_callFuncByNameWithTwoParam(action ,candidate1,candidate2)
             anything_exit() ;;first quit .then execute action
-            break
+            return 
         }
     }
     
