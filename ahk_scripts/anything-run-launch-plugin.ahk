@@ -5,11 +5,12 @@
  {
      global anything_run_launch_candidates
      anything_run_launch_candidates:=Array()
-     IniRead, default_scan_path, anything-run-launch-plugin.ini, Settings, default_scan_path,%A_StartMenuCommon%|%A_StartMenu%|%A_Desktop%|%UserProfile%\Recent
+     IniRead, default_scan_path_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_recursively,%A_StartMenuCommon%|%A_StartMenu%
+     IniRead, default_scan_path_none_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively,%SystemRoot%|%SystemRoot%\system32|%A_Desktop%
      IniRead, accept_type_list, anything-run-launch-plugin.ini, Settings, accept_type_list, exe|lnk|ahk|url|chm
      IniRead, exclude_filename_list,  anything-run-launch-plugin.ini,Settings, exclude_filename_list, about|history|readme|remove|uninstall|license
      ;scan always updated list
-     Loop, Parse, default_scan_path, |
+     Loop, Parse, default_scan_path_recursively, |
      {
          Loop, %A_LoopField%\*.*, 0, 1
          {
@@ -39,7 +40,39 @@
              anything_run_launch_candidates.Insert(candidate)
          }
      }
-     IniWrite, %default_scan_path%, anything-run-launch-plugin.ini, Settings, default_scan_path
+     Loop, Parse, default_scan_path_none_recursively, |
+     {
+         Loop, %A_LoopField%\*.*, 0, 0
+         {
+             SplitPath, A_LoopFileFullPath, FName, FDir, FExt, FNameNoExt, FDrive
+             ;only filetypes defined are added
+             IfNotInString, accept_type_list, %FExt%, Continue
+
+             ;excluding items based on exclude_filename_list
+             Continue = 0
+             Loop, Parse, exclude_filename_list, |
+             {
+                 IfInString, FName, %A_LoopField%
+                 {
+                     Continue = 1
+                     Break
+                 }
+             }
+             IfEqual, Continue, 1
+             Continue
+
+             ;reaching here means that file is not to be excluded and
+             ;has a desired extension
+             candidate := Array()
+             SplitPath, A_LoopFileDir,parentDirName
+             candidate.Insert(parentDirName .  "/" . A_LoopFileName ) ; display on anything listview
+             candidate.Insert(A_LoopFileFullPath)                         ; the full path of file
+             anything_run_launch_candidates.Insert(candidate)
+         }
+     }
+     
+     IniWrite, %default_scan_path_recursively%, anything-run-launch-plugin.ini, Settings, default_scan_path_recursively
+     IniWrite, %default_scan_path_none_recursively%, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively
      IniWrite, %accept_type_list%, anything-run-launch-plugin.ini, Settings, accept_type_list
      IniWrite, %exclude_filename_list%,  anything-run-launch-plugin.ini,Settings, exclude_filename_list
      
