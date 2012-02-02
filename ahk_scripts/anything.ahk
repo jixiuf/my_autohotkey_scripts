@@ -156,11 +156,12 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    ;;anything_WM_LBUTTONDOWN() will be called
     OnMessage(0x201, "anything_WM_LBUTTONDOWN")
 
-     WinGet, anything_wid, ID, A
-     WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
-       anything_on_select(tmpSources,matched_candidates) ;  on select event
-     loop,
-     {
+    WinGet, anything_wid, ID, A
+    WinSet, AlwaysOnTop, On, ahk_id %anything_wid%
+    anything_on_select(tmpSources,matched_candidates) ;  on select event
+    anything_beep(0)
+    loop,
+    {
        ;;if only one candidate left automatically execute it
        ;; if source["anything-execute-action-at-once-if-one"]="yes"
        if ( matched_candidates.maxIndex() == 1)
@@ -196,8 +197,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
-       anything_beep(0)
-       Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
+       Input, input, L1 M T0.5 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
