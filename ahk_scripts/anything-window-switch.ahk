@@ -14,7 +14,6 @@
 ; my_anything_properties["anything_use_large_icon"]:=1
 ; my_anything_properties["FontSize"]:= 15
 ; sources:=Array()
-; sources.insert(anything_window_switcher_with_assign_keys_source)
 ; sources.insert(anything_window_switcher_source)
 ; anything_multiple_sources_with_properties(sources,my_anything_properties)
 ; return
@@ -31,6 +30,7 @@ anything_ws_get_win_candidates()
   global anything_wid
   global anything_properties
   global  exclude_windows_by_class
+  global anything_window_switcher_with_assign_keys_candidates
   candidates :=Array()
   WinGet, id, list, , , Program Manager
   Loop, %id%
@@ -70,7 +70,13 @@ anything_ws_get_win_candidates()
     ; don't add the switcher window
     ; if switcher_id = %this_id%
     ;   continue
+    if (anything_window_switcher_with_assign_keys_candidates[this_id])
+    {
+      display:= anything_ws_get_processname(this_id) . " _ " .  anything_window_switcher_with_assign_keys_candidates[this_id]  . " _ " . title
+    }else
+    {
       display:= anything_ws_get_processname(this_id) . " _ " . title
+    }
       candidate.insert(display)
       candidate.insert(this_id)
       candidates.insert(candidate)
@@ -242,6 +248,7 @@ anything_ws_get_processname(wid){
 anything_ws_assign_key_4_current_window(candidate)
 {
     global
+    ; global anything_window_switcher_with_assign_keys_candidates
     old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
     anything_set_property_4_quit_when_lose_focus("no")
     InputBox,assigned_key, Assigned Keys, Please enter your Assigned Keys for current window., , 320, 120
@@ -252,60 +259,19 @@ anything_ws_assign_key_4_current_window(candidate)
     else
     {
         win_id:=candidate[2]
-        new_candidate:=Array()
-        new_candidate.Insert(assigned_key)
-        new_candidate.Insert(win_id) ;  new candidate with (assignedkey,win_id) as candidate element
-        anything_window_switcher_with_assign_keys_candidates.insert(new_candidate)
+        anything_window_switcher_with_assign_keys_candidates[win_id]:=assigned_key
+        ; new_candidate:=Array()
+        ; new_candidate.Insert(assigned_key)
+        ; new_candidate.Insert(win_id) ;  new candidate with (assignedkey,win_id) as candidate element
+        ; anything_window_switcher_with_assign_keys_candidates.insert(new_candidate)
     }
     anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus)
 }
 
-anything_window_switcher_get_icon_4assign_keys()
-{
-  global  anything_ws_icon_imageListId_4_assign_keys
-  return  anything_ws_icon_imageListId_4_assign_keys
-}
-anything_ws_delete_assigned_keys(candidate)
-{
-    global
-    win_id:=candidate[2]
-    if  WinExist("ahk_id " . win_id)
-    {
-     anything_window_switcher_with_assign_keys_candidates.Remove(candidate_index) ; if window doesn't exists anymore ,delete the assigned key (candidate)
-    }
-}
-
-; delete dead window from candidates ,and return it .
- anything_window_switcher_with_assign_keys_candidates_fun()
- {
-     global
-    ; old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
-    ; anything_set_property_4_quit_when_lose_focus("no")
-     for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
-         win_id:=candidate[2]
-         if not WinExist("ahk_id " . win_id)
-         {
-              anything_window_switcher_with_assign_keys_candidates.Remove(candidate_index) ; if window doesn't exists anymore ,delete the assigned key (candidate)
-         }
-     }
-     ; update icon
-     anything_ws_icon_imageListId_4_assign_keys := IL_Create(anything_window_switcher_with_assign_keys_candidates.MaxIndex())
-     for candidate_index ,candidate in  anything_window_switcher_with_assign_keys_candidates {
-         win_id:=candidate[2]
-         if WinExist("ahk_id " . win_id)
-         {
-             anything_add_window_icon_2_imageList(win_id,0,anything_ws_icon_imageListId_4_assign_keys)
-         }
-     }
-
-  return anything_window_switcher_with_assign_keys_candidates
-
- }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;candidates
 anything_window_switcher_with_assign_keys_candidates:=Object()
 anything_ws_icon_imageListId =
-anything_ws_icon_imageListId_4_assign_keys =
 exclude_windows_by_class=
 ; exclude some window by window class ,
 ; default excluded class is "ATL:00573BA8" ,the separater  char is "|"
@@ -319,16 +285,6 @@ exclude_windows_by_class=
 ; window switcher
 ; default value ATL:00573BA8|DV2ControlHost (ATL:00573BA8 are googletalk window ,DV2ControlHost are start menu)
 IniRead, exclude_windows_by_class, anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8|DV2ControlHost
-
-anything_window_switcher_with_assign_keys_source:=Object()
-anything_window_switcher_with_assign_keys_source["name"]:="WinKey"
-anything_window_switcher_with_assign_keys_source["candidate"]:="anything_window_switcher_with_assign_keys_candidates_fun"
-anything_window_switcher_with_assign_keys_source["icon"]:="anything_window_switcher_get_icon_4assign_keys"
-anything_window_switcher_with_assign_keys_source["action"]:=Array("anything_ws_activate_window", "anything_ws_close_window" ,"anything_ws_delete_assigned_keys" ,"anything_ws_kill_process")
-anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one"]:="yes"
-anything_window_switcher_with_assign_keys_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
-
-
 
 anything_window_switcher_source:=Object()
 anything_window_switcher_source["name"]:="Win"
