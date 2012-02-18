@@ -151,16 +151,27 @@ anything_add_directory_history(newAddr)
   }
 }
 
-getExplorerAddressPath()
+getExplorerAddressPath()                
 {
-  ; WinGetText, full_path, A  ; 
-  ; StringSplit, word_array, full_path, `n     ;;
-  ; full_path = %word_array1%   ; Take the first element from the array
-  ; StringReplace, full_path, full_path, `r, , all   ; 
-  ;;return full_path
-  ControlGetText, ExplorePath, Edit1, A
-  return ExplorePath
+        Critical
+        Obj:=ComObjCreate("Shell.Application")
+        for objWin in obj.Windows
+        {
+                ForegroundWindow:=DllCall("GetForegroundWindow")
+                If (InStr(objWin.FullName, "explorer.exe") && (objWin.hwnd=ForegroundWindow))
+                        return, RegExReplace(RegExReplace(UrlUnEscape(objWin.LocationURL),"file:///",""),"/","\")
+;                Else if (InStr(objWin.FullName, "iexplore.exe") && (objWin.hwnd=ForegroundWindow)) 
+;                        return, """iexplore.exe""" " "objWin.LocationURL
+        }
+        ObjRelease(Object(obj))
 }
+UrlUnEscape(url)                ;
+{
+   VarSetCapacity(newUrl,500,0),pcche:=500
+   DllCall("shlwapi\UrlUnescapeW", Str,url, Str,newUrl, UIntP,pcche, UInt,0x10000000)
+   Return newUrl
+}
+
 ; delete all directory history from candidates
 ; [Action Fun]
 delete_all_directory_history(unused_candidate)
