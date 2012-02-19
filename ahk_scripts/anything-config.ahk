@@ -35,7 +35,7 @@ my_anything_properties2:=Object()
 my_anything_properties2["anything_use_large_icon"]:=0
 my_anything_properties2["FontSize"]:= 12
 ; anything_run_source["anything-execute-action-at-once-if-one"]:= "yes" ;maybe you don't want this optin , when you not familiar with "anything" (you can just comment this line)
-anything_multiple_sources_with_properties(Array(anything_run_source, anything_run_launch_source),my_anything_properties2)
+ anything_multiple_sources_with_properties(Array(anything_run_source, anything_run_launch_source,anything_process_manager_source),my_anything_properties2)
 return
 
 ^f3::
