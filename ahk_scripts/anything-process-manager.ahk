@@ -141,6 +141,7 @@ anything_process_on_select(candidate)
 {
     process := candidate[2]
     anything_statusbar(process.CommandLine)
+    anything_tooltip_header("[Enter] to kill,[Ctrl-j] to change the priority of the selected process")
 }
 anything_process_kill(candidate)
 {
