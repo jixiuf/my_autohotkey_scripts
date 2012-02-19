@@ -1409,6 +1409,29 @@ anything_add_icon(File ,ImageList,Large_Icon)
     }
 }
 
+; anything_make_string("abc",10) ="abc       "
+; anything_make_string("abc",10,"true") ="       abc"
+anything_make_string(Str,Len,alias_right= "false")
+{
+    length := StrLen(Str)
+    Spaces:=""
+    if (length<Len)
+    {
+        Loop, %  Len-length
+        {
+            Spaces := Spaces . " "
+        }
+    }
+    if (alias_right= "true")
+    {
+        return ( Spaces . Str)
+    }
+    else
+    {
+        return ( Str . Spaces)
+    }
+}
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
