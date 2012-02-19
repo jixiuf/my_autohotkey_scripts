@@ -115,8 +115,11 @@ GetProcessMemory_Private_As_String(pid,Units="K")
 
 anything_process_candidates()
 {
-    ;    current_anything_pid := DllCall("GetCurrentProcessId") ;
+    global anything_properties
+    global anything_process_icons
     candidates:= Object()
+    anything_process_icons:=IL_Create(15,5,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 5 each time, 
+    
     for process in ComObjGet("winmgmts:").ExecQuery("Select * from Win32_Process")
     {
         if ( (process.Name != "System Idle Process") and(process.Name != "System")) 
@@ -124,9 +127,11 @@ anything_process_candidates()
             candidate:=Array()
             Name:=anything_make_string(process.Name,25)
             Mem :=  anything_make_string(GetProcessMemory_Private_As_String(process.ProcessId),8,"true")
-            candidate.Insert( Name . Mem)
-            candidate.Insert(process)
+            candidate.Insert( Name . Mem) ; display ,candidate[1]
+            candidate.Insert(process)     ; process object candidate[2]
             candidates.Insert(candidate)
+            
+            anything_add_icon(process.ExecutablePath, anything_process_icons,anything_properties["anything_use_large_icon"])
         }
     }
     return candidates
@@ -166,10 +171,20 @@ anything_process_change_priority_action(candidate_level)
     Process, priority, %anything_processId_to_be_changed%, %candidate_level%
 }
 
-
+    
+anything_process_icons=
+ 
+    ; get icon from cmd file 
+anything_process_manager_get_icons()
+{
+    global anything_process_icons
+    return anything_process_icons
+}
+    
     
 anything_process_manager_source:=Object()
 anything_process_manager_source["name"] :="Proc"
 anything_process_manager_source["candidate"] :="anything_process_candidates"
+anything_process_manager_source["icon"] :="anything_process_manager_get_icons" 
 anything_process_manager_source["action"] :=Array("anything_process_kill","anything_process_change_priority" )
 anything_process_manager_source["onselect"] :="anything_process_on_select" 
