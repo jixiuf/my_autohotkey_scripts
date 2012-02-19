@@ -8,6 +8,7 @@ SetWorkingDir %A_ScriptDir%
 #include anything-favorite-directories.ahk
 #include anything-window-switch.ahk
 #include anything-process-manager.ahk
+#include anything-services.ahk
 #include anything-explorer-history.ahk
 
 ; anything-source: <anything_explorer_history_source>       defined in anything-explorer-history.ahk .
@@ -16,8 +17,11 @@ SetWorkingDir %A_ScriptDir%
 ; anything-source: <anything_run_source>                    defined in anything-run.ahk
 ; anything-source: <anything_run_launch_source>             defined in anything-run-launch-plugin.ahk
 
-; anything-source: <anything_window_switcher_source>        define in anything-window-switch.ahk 
+; anything-source: <anything_window_switcher_source>        define in anything-window-switch.ahk
 
+; anything-source: <anything_services_source>        define in anything-services.ahk 
+
+; anything-source: <anything_process_manager_source>        define in anything-process-manager.ahk
 
 
 f3::
@@ -25,6 +29,7 @@ sources:=Array()
 sources.insert(anything_explorer_history_source)
 sources.insert(anything_favorite_directories_source)
 sources.insert(anything_run_source)
+sources.insert(anything_services_source)
 ; sources.insert(anything_run_source)
 anything_multiple_sources(sources)
 return
@@ -35,11 +40,16 @@ my_anything_properties2:=Object()
 my_anything_properties2["anything_use_large_icon"]:=0
 my_anything_properties2["FontSize"]:= 12
 ; anything_run_source["anything-execute-action-at-once-if-one"]:= "yes" ;maybe you don't want this optin , when you not familiar with "anything" (you can just comment this line)
- anything_multiple_sources_with_properties(Array(anything_run_source, anything_run_launch_source,anything_process_manager_source),my_anything_properties2)
+ anything_multiple_sources_with_properties(Array(anything_run_source, anything_run_launch_source,anything_process_manager_source,anything_services_source ),my_anything_properties2)
+
 return
 
 ^f3::
  anything(anything_process_manager_source)
+return
+ 
+^f4::
+ anything(anything_services_source)
 return
  
 !Tab::
