@@ -145,7 +145,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    WinSetTitle, Anything.ahk
 
     Gui, Add, ListView, x0 y40 w%win_width% h%ListViewHeight% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
-    Gui, Add, Text,     x1  y%StatusHeight% Cwhite w%win_width% h20
+    Gui, Add, Text,     x1  y%StatusHeight% Cwhite w%win_width% h30
 
      ;; search string you have typed
      tabListActions:=""
