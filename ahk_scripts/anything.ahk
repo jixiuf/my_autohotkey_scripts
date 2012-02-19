@@ -160,6 +160,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
      if(matched_candidates.Maxindex() >=anything_pre_selected_candidate_index )
      {
          LV_Modify(anything_pre_selected_candidate_index, "Select Vis")
+         anything_pre_selected_candidate_index:=1
      }
      
      Gui ,Show,,
