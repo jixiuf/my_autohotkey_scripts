@@ -1233,6 +1233,24 @@ anything_set_property_4_quit_when_lose_focus(value) ; "yes" or "no"
     }
 }
 
+anything_on_select(tmpSources,matched_candidates)
+{
+    selectedRowNum:= LV_GetNext(0)
+    LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
+    if ( not (tmpSources[source_index]["onselect"]==""))
+    {
+        onselectfun := tmpSources[source_index]["onselect"]
+        anything_callFuncByNameWithOneParam(onselectfun,matched_candidates[selectedRowNum])
+    }
+    else
+    {
+        ToolTip,                ;  clear tooltip
+        anything_statusbar("")  ; set the statusbar content empty
+    }
+
+
+}
+
 ;; I find this function here .
 ;;http://www.autohotkey.com/forum/viewtopic.php?p=454619#454619
 ;;and thanks  maul.esel
@@ -1286,23 +1304,6 @@ anything_statusbar(Text)
     GuiControl ,Text,Static2,%Text%
 }
 
-anything_on_select(tmpSources,matched_candidates)
-{
-    selectedRowNum:= LV_GetNext(0)
-    LV_GetText(source_index, selectedRowNum,2) ;;populate source_index
-    if ( not (tmpSources[source_index]["onselect"]==""))
-    {
-        onselectfun := tmpSources[source_index]["onselect"]
-        anything_callFuncByNameWithOneParam(onselectfun,matched_candidates[selectedRowNum])
-    }
-    else
-    {
-        ToolTip,                ;  clear tooltip
-        anything_statusbar("")  ; set the statusbar content empty
-    }
-
-
-}
 
 
 /*
