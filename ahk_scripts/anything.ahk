@@ -562,14 +562,15 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 ;;        backspace
       if ErrorLevel = EndKey:backspace
         {
-            ControlGetText,anything_pattern,Edit1
-             if anything_pattern <>
-              {
-                   ControlGetText,anything_pattern,Edit1
-                  ; StringTrimRight, anything_pattern, anything_pattern, 1
-                  ; GuiControl,, Edit1, %anything_pattern%
-                   anything_pattern_updated:="yes"
-              }
+            anything_pattern_updated:="yes"
+            ; ControlGetText,anything_pattern,Edit1
+            ;  if anything_pattern <>
+            ;   {
+            ;        ControlGetText,anything_pattern,Edit1
+            ;       ; StringTrimRight, anything_pattern, anything_pattern, 1
+            ;       ; GuiControl,, Edit1, %anything_pattern%
+            ;        anything_pattern_updated:="yes"
+            ;   }
 
         }
  ;;Ctrl-y ,paste
