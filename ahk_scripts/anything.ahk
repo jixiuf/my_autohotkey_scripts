@@ -19,6 +19,10 @@ anything_wid=
 ;; the search you have typed in the search textbox
 ;readonly
 anything_pattern=
+ 
+;writable
+anything_pre_selected_candidate_index:=1
+ 
  ; previous activated window id
 ;readonly
 anything_previous_activated_win_id=
@@ -92,7 +96,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
     global anything_properties
     global previous_filtered_anything_pattern
     global anything_previous_activated_win_id
-
+    global anything_pre_selected_candidate_index
 
     ; store previous activated window id in  global variable
     WinGet, anything_previous_activated_win_id, ID, A
@@ -153,6 +157,10 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
      LV_ModifyCol(3,0) ;;candidate_index hidden
      LV_ModifyCol(4, win_width*0.10) ;; source_name width
      LV_ModifyCol(4, "Right") ;; source_name align Right
+     if(matched_candidates.Maxindex() >=anything_pre_selected_candidate_index )
+     {
+         LV_Modify(anything_pre_selected_candidate_index, "Select Vis")
+     }
      
      Gui ,Show,,
    ; ;;;;when window lost focus ,function anything_WM_ACTIVATE()
