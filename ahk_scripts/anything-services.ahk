@@ -215,8 +215,8 @@ anything_services_candidates()
             candidate.Insert(Running_Status) ; candidate[3] ,Running or Stopped
             candidate.Insert(Service_Name)   ; candidate[4]
             candidate.Insert(Description)    ; candidate[5]
-            candidate.Insert(Start) ; candidate[6] ; 0,1,2,3,4 
-            
+            candidate.Insert(Start) ; candidate[6] ; 0,1,2,3,4
+            candidate.Insert(Display_Name) ; candidate[7] 
             
             candidates.Insert(candidate)
         }
@@ -238,18 +238,26 @@ anything_services_toggle_start_or_stop(candidate)
     Service_Name :=candidate[4]
     Start_Status :=candidate[2]
     Running_Status :=candidate[3]
+    Display_Name :=candidate[7]
     if (Start_Status="Disabled")
     {
-        anything_MsgBox(Service_Name . " is Disabled,you can't start or stop a disabled service!!")
+        if (Running_Status="Stopped")
+        {
+            anything_MsgBox("service:  '" . Display_Name . "'[" . Service_Name . "]" . " is Disabled,you can't start a disabled service!!")
+        }
+        else
+        {
+            WinServ(Service_Name,False) ; stop the service
+        }
     }else
     {
         if (Running_Status="Running")
         {
-            WinServ(Service_Name,False)
+            WinServ(Service_Name,False) ; stop the service
         }
         else
         {
-            WinServ(Service_Name,True)
+            WinServ(Service_Name,True) ; start the service
         }
     }
 }
