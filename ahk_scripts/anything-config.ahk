@@ -45,11 +45,17 @@ my_anything_properties2["FontSize"]:= 12
 return
 
 ^f3::
- anything(anything_process_manager_source)
+ sources:=Array()
+ sources.Insert(anything_process_manager_source)
+ sources.Insert(anything_services_source)
+ anything_multiple_sources(sources)
 return
  
 ^f4::
- anything(anything_services_source)
+ sources:=Array()
+ sources.Insert(anything_services_source)
+ sources.Insert(anything_process_manager_source)
+ anything_multiple_sources(sources)
 return
  
 !Tab::
