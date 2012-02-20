@@ -191,7 +191,7 @@ anything_services_candidates()
                 Running_Status:="Stopped"
             }
             candidate:=Array()
-            display:=anything_make_string(Display_Name,60) . anything_make_string(Start_Status,15) . anything_make_string(Running_Status,10)
+            display:= anything_make_string(Start_Status,15) . anything_make_string(Running_Status,15) . Display_Name
             candidate.Insert(display) ; candidate[1]
             candidate.Insert(Start_Status) ; candidate[2] ; Boot System Automatic Manual Disabled
             candidate.Insert(Running_Status) ; candidate[3] ,Running or Stopped
