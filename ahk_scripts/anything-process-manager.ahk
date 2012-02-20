@@ -4,12 +4,32 @@
 ; https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
 ; and you can find the forum here
 ; http://www.autohotkey.com/forum/viewtopic.php?t=72833
+; Documention:
+; http://jixiuf.github.com/autohotkey/anything-doc.html
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;how to use `anything-process-manager.ahk'
-; f2::
-; anything(anything_process_manager_source)
-; return
+;        #include anything.ahk
+;        #include anything-process-manager.ahk
+;        f2::
+;        anything(anything_process_manager_source)
+;        return
+
+; 2  if you also have other anything-sources ,
+;     you just need add 
+;         anything_process_manager_source
+;     to the sources
+;    for example :
+;        #include anything.ahk
+;        #include anything-process-manager.ahk
+;        #include anything-services.ahk
+;         ^f4::
+;          sources:=Array()
+;          sources.Insert(anything_services_source)
+;          sources.Insert(anything_process_manager_source)  ;         <--------- here.
+;          anything_multiple_sources(sources)
+;         return
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; ComVar(Type=0xC)
