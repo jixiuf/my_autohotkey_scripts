@@ -267,6 +267,37 @@ anything_services_status_source:=Object()
 anything_services_status_source["name"]:="ServStat"
 anything_services_status_source["candidate"]:=Array(Array("Boot",0),Array("System",1),Array("Automatic",2) ,Array("Manual",3),Array("Disabled",4))
 anything_services_status_source["action"]:="anything_services_change_status_action"
+anything_services_status_source["onselect"]:="anything_services_status_onselect"
+ 
+anything_services_status_onselect(candidate)
+{
+    global anything_services_candidate
+    Service_Name   :=anything_services_candidate[4]
+    Display_Name   :=anything_services_candidate[7]
+    anything_tooltip_header("change the StartType of service: dispaly_name:<<" . Display_Name . ">> servername:[" . Service_Name . "]" )
+    Start_Status := candidate[1]
+    if (Start_Status="Boot")
+    {
+        anything_statusbar( "a device driver loaded by the boot loader")
+    }
+    else if(Start_Status="System")
+    {
+        anything_statusbar( "a service started during kernel initialization")
+    }
+    else if(Start_Status="Automatic")
+    {
+        anything_statusbar( "a service automatically started at boot time, even if no user logs on")
+    }
+    else if(Start_Status="Manual")
+    {
+        anything_statusbar( "a service that must be manually started (the default)")
+    }
+    else if(Start_Status="Disabled")
+    {
+        anything_statusbar( " a service that can't be started")
+    }
+
+}
  
 ; change the status of service to :Boot System Automatic Manual Disabled
 anything_services_change_status_action(candidate_status)
