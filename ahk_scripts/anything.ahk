@@ -343,6 +343,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
             action:= anything_get_default_action(tmpSources[source_index]["action"])
             if (GetKeyState("LAlt", "P")=1){ ;;LAlt+Enter
                   anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
+                  anything_pattern_updated:="yes" ;;
             }else
             {
                anything_callFuncByNameWithOneParam(action ,matched_candidates[selectedRowNum])
