@@ -133,7 +133,8 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    FontColor:=anything_properties["FontColor"]
    FontWeight:=anything_properties["FontWeight"]
    quit_when_lose_focus :=anything_properties["quit_when_lose_focus"]
-   StatusHeight := win_height+40 ; a status bar
+   StatusTextY := win_height+40 ; a status bar( Text control)
+   StatusTextHeight := FontSize*3 ; a status bar 
    ListViewHeight:= win_height
    Gui,+LastFound +AlwaysOnTop -Caption ToolWindow
    WinSet, Transparent, %Transparent%
@@ -145,7 +146,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    WinSetTitle, Anything.ahk
 
     Gui, Add, ListView, x0 y40 w%win_width% h%ListViewHeight% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
-    Gui, Add, Text,     x1  y%StatusHeight% Cwhite w%win_width% h30
+    Gui, Add, Text,     x1  y%StatusTextY% Cwhite w%win_width% h%StatusTextHeight%
 
      ;; search string you have typed
      tabListActions:=""
