@@ -79,6 +79,7 @@ anything_ws_get_win_candidates()
     }
       candidate.insert(display)
       candidate.insert(this_id)
+      candidate.insert(title)    
       candidates.insert(candidate)
   }
 ;;;;;;;;;;;;;;;;;;;start (if window count >=2 ,move previous activated window first);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -122,6 +123,11 @@ anything_ws_activate_window(candidate)
   WinActivate ,ahk_id  %win_id%
 }
 
+anything_ws_on_select(candidate)
+{
+    title:=candidate[3]
+    anything_statusbar(title)
+}
 ; [Action} : add current selected window to excluded_window by window class
 ;  so that it wouldn't be member of candidtes any more
 ; keybinding [Ctrl-e],or [Alt-e]
@@ -291,6 +297,8 @@ anything_window_switcher_source["name"]:="Win"
 anything_window_switcher_source["candidate"]:="anything_ws_get_win_candidates"
 anything_window_switcher_source["icon"]:="anything_ws_get_icon"
 anything_window_switcher_source["action"]:=Array("anything_ws_activate_window","anything_ws_close_window" ,"anything_ws_assign_key_4_current_window","anything_ws_kill_process" ,"anything_ws_exclude_window_by_class")
+anything_window_switcher_source["onselect"] :="anything_ws_on_select"
 anything_window_switcher_source["anything-action-when-2-candidates-even-no-keyword"]:="anything_ws_activate_window_another_when_2_candidates"
 anything_window_switcher_source["anything-execute-action-at-once-if-one"]:="yes"
 anything_window_switcher_source["anything-execute-action-at-once-if-one-even-no-keyword"]:="yes"
+
