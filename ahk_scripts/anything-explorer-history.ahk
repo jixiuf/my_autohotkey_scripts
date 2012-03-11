@@ -159,11 +159,13 @@ getExplorerAddressPath()
         for objWin in obj.Windows
         {
                 ForegroundWindow:=DllCall("GetForegroundWindow")
-                If (InStr(objWin.FullName, "explorer.exe") && (objWin.hwnd=ForegroundWindow))
-                        return, RegExReplace(RegExReplace(UrlUnEscape(objWin.LocationURL),"file:///",""),"/","\")
-;                Else if (InStr(objWin.FullName, "iexplore.exe") && (objWin.hwnd=ForegroundWindow)) 
-;                        return, """iexplore.exe""" " "objWin.LocationURL
-        }
+                If (InStr(objWin.FullName, "explorer.exe") && (objWin.hwnd=ForegroundWindow)){
+                     Addr:=    RegExReplace(RegExReplace(UrlUnEscape(objWin.LocationURL),"file:///",""),"/","\")
+                     ObjRelease(Object(obj))
+                    return Addr
+ 
+                 }
+         }
         ObjRelease(Object(obj))
 }
 UrlUnEscape(url)                ;
