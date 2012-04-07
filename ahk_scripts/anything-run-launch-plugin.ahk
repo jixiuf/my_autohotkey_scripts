@@ -67,13 +67,13 @@
              anything_run_launch_candidates.Insert(candidate)
          }
      }
-     
+
      IniWrite, %default_scan_path_recursively%, anything-run-launch-plugin.ini, Settings, default_scan_path_recursively
      IniWrite, %default_scan_path_none_recursively%, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively
      IniWrite, %accept_type_list%, anything-run-launch-plugin.ini, Settings, accept_type_list
      IniWrite, %exclude_filename_list%,  anything-run-launch-plugin.ini,Settings, exclude_filename_list
-     
-     ; anything_run_launch_get_icons_fun()     
+
+     ; anything_run_launch_get_icons_fun()
      return anything_run_launch_candidates
  }
 
@@ -95,7 +95,7 @@ anything_run_launch(candidate)
      }
   }
   }
-; ; ; get icon from cmd file 
+; ; ; get icon from cmd file
 ; anything_run_launch_get_icons_fun()
 ; {
 ;      global anything_properties
@@ -119,30 +119,30 @@ anything_run_launch_on_select(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
     {
-        fullpath_cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd 
+        fullpath_cmd := candidate[2]         ;  use "full-path-of-cmd" as cmd
     }
-    else ; when candidate is string 
+    else ; when candidate is string
     {
         fullpath_cmd := candidate
     }
-     anything_statusbar(fullpath_cmd)     
+     anything_statusbar(fullpath_cmd)
 }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; format of candidate is  Array("display","cmd")
  anything_run_launch_candidates:=Array()
- ; anything_run_launch_icons:=IL_Create(1,10)       ; init 5 icon , 
+ ; anything_run_launch_icons:=IL_Create(1,10)       ; init 5 icon ,
 
-; when load this file ,run anything_run_launch_get_candidates() to collect candidate 
+; when load this file ,run anything_run_launch_get_candidates() to collect candidate
 anything_run_launch_get_candidates()
 ;;every 5 minute ,collect candidates
-anything_SetTimerF("anything_run_launch_get_candidates",60000,Object()) ;create a timer 
+anything_SetTimerF("anything_run_launch_get_candidates",60000,Object()) ;create a timer
 
- 
+
 anything_run_launch_source:=Object()
 anything_run_launch_source["name"]:="Launch"
 anything_run_launch_source["candidate"]:=  anything_run_launch_candidates
 anything_run_launch_source["action"] := Array("anything_run_launch")
 anything_run_launch_source["onselect"] := "anything_run_launch_on_select"
-; anything_run_launch_source["icon"]:= "anything_run_launch_get_icons"  ;I fount it make it slow  ,so comment it  
+; anything_run_launch_source["icon"]:= "anything_run_launch_get_icons"  ;I fount it make it slow  ,so comment it
 anything_run_launch_source["anything-execute-action-at-once-if-one"] := "no"
 anything_run_launch_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
