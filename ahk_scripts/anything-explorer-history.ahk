@@ -269,7 +269,7 @@ visit_directory( candidate_directory)
          }else
          {
            Run explorer.exe   /n`, /e`,  "%candidate_directory%"
-           WinWait ,ahk_class ExploreWClass
+           WinWait ,ahk_class CabinetWClass
            h := WinExist("ahk_class CabinetWClass")
          }
        }
