@@ -18,7 +18,7 @@
 ; return
 
 ; 2  if you also have other anything-sources ,
-;     you just need add 
+;     you just need add
 ;         anything_services_source
 ;     to the sources
 ;    for example :
@@ -28,7 +28,7 @@
 ;         ^f4::
 ;          sources:=Array()
 ;          sources.Insert(anything_services_source) ;         <--------- here.
-;          sources.Insert(anything_process_manager_source) 
+;          sources.Insert(anything_process_manager_source)
 ;          anything_multiple_sources(sources)
 ;         return
 
@@ -166,13 +166,13 @@ anything_services_candidates()
         if( ErrorLevel = 0 )    ; if it has  SYSTEM\CurrentControlSet\Services\servicename. ObjectName
         {
             RegRead, Start, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Services\%Service_Name%, Start
-            ; 
+            ;
             ; 0 = Boot
             ; 1 = System
             ; 2 = Automatic
             ; 3 = Manual
             ; 4 = Disabled
-            
+
             if (Start=0)
             {
                 Start_Status:="Boot"
@@ -189,19 +189,19 @@ anything_services_candidates()
             {
                 Start_Status:="Disabled"
             }
-            
+
             RegRead, Display_Name, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Services\%Service_Name%, DisplayName
             if( ErrorLevel = 1 )
             {
                 Display_Name :=Service_Name
             }
-            
+
             RegRead, Description, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Services\%Service_Name%, Description
             if( ErrorLevel = 1 )
             {
-                Description:= Display_Name 
+                Description:= Display_Name
             }
-            if (WinServ(Service_Name)=1) ; 
+            if (WinServ(Service_Name)=1) ;
             {
                 Running_Status:="Running"
             }else
@@ -216,8 +216,8 @@ anything_services_candidates()
             candidate.Insert(Service_Name)   ; candidate[4]
             candidate.Insert(Description)    ; candidate[5]
             candidate.Insert(Start) ; candidate[6] ; 0,1,2,3,4
-            candidate.Insert(Display_Name) ; candidate[7] 
-            
+            candidate.Insert(Display_Name) ; candidate[7]
+
             candidates.Insert(candidate)
         }
     }
@@ -227,7 +227,7 @@ anything_services_onselect(candidate)
 {
     Description:=candidate[5]
     anything_statusbar(Description)
-    anything_tooltip_header("[Enter] to start a stopped service or stop a running service,[Ctrl-j] to change the StartStatus of a service. [Ctrl-m] to run services.msc")    
+    anything_tooltip_header("[Enter] to start a stopped service or stop a running service,[Ctrl-j] to change the StartStatus of a service. [Ctrl-m] to run services.msc")
 
 }
 
@@ -268,7 +268,7 @@ anything_services_status_source["name"]:="ServStat"
 anything_services_status_source["candidate"]:=Array(Array("Boot",0),Array("System",1),Array("Automatic",2) ,Array("Manual",3),Array("Disabled",4))
 anything_services_status_source["action"]:="anything_services_change_status_action"
 anything_services_status_source["onselect"]:="anything_services_status_onselect"
- 
+
 anything_services_status_onselect(candidate)
 {
     global anything_services_candidate
@@ -298,7 +298,7 @@ anything_services_status_onselect(candidate)
     }
 
 }
- 
+
 ; change the status of service to :Boot System Automatic Manual Disabled
 anything_services_change_status_action(candidate_status)
 {
@@ -310,13 +310,13 @@ anything_services_change_status_action(candidate_status)
     ; * demand--a service that must be manually started (the default)
     ; * disabled--a service that can't be started
     ; * system--a service started during kernel initialization
-    
-    
+
+
     ; candidate_status_value:=candidate_status[2]
     ; RegWrite, REG_DWORD, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Services\%Service_Name%,Start,%candidate_status_value%
-    
+
     candidate_status:=candidate_status[1]
-    if(candidate_status="Boot") 
+    if(candidate_status="Boot")
     {
         run, sc config "%Service_Name%" start= boot
     }else    if(candidate_status="System")
@@ -332,7 +332,7 @@ anything_services_change_status_action(candidate_status)
     {
         run, sc config "%Service_Name%" start= disabled
     }
- 
+
     if (candidate_status_value)
     anything_MsgBox(Service_Name)
 }
@@ -344,12 +344,12 @@ anything_services_change_StartStatus(candidate)
     global anything_services_candidate
     global anything_services_status_source
     global anything_pre_selected_candidate_index
-    
+
     anything_services_candidate:=candidate
     Start :=candidate[6]
-    ; start a new anything session 
+    ; start a new anything session
     anything_exit()
-    anything_pre_selected_candidate_index:=Start+1 ;  
+    anything_pre_selected_candidate_index:=Start+1 ;
     anything(anything_services_status_source)
     anything_tooltip_header("hel")
 }
