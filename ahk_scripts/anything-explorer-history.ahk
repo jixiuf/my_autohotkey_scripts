@@ -159,7 +159,7 @@ getExplorerAddressPath()
         for objWin in obj.Windows
         {
                 ForegroundWindow:=DllCall("GetForegroundWindow")
-                If (InStr(objWin.FullName, "explorer.exe") && (objWin.hwnd=ForegroundWindow)){
+                If (objWin and InStr(objWin.FullName, "explorer.exe") && (objWin.hwnd=ForegroundWindow)){
                      Addr:=    RegExReplace(RegExReplace(UrlUnEscape(objWin.LocationURL),"file:///",""),"/","\")
                      ObjRelease(Object(obj))
                     return Addr
@@ -278,7 +278,7 @@ visit_directory( candidate_directory)
           ; h :=   WinExist("A")
 
             For win in ComObjCreate("Shell.Application").Windows
-            if   (win.hwnd=h)
+            if   (win and  (win.hwnd=h))
               win.Navigate[candidate_directory]
             Until   (win.hwnd=h)
 
