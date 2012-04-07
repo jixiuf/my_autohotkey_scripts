@@ -6,14 +6,14 @@
 ; #include anything-favorites-directory.ahk
 ; f1::anything(anything_favorite_directories_source)
 ;
-; if you also use other sources ,just need add "anything_favorite_directories_source" to 
+; if you also use other sources ,just need add "anything_favorite_directories_source" to
 ; the array of sources for anything_multiple_sources(sources)
 ;
 ; 1 how to add a new Folder to your favorite-directories
 ; first activate "Anything" and Press <Ctrl-L> list all available actions
 ; select "call action: Favdirs.anything_favorite_directories_add "
 ;
-; 2 then you can use "Anything" selected one of your favorite directory 
+; 2 then you can use "Anything" selected one of your favorite directory
 ;   it will visit it in current Explorer.exe (if current activated window is Explorer.exe)
 ;   it will visit it in current cmd.exe (if current activated window is cmd.exe)
 ;   it will visit it in current msys.bat (if current activated window is msys.bat)
@@ -23,7 +23,7 @@
 ;;#include anything.ahk
 ;;SetWorkingDir %A_ScriptDir%
 anything_favorite_directories:=Array()
-;;init  
+;;init
 IfExist, anything-favorite-directories.ini
 {
 iniread, favorite_line, anything-favorite-directories.ini, main, favorites
@@ -40,11 +40,11 @@ Loop, Parse, favorite_line,,
 anything_favorite_directories_source:=Object()
 anything_favorite_directories_source["candidate"]:= anything_favorite_directories
 anything_favorite_directories_source["action"]:=Array("anything_favorite_directories_visit","anything_favorite_directories_delete","anything_favorite_directories_add")
-anything_favorite_directories_source["onselect"]:="anything_favorite_directories_onselect" 
+anything_favorite_directories_source["onselect"]:="anything_favorite_directories_onselect"
 anything_favorite_directories_source["name"]:="FavDirs"
 anything_favorite_directories_source["anything-execute-action-at-once-if-one"] := "yes"
 anything_favorite_directories_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
- 
+
 ; onselect
 anything_favorite_directories_onselect(candidate)
 {
@@ -52,7 +52,7 @@ anything_favorite_directories_onselect(candidate)
     anything_statusbar(directory)
 }
 
-;;action 
+;;action
 anything_favorite_directories_visit(candidate_directory)
 {
     global anything_previous_activated_win_id
@@ -60,23 +60,23 @@ anything_favorite_directories_visit(candidate_directory)
   ; WinGet, processName, ProcessName, ahk_id %id2%
   ; WinGet, pid, PID, ahk_id %id2%
     active_id :=anything_previous_activated_win_id
-    
+
     if (not  FileExist(candidate_directory))
     {
         anything_favorite_directories_delete(candidate_directory)
         anything_MsgBox("directory doesn't exists")
         return
     }
-    
+
   WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
   WinGet, pid, PID,  ahk_id %active_id%
-; ;;  global active_id 
-           
+; ;;  global active_id
+
   ; updateHistory(candidate_directory)
-  
+
   WinActivate, ahk_pid %pid%
-  
+
   if (processName="sh.exe" or processName="bash.exe" ){ ; msys
          WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
@@ -86,14 +86,14 @@ anything_favorite_directories_visit(candidate_directory)
            SendInput, cd /d "%candidate_directory%"{Enter}
   }
  ;  else if (processName="emacs.exe"){
- ; ;  	WinActivate, ahk_id %active_id% 
- ; ;    SetKeyDelay, 0 
+ ; ;      WinActivate, ahk_id %active_id%
+ ; ;    SetKeyDelay, 0
  ; ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
  ;    dired_cmd:="emacsclientw  --eval ""(dired \""" . win2posixPath(candidate_directory) . "\"")"" "
  ;    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
  ;    if ErrorLevel = ERROR
  ;    {
- ;       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
+ ;       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs
  ;    }
  ; }
  else{
@@ -107,7 +107,7 @@ anything_favorite_directories_visit(candidate_directory)
          h := WinExist("ahk_class CabinetWClass")
          if (h != 0)
          {
-           WinActivate ,ahk_class CabinetWClass 
+           WinActivate ,ahk_class CabinetWClass
          }else
          {
            Run explorer.exe   /n`, /e`,  "%candidate_directory%"
@@ -115,21 +115,21 @@ anything_favorite_directories_visit(candidate_directory)
            h := WinExist("ahk_class CabinetWClass")
          }
        }
-         ; MsgBox % h  
+         ; MsgBox % h
           ; WinActivate
           ; h :=   WinExist("A")
-            
+
             For win in ComObjCreate("Shell.Application").Windows
             if   (win.hwnd=h)
               win.Navigate[candidate_directory]
             Until   (win.hwnd=h)
-          
+
           sleep 50
           ControlFocus, SysListView321,A
           Send {Home}
    }
 }
-;;action 
+;;action
 anything_favorite_directories_delete(candidate)
 {
   global anything_favorite_directories
@@ -157,17 +157,17 @@ add2FavoriteDirectories(candidate)
   }
   anything_favorite_directories.insert(1,candidate)
 }
-;;action 
+;;action
 anything_favorite_directories_add(unused_candidate)
 {
-    global 
-    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"] 
-    anything_set_property_4_quit_when_lose_focus("no")    
+    global
+    old_value_of_quit_when_lose_focus=anything_properties["quit_when_lose_focus"]
+    anything_set_property_4_quit_when_lose_focus("no")
 
   FileSelectFolder, newFavDir, , 3
   if newFavDir <>
   {
-   add2FavoriteDirectories(newFavDir) 
+   add2FavoriteDirectories(newFavDir)
   }
     anything_favorite_directories_write2disk()
     anything_set_property_4_quit_when_lose_focus(old_value_of_quit_when_lose_focus=anything_properties)
@@ -184,7 +184,7 @@ anything_favorite_directories_write2disk()
   }
   IniWrite,%directory_text%,anything-favorite-directories.ini, main, favorites
 }
-;;Windows Path to msys Path 
+;;Windows Path to msys Path
 ;; for example d:\a\b\ to /d/a/b
 anything_favorite_directories_win2msysPath(winPath){
    msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
@@ -197,7 +197,7 @@ anything_favorite_directories_win2msysPath(winPath){
 anything_favorite_directories_win2posixPath(winPath)
 {
    StringReplace, posixPath, winPath, \ , /, All
-   Return posixPath  
+   Return posixPath
 }
 ;;f1::anything(anything_favorite_directories_source)
-;; anything-favorites-directory.ahk ends here. 
+;; anything-favorites-directory.ahk ends here.
