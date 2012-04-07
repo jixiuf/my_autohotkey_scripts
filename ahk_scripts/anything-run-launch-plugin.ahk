@@ -3,7 +3,7 @@
      global anything_run_launch_candidates
      anything_run_launch_candidates:=Array()
      IniRead, default_scan_path_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_recursively,%A_StartMenuCommon%|%A_StartMenu%
-     IniRead, default_scan_path_none_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively,%SystemRoot%|%SystemRoot%\system32|%A_Desktop%
+     IniRead, default_scan_path_none_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively,%A_Desktop%|%A_DesktopCommon%
      IniRead, accept_type_list, anything-run-launch-plugin.ini, Settings, accept_type_list, exe|lnk|ahk|url|chm
      IniRead, exclude_filename_list,  anything-run-launch-plugin.ini,Settings, exclude_filename_list, about|history|readme|remove|uninstall|license
      ;scan always updated list
