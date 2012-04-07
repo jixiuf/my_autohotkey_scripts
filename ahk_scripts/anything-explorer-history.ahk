@@ -1,6 +1,6 @@
-;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk           
+;;; anything-explorer-history.ahk record and visit explorer.exe history using anything.ahk
 ; when you click directory in your explorer , anything-explorer-history.ahk
-; will remember the directories you have vistied, and 'Anyting' will use it 
+; will remember the directories you have vistied, and 'Anyting' will use it
 ; as candidates ,you can visited again easyly.
 ; source is hosted on
 ; https://github.com/jixiuf/my_autohotkey_scripts/tree/master/ahk_scripts
@@ -8,7 +8,7 @@
 ; http://www.autohotkey.com/forum/viewtopic.php?t=72833
 
 ;;how to use `anything-explorer-history.ahk'
-;1 
+;1
 ; if you only have one anything-source :
 ;         anything_explorer_history_source  (defined in this file )
 ; you can use it like this :
@@ -18,7 +18,7 @@
 ;     f3::anything(anything_explorer_history_source)
 ;
 ; 2  if you also have other anything-sources ,
-;     you just need add 
+;     you just need add
 ;         anything_explorer_history_source
 ;     to the sources
 ;    for example :
@@ -38,7 +38,7 @@
 ;;SetWorkingDir %A_ScriptDir%
 ; [Candidates Var]
 directory_history:=Array()
- 
+
 ;;source for anything .
 anything_explorer_history_source:=Object()
 anything_explorer_history_source["candidate"]:= directory_history
@@ -51,8 +51,8 @@ anything_explorer_history_source["anything-execute-action-at-once-if-one-even-no
 
 
 anything_directory_init()
-;;every 5 minute ,save history to disk 
-anything_SetTimerF("write_history_2_disk",60000,Object()) ;create a timer 
+;;every 5 minute ,save history to disk
+anything_SetTimerF("write_history_2_disk",60000,Object()) ;create a timer
 
 SetTitleMatchMode Regex ;
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
@@ -62,7 +62,7 @@ SetTitleMatchMode Regex ;
     ; Too much time between presses, so this isn't a double-press.
     anything_explorer_history_address:=getExplorerAddressPath()
     KeyWait, LButton
-    anything_SetTimerF("addressChangeTimer",-200,Object()) ;create a timer ,only run one time after 200ms 
+    anything_SetTimerF("addressChangeTimer",-200,Object()) ;create a timer ,only run one time after 200ms
    return
   }
 return
@@ -77,8 +77,8 @@ sleep ,200
 return
 #IfWinActive
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; when address in explorer.exe changed in 200ms after LButton down ,then
@@ -91,18 +91,18 @@ addressChangeTimer()
         newAddr:= getExplorerAddressPath()
         if (anything_explorer_history_address <> newAddr)
         {
-            ;;add to history list 
+            ;;add to history list
             anything_add_directory_history(newAddr)
         }
     }
 }
 
 ;when anything-explorer-history.ahk start
-; init variable "directory_history" from anything-explorer-history.ini if exists 
+; init variable "directory_history" from anything-explorer-history.ini if exists
 anything_directory_init()
 {
     global directory_history
-    ;;anything_directory_init history when first run this script 
+    ;;anything_directory_init history when first run this script
     IfExist, anything-explorer-history.ini
     {
         IniRead, history_line, anything-explorer-history.ini, main, history
@@ -152,7 +152,7 @@ anything_add_directory_history(newAddr)
   }
 }
 
-getExplorerAddressPath()                
+getExplorerAddressPath()
 {
         Critical
         Obj:=ComObjCreate("Shell.Application")
@@ -163,7 +163,7 @@ getExplorerAddressPath()
                      Addr:=    RegExReplace(RegExReplace(UrlUnEscape(objWin.LocationURL),"file:///",""),"/","\")
                      ObjRelease(Object(obj))
                     return Addr
- 
+
                  }
          }
         ObjRelease(Object(obj))
@@ -202,7 +202,7 @@ delete_from_directory_history(candidate)
     }
   }
 }
-; onselect 
+; onselect
 anything_explorer_history_onselect(candidate)
 {
     directory := candidate
@@ -218,23 +218,23 @@ visit_directory( candidate_directory)
   ; WinGet, processName, ProcessName, ahk_id %id2%
   ; WinGet, pid, PID, ahk_id %id2%
     active_id :=anything_previous_activated_win_id
-    
+
      if (not  FileExist(candidate_directory))
      {
          delete_from_directory_history(candidate_directory)
          anything_MsgBox( candidate_directory  . " doesn't exists")
          return
      }
-    
+
   WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
   WinGet, pid, PID,  ahk_id %active_id%
-; ;;  global active_id 
-           
+; ;;  global active_id
+
   anything_add_directory_history(candidate_directory)
-  
+
   WinActivate, ahk_pid %pid%
-  
+
   if (processName="sh.exe" or processName="bash.exe" ){ ; msys
          WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
@@ -244,14 +244,14 @@ visit_directory( candidate_directory)
            SendInput, %A_Space%cd /d "%candidate_directory%"{Enter}
   }
  ;  Else if (processName="emacs.exe"){
- ; ;  	WinActivate, ahk_id %active_id% 
- ; ;    SetKeyDelay, 0 
+ ; ;      WinActivate, ahk_id %active_id%
+ ; ;    SetKeyDelay, 0
  ; ; SendInput, {Esc 3}^g^g!xdired{return}%candidate_directory%{tab}{return}
  ;    dired_cmd:="emacsclientw  --eval ""(dired \""" . win2posixPath(candidate_directory) . "\"")"" "
  ;    Run ,%dired_cmd% ,,UseErrorLevel  ;  don't display dialog if it fails.
  ;    if ErrorLevel = ERROR
  ;    {
- ;       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs 
+ ;       MsgBox ,Please add you Emacs/bin path  to your Path ,and add (server-start) to you .emacs
  ;    }
  ; }
  else{
@@ -265,7 +265,7 @@ visit_directory( candidate_directory)
          h := WinExist("ahk_class CabinetWClass")
          if (h != 0)
          {
-           WinActivate ,ahk_class CabinetWClass 
+           WinActivate ,ahk_class CabinetWClass
          }else
          {
            Run explorer.exe   /n`, /e`,  "%candidate_directory%"
@@ -273,15 +273,15 @@ visit_directory( candidate_directory)
            h := WinExist("ahk_class CabinetWClass")
          }
        }
-         ; MsgBox % h  
+         ; MsgBox % h
           ; WinActivate
           ; h :=   WinExist("A")
-            
+
             For win in ComObjCreate("Shell.Application").Windows
             if   (win.hwnd=h)
               win.Navigate[candidate_directory]
             Until   (win.hwnd=h)
-          
+
           sleep 50
           ControlFocus, SysListView321,A
           Send {Home}
@@ -289,7 +289,7 @@ visit_directory( candidate_directory)
 }
 
 
-;;Windows Path to msys Path 
+;;Windows Path to msys Path
 ;; for example d:\a\b\ to /d/a/b
 win2msysPath(winPath){
    msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
@@ -302,6 +302,5 @@ win2msysPath(winPath){
 win2posixPath(winPath)
 {
    StringReplace, posixPath, winPath, \ , /, All
-   Return posixPath  
+   Return posixPath
 }
-
