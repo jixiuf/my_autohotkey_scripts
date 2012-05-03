@@ -154,25 +154,16 @@ anything_add_directory_history(newAddr)
 
 getExplorerAddressPath()
 {
-        Critical
-        Obj:=ComObjCreate("Shell.Application")
-        for objWin in obj.Windows
-        {
-                ForegroundWindow:=DllCall("GetForegroundWindow")
-                If (objWin and InStr(objWin.FullName, "explorer.exe") && (objWin.hwnd=ForegroundWindow)){
-                     Addr:=    RegExReplace(RegExReplace(UrlUnEscape(objWin.LocationURL),"file:///",""),"/","\")
-                     ObjRelease(Object(obj))
-                    return Addr
-
-                 }
-         }
-        ObjRelease(Object(obj))
-}
-UrlUnEscape(url)                ;
-{
-   VarSetCapacity(newUrl,500,0),pcche:=500
-   DllCall("shlwapi\UrlUnescapeW", Str,url, Str,newUrl, UIntP,pcche, UInt,0x10000000)
-   Return newUrl
+    WinGetText,full_path,A
+    StringSplit,word_array,full_path,`n
+    full_path:= word_array1
+    Pos :=InStr(full_path,":\")
+    if(Pos>0)
+    {
+        path2:= SubStr(full_path,Pos-1,1) . SubStr(full_path,Pos)
+    }
+    StringReplace, path2, path2, `r, , all
+    return path2
 }
 
 ; delete all directory history from candidates
@@ -304,3 +295,4 @@ win2posixPath(winPath)
    StringReplace, posixPath, winPath, \ , /, All
    Return posixPath
 }
+
