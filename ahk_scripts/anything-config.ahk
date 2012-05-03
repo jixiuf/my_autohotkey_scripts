@@ -47,14 +47,14 @@ return
 ^f3::
  sources:=Array()
  sources.Insert(anything_process_manager_source)
- sources.Insert(anything_services_source)
+ ; sources.Insert(anything_services_source)
  anything_multiple_sources(sources)
 return
  
 ^f4::
  sources:=Array()
  sources.Insert(anything_services_source)
- sources.Insert(anything_process_manager_source)
+ ; sources.Insert(anything_process_manager_source)
  anything_multiple_sources(sources)
 return
  
