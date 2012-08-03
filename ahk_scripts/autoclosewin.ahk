@@ -15,4 +15,6 @@ WinClose, 腾讯网 - 我的资讯
 WinClose, 安全沟通 - 为您提供全面的QQ安全保护
 WinClose, 请购买 WinRAR 许可
 WinClose, 迅雷新闻 
+WinClose, 资讯快播
+WinClose,  腾讯网迷你版
 return
