@@ -17,4 +17,5 @@ WinClose, 请购买 WinRAR 许可
 WinClose, 迅雷新闻 
 WinClose, 资讯快播
 WinClose,  腾讯网迷你版
+WinClose,  PPS迷你首页
 return
