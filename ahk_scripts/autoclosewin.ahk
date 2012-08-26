@@ -22,4 +22,7 @@ WinClose,  PPS为你推荐
 WinClose,  公告 1/1
 WinClose,  公告 2/2
 WinClose,  公告 3/3
+WinClose,  公告 4/4
+WinClose,  公告 5/5
+WinClose,  风行
 return
