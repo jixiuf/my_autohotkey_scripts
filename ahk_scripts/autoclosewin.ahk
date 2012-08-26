@@ -18,4 +18,6 @@ WinClose, 迅雷新闻
 WinClose, 资讯快播
 WinClose,  腾讯网迷你版
 WinClose,  PPS迷你首页
+WinClose,  PPS为你推荐
+WinClose,  公告 1/1
 return
