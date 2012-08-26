@@ -20,4 +20,6 @@ WinClose,  腾讯网迷你版
 WinClose,  PPS迷你首页
 WinClose,  PPS为你推荐
 WinClose,  公告 1/1
+WinClose,  公告 2/2
+WinClose,  公告 3/3
 return
