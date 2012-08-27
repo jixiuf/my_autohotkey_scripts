@@ -6,6 +6,7 @@
 SetWorkingDir %A_ScriptDir%
 
 SetTimer, autocloseWin, 250
+SetTimer, autocloseWin3Min, 3000
 return
 
 autocloseWin:
@@ -25,4 +26,8 @@ WinClose,  公告 3/3
 WinClose,  公告 4/4
 WinClose,  公告 5/5
 WinClose,  风行
+return
+
+autocloseWin3Min:
+ WinClose,  腾讯网新闻
 return
