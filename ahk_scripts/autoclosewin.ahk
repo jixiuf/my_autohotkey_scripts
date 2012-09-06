@@ -21,8 +21,14 @@ WinClose,  腾讯网迷你版
 WinClose,  PPS迷你首页
 WinClose,  PPS为你推荐
 WinClose,  公告 1/1
+WinClose,  公告 1/2
 WinClose,  公告 2/2
+WinClose,  公告 1/3
+WinClose,  公告 2/3
 WinClose,  公告 3/3
+WinClose,  公告 1/4
+WinClose,  公告 2/4
+WinClose,  公告 3/4
 WinClose,  公告 4/4
 WinClose,  公告 5/5
 WinClose,  风行
