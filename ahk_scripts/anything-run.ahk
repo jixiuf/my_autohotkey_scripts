@@ -211,6 +211,6 @@ anything_run_source["name"]:="Run"
 anything_run_source["candidate"]:= anything_run_cmd_array
 anything_run_source["action"] := Array("anything_run","anything_run_delete")
 anything_run_source["onselect"] := "anything_run_on_select"
-anything_run_source["icon"]:= "anything_run_get_icons"
+; anything_run_source["icon"]:= "anything_run_get_icons" ; ;I fount it make it slow  ,so comment it
 anything_run_source["anything-execute-action-at-once-if-one"] := "no"
 anything_run_source["anything-execute-action-at-once-if-one-even-no-keyword"] := "no"
