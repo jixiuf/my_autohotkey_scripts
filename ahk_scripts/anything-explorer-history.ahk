@@ -223,6 +223,7 @@ visit_directory( candidate_directory)
 ; ;;  global active_id
 
   anything_add_directory_history(candidate_directory)
+  write_history_2_disk()
 
   WinActivate, ahk_pid %pid%
 
