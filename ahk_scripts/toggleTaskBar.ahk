@@ -9,13 +9,13 @@ SetWinDelay,0
 #z::
 IfWinExist,ahk_class Shell_TrayWnd
 {
-  Send #d
+  ; Send #d
   WinHide,ahk_class Shell_TrayWnd
   WinHide,Start ahk_class Button
 }
 Else
 {
-  Send #d
+  ; Send #d
   WinShow,ahk_class Shell_TrayWnd
   WinShow,Start ahk_class Button
 }
