@@ -28,7 +28,7 @@ f3::
 sources:=Array()
 sources.insert(anything_explorer_history_source)
 sources.insert(anything_favorite_directories_source)
-sources.insert(anything_run_source)
+; sources.insert(anything_run_source)
 ; sources.insert(anything_services_source)
 ; sources.insert(anything_run_source)
 anything_multiple_sources(sources)
