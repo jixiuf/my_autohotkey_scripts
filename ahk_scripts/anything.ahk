@@ -216,7 +216,7 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
        ; disable beeping ,when press some special key .(it's boring if don't disable it );
        ; for example when you press Ctrl-n ,       
        ; Input, input, L1 M T0.2 V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}knpgujlzimdyoevw{LAlt}{tab}
-       Input, input, L1 M V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{LControl}khnpgujlzimdyoevw{LAlt}{tab}
+       Input, input, L1 M V,{enter}{esc}{backspace}{up}{down}{pgup}{pgdn}{tab}{left}{right}{RControl}{LControl}khnpgujlzimdyoevw{LAlt}{tab}
 
        if ErrorLevel = EndKey:pgup
        {
@@ -272,18 +272,13 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 
          if ErrorLevel = EndKey:escape
          {
-            ;   if (tabListActions="yes")
-            ; {
-            ;   tabListActions:=""
-            ;   tmpSources:=sources
-            ;   anything_pattern := previous_anything_pattern
-            ;   matched_candidates:=anything_refresh(tmpSources,anything_pattern,true)
-            ;      LV_Modify(previousSelectedIndex, "Select Focus Vis")
-            ;    }else
-            ;    {
-                 anything_exit()
-                 Break
-               ; }
+             anything_exit()
+             Break
+         }
+         if ErrorLevel = EndKey:RControl
+         {
+             anything_exit()
+             Break
          }
          if ErrorLevel = EndKey:LControl
             {
@@ -716,7 +711,7 @@ anything_WM_ACTIVATE(wParam, lParam, msg, hwnd)
 ;;Tooltip, % wParam
   If ( wParam =0 and  A_Gui=1)
   {
-    Send {esc}
+      Send {RControl}
   }
 }
 ;OnMessage(0x201, "anything_WM_LBUTTONDOWN")
@@ -998,6 +993,7 @@ anything_exit(){
    anything_beep(1)           ;enable beep
    ToolTip,                ;  clear tooltip
    Gui Destroy
+   Send {LControl up}{RControl up}{LAlt up}{Esc up} ; in case some key is still down
 }
 anything_callFuncByNameWithOneParam(funcName,param1){
    return %funcName%(param1)
