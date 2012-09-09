@@ -42,18 +42,18 @@
 ;   run devenv
 ; return
 
-;VBA 
+;VBA
 #1::
 IfWinExist,ahk_class wndclass_desked_gsk
   IfWinActive ,ahk_class wndclass_desked_gsk
-     WinMinimize ,ahk_class wndclass_desked_gsk 
+     WinMinimize ,ahk_class wndclass_desked_gsk
   else{
     WinActivate ,  ahk_class wndclass_desked_gsk
     }
 ; else
 ;   run devenv
 return
-  
+
 ; ;;;;;;;;;;Win+c ,toggle Pl/sql
 ; #c::
 ; IfWinExist,ahk_class TPLSQLDevForm
@@ -66,7 +66,7 @@ return
 ;   Run, C:\Prog\PLSQL\plsqldev.exe
 ; return
 
-;;;;;;;;;;Win+c ,toggle Toad 
+;;;;;;;;;;Win+c ,toggle Toad
 ; #c::
 ; IfWinExist,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
 ;   IfWinActive ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
@@ -77,7 +77,7 @@ return
 ; else
 ;   Run, D:\usr\toad\toad.exe
 ; return
-  
+
 #c::
 IfWinExist,SQL Manager
   IfWinActive ,SQL Manager
@@ -86,10 +86,10 @@ IfWinExist,SQL Manager
     WinActivate ,SQL Manager
     }
 else
-  Run,D:\usr\mysql_manager\MyManager.exe 
+  Run,D:\usr\mysql_manager\MyManager.exe
 return
-  
-  
+
+
 ;;Win+f toggle Firefox
 #f::
 SetTitleMatchMode, RegEx
@@ -191,9 +191,9 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 {
   If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
      ControlGetText, ExplorePath, Edit1, A
-;;之所以不用这条命令，是因为当地址栏里为“我的电脑”四个字时，用这条命令提示找不到路径     
+;;之所以不用这条命令，是因为当地址栏里为“我的电脑”四个字时，用这条命令提示找不到路径
     run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
-  }else{ 
+  }else{
     WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
     WinWaitActive
     ControlGetFocus, focusedControl,A
@@ -207,7 +207,7 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
   }
 }else{
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
-    WinWait ahk_class (CabinetWClass|ExploreWClass) 
+    WinWait ahk_class (CabinetWClass|ExploreWClass)
     WinActivate
     ;;选中第一个文件
     sleep 50
@@ -234,7 +234,7 @@ return
 ;;;;;;Win+3 toggle word
 #3::
 IfWinExist,ahk_class OpusApp
-  IfWinActive ,ahk_class OpusApp 
+  IfWinActive ,ahk_class OpusApp
      WinMinimize ,ahk_class OpusApp
   else{
 ;;    WinMaximize,ahk_class OpusApp
@@ -257,7 +257,7 @@ IfWinExist,ahk_class rctrl_renwnd32
 else
   run outlook
 return
-        
+
 ;; remote desk
 #v::
 IfWinExist,ahk_class TSSHELLWND
@@ -270,3 +270,5 @@ IfWinExist,ahk_class TSSHELLWND
 else
   run mstsc
 return
+
+^Tab::Send {Alt down}{tab}{Alt up}
