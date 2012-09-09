@@ -27,12 +27,18 @@
              }
              IfEqual, Continue, 1
              Continue
-
+             if(FExt = "lnk"){
+                 FileGetShortcut, %A_LoopFileFullPath% ,LnkTarget
+                 SplitPath,LnkTarget, FName
+                 Display:= parentDirName .  "/" . A_LoopFileName . " " . FName
+             }else{
+                 Display:= A_ parentDirName .  "/" . A_LoopFileName
+             }
              ;reaching here means that file is not to be excluded and
              ;has a desired extension
              candidate := Array()
              SplitPath, A_LoopFileDir,parentDirName
-             candidate.Insert(parentDirName .  "/" . A_LoopFileName ) ; display on anything listview
+             candidate.Insert(Display ) ; display on anything listview
              candidate.Insert(A_LoopFileFullPath)                         ; the full path of file
              anything_run_launch_candidates.Insert(candidate)
          }
@@ -44,7 +50,7 @@
              SplitPath, A_LoopFileFullPath, FName, FDir, FExt, FNameNoExt, FDrive
              ;only filetypes defined are added
              IfNotInString, accept_type_list, %FExt%, Continue
-
+             if (A_LoopFileFullPath )
              ;excluding items based on exclude_filename_list
              Continue = 0
              Loop, Parse, exclude_filename_list, |
@@ -57,12 +63,18 @@
              }
              IfEqual, Continue, 1
              Continue
-
+             if(FExt = "lnk"){
+                 FileGetShortcut, %A_LoopFileFullPath% ,LnkTarget
+                 SplitPath,LnkTarget, FName
+                 Display:= parentDirName .  "/" . A_LoopFileName . " " . FName
+             }else{
+                 Display:= A_ parentDirName .  "/" . A_LoopFileName
+             }
              ;reaching here means that file is not to be excluded and
              ;has a desired extension
              candidate := Array()
              SplitPath, A_LoopFileDir,parentDirName
-             candidate.Insert(parentDirName .  "/" . A_LoopFileName ) ; display on anything listview
+             candidate.Insert(Display ) ; display on anything listview
              candidate.Insert(A_LoopFileFullPath)                         ; the full path of file
              anything_run_launch_candidates.Insert(candidate)
          }
