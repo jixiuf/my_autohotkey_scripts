@@ -271,4 +271,4 @@ else
   run mstsc
 return
 
-^Tab::Send {Alt down}{tab}{Alt up}
+#Tab::Send {Alt down}{tab}{Alt up}
