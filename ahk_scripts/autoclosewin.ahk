@@ -5,6 +5,8 @@
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
 
+SetTitleMatchMode 2
+
 SetTimer, autocloseWin, 250
 SetTimer, autocloseWin3Min, 3000
 return
@@ -32,6 +34,7 @@ WinClose,  公告 3/4
 WinClose,  公告 4/4
 WinClose,  公告 5/5
 WinClose,  风行
+WinClose,  悠视资讯
 return
 
 autocloseWin3Min:
