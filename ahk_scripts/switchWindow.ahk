@@ -46,7 +46,10 @@
 #1::
 IfWinExist,ahk_class wndclass_desked_gsk
   IfWinActive ,ahk_class wndclass_desked_gsk
-     Send, {Alt down}{tab}{Alt up}
+  {
+      WinMinimize ,ahk_class wndclass_desked_gsk
+      WinMinimize ,ahk_class wndclass_desked_gsk
+  }
   else{
     WinActivate ,  ahk_class wndclass_desked_gsk
     }
@@ -81,10 +84,14 @@ return
 #c::
 IfWinExist,SQL Manager
   IfWinActive ,SQL Manager
-     Send, {Alt down}{tab}{Alt up}
-  else{
-    WinActivate ,SQL Manager
-    }
+  {
+     WinMinimize ,SQL Manager
+     WinMinimize ,SQL Manager
+  }
+ else
+ {
+      WinActivate ,SQL Manager
+ }
 else
   Run,D:\usr\mysql_manager\MyManager.exe
 return
@@ -95,8 +102,10 @@ return
 SetTitleMatchMode, RegEx
 IfWinExist,ahk_class MozillaUIWindowClass|MozillaWindowClass
   IfWinActive ,ahk_class MozillaUIWindowClass|MozillaWindowClass
-  Send, {Alt down}{tab}{Alt up}
-     ; WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
+  {
+     WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
+     WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
+  }
   else{
 ;;    WinMaximize,ahk_class MozillaUIWindowClass|MozillaWindowClass
 ;;    sleep 10
@@ -114,7 +123,10 @@ return
 #i::
 IfWinExist,ahk_class IEFrame
   IfWinActive ,ahk_class IEFrame
-  Send, {Alt down}{tab}{Alt up}
+  {
+      WinMinimize ,ahk_class IEFrame
+      WinMinimize ,ahk_class IEFrame
+  }
   else{
 ;;    WinMaximize,ahk_class IEFrame
 ;;    sleep 10
@@ -133,7 +145,10 @@ return
 #a::
 IfWinExist,ahk_class Emacs
   IfWinActive ,ahk_class Emacs
-  Send, {Alt down}{tab}{Alt up}
+  {
+     WinMinimize ,ahk_class Emacs
+     WinMinimize ,ahk_class Emacs
+  }
   else{
 ;;    WinMaximize,ahk_class Emacs
     WinActivate ,ahk_class Emacs
@@ -151,12 +166,15 @@ return
 #g::
 DetectHiddenWindows, On
 IfWinExist,ahk_class Google Talk - Google Xmpp Client GUI Window
-   IfWinActive ,ahk_class Google Talk - Google Xmpp Client GUI Window
-   Send, {Alt down}{tab}{Alt up}
-  else{
+  IfWinActive ,ahk_class Google Talk - Google Xmpp Client GUI Window
+  {
+     WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
+     WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
+  }
+ else{
      WinRestore,ahk_class Chat View
      WinActivate ,ahk_class Google Talk - Google Xmpp Client GUI Window
-    }
+     }
 else
   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
 return
@@ -168,7 +186,10 @@ return
 DetectHiddenWindows, On
   IfWinExist,ahk_class Chat View
   IfWinActive ,ahk_class Chat View
-  Send, {Alt down}{tab}{Alt up}
+  {
+     WinMinimize ,ahk_class Chat View
+     WinMinimize ,ahk_class Chat View
+  }
   else{
      WinRestore,ahk_class Chat View
     WinActivate ,ahk_class Chat View
@@ -222,7 +243,10 @@ return
 #q::
 IfWinExist,ahk_class XLMAIN
   IfWinActive ,ahk_class XLMAIN
-  Send, {Alt down}{tab}{Alt up}
+  {
+     WinMinimize ,ahk_class XLMAIN
+     WinMinimize ,ahk_class XLMAIN
+  }
   else{
 ;;    WinMaximize,ahk_class XLMAIN
     WinActivate ,ahk_class XLMAIN
@@ -236,7 +260,9 @@ return
 #3::
 IfWinExist,ahk_class OpusApp
   IfWinActive ,ahk_class OpusApp
-  Send, {Alt down}{tab}{Alt up}
+  {
+     WinMinimize ,ahk_class OpusApp
+  }
   else{
 ;;    WinMaximize,ahk_class OpusApp
     WinActivate ,ahk_class OpusApp
@@ -250,7 +276,10 @@ return
 #o::
 IfWinExist,ahk_class rctrl_renwnd32
   IfWinActive ,ahk_class rctrl_renwnd32
-  Send, {Alt down}{tab}{Alt up}
+  {
+     WinMinimize ,ahk_class rctrl_renwnd32
+     WinMinimize ,ahk_class rctrl_renwnd32
+  }
   else{
 ;;    WinMaximize,ahk_class OpusApp
     WinActivate ,ahk_class rctrl_renwnd32
@@ -263,7 +292,10 @@ return
 #v::
 IfWinExist,ahk_class TSSHELLWND
   IfWinActive ,ahk_class TSSHELLWND
-  Send, {Alt down}{tab}{Alt up}
+  {
+     WinMinimize ,ahk_class TSSHELLWND
+     WinMinimize ,ahk_class TSSHELLWND
+  }
   else{
 ;;    WinMaximize,ahk_class OpusApp
     WinActivate ,ahk_class TSSHELLWND
