@@ -5,6 +5,7 @@
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
 
+SetTitleMatchMode RegEx
 
 SetTimer, autocloseWin, 250
 SetTimer, autocloseWin3Min, 3000
