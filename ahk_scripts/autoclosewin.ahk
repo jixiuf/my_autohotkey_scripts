@@ -36,6 +36,7 @@ WinClose,  公告 5/5
 WinClose,  风行
 WinClose,  悠视资讯
 WinClose,  UUSee资讯
+WinClose,  今日推荐
 return
 
 autocloseWin3Min:
