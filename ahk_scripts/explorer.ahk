@@ -119,8 +119,8 @@ return
 ^u::
     oldExplorePath:= getExplorerAddrPath()
     SplitPath, oldExplorePath,, dir
- if(dir!=oldExplorePath)
- {
+ if(dir!=oldExplorePath)        ; 是否已经在根目录了
+a {
    h :=   WinExist("A")
    For win in ComObjCreate("Shell.Application").Windows
     if   (win and  (win.hwnd=h))
@@ -140,7 +140,6 @@ return
 
 return
 
-#IfWinActive ahk_class ExploreWClass|CabinetWClass
 ; win7 backspace work like xp
 Backspace::
 if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
@@ -160,7 +159,6 @@ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
       Send {Backspace}
 }
 return
-#IfWinActive
 
 ;;Ctrl+, 选中第一个文件
 ^,::
