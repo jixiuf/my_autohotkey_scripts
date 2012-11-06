@@ -154,7 +154,12 @@ return
 
 ;;ctrl+; 定位到目录树
 ^;::
-  ControlFocus, SysTreeView321,A
+if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+   ControlFocus, DirectUIHWND3
+}else{
+   ControlFocus, SysListView321,A
+}
 return
 
  ;;ctrl+L 定位在地址栏
