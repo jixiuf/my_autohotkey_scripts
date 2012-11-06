@@ -42,25 +42,48 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ^n::Send {Down}
 ^p::Send {Up}
 ^j::
-  ControlGetFocus, focusedControl,A
-    if(focusedControl="SysListView321")
-  {
-    ControlGetText, oldExplorePath, Edit1, A
-    Send {Enter}
-        sleep 150
-        if WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass")
+ControlGetFocus, focusedControl,A
+ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+    if(focusedControl="DirectUIHWND3")
+    {
+        Send {Enter}
+        sleep 200
+        if( WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass"))
         {
-          ControlGetText, newExplorePath, Edit1, A
-          ControlFocus, SysListView321,A
+            newExplorePath:=getExplorerAddrPath()
+            ControlFocus, DirectUIHWND3,A
             Send {Home}
-          ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-          ;;add to history list
-          anything_add_directory_history(newExplorePath)
-        }
-  }else
-  {
-    Send {Enter}
-  }
+            ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+            ;;add to history list
+            anything_add_directory_history(newExplorePath)
+            }
+    }
+    else
+    {
+        Send {Enter}
+    }
+}else
+ {
+     if(focusedControl="SysListView321")
+     {
+         Send {Enter}
+         sleep 150
+         if( WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass"))
+         {
+             newExplorePath:=getExplorerAddrPath()
+             ControlFocus, SysListView321,A
+             Send {Home}
+             ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+             ;;add to history list
+             anything_add_directory_history(newExplorePath)
+             }
+     }
+     else
+     {
+         Send {Enter}
+     }
+ }
 return
 
 ^f::
@@ -255,6 +278,7 @@ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 }
 
 ;;需要 emacsclientw 在Path路径下
+OpenCmdInCurrent() win7
 openSelectedfileWithEamcs()
 {
     fullPath:=GetSelectedFileName()
