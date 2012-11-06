@@ -99,7 +99,7 @@ return
   }
 return
 
-; ^b::send {Left}
+^b::send {Left}
 ; ^h::
 ;    ControlGetFocus, focusedControl,A
 ;     if(focusedControl="SysTreeView321")
