@@ -58,7 +58,7 @@ return
  anything_multiple_sources(sources)
 return
  
-#Tab:: 
+^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
 my_anything_properties:=Object()
 my_anything_properties["win_width"]:= 900
 my_anything_properties["win_height"]:= 380
