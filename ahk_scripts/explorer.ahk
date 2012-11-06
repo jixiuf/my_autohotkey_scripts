@@ -257,20 +257,29 @@ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 ;;需要 emacsclientw 在Path路径下
 openSelectedfileWithEamcs()
 {
-  ControlGetFocus, focusedControl,A
-  if (focusedControl="SysListView321")
-  {
-    ClipSaved := ClipboardAll
-    Send ^c
-    sleep,300
-    clipboard = %clipboard%
-    fullPath=`"%clipboard%`"
-    Clipboard := ClipSaved
-    run , emacsclientw %fullPath%
-  }else if (focusedControl="Edit1")
-  {
-    send {End}
-  }
+    fullPath:=GetSelectedFileName()
+    if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+ {
+     ControlGetFocus, focusedControl,A
+     if (focusedControl="DirectUIHWND3")
+     {
+         run , emacsclientw %fullPath%
+     }
+     else if (focusedControl="Edit1")
+     {
+         send {End}
+     }
+ }else{
+     ControlGetFocus, focusedControl,A
+     if (focusedControl="SysListView321")
+     {
+         run , emacsclientw %fullPath%
+     }
+     else if (focusedControl="Edit1")
+     {
+         send {End}
+     }
+ }
 }
 #IfWinActive ahk_class ExploreWClass|CabinetWClass
 ^e:: openSelectedfileWithEamcs()
@@ -289,4 +298,19 @@ getExplorerAddrPath()
     }
     StringReplace, path2, path2, `r, , all
     return path2
+}
+
+GetSelectedFileName()
+{
+   FileName =
+   AlterClipboardInhalt := ClipboardAll ; sichern des Inhaltes von Clipboard
+   Clipboard =
+   Send ^c                              ; Kopiert die Datei
+   ClipWait, 1                          ; Warte auf neuen Inhalt im Clipboard
+   If (FileExist(ClipBoard))  ;
+   {                                    ; Datei handelt
+     FileName := ClipBoard             ; Speichern des Namens zur weiteren Verarbeitung
+   }
+   ClipBoard := AlterClipboardInhalt    ; Alten Inhalt des Clipboards wiederherstellen
+   Return FileName
 }
