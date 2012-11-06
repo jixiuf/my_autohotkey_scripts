@@ -203,14 +203,25 @@ toggle_hide_file_in_explore(){
 ; Value Name: Hidden
 ; Data Type: REG_DWORD (DWORD Value)
 ; Value Data: (1 = show hidden, 2 = do not show)
-RegRead, ShowHidden_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
-if ShowHidden_Status = 2
-  RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
-Else
-  RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
-WinGetClass, CabinetWClass
-PostMessage, 0x111, 28931,,, A
-Return
+if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+ {
+     RegRead, ValorHidden, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
+     if ValorHidden = 2
+         RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
+     Else
+         RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
+     send {F5}
+     return
+   } else{                      ; xp
+     RegRead, ShowHidden_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
+     if ShowHidden_Status = 2
+       RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
+     Else
+       RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
+     WinGetClass, CabinetWClass
+     PostMessage, 0x111, 28931,,, A
+     return
+  }
 }
 
 ;;需要 emacsclientw 在Path路径下
