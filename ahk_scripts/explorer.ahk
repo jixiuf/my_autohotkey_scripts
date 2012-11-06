@@ -42,7 +42,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ^n::Send {Down}
 ^p::Send {Up}
 ^j::
-  ControlGetFocus, focusedControl,A 
+  ControlGetFocus, focusedControl,A
     if(focusedControl="SysListView321")
   {
     ControlGetText, oldExplorePath, Edit1, A
@@ -64,13 +64,13 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 return
 
 ^f::
-  ControlGetFocus, focusedControl,A 
+  ControlGetFocus, focusedControl,A
       Send {Right}
 
     if(focusedControl="SysTreeView321")
   {
     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-    ;;add to history list 
+    ;;add to history list
     sleep 400
     anything_add_directory_history(getExplorerAddressPath())
   }
@@ -78,13 +78,13 @@ return
 
 ; ^b::send {Left}
 ; ^h::
-;    ControlGetFocus, focusedControl,A 
+;    ControlGetFocus, focusedControl,A
 ;     if(focusedControl="SysTreeView321")
 ;   {
 
 ;     send {Left}
 ;     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-;     ;;add to history list 
+;     ;;add to history list
 ;     sleep 400
 ;     anything_add_directory_history(getExplorerAddressPath())0
 ;   }else
@@ -110,15 +110,25 @@ return
 
 ;;Ctrl+, 选中第一个文件
 ^,::
+if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+   ControlFocus, DirectUIHWND3
+}else{
    ControlFocus, SysListView321,A
-    Send {Home}
+}
+ Send {Home}
 return
 ;;Ctrl+. 选中最后一个文件
 ^.::
-  ControlFocus, SysListView321,A
-  Send {End}
-  return
-  
+if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+   ControlFocus, DirectUIHWND3
+}else{
+   ControlFocus, SysListView321,A
+}
+Send {End}
+return
+
 ;;ctrl+; 定位到目录树
 ^;::
   ControlFocus, SysTreeView321,A
@@ -126,7 +136,7 @@ return
 
  ;;ctrl+L 定位在地址栏
 ^l:: ControlFocus, Edit1,A
-;"+"  like Emacs dired: create new folder 
+;"+"  like Emacs dired: create new folder
 +=::Send !fwf
 !^n::Send !fwf
 
@@ -152,7 +162,7 @@ FileAppend,, %newFilepath%
 ControlFocus, SysListView321,A
 ; Switch the active window's keyboard layout/language to English:
 PostMessage, 0x50, 0, 0x4090409,, A  ; 0x50 is WM_INPUTLANGCHANGEREQUEST.
-SendInput {F5}%UserInput%  
+SendInput {F5}%UserInput%
 }
 return
 
@@ -200,7 +210,7 @@ return
 ;
 OpenCmdInCurrent()
 {
- ControlGetText, full_path, Edit1, A
+  full_path:=getExplorerAddrPath()
  IfInString full_path, \
   {
     Run, cmd /K cd /D "%full_path%"
@@ -255,7 +265,7 @@ openSelectedfileWithEamcs()
     sleep,300
     clipboard = %clipboard%
     fullPath=`"%clipboard%`"
-    Clipboard := ClipSaved   
+    Clipboard := ClipSaved
     run , emacsclientw %fullPath%
   }else if (focusedControl="Edit1")
   {
