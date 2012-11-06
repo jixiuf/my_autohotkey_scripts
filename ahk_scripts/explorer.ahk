@@ -117,19 +117,50 @@ return
 ; return
 ; 回到上层目录
 ^u::
+    oldExplorePath:= getExplorerAddrPath()
+    SplitPath, oldExplorePath,, dir
+ if(dir!=oldExplorePath)
+ {
+   h :=   WinExist("A")
+   For win in ComObjCreate("Shell.Application").Windows
+    if   (win and  (win.hwnd=h))
+    {
+        win.Navigate[dir]
+    }
+    Until   (win.hwnd=h)
+    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+    ;;add to history list
+    anything_add_directory_history(dir)
+ }
+ else
+ {
+     ControlFocus, Edit1,A
+     ControlSetText,Edit1,A
+ }
+
+return
+
+#IfWinActive ahk_class ExploreWClass|CabinetWClass
+; win7 backspace work like xp
+Backspace::
 if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 {
-    ControlFocus, DirectUIHWND3
-    SendInput {Alt Down}{Up}{Alt Up}
-}else{
-    ControlFocus, SysListView321,A
-    send {backspace}
- }
-;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-;;add to history list
-newExplorePath:= getExplorerAddrPath()
-anything_add_directory_history(newExplorePath)
+     ControlGet renamestatus,Visible,,Edit1,A
+ ControlGetFocus focussed, A
+ if(renamestatus!=1&&(focussed="DirectUIHWND3"||focussed="SysTreeView321"))
+   {
+       SendInput {Alt Down}{Up}{Alt Up}
+   }
+   else
+   {
+      Send {Backspace}
+   }
+}else
+{
+      Send {Backspace}
+}
 return
+#IfWinActive
 
 ;;Ctrl+, 选中第一个文件
 ^,::
