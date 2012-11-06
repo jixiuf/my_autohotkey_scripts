@@ -92,20 +92,20 @@ return
 ;     Send ^h
 ;   }
 ; return
- 
+; 回到上层目录
 ^u::
-   ControlGetFocus, focusedControl,A 
-    if(focusedControl="SysListView321")
-  {
-    send     {backspace}
-    ControlGetText, newExplorePath, Edit1, A
+if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+    ControlFocus, DirectUIHWND3
+    SendInput {Alt Down}{Up}{Alt Up}
+}else{
     ControlFocus, SysListView321,A
-      Send {Home}
-    ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-    ;;add to history list 
-    sleep 400
-    anything_add_directory_history(newExplorePath)
-  }
+    send {backspace}
+ }
+;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+;;add to history list
+newExplorePath:= getExplorerAddrPath()
+anything_add_directory_history(newExplorePath)
 return
 
 ;;Ctrl+, 选中第一个文件
@@ -266,3 +266,17 @@ openSelectedfileWithEamcs()
 ^e:: openSelectedfileWithEamcs()
 ^`:: openSelectedfileWithEamcs()
 #IfWinActive
+
+getExplorerAddrPath()
+{
+    WinGetText,full_path,A
+    StringSplit,word_array,full_path,`n
+    full_path:= word_array1
+    Pos :=InStr(full_path,":\")
+    if(Pos>0)
+    {
+        path2:= SubStr(full_path,Pos-1,1) . SubStr(full_path,Pos)
+    }
+    StringReplace, path2, path2, `r, , all
+    return path2
+}
