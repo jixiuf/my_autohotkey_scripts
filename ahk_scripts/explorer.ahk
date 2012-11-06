@@ -160,6 +160,7 @@ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 }else{
    ControlFocus, SysListView321,A
 }
+Send {Down}{UP}
 return
 
  ;;ctrl+L 定位在地址栏
