@@ -156,18 +156,38 @@ SendInput {F5}%UserInput%
 }
 return
 
-;Ctrl-t TOGGLES FILE EXTENSIONS
+;Alt-h TOGGLES FILE EXTENSIONS
 !h::
-RegRead, HiddenFiles_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt
-If HiddenFiles_Status = 1
-     RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 0
-Else
-   RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 1
-WinGetClass, eh_Class,A
-If (eh_Class = "#32770" OR A_OSVersion = "WIN_VISTA")
-   send, {F5}
-Else PostMessage, 0x111, 28931,,, A
-Return
+if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+    SubKey := "Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+    RegRead Value, HKCU, %SubKey%, HideFileExt
+    ; RegWrite REG_DWORD, HKCU, %SubKey%, %ValueName%, %Value%
+    if(Value){
+        RegWrite REG_DWORD, HKCU, %SubKey%, HideFileExt, 0
+    }else{
+        RegWrite REG_DWORD, HKCU, %SubKey%, HideFileExt, 1
+        }
+    ; update window
+    GroupAdd ExplorerWindows, ahk_class ExploreWClass|CabinetWClass|Progman
+    Code := InStr("WIN_XP, WIN_2000", A_OSVERSION) ? 28931 : 41504
+    WinGet WindowList, List, ahk_Group ExplorerWindows
+    Loop %WindowList%
+    PostMessage 0x111, %Code%, , , % "ahk_id" WindowList%A_Index%
+    return
+}else
+{
+    RegRead, HiddenFiles_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt
+    If HiddenFiles_Status = 1
+    RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 0
+    Else
+    RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, HideFileExt, 1
+    WinGetClass, eh_Class,A
+    If (eh_Class = "#32770" OR A_OSVersion = "WIN_VISTA" or A_OSVersion = "WIN_VISTA" )
+    send, {F5}
+    Else PostMessage, 0x111, 28931,,, A
+}
+return
 
 ; open 'cmd' in the current directory
 ;
