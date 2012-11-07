@@ -275,8 +275,13 @@ visit_directory( candidate_directory)
             Until   (win.hwnd=h)
 
           sleep 50
-          ControlFocus, SysListView321,A
-          Send {Home}
+	   if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+	   {
+ 	      ControlFocus, DirectUIHWND3,A
+	   }else{	  
+	      ControlFocus, SysListView321,A
+	  }
+          Send {Home}{Down}{Up}
    }
 }
 
