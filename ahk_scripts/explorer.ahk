@@ -120,7 +120,7 @@ return
     oldExplorePath:= getExplorerAddrPath()
     SplitPath, oldExplorePath,, dir
  if(dir!=oldExplorePath)        ; 是否已经在根目录了
-a {
+ {
    h :=   WinExist("A")
    For win in ComObjCreate("Shell.Application").Windows
     if   (win and  (win.hwnd=h))
