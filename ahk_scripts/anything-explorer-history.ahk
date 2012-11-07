@@ -38,7 +38,7 @@
 ;;SetWorkingDir %A_ScriptDir%
 ; [Candidates Var]
 directory_history:=Array()
-
+anything_explorer_max_candidate_count:=100
 ;;source for anything .
 anything_explorer_history_source:=Object()
 anything_explorer_history_source["candidate"]:= directory_history
@@ -146,9 +146,9 @@ anything_add_directory_history(newAddr)
     }
   }
   directory_history.insert(1,newAddr)
-  if (directory_history.maxIndex()>100)
+  if (directory_history.maxIndex()>anything_explorer_max_candidate_count)
   {
-    directory_history.remove(51)
+    directory_history.remove(anything_explorer_max_candidate_count+1)
   }
 }
 
