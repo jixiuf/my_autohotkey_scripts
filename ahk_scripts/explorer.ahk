@@ -47,13 +47,23 @@ ControlGetFocus, focusedControl,A
 {
     if(focusedControl="DirectUIHWND3")
     {
-        Send {Enter}
+        h :=   WinExist("A")
+        For win in ComObjCreate("Shell.Application").Windows{
+            if   (win and  (win.hwnd=h))
+            {
+                selectedFiles := win.Document.SelectedItems
+                ; all = win.Document.Foleer.Items
+                for file in selectedFiles{
+                    win.Navigate(file.path)
+                }
+            }
+        }
         sleep 200
         if( WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass"))
         {
             newExplorePath:=getExplorerAddrPath()
             ControlFocus, DirectUIHWND3,A
-            Send {Home}
+            Send {Home}{Down}{Up}
             ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
             ;;add to history list
             anything_add_directory_history(newExplorePath)
@@ -134,8 +144,10 @@ return
  }
  else
  {
-     ControlFocus, Edit1,A
-     ControlSetText,Edit1,A
+     ; ControlFocus, Edit1,A
+     ControlFocus, Address Band Root1
+     ControlClick, Address Band Root1
+     ; ControlSetText,Edit1,A
  }
 
 return
