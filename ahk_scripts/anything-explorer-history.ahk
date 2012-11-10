@@ -205,6 +205,7 @@ anything_explorer_history_onselect(candidate)
 visit_directory( candidate_directory)
 {
     global anything_previous_activated_win_id
+    ComObjError(false)          ; 不报com错
  ; WinGet, id, list, , , Program Manager
   ; WinGet, processName, ProcessName, ahk_id %id2%
   ; WinGet, pid, PID, ahk_id %id2%
@@ -268,7 +269,6 @@ visit_directory( candidate_directory)
          ; MsgBox % h
           ; WinActivate
           ; h :=   WinExist("A")
-            ComObjError(false)          ; 不报com错
             For win in ComObjCreate("Shell.Application").Windows
             if   (win and  (win.hwnd=h))
               win.Navigate[candidate_directory]
@@ -277,7 +277,7 @@ visit_directory( candidate_directory)
           sleep 50
        if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
        {
-           ControlFocus, DirectUIHWND3,A
+          ControlFocus, DirectUIHWND3,A
        }else{
           ControlFocus, SysListView321,A
       }
