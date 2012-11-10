@@ -361,5 +361,6 @@ anything_services_run_services_dot_msc(unused_candidate)
 anything_services_source:=Object()
 anything_services_source["name"]:="Services"
 anything_services_source["candidate"]:="anything_services_candidates"
- anything_services_source["action"]:=Array("anything_services_toggle_start_or_stop","anything_services_change_StartStatus","anything_services_run_services_dot_msc")
+anything_services_source["action"]:=Array("anything_services_toggle_start_or_stop","anything_services_change_StartStatus","anything_services_run_services_dot_msc")
+anything_services_source["action_desc"]:=Array("Toggle Start or Stop","Change Service StartStatus","Launch services.msc")
 anything_services_source["onselect"]:="anything_services_onselect"
