@@ -148,8 +148,6 @@ anything_run(candidate)
   {
       anything_MsgBox(" Failed") 
   }else{
-     if (not (IsObject(candidate))) ; if is string ,means a new cmd , 
-     {
          if (pid == "")
          {
              anything_run_add_new_cmd(Array(cmd,cmd,cmd))     
@@ -159,7 +157,6 @@ anything_run(candidate)
              anything_run_add_new_cmd(Array(cmd,cmd,anything_run_get_process_full_path(pid)))     
          }
          anything_run_write2disk()
-     }
   }
 }
 ; delete selected cmd from candidates
