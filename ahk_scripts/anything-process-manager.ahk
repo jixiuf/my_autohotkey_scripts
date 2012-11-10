@@ -208,4 +208,5 @@ anything_process_manager_source["name"] :="Proc"
 anything_process_manager_source["candidate"] :="anything_process_candidates"
 anything_process_manager_source["icon"] :="anything_process_manager_get_icons" 
 anything_process_manager_source["action"] :=Array("anything_process_kill","anything_process_change_priority" )
+anything_process_manager_source["action_desc"] :=Array("Kill Process","Change Process Priority" )
 anything_process_manager_source["onselect"] :="anything_process_on_select" 
