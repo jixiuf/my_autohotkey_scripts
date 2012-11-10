@@ -154,6 +154,7 @@ anything_run_launch_source:=Object()
 anything_run_launch_source["name"]:="Launch"
 anything_run_launch_source["candidate"]:=  anything_run_launch_candidates
 anything_run_launch_source["action"] := Array("anything_run_launch")
+anything_run_launch_source["action_desc"] := Array("Launch (File/Cmd/...)")
 anything_run_launch_source["onselect"] := "anything_run_launch_on_select"
 ; anything_run_launch_source["icon"]:= "anything_run_launch_get_icons"  ;I fount it make it slow  ,so comment it
 anything_run_launch_source["anything-execute-action-at-once-if-one"] := "no"
