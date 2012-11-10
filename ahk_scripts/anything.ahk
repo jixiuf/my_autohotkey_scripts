@@ -141,12 +141,13 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
    Gui, Color,%WindowColor% , %ControlColor%
    Gui,Font,s%FontSize% %FontColor% %FontWeight%
    Gui, Add, Text,     x10  y10 w80 h30, Search`:
-   Gui, Add, Edit,     x90 y5 w500 h30,
+   Gui, Add, Edit,     x90 y5 w300a h30,
    Gui +OwnDialogs
    WinSetTitle, Anything.ahk
 
     Gui, Add, ListView, x0 y40 w%win_width% h%ListViewHeight% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
     Gui, Add, Text,     x1  y%StatusTextY% Cwhite w%win_width% h%StatusTextHeight%
+    Gui, Add, Text,     x400 y5 w400 h30,  Tab/Ret/C-j/C-m/C-k/C-e C-n/C-p C-L
 
      ;; search string you have typed
      tabListActions:=""
