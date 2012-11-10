@@ -73,8 +73,8 @@ Backspace::back_up_dir()
 ; open 'cmd' in the current directory
 ^!c::OpenCmdInCurrent()
 ; open with emacs
-^e:: openSelectedfileWithEamcs()
-^`:: openSelectedfileWithEamcs()
+^e:: openSelectedfileWithEamcsOrEOL()
+^`:: openSelectedfileWithEamcsOrEOL()
 #IfWinActive
 
 ctrl_j(){
@@ -323,32 +323,46 @@ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 }
 
 ;;需要 emacsclientw 在Path路径下
-OpenCmdInCurrent() win7
-openSelectedfileWithEamcs()
+; 用emacs打开选中文件，或者到行尾
+openSelectedfileWithEamcsOrEOL()
 {
-    fullPath:=GetSelectedFileName()
+    h :=   WinExist("A")
+    For win in ComObjCreate("Shell.Application").Windows{
+        if   (win and  (win.hwnd=h))
+        {
+            selectedFiles := win.Document.SelectedItems
+        }
+    }
+
+    ; fullPath:=GetSelectedFileName()
     if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
- {
-     ControlGetFocus, focusedControl,A
-     if (focusedControl="DirectUIHWND3")
-     {
-         run , emacsclientw %fullPath%
-     }
-     else if (focusedControl="Edit1")
-     {
-         send {End}
-     }
- }else{
-     ControlGetFocus, focusedControl,A
-     if (focusedControl="SysListView321")
-     {
-         run , emacsclientw %fullPath%
-     }
-     else if (focusedControl="Edit1")
-     {
-         send {End}
-     }
- }
+    {
+        ControlGetFocus, focusedControl,A
+        if (focusedControl="DirectUIHWND3")
+        {
+            for file in selectedFiles{
+                FilePath:=file.path
+                run , emacsclientw %FilePath%
+            }
+        }
+        else
+        {
+            send {End}
+        }
+     }else{
+        ControlGetFocus, focusedControl,A
+        if (focusedControl="SysListView321")
+        {
+            for file in selectedFiles{
+                FilePath:=file.path
+               run , emacsclientw %FilePath%
+            }
+        }
+        else
+        {
+            send {End}
+        }
+    }
 }
 
 getExplorerAddrPath()
