@@ -145,7 +145,8 @@ ctrl_u(){
          win.Navigate[dir]
      }
      Until   (win.hwnd=h)
-     ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+     Send {Down}{UP}
+      ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
      ;;add to history list
      anything_add_directory_history(dir)
     }
