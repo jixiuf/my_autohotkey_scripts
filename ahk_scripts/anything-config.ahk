@@ -55,7 +55,14 @@ return
  sources:=Array()
  sources.Insert(anything_services_source)
  ; sources.Insert(anything_process_manager_source)
- anything_multiple_sources(sources)
+ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+    Send ^{f4}
+}
+ else
+ {
+     anything_multiple_sources(sources)
+ }
 return
  
 ^Tab::                          ;  I remap CapsLock Ctrl ,Alt , so ...
