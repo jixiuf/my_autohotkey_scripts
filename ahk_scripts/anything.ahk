@@ -1204,14 +1204,20 @@ newSources:=Array()
  candidates:=Array()
  for key ,candidate in sources
  {
+    if (candidate["action_desc"]== ""){
+        action_descs:=anything_get_prop_as_array(candidate["action"])
+    }else{
+        action_descs:=anything_get_prop_as_array(candidate["action_desc"])
+    }
    for k,action in anything_get_prop_as_array(candidate["action"])
    {
    next:=Object()
-   next.insert("call action :  "candidate["name"] . "." . action)
+   action_desc:=action_descs[k]
+   next.insert( anything_make_string("call action :  " . candidate["name"] . "." . action_desc,50) )
+   ; next.insert("call action :  "candidate["name"] . "." . action)
    next.insert(action)
-   next.insert(anything_pattern)
+   ; next.insert(anything_pattern)
    candidates.insert(next)
-
    }
  }
  source["candidate"]:=candidates
@@ -1221,9 +1227,11 @@ newSources:=Array()
 }
 anything_execute_default_action_with_anything_pattern(candidate)
 {
-  real_candidate :=candidate[3]
+    global anything_pattern
+
+  ; real_candidate :=candidate[3]
   real_action:=candidate[2]
-  anything_callFuncByNameWithOneParam(real_action ,real_candidate)
+  anything_callFuncByNameWithOneParam(real_action ,anything_patterna)
 }
 ;;this  is just a example
 ;;you can parse a property to anything
