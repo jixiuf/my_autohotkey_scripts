@@ -1138,8 +1138,7 @@ anything_build_source_of_actions(source,selected_candidate)
 actionSources:=Array()
 actionSource:=Array()
 candidates :=Array()
-i:=0
-for key ,action in anything_get_all_actions(source["action"])
+for i ,action in anything_get_all_actions(source["action"])
 {
    next:=Array()
    if(i=0){
@@ -1158,7 +1157,6 @@ for key ,action in anything_get_all_actions(source["action"])
    next.insert(action)
    next.insert(selected_candidate)
    candidates.insert(next)
-   i:=i+1
 }
 actionSource["candidate"]:=candidates
 actionSource["action"]:="anything_execute_action_action"
