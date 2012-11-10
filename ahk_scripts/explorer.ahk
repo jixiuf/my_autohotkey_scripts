@@ -326,6 +326,7 @@ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 ; 用emacs打开选中文件，或者到行尾
 openSelectedfileWithEamcsOrEOL()
 {
+    ComObjError(false)          ; 不报com错
     h :=   WinExist("A")
     For win in ComObjCreate("Shell.Application").Windows{
         if   (win and  (win.hwnd=h))
