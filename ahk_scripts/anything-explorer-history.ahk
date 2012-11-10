@@ -43,6 +43,7 @@ anything_explorer_max_candidate_count:=100
 anything_explorer_history_source:=Object()
 anything_explorer_history_source["candidate"]:= directory_history
 anything_explorer_history_source["action"]:=Array("visit_directory","delete_from_directory_history" ,"delete_all_directory_history")
+anything_explorer_history_source["action_desc"]:=Array("Visit Selected Directory","Delete Selected Item" ,"Delete All Items")
 anything_explorer_history_source["onselect"]:="anything_explorer_history_onselect"
 anything_explorer_history_source["name"]:="ExpHist"
 anything_explorer_history_source["anything-execute-action-at-once-if-one"] := "yes"
