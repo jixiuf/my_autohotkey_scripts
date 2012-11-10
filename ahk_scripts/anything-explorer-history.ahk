@@ -268,19 +268,19 @@ visit_directory( candidate_directory)
          ; MsgBox % h
           ; WinActivate
           ; h :=   WinExist("A")
-
+            ComObjError(false)          ; 不报com错
             For win in ComObjCreate("Shell.Application").Windows
             if   (win and  (win.hwnd=h))
               win.Navigate[candidate_directory]
             Until   (win.hwnd=h)
 
           sleep 50
-	   if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
-	   {
- 	      ControlFocus, DirectUIHWND3,A
-	   }else{	  
-	      ControlFocus, SysListView321,A
-	  }
+       if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+       {
+           ControlFocus, DirectUIHWND3,A
+       }else{
+          ControlFocus, SysListView321,A
+      }
           Send {Home}{Down}{Up}
    }
 }
