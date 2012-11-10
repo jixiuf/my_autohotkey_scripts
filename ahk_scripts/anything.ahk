@@ -147,8 +147,10 @@ anything_multiple_sources_with_properties(sources,anything_tmp_properties){
 
     Gui, Add, ListView, x0 y40 w%win_width% h%ListViewHeight% -VScroll -E0x200 Background%WindowColor% AltSubmit -Hdr -HScroll -Multi  Count10 , candidates|source_index|candidate_index|source-namee
     Gui, Add, Text,     x1  y%StatusTextY% Cwhite w%win_width% h%StatusTextHeight%
-    Gui, Add, Text,     x400 y5 w400 h30,  Tab/Ret/C-j/C-m/C-k/C-e C-n/C-p C-L
-
+   ;  change the font size of control Text (Tab/Ret/C-j/C-m/C-k/C-e C-n/C-p/C-u/C-d C-L C-w/C-y
+    Gui,Font,s12 %FontColor% %FontWeight%
+    Gui, Add, Text,     x400 y5 w500 h30,  Tab/Ret/C-j/C-m/C-k/C-e C-n/C-p/C-u/C-d C-L C-w/C-y
+    GuiControl, Font, Text
      ;; search string you have typed
      tabListActions:=""
      matched_candidates:=Object()
