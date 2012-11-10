@@ -1131,35 +1131,61 @@ anything_get_fifth_or_defalut_action(actionProperty)
 ;; for selected_candidate
 ;; so that you can selected one of the "actions" and execute it .
 ;; so source["action"] will be used as newSource["candidate"]
-;; and the new "action" for newSource is"anything_execute_action_on_selected"
+;; and the new "action" for newSource is"anything_execute_action_action"
 ;;
 anything_build_source_of_actions(source,selected_candidate)
 {
 actionSources:=Array()
 actionSource:=Array()
 candidates :=Array()
+i:=0
 for key ,action in anything_get_all_actions(source["action"])
 {
    next:=Array()
+   if(i=0){
+       next.insert(anything_make_string(action,50) . "Enter")
+   } else if (i=1){
+       next.insert(anything_make_string(action,50) . "Ctrl-j/Alt-j")
+   }else if (i=2){
+       next.insert(anything_make_string(action,50) . "Ctrl-m/Alt-m")
+   }else if (i=3){
+       next.insert(anything_make_string(action,50) . "Ctrl-k/Alt-k")
+   }else if (i=4){
+       next.insert(anything_make_string(action,50) . "Ctrl-e/Alt-e")
+   }else{
+       next.insert(action)
+   }
    next.insert(action)
    next.insert(selected_candidate)
    candidates.insert(next)
+   i:=i+1
 }
 actionSource["candidate"]:=candidates
-actionSource["action"]:="anything_execute_action_on_selected"
+actionSource["action"]:="anything_execute_action_action"
+actionSource["onselect"]:="anything_execute_action_on_selected"
 actionSource["name"]:="Action"
 actionSources.insert(actionSource)
 return actionSources
 }
-
+anything_execute_action_on_selected(Candidate){
+    ; functionName:=candidate[2]
+    realCandidate:=candidate[3]
+    if IsObject(realCandidate)
+    { ; array
+        display:=realCandidate[1]
+    }else{                      ; string
+        display:=realCandidate
+    }
+    anything_statusbar("Actions for candidate : " . display)
+}
 ;;this is a inner "action" ,and the candidate is special
 ;;the "display" of candidate (the first element of this candidate)
 ;; is a function name ,and the "real" of candidate is the anything_pattern_string
 ;;so this function is used to display(real)
-anything_execute_action_on_selected(candidate)
+anything_execute_action_action(candidate)
 {
-  functionName:=candidate[1]
-  realCandidate:=candidate[2]
+  functionName:=candidate[2]
+  realCandidate:=candidate[3]
   anything_callFuncByNameWithOneParam(functionName, realCandidate)
 }
 
