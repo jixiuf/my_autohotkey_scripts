@@ -1,18 +1,18 @@
 ;;; anything-run.ahk , a replace of Win+r
 SetWorkingDir %A_ScriptDir%
 ;;; anything-run.ahk , a replace of Win+r
-;;if you only use this source ,you can bind it like this  
+;;if you only use this source ,you can bind it like this
 ;;#include anything.ahk
 ;;#include anything-run.ahk
 ; f3::
 ;    anything(anything_run_source)
 ; return
- 
+
  ; read cmd history from ini file
  anything_run_init()
 {
     global anything_run_cmd_array
-    ;;init anything_run_cmd_array from anything-run.ini 
+    ;;init anything_run_cmd_array from anything-run.ini
     IfExist,anything-run.ini
     {
         IniRead, history_line, anything-run.ini, main, anything_run_cmd_array
@@ -27,9 +27,9 @@ SetWorkingDir %A_ScriptDir%
     }
 }
 
-;anything_get_file_name("c:\a.txt")==a.txt 
+;anything_get_file_name("c:\a.txt")==a.txt
 ;anything_get_file_name("a.txt")==a.txt
-;anything_get_file_name("http://www.google.com")==http://www.google.com 
+;anything_get_file_name("http://www.google.com")==http://www.google.com
 anything_get_file_name(fullPath)
 {
     if( RegExMatch(fullPath ,"(^https?://)|(^ftp://)"))
@@ -39,7 +39,7 @@ anything_get_file_name(fullPath)
     {
         return fullPath
     }
-    ; else handle file name 
+    ; else handle file name
     SplitPath, fullPath , OutFileName,
     return OutFileName
 }
@@ -73,7 +73,7 @@ anything_run_add_new_cmd(new_cmd_candidate)
   {
       candidate := Array(new_cmd_candidate,new_cmd_candidate,new_cmd_candidate)
   }
-  
+
   for key ,cmdFullPath in anything_run_cmd_array
   {
     if (cmdFullPath[2] == candidate[2])
@@ -83,7 +83,7 @@ anything_run_add_new_cmd(new_cmd_candidate)
     }
   }
   anything_run_cmd_array.insert(1,candidate)
-  if (directory_history.maxIndex()>150) ;;only record 50 cmd history items 
+  if (directory_history.maxIndex()>150) ;;only record 50 cmd history items
   {
     anything_run_cmd_array.remove(151)
   }
@@ -94,15 +94,15 @@ anything_run_on_select(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
     {
-        fullpath_cmd := candidate[3] ;  use "full-path-of-cmd" as cmd 
+        fullpath_cmd := candidate[3] ;  use "full-path-of-cmd" as cmd
     }
-    else ; when candidate is string 
+    else ; when candidate is string
     {
         fullpath_cmd := candidate
     }
-     anything_statusbar(fullpath_cmd)     
+     anything_statusbar(fullpath_cmd)
 }
- 
+
 ; get_candidates fun
 ; the format of each candidate is Array("cmd","full-path-of-cmd")
 ; for example : Array("cmd.exe","c:\windows\system32\cmd.exe")
@@ -117,12 +117,12 @@ anything_run_on_select(candidate)
 ;     ; }
 ;     return anything_run_cmd_array
 ; }
-; get icon from cmd file 
+; get icon from cmd file
 anything_run_get_icons()
 {
     global anything_run_cmd_array
     global anything_properties
-    icons:=IL_Create(5,5,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 5 each time, 
+    icons:=IL_Create(5,5,anything_properties["anything_use_large_icon"])       ; init 5 icon ,incremnt by 5 each time,
     for key ,cmd_no_display in anything_run_cmd_array
     {
           anything_add_icon(cmd_no_display[3],icons,anything_properties["anything_use_large_icon"])
@@ -137,40 +137,40 @@ anything_run(candidate)
 {
     if (IsObject(candidate))  ;  when format of candidate is Array("cmd","full-path-of-cmd")
     {
-    cmd := candidate[2]      
+    cmd := candidate[2]
     }
-    else ; when candidate is string 
+    else ; when candidate is string
     {
     cmd := candidate
     }
-  Run,%cmd%, , UseErrorLevel,pid  ;  don't display default dialog if it fails. and populate pid 
+  Run,%cmd%, , UseErrorLevel,pid  ;  don't display default dialog if it fails. and populate pid
  if ErrorLevel = ERROR
   {
-      anything_MsgBox(" Failed") 
+      anything_MsgBox(" Failed")
   }else{
          if (pid == "")
          {
-             anything_run_add_new_cmd(Array(cmd,cmd,cmd))     
+             anything_run_add_new_cmd(Array(cmd,cmd,cmd))
          }
-         else 
+         else
          {
-             anything_run_add_new_cmd(Array(cmd,cmd,anything_run_get_process_full_path(pid)))     
+             anything_run_add_new_cmd(Array(cmd,cmd,anything_run_get_process_full_path(pid)))
          }
          anything_run_write2disk()
   }
 }
 ; delete selected cmd from candidates
 ; the format of candidates can be
-; Array("cmd","full-path-of-cmd") or string 
+; Array("cmd","full-path-of-cmd") or string
 ; for example : Array("cmd.exe","c:\windows\system32\cmd.exe")
 anything_run_delete(candidate)
 {
   global anything_run_cmd_array
     if (IsObject(candidate))  ;  when format of candidate is Array("display","cmd","full-path-of-cmd")
     {
-        cmd := candidate[2]     
+        cmd := candidate[2]
     }
-    else ; when candidate is string 
+    else ; when candidate is string
     {
         cmd := candidate
     }
@@ -194,11 +194,11 @@ anything_run_delete(candidate)
 ; I can get icon from the full path of cmd file
 ; but for some special command ,
 ;        for example: msconfig
-;  Run,%cmd%, , UseErrorLevel,pid  ;   
+;  Run,%cmd%, , UseErrorLevel,pid  ;
 ; the value of pid is empty ,
 ; so I can't set get full path of it by anything_run_get_process_full_path(pid)
 ; then I store "msconfig" in config file
-; so variable "anything_run_cmd_array" not all "fullpath"  
+; so variable "anything_run_cmd_array" not all "fullpath"
 anything_run_cmd_array:=Array()
 anything_run_init()
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
