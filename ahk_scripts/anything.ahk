@@ -1066,7 +1066,7 @@ anything_get_second_or_defalut_action(actionProperty)
   return actionProperty
 }
 }
-anything_get_all_actions(actionProperty)
+anything_get_prop_as_array(actionProperty)
 {
   if isObject(actionProperty)
   {
@@ -1135,35 +1135,41 @@ anything_get_fifth_or_defalut_action(actionProperty)
 ;;
 anything_build_source_of_actions(source,selected_candidate)
 {
-actionSources:=Array()
-actionSource:=Array()
-candidates :=Array()
-for i ,action in anything_get_all_actions(source["action"])
-{
-   next:=Array()
-   if(i=0){
-       next.insert(anything_make_string(action,50) . "Enter")
-   } else if (i=1){
-       next.insert(anything_make_string(action,50) . "Ctrl-j/Alt-j")
-   }else if (i=2){
-       next.insert(anything_make_string(action,50) . "Ctrl-m/Alt-m")
-   }else if (i=3){
-       next.insert(anything_make_string(action,50) . "Ctrl-k/Alt-k")
-   }else if (i=4){
-       next.insert(anything_make_string(action,50) . "Ctrl-e/Alt-e")
-   }else{
-       next.insert(action)
-   }
-   next.insert(action)
-   next.insert(selected_candidate)
-   candidates.insert(next)
-}
-actionSource["candidate"]:=candidates
-actionSource["action"]:="anything_execute_action_action"
-actionSource["onselect"]:="anything_execute_action_on_selected"
-actionSource["name"]:="Action"
-actionSources.insert(actionSource)
-return actionSources
+    actionSources:=Array()
+    actionSource:=Array()
+    candidates :=Array()
+    if (source["action_desc"]== ""){
+        action_descs:=anything_get_prop_as_array(source["action"])
+    }else{
+        action_descs:=anything_get_prop_as_array(source["action_desc"])
+    }
+    for i ,action in anything_get_prop_as_array(source["action"])
+    {
+        action_desc:=action_descs[i]
+        next:=Array()
+        if(i=1){
+            next.insert(anything_make_string(action_desc,55) . "Enter")
+        } else if (i=2){
+            next.insert(anything_make_string(action_desc,55) . "Ctrl-j/Alt-j")
+        }else if (i=3){
+            next.insert(anything_make_string(action_desc,55) . "Ctrl-m/Alt-m")
+        }else if (i=4){
+            next.insert(anything_make_string(action_desc,55) . "Ctrl-k/Alt-k")
+        }else if (i=5){
+            next.insert(anything_make_string(action_desc,55) . "Ctrl-e/Alt-e")
+        }else{
+            next.insert(action)
+        }
+        next.insert(action)
+        next.insert(selected_candidate)
+        candidates.insert(next)
+    }
+    actionSource["candidate"]:=candidates
+    actionSource["action"]:="anything_execute_action_action"
+    actionSource["onselect"]:="anything_execute_action_on_selected"
+    actionSource["name"]:="Action"
+    actionSources.insert(actionSource)
+    return actionSources
 }
 anything_execute_action_on_selected(Candidate){
     ; functionName:=candidate[2]
@@ -1196,7 +1202,7 @@ newSources:=Array()
  candidates:=Array()
  for key ,candidate in sources
  {
-   for k,action in anything_get_all_actions(candidate["action"])
+   for k,action in anything_get_prop_as_array(candidate["action"])
    {
    next:=Object()
    next.insert("call action :  "candidate["name"] . "." . action)
