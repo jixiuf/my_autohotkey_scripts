@@ -114,7 +114,17 @@ ctrl_j(){
      {
          if(focusedControl="SysListView321")
          {
-             Send {Enter}
+             h :=   WinExist("A")
+             For win in ComObjCreate("Shell.Application").Windows{
+                 if   (win and  (win.hwnd=h))
+                 {
+                     selectedFiles := win.Document.SelectedItems
+                     ; all = win.Document.Foleer.Items
+                     for file in selectedFiles{
+                         win.Navigate(file.path)
+                     }
+                 }
+             }
              sleep 150
              if( WinActive("ahk_class ExploreWClass") or WinActive("ahk_class CabinetWClass"))
              {
