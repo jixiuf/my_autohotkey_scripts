@@ -38,6 +38,7 @@ SetKeyDelay 0
 
 
 #IfWinActive ahk_class Notepad
+^!h::Send ^a
 ^BS::Send ^+{Left}{Del}
 +^BS::Send ^+{Left}{Del}
 
@@ -122,5 +123,3 @@ return
 
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
