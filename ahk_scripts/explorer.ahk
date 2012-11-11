@@ -135,31 +135,30 @@ ctrl_j(){
 }
 ctrl_u(){
     ComObjError(false)          ; 不报com错
-    oldExplorePath:= getExplorerAddrPath()
-    SplitPath, oldExplorePath,, dir
-    if(dir!=oldExplorePath){        ; 是否已经在根目录了
-     h :=   WinExist("A")
-     For win in ComObjCreate("Shell.Application").Windows
-     if   (win and  (win.hwnd=h))
-     {
-         win.Navigate[dir]
-     }
-     Until   (win.hwnd=h)
-     Send {Down}{UP}
-      ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
-     ;;add to history list
-     anything_add_directory_history(dir)
-    }
-    else
+    h :=   WinExist("A")
+    For win in ComObjCreate("Shell.Application").Windows
+    if   (win and  (win.hwnd=h))
     {
-        ; todo:
-        ; ControlFocus, Edit1,A
-        ; ControlFocus, Address Band Root1
-        ; ControlClick, Address Band Root1
-        ; ControlSetText,Edit1,A
-     }
- return
-}
+        ; http://www.yongfa365.com/Item/Shell.Application-JiShuZiLiao.html
+        ; win.Document.Folder.Items
+        Path1:=locationUrl2WinPath(win.locationUrl)
+        ;
+        ;; d:/ 是否已经在根目录了
+        if(StrLen(Path1)==0){
+            win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] ; 我的电脑
+        }else if(StrLen(Path1)==3){
+            win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"]
+        }else{
+            SplitPath, Path1,, ParentDir
+            win.Navigate[ParentDir . "\"]
+            Send {Down}{UP}
+            ;;;这两句话，是用于更新anything-explorer-history.ahk中的变量而设
+            ;;add to history list
+            anything_add_directory_history(ParentDir)
+        }
+    }
+    Until (win.hwnd=h)
+    }
 back_up_dir(){
     if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
     {
@@ -393,4 +392,14 @@ GetSelectedFileName()
    }
    ClipBoard := AlterClipboardInhalt    ; Alten Inhalt des Clipboards wiederherstellen
    Return FileName
+}
+
+;;
+; file:///d:/path/ -->d:\path
+locationUrl2WinPath(winPath)
+{
+   path1:= RegExReplace(winPath, "^file:///(.*)"  ,"$1" )
+   path2:= RegExReplace(path1, "%20"  ," " )
+   StringReplace,path3, path2, / , \, All
+    return path3
 }
