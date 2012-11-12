@@ -159,7 +159,8 @@ ctrl_u(){
     {
         ; http://www.yongfa365.com/Item/Shell.Application-JiShuZiLiao.html
         ; win.Document.Folder.Items
-        Path1:=locationUrl2WinPath(win.locationUrl)
+        Path1:=win.Document.Folder.Self.path
+        ; locationUrl2WinPath(win.locationUrl)
         ;
         ; Documents folder: %SystemRoot%\explorer.exe /n,::{450D8FBA-AD25-11D0-98A8-0800361B1103}
         ; Computer: %SystemRoot%\explorer.exe /E,::{20D04FE0-3AEA-1069-A2D8-08002B30309D}
