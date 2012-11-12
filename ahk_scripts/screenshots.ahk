@@ -19,12 +19,19 @@ if (not  FileExist(shot_dest_dir))
 ~PrintScreen::screenshot_fullscreen()
 ~!PrintScreen::screenshot_actived_window()
 
+#IfWinActive ahk_class Photo_Lightweight_Viewer
+q::Send !{F4}
+!g::Send !{F4}
+esc::Send !{F4}
+#IfWinActive
+
+
 screenshot_fullscreen(){
     global shot_dest_dir
     FileName:= A_YYYY . "_" . A_MM . "_" . A_DD . "-" . A_Hour . A_Min . A_Sec . A_MSec . ".png"
     Path1 :=shot_dest_dir . FileName
     Run ,boxcutter --fullscreen %Path1%
-    sleep 100
+    sleep 200
     Run, %Path1%
 }
 
@@ -36,6 +43,6 @@ screenshot_actived_window(){
     X2:=X+Width
     Y2:=Y+ Height
     Run ,boxcutter  --coords %X%`,%Y%`,%X2%`,%Y2%  %Path1%
-    sleep 100
+    sleep 200
     Run, %Path1%
 }
