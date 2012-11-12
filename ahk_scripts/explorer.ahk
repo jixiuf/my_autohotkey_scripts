@@ -153,6 +153,9 @@ ctrl_u(){
         ; win.Document.Folder.Items
         Path1:=locationUrl2WinPath(win.locationUrl)
         ;
+        ; Documents folder: %SystemRoot%\explorer.exe /n,::{450D8FBA-AD25-11D0-98A8-0800361B1103}
+        ; Computer: %SystemRoot%\explorer.exe /E,::{20D04FE0-3AEA-1069-A2D8-08002B30309D}
+        ; Recycle Bin: %SystemRoot%\explorer.exe /E,::{645FF040-5081-101B-9F08-00AA002F954E}
         ;; d:/ 是否已经在根目录了
         if(StrLen(Path1)==0){
             win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] ; 我的电脑
