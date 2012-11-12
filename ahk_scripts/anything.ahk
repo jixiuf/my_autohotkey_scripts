@@ -1231,7 +1231,7 @@ anything_execute_default_action_with_anything_pattern(candidate)
 
   ; real_candidate :=candidate[3]
   real_action:=candidate[2]
-  anything_callFuncByNameWithOneParam(real_action ,anything_patterna)
+  anything_callFuncByNameWithOneParam(real_action ,anything_pattern)
 }
 ;;this  is just a example
 ;;you can parse a property to anything
