@@ -58,7 +58,7 @@ Backspace::back_up_dir()
 ^;::focus_files()
 
 ;;ctrl+L 定位在地址栏
-^l:: ControlFocus, Edit1,A
+^l::focus_address_bar()
 ;"+"  like Emacs dired: create new folder
 +=::Send !fwf
 !^n::Send !fwf
@@ -77,6 +77,14 @@ Backspace::back_up_dir()
 ^`:: openSelectedfileWithEamcsOrEOL()
 #IfWinActive
 
+focus_address_bar(){
+    if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+    {
+        Send {Alt Down}D{Alt Up}
+    }else{
+        ControlFocus, Edit1,A
+    }
+}
 ctrl_j(){
     ComObjError(false)          ; 不报com错
     ControlGetFocus, focusedControl,A
