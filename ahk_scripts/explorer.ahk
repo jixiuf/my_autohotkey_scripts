@@ -160,16 +160,29 @@ ctrl_u(){
         ; http://www.yongfa365.com/Item/Shell.Application-JiShuZiLiao.html
         ; win.Document.Folder.Items
         Path1:=win.Document.Folder.Self.path
-        ; locationUrl2WinPath(win.locationUrl)
+        Path1:=locationUrl2WinPath(win.locationUrl)
         ;
         ; Documents folder: %SystemRoot%\explorer.exe /n,::{450D8FBA-AD25-11D0-98A8-0800361B1103}
         ; Computer: %SystemRoot%\explorer.exe /E,::{20D04FE0-3AEA-1069-A2D8-08002B30309D}
         ; Recycle Bin: %SystemRoot%\explorer.exe /E,::{645FF040-5081-101B-9F08-00AA002F954E}
         ;; d:/ 是否已经在根目录了
-        if(StrLen(Path1)==0){
-            win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] ; 我的电脑
-        }else if(StrLen(Path1)==3){
-            win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"]
+        if ((StrLen(Path1)==0)){
+            ; do nothing
+        }else if (StrLen(Path1)==3){
+            ; d:\
+            ; this doesn't work on win7
+            ; win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] ; 我的电脑
+            if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+            {
+                ; focus_address_bar()
+                SendInput {Alt Down}D{Alt Up}
+                sleep 10
+                ControlSetText, Edit1 ,::{20D04FE0-3AEA-1069-A2D8-08002B30309D}
+                SendInput {Enter}
+
+            }else{
+                win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] ; 我的电脑
+            }
         }else{
             SplitPath, Path1,, ParentDir
             win.Navigate[ParentDir . "\"]
