@@ -31,7 +31,6 @@ screenshot_fullscreen(){
     Path1 := shot_dest_dir . FileName
     Run ,boxcutter --fullscreen %Path1%
     sleep 200
-    MsgBox % Path1
     Run, %Path1%
 }
 
