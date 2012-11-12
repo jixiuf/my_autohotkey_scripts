@@ -21,6 +21,7 @@ run %A_ScriptDir%\autoclosewin.ahk
 #Include %A_ScriptDir%\notepad-emacs-key.ahk
 #Include %A_ScriptDir%\eclipse.ahk
 #Include %A_ScriptDir%\alias.ahk
+#Include %A_ScriptDir%\screenshots.ahk
 #Include %A_ScriptDir%\toggleTaskBar.ahk
 #Include %A_ScriptDir%\plsql.ahk
 #Include %A_ScriptDir%\toadsqlserver.ahk
