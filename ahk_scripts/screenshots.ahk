@@ -14,11 +14,10 @@ if (not  FileExist(shot_dest_dir))
      FileCreateDir, %shot_dest_dir%
  }
 
-PrintScreen::screenshot_fullscreen()
-!PrintScreen::screenshot_actived_window()
-#IfWinActive ahk_class Photo_Lightweight_Viewer
-; ^c::
-#IfWinActive
+; 按下 printScreen Alt+PrintScreen(系统自带的功能依然有用)
+; 但是增加以下功能 ，自动保存文件，并预览
+~PrintScreen::screenshot_fullscreen()
+~!PrintScreen::screenshot_actived_window()
 
 screenshot_fullscreen(){
     global shot_dest_dir
