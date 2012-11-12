@@ -11,7 +11,8 @@ Gosub, AUTOHIDE
 IfWinExist,ahk_class Shell_TrayWnd
 {
     WinHide,ahk_class Shell_TrayWnd
-    WinHide,Start ahk_class Button
+    WinHide, ahk_class Button
+
     Gosub, AUTOHIDE
 }
 Else
@@ -19,8 +20,9 @@ Else
     ; WinSet,Region,,ahk_id %taskbar%
   ; Send #d
     WinShow,ahk_class Shell_TrayWnd
-    WinShow,Start ahk_class Button
-  ; WinActivate,ahk_class Shell_TrayWnd
+    WinShow, ahk_class Button
+    ; WinShow, ahk_class DV2ControlHost
+
     Gosub, Normal
 }
 return
