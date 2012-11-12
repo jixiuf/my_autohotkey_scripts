@@ -265,7 +265,9 @@ create_new_text(){
         {
             ; TODO: select created file
             ControlFocus, DirectUIHWND3,A
-            SendInput {F5}%UserInput%
+            SendInput {F5}
+            sleep 100
+            SendInput %UserInput%
         }else{
             ControlFocus, SysListView321,A
             ; Switch the active window's keyboard layout/language to English:
