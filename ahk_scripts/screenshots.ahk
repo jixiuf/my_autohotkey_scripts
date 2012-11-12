@@ -8,11 +8,6 @@
 ;   -f, --fullscreen            capture the full screen\n\
 ;   -h, --help                  display help message
 
-shot_dest_dir:="c:\shots\"
-if (not  FileExist(shot_dest_dir))
- {
-     FileCreateDir, %shot_dest_dir%
- }
 
 ; 按下 printScreen Alt+PrintScreen(系统自带的功能依然有用)
 ; 但是增加以下功能 ，自动保存文件，并预览
@@ -27,16 +22,25 @@ esc::Send !{F4}
 
 
 screenshot_fullscreen(){
-    global shot_dest_dir
+    shot_dest_dir:="c:\shots\"
+    if (not  FileExist(shot_dest_dir))
+    {
+        FileCreateDir, %shot_dest_dir%
+    }
     FileName:= A_YYYY . "_" . A_MM . "_" . A_DD . "-" . A_Hour . A_Min . A_Sec . A_MSec . ".png"
-    Path1 :=shot_dest_dir . FileName
+    Path1 := shot_dest_dir . FileName
     Run ,boxcutter --fullscreen %Path1%
     sleep 200
+    MsgBox % Path1
     Run, %Path1%
 }
 
 screenshot_actived_window(){
-    global shot_dest_dir
+    shot_dest_dir:="c:\shots\"
+    if (not  FileExist(shot_dest_dir))
+    {
+        FileCreateDir, %shot_dest_dir%
+    }
     FileName:= A_YYYY . "_" . A_MM . "_" . A_DD . "-" . A_Hour . A_Min . A_Sec . A_MSec . ".png"
     Path1 :=shot_dest_dir . FileName
     WinGetPos, X, Y, Width, Height,A
