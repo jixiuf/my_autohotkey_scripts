@@ -6,19 +6,16 @@
 ; #SingleInstance,Force
 ; #NoTrayIcon
 SetWinDelay,0
-status:="show"
 Gosub, AUTOHIDE
 #z::
- if (status=="show")
+IfWinExist,ahk_class Shell_TrayWnd
 {
-    status:="hide"
     WinHide,ahk_class Shell_TrayWnd
     WinHide,Start ahk_class Button
     Gosub, AUTOHIDE
 }
 Else
 {
-    status:="show"
     ; WinSet,Region,,ahk_id %taskbar%
   ; Send #d
     WinShow,ahk_class Shell_TrayWnd
