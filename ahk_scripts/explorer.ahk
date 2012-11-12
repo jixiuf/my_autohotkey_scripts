@@ -75,6 +75,7 @@ Backspace::back_up_dir()
 ; open with emacs
 ^e:: openSelectedfileWithEamcsOrEOL()
 ^`:: openSelectedfileWithEamcsOrEOL()
+~^d::Send {Down}                ;  删除文件后焦点下移
 #IfWinActive
 
 focus_address_bar(){
