@@ -14,7 +14,7 @@
 ~PrintScreen::screenshot_fullscreen()
 ~!PrintScreen::screenshot_actived_window()
 
-#IfWinActive ahk_class Photo_Lightweight_Viewer
+#IfWinActive ahk_class Photo_Lightweight_Viewer|ShImgVw:CPreviewWnd
 q::Send !{F4}
 !g::Send !{F4}
 esc::Send !{F4}
