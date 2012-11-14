@@ -19,6 +19,8 @@ q::Send !{F4}
 ^g::Send !{F4}
 esc::Send !{F4}
 f::Send {F11}
+d::Send {Del}
+^d::Send {Del}
 #IfWinActive
 
 
