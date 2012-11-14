@@ -380,7 +380,7 @@ openSelectedfileWithEamcsOrEOL()
         {
             for file in selectedFiles{
                 FilePath:=file.path
-                run , emacsclientw %FilePath%
+                run , emacsclientw "%FilePath%"
             }
         }
         else
@@ -393,7 +393,7 @@ openSelectedfileWithEamcsOrEOL()
         {
             for file in selectedFiles{
                 FilePath:=file.path
-               run , emacsclientw %FilePath%
+               run , emacsclientw "%FilePath%"
             }
         }
         else
