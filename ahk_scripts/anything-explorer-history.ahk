@@ -236,6 +236,9 @@ visit_directory( candidate_directory)
          SendInput ,%A_Space%cd "%candidate_directory%"  {Enter}
   }else if (processName="cmd.exe"){
            SendInput, %A_Space%cd /d "%candidate_directory%"{Enter}
+  }else if (processName="erl.exe"  or processName="werl.exe"){
+      candidate_directory:= win2posixPath(candidate_directory)
+      SendInput, %A_Space%cd  ("%candidate_directory%").{Enter}
   }
  ;  Else if (processName="emacs.exe"){
  ; ;      WinActivate, ahk_id %active_id%
