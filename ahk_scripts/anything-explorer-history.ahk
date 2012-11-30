@@ -222,14 +222,18 @@ visit_directory( candidate_directory)
   WinGet, processName, ProcessName, ahk_id %active_id%
   WinGetClass, activeWinClass ,ahk_id %active_id%
   WinGet, pid, PID,  ahk_id %active_id%
+  WinGetTitle, Title,ahk_id %active_id%
+
 ; ;;  global active_id
 
   anything_add_directory_history(candidate_directory)
   write_history_2_disk()
 
   WinActivate, ahk_pid %pid%
-
-  if (processName="sh.exe" or processName="bash.exe" ){ ; msys
+  if (processName="werl.exe" or Title="C:\Windows\system32\cmd.exe - erl"){
+      candidate_directory:=win2posixPath(candidate_directory)
+      SendInput, %A_Space%cd ( "%candidate_directory%").{Enter}
+  }else if (processName="sh.exe" or processName="bash.exe" ){ ; msys
          WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
          candidate_directory:= win2msysPath(candidate_directory)
