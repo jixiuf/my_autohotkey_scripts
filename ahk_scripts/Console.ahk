@@ -22,7 +22,7 @@ SendMode, Input
 ^e::Send {End}
 ^!a::Send {Home} 
 ^!e::Send {End}
-
+^d::Send {Del}
 ^f::Send {Right}
 ^b::Send {Left}
 
