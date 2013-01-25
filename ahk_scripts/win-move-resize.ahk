@@ -21,6 +21,8 @@ WinMove  ,ahk_id %wid%,, x-50,y
 return
 
 #l::
+ ; disable lock screen on window7 
+RegWrite, REG_DWORD,  HKEY_CURRENT_USER,Software\Microsoft\Windows\CurrentVersion\Policies\System, DisableLockWorkstation,1
 wid:=WinActive("A")
 WinGetPos ,x,y,,,ahk_id %wid%
 WinMove  ,ahk_id %wid%,, x+50,y
@@ -102,5 +104,9 @@ toggleMaximize(wid=0){
 #m::
   toggleMaximize()
 return
-#f12:: Send #l
+#f12::
+  ; enable  lockscreen for win7
+  RegWrite, REG_DWORD,  HKEY_CURRENT_USER,Software\Microsoft\Windows\CurrentVersion\Policies\System, DisableLockWorkstation,0
+  Send #l
+ return
 
