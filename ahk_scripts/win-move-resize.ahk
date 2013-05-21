@@ -21,12 +21,17 @@ WinMove  ,ahk_id %wid%,, x-50,y
 return
 
 #l::
- ; disable lock screen on window7 
-RegWrite, REG_DWORD,  HKEY_CURRENT_USER,Software\Microsoft\Windows\CurrentVersion\Policies\System, DisableLockWorkstation,1
+ if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+{
+    ; enable  lockscreen for win7
+    ; disable lock screen on window7
+    ; should run as administer
+    RegWrite, REG_DWORD,  HKEY_CURRENT_USER,Software\Microsoft\Windows\CurrentVersion\Policies\System, DisableLockWorkstation,1
+}
 wid:=WinActive("A")
-WinGetPos ,x,y,,,ahk_id %wid%
-WinMove  ,ahk_id %wid%,, x+50,y
-return
+ WinGetPos ,x,y,,,ahk_id %wid%
+ WinMove  ,ahk_id %wid%,, x+50,y
+ return
 
 !#j::
 wid:=WinActive("A")
@@ -105,8 +110,19 @@ toggleMaximize(wid=0){
   toggleMaximize()
 return
 #f12::
+    if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
+    {
   ; enable  lockscreen for win7
-  RegWrite, REG_DWORD,  HKEY_CURRENT_USER,Software\Microsoft\Windows\CurrentVersion\Policies\System, DisableLockWorkstation,0
-  Send #l
+        RegWrite, REG_DWORD,  HKEY_CURRENT_USER,Software\Microsoft\Windows\CurrentVersion\Policies\System, DisableLockWorkstation,0
+        Sleep, 200
+        DllCall("LockWorkStation")
+        Sleep, 200
+        SendMessage,0x112,0xF170,2,,Program Manager
+    }
+    else
+    {
+        Send #l
+    }
  return
+
 
