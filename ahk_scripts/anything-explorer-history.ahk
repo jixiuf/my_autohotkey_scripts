@@ -233,6 +233,12 @@ visit_directory( candidate_directory)
   if (processName="werl.exe" or Title="C:\Windows\system32\cmd.exe - erl"){
       candidate_directory:=win2posixPath(candidate_directory)
       SendInput, %A_Space%cd ( "%candidate_directory%").{Enter}
+
+  }else if (Title == "Git Bash" ){ ; msys
+         WinActivate, ahk_pid %pid%
+         SetKeyDelay, 0
+         candidate_directory:= win2msysPath(candidate_directory)
+         SendInput ,%A_Space%cd "%candidate_directory%"  {Enter}
   }else if (processName="sh.exe" or processName="bash.exe" ){ ; msys
          WinActivate, ahk_pid %pid%
          SetKeyDelay, 0
