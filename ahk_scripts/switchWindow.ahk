@@ -1,33 +1,34 @@
+; -*-coding:utf-8 -*-
 ;;;; switchWindow.ahk -- switch to your favourate window
 ;;;;@author jixiuf@gmail.com
-;;;,´Ë½Å±¾ÒòÎªº¬ÓĞÖĞÎÄ£¬ËùÒÔÔÚ±£´æ´ËÎÄ±¾µÄÊ±ºò±ØĞë±£´æÎªutf-8±àÂë£¬
-;;; ÆäËûÈçgbkµÄ±àÂëÓ¦¸Ã²»¿ÉÒÔ(Î´²âÊÔ)
+;;;,æ­¤è„šæœ¬å› ä¸ºå«æœ‰ä¸­æ–‡ï¼Œæ‰€ä»¥åœ¨ä¿å­˜æ­¤æ–‡æœ¬çš„æ—¶å€™å¿…é¡»ä¿å­˜ä¸ºutf-8ç¼–ç ï¼Œ
+;;; å…¶ä»–å¦‚gbkçš„ç¼–ç åº”è¯¥ä¸å¯ä»¥(æœªæµ‹è¯•)
 ;;
-;;;;Õâ¸ö½Å±¾ÓÃÓÚ¿ìËÙ¶¨Î»µ½ÌØ¶¨µÄ´°¿Ú
-;;;ÒÔWin+1¼üÎªÀı
-;;;Èç¹ûÃ»ÓĞÆô¶¯eclipse£¬°´ÏÂWin+1¼üºó£¬»áÆô¶¯Ò»¸öeclipse,
-;;;Èç¹ûÒÑ¾­ÓĞÒ»¸öÆô¶¯µÄeclipse,Ôò°´ÏÂWin+1¼ü»áÓĞÁ½ÖÖÇé¿ö·¢Éú
-;; Èç¹ûeclipseÒÑ¾­»ñµÃ½¹µã£¬Ôò×îĞ¡»¯eclipse´°¿Ú
-;; Èç¹ûeclipseÃ»ÓĞ»ñµÃ½¹µã£¬Ôò×î´ó»¯Ö®£¬²¢¾Û½¹
+;;;;è¿™ä¸ªè„šæœ¬ç”¨äºå¿«é€Ÿå®šä½åˆ°ç‰¹å®šçš„çª—å£
+;;;ä»¥Win+1é”®ä¸ºä¾‹
+;;;å¦‚æœæ²¡æœ‰å¯åŠ¨eclipseï¼ŒæŒ‰ä¸‹Win+1é”®åï¼Œä¼šå¯åŠ¨ä¸€ä¸ªeclipse,
+;;;å¦‚æœå·²ç»æœ‰ä¸€ä¸ªå¯åŠ¨çš„eclipse,åˆ™æŒ‰ä¸‹Win+1é”®ä¼šæœ‰ä¸¤ç§æƒ…å†µå‘ç”Ÿ
+;; å¦‚æœeclipseå·²ç»è·å¾—ç„¦ç‚¹ï¼Œåˆ™æœ€å°åŒ–eclipseçª—å£
+;; å¦‚æœeclipseæ²¡æœ‰è·å¾—ç„¦ç‚¹ï¼Œåˆ™æœ€å¤§åŒ–ä¹‹ï¼Œå¹¶èšç„¦
 
 
 ; #NoTrayIcon
 ; #SingleInstance force
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;×¢Òâ£¬eclipseÃüÁî±ØĞëÔÚPath »·¾³±äÁ¿ÖĞ,
-;;ÒÔÏÂÓÃµ½µÄ³ÌĞò£¬³ıÁË¼ÓÁË¾ø¶ÔÂ·¾¶µÄ¾ùĞëÈç´Ë£¬
-; #1::
-; IfWinExist,ahk_class SWT_Window0
-;   IfWinActive ,ahk_class SWT_Window0
-;      WinMinimize ,ahk_class SWT_Window0
-;   else{
-; ;;    WinMaximize,ahk_class SWT_Window0
-;     WinActivate ,ahk_class SWT_Window0
-;     }
-; else
-;   run, eclipse -nl en_US
-; return
+;;æ³¨æ„ï¼Œeclipseå‘½ä»¤å¿…é¡»åœ¨Path ç¯å¢ƒå˜é‡ä¸­,
+;;ä»¥ä¸‹ç”¨åˆ°çš„ç¨‹åºï¼Œé™¤äº†åŠ äº†ç»å¯¹è·¯å¾„çš„å‡é¡»å¦‚æ­¤ï¼Œ
+#1::
+IfWinExist,ahk_class SWT_Window0
+  IfWinActive ,ahk_class SWT_Window0
+     WinMinimize ,ahk_class SWT_Window0
+  else{
+;;    WinMaximize,ahk_class SWT_Window0
+    WinActivate ,ahk_class SWT_Window0
+    }
+else
+  run, eclipse -nl en_US
+return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;Win+1  VS
 ; #1::
@@ -43,19 +44,19 @@
 ; return
 
 ;VBA
-#1::
-IfWinExist,ahk_class wndclass_desked_gsk
-  IfWinActive ,ahk_class wndclass_desked_gsk
-  {
-      WinMinimize ,ahk_class wndclass_desked_gsk
-      WinMinimize ,ahk_class wndclass_desked_gsk
-  }
-  else{
-    WinActivate ,  ahk_class wndclass_desked_gsk
-    }
-; else
-;   run devenv
-return
+; #1::
+; IfWinExist,ahk_class wndclass_desked_gsk
+;   IfWinActive ,ahk_class wndclass_desked_gsk
+;   {
+;       WinMinimize ,ahk_class wndclass_desked_gsk
+;       WinMinimize ,ahk_class wndclass_desked_gsk
+;   }
+;   else{
+;     WinActivate ,  ahk_class wndclass_desked_gsk
+;     }
+; ; else
+; ;   run devenv
+; return
 
 ; ;;;;;;;;;;Win+c ,toggle Pl/sql
 ; #c::
@@ -81,20 +82,20 @@ return
 ;   Run, D:\usr\toad\toad.exe
 ; return
 
-#c::
-IfWinExist,SQL Manager
-  IfWinActive ,SQL Manager
-  {
-     WinMinimize ,SQL Manager
-     WinMinimize ,SQL Manager
-  }
- else
- {
-      WinActivate ,SQL Manager
- }
-else
-  Run,D:\usr\mysql_manager\MyManager.exe
-return
+; #c::
+; IfWinExist,SQL Manager
+;   IfWinActive ,SQL Manager
+;   {
+;      WinMinimize ,SQL Manager
+;      WinMinimize ,SQL Manager
+;   }
+;  else
+;  {
+;       WinActivate ,SQL Manager
+;  }
+; else
+;   Run,D:\usr\mysql_manager\MyManager.exe
+; return
 
 
 ;;Win+f toggle Firefox
@@ -162,50 +163,50 @@ return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;Win+g ,toggle Gtalk
-#g::
-DetectHiddenWindows, On
-IfWinExist,ahk_class Google Talk - Google Xmpp Client GUI Window
-  IfWinActive ,ahk_class Google Talk - Google Xmpp Client GUI Window
-  {
-     WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
-     WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
-  }
- else{
-     WinRestore,ahk_class Chat View
-     WinActivate ,ahk_class Google Talk - Google Xmpp Client GUI Window
-     }
-else
-  Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
-return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;;;;;;;;;;Win+g ,toggle Gtalk
+; #g::
+; DetectHiddenWindows, On
+; IfWinExist,ahk_class Google Talk - Google Xmpp Client GUI Window
+;   IfWinActive ,ahk_class Google Talk - Google Xmpp Client GUI Window
+;   {
+;      WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
+;      WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
+;   }
+;  else{
+;      WinRestore,ahk_class Chat View
+;      WinActivate ,ahk_class Google Talk - Google Xmpp Client GUI Window
+;      }
+; else
+;   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
+; return
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;Win+b ,toggle Gtalk
-#b::
-DetectHiddenWindows, On
-  IfWinExist,ahk_class Chat View
-  IfWinActive ,ahk_class Chat View
-  {
-     WinMinimize ,ahk_class Chat View
-     WinMinimize ,ahk_class Chat View
-  }
-  else{
-     WinRestore,ahk_class Chat View
-    WinActivate ,ahk_class Chat View
-    }
-else
-  Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
-return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ;;;;;;;;;;Win+b ,toggle Gtalk
+; #b::
+; DetectHiddenWindows, On
+;   IfWinExist,ahk_class Chat View
+;   IfWinActive ,ahk_class Chat View
+;   {
+;      WinMinimize ,ahk_class Chat View
+;      WinMinimize ,ahk_class Chat View
+;   }
+;   else{
+;      WinRestore,ahk_class Chat View
+;     WinActivate ,ahk_class Chat View
+;     }
+; else
+;   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
+; return
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;Win+e Æô¶¯×ÊÔ´¹ÜÀíÆ÷£¬
+;;;Win+e å¯åŠ¨èµ„æºç®¡ç†å™¨ï¼Œ
 
-;;ÓëÄ¬ÈÏµÄWin+eµÄ²»Í¬Ö®´¦ÔÚÓÚ,Èç¹ûÒÑ¾­ÓĞÒ»¸öÆô¶¯µÄ×ÊÔ´¹ÜÀíÆ÷£¬µ«ÊÇËü²¢
-;;Ã»±»¼¤»îµÄ»°£¬²»±ØÖØĞÂÆô¶¯Ò»¸ö£¬Ö»Ğë¼¤»îÖ®£¬
-;;ÓĞÊ±×ÊÔ´¹ÜÀíÆ÷£¬ĞèÒªÆô¶¯¶à¸ö£¬ËùÒÔ£¬Èç¹ûµ±Ç°¾Û¼¯µÄ´°¿ÚÒÑ¾­ÊÇÒ»¸ö×ÊÔ´¹ÜÀíÆ÷ÁË
-;;ÎÒÃÇÈÏÎªÓÃ»§ÏëÖØĞÂÆôÓÃÒ»¸ö×ÊÔ´¹ÜÀíÆ÷£¬Îª·½±ã¼Æ£¬°ÑÄ¿Â¼¶¨Î»µ½ÓëÕâ¸ö´°¿ÚÏàÍ¬µÄÄ¿Â¼
+;;ä¸é»˜è®¤çš„Win+eçš„ä¸åŒä¹‹å¤„åœ¨äº,å¦‚æœå·²ç»æœ‰ä¸€ä¸ªå¯åŠ¨çš„èµ„æºç®¡ç†å™¨ï¼Œä½†æ˜¯å®ƒå¹¶
+;;æ²¡è¢«æ¿€æ´»çš„è¯ï¼Œä¸å¿…é‡æ–°å¯åŠ¨ä¸€ä¸ªï¼Œåªé¡»æ¿€æ´»ä¹‹ï¼Œ
+;;æœ‰æ—¶èµ„æºç®¡ç†å™¨ï¼Œéœ€è¦å¯åŠ¨å¤šä¸ªï¼Œæ‰€ä»¥ï¼Œå¦‚æœå½“å‰èšé›†çš„çª—å£å·²ç»æ˜¯ä¸€ä¸ªèµ„æºç®¡ç†å™¨äº†
+;;æˆ‘ä»¬è®¤ä¸ºç”¨æˆ·æƒ³é‡æ–°å¯ç”¨ä¸€ä¸ªèµ„æºç®¡ç†å™¨ï¼Œä¸ºæ–¹ä¾¿è®¡ï¼ŒæŠŠç›®å½•å®šä½åˆ°ä¸è¿™ä¸ªçª—å£ç›¸åŒçš„ç›®å½•
 #e::
 MyFavorateDir:="D:\"
 SetTitleMatchMode, RegEx
@@ -213,7 +214,7 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 {
   If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
      ControlGetText, ExplorePath, Edit1, A
-;;Ö®ËùÒÔ²»ÓÃÕâÌõÃüÁî£¬ÊÇÒòÎªµ±µØÖ·À¸ÀïÎª¡°ÎÒµÄµçÄÔ¡±ËÄ¸ö×ÖÊ±£¬ÓÃÕâÌõÃüÁîÌáÊ¾ÕÒ²»µ½Â·¾¶
+;;ä¹‹æ‰€ä»¥ä¸ç”¨è¿™æ¡å‘½ä»¤ï¼Œæ˜¯å› ä¸ºå½“åœ°å€æ é‡Œä¸ºâ€œæˆ‘çš„ç”µè„‘â€å››ä¸ªå­—æ—¶ï¼Œç”¨è¿™æ¡å‘½ä»¤æç¤ºæ‰¾ä¸åˆ°è·¯å¾„
     run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
   }else{
     WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
@@ -222,7 +223,7 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 ;;    Tooltip ,%focusedControl%
     if (focusedControl <> "SysListView321")
     {
-     ;;Ñ¡ÖĞµÚÒ»¸öÎÄ¼ş
+     ;;é€‰ä¸­ç¬¬ä¸€ä¸ªæ–‡ä»¶
       ControlFocus, SysListView321,A
       Send {Home}
     }
@@ -231,7 +232,7 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
     WinWait ahk_class (CabinetWClass|ExploreWClass)
     WinActivate
-    ;;Ñ¡ÖĞµÚÒ»¸öÎÄ¼ş
+    ;;é€‰ä¸­ç¬¬ä¸€ä¸ªæ–‡ä»¶
     sleep 50
     ControlFocus, SysListView321,A
     Send {Home}
@@ -272,24 +273,24 @@ else
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;Win+o  toggle OutLook
-#o::
-IfWinExist,ahk_class rctrl_renwnd32
-  IfWinActive ,ahk_class rctrl_renwnd32
-  {
-     WinMinimize ,ahk_class rctrl_renwnd32
-     WinMinimize ,ahk_class rctrl_renwnd32
-  }
-  else{
-;;    WinMaximize,ahk_class OpusApp
-    WinActivate ,ahk_class rctrl_renwnd32
-    }
-else
-  run outlook
-return
+; ;;;;;;Win+o  toggle OutLook
+; #o::
+; IfWinExist,ahk_class rctrl_renwnd32
+;   IfWinActive ,ahk_class rctrl_renwnd32
+;   {
+;      WinMinimize ,ahk_class rctrl_renwnd32
+;      WinMinimize ,ahk_class rctrl_renwnd32
+;   }
+;   else{
+; ;;    WinMaximize,ahk_class OpusApp
+;     WinActivate ,ahk_class rctrl_renwnd32
+;     }
+; else
+;   run outlook
+; return
 
 ;; remote desk
-#v::
+#n::
 IfWinExist,ahk_class TSSHELLWND
   IfWinActive ,ahk_class TSSHELLWND
   {
@@ -305,3 +306,6 @@ else
 return
 
 #Tab::Send {Alt down}{tab}{Alt up}
+; é˜²æ­¢ æ„å¤– æŒ‰ä¸‹windowsé”®
+~LWin Up:: return
+
