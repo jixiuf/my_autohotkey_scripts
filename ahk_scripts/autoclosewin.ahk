@@ -37,6 +37,8 @@ WinClose,  风行
 WinClose,  悠视资讯
 WinClose,  UUSee资讯
 WinClose,  今日推荐
+WinClose,  通达信信息
+
 return
 
 autocloseWin3Min:
