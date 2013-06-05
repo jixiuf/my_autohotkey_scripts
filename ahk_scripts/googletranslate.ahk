@@ -9,7 +9,7 @@
     ToolTip(display ,50,rxpos,rypos)
 return
 
-;;http post method 
+;;http post method
 _post(url,Send,Referer="",UserAgent=""){
         COM_Init()
         WebRequest := COM_CreateObject("WinHttp.WinHttpRequest.5.1")
@@ -50,7 +50,10 @@ Clipboard=
   WinGetClass, activeWinClass ,ahk_id %active_id%
   if (activeWinClass="Emacs"){
     Send !w
-  }else 
+  } else if (activeWinClass="MozillaWindowClass"){
+    Send !w
+  }
+  else
   {
   Send,^c
   }
@@ -58,7 +61,7 @@ ClipWait,3
 IfEqual,ErrorLevel,1,Return
 c:=Clipboard
 Clipboard:=tmp
-return c   
+return c
 }
 
 
