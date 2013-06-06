@@ -14,7 +14,7 @@ SendMode, Input
 ^y::StringTypePaste(Clipboard)
 ^Return::startMsysHere()
 ^!Return::cmd_explore_here()
-#Esc::Send ,^cexit`n
+#Esc::Send ,^c^cexit`n
 Esc::Send ,exit`n
 
 ^!f::Send ^{Right}
