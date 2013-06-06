@@ -10,6 +10,7 @@ SendMode, Input
 
 #IfWinActive ahk_class ConsoleWindowClass
 ^v::StringTypePaste(Clipboard)
+#v::StringTypePaste(Clipboard)
 ^y::StringTypePaste(Clipboard)
 ^Return::startMsysHere()
 ^!Return::cmd_explore_here()
@@ -27,8 +28,11 @@ Esc::Send ,exit`n
 ^f::Send {Right}
 ^b::Send {Left}
 
-^u::Send ^{Home}
+; ^u::Send ^{Home}
 ^k::Send ^{End}
+; 滚屏
+^u::Send {WheelUp}
+; ^v::Send {WheelDown}
 #IfWinActive
 
 
