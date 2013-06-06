@@ -15,190 +15,90 @@
 ; #NoTrayIcon
 ; #SingleInstance force
 
+ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
+{
+    SetTitleMatchMode,%TitleMatchMode%
+    ; SetTitleMatchMode, RegEx
+    DetectHiddenWindows, Off
+     ; DetectHiddenWindows, On
+    IfWinActive, %TheWindowTitle%
+    {
+        WinMinimize, %TheWindowTitle%
+
+        ; 有时因为焦点问题， 激活窗口无效
+        ; just click something on desktop for focus
+        ; The following method may improve reliability and reduce side effects:
+        SetControlDelay -1
+        ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
+
+
+    }
+    Else
+    {
+        IfWinExist, %TheWindowTitle%
+        {
+            ; WinActivate,  ahk_class Progman
+            ;  有时激活窗口无效
+            WinGet, winid, ID, %TheWindowTitle%
+            DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+
+            ; 有时因为焦点问题， 激活窗口无效
+            ; just click something on desktop for focus
+            SetControlDelay -1
+            ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
+        }
+        else
+        {
+            if (Cmd != ""){
+              run, %Cmd%
+            }
+        }
+    }
+    Return
+}
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;注意，eclipse命令必须在Path 环境变量中,
 ;;以下用到的程序，除了加了绝对路径的均须如此，
-#1::
-IfWinExist,ahk_class SWT_Window0
-  IfWinActive ,ahk_class SWT_Window0
-     WinMinimize ,ahk_class SWT_Window0
-  else{
-;;    WinMaximize,ahk_class SWT_Window0
-    WinActivate ,ahk_class SWT_Window0
-    }
-else
-  run, eclipse -nl en_US
-return
+#1::ToggleWinMinimizeOrRun("ahk_class SWT_Window0","eclipse -nl en_US")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;Win+1  VS
-; #1::
-; SetTitleMatchMode, 2
-; IfWinExist,  Microsoft Visual Studio
-;   IfWinActive ,  Microsoft Visual Studio
-;      WinMinimize ,  Microsoft Visual Studio
-;   else{
-;     WinActivate ,  Microsoft Visual Studio
-;     }
-; else
-;   run devenv
-; return
-
+; #1::ToggleWinMinimizeOrRun("Microsoft Visual Studio","devenv")
 ;VBA
-; #1::
-; IfWinExist,ahk_class wndclass_desked_gsk
-;   IfWinActive ,ahk_class wndclass_desked_gsk
-;   {
-;       WinMinimize ,ahk_class wndclass_desked_gsk
-;       WinMinimize ,ahk_class wndclass_desked_gsk
-;   }
-;   else{
-;     WinActivate ,  ahk_class wndclass_desked_gsk
-;     }
-; ; else
-; ;   run devenv
-; return
-
-; ;;;;;;;;;;Win+c ,toggle Pl/sql
-; #c::
-; IfWinExist,ahk_class TPLSQLDevForm
-;   IfWinActive ,ahk_class TPLSQLDevForm
-;      WinMinimize ,ahk_class TPLSQLDevForm
-;   else{
-;     WinActivate ,ahk_class TPLSQLDevForm
-;     }
-; else
-;   Run, C:\Prog\PLSQL\plsqldev.exe
-; return
-
-;;;;;;;;;;Win+c ,toggle Toad
-; #c::
-; IfWinExist,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
-;   IfWinActive ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
-;      WinMinimize ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
-;   else{
-;     WinActivate ,ahk_class WindowsForms10.Window.8.app.0.33c0d9d
-;     }
-; else
-;   Run, D:\usr\toad\toad.exe
-; return
-
-; #c::
-; IfWinExist,SQL Manager
-;   IfWinActive ,SQL Manager
-;   {
-;      WinMinimize ,SQL Manager
-;      WinMinimize ,SQL Manager
-;   }
-;  else
-;  {
-;       WinActivate ,SQL Manager
-;  }
-; else
-;   Run,D:\usr\mysql_manager\MyManager.exe
-; return
+; #1::ToggleWinMinimizeOrRun("ahk_class wndclass_desked_gsk","")
 
 
 ;;Win+f toggle Firefox
-#f::
-SetTitleMatchMode, RegEx
-IfWinExist,ahk_class MozillaUIWindowClass|MozillaWindowClass
-  IfWinActive ,ahk_class MozillaUIWindowClass|MozillaWindowClass
-  {
-     WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
-     WinMinimize ,ahk_class MozillaUIWindowClass|MozillaWindowClass
-  }
-  else{
-;;    WinMaximize,ahk_class MozillaUIWindowClass|MozillaWindowClass
-;;    sleep 10
-;;    WinSet, Style, -0xC00000, A ;;full screen
-    WinActivate ,ahk_class MozillaUIWindowClass|MozillaWindowClass
-    }
-else
-  run firefox
-return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#f::ToggleWinMinimizeOrRun("ahk_class MozillaUIWindowClass|MozillaWindowClass","firefox","RegEx")
 
-
-
-;;;;;;;;;;;Win+x ,toggle IE
-#i::
-IfWinExist,ahk_class IEFrame
-  IfWinActive ,ahk_class IEFrame
-  {
-      WinMinimize ,ahk_class IEFrame
-      WinMinimize ,ahk_class IEFrame
-  }
-  else{
-;;    WinMaximize,ahk_class IEFrame
-;;    sleep 10
-;;    WinSet, Style, -0xC00000, A ;;full screen
-    WinActivate ,ahk_class IEFrame
-    }
-else
-  Run, %A_ProgramFiles%\Internet Explorer\iexplore.exe
-return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
+;;;;;;;;;;;Win+i ,toggle IE
+#i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
 
 ;;;;;;;;;;Win+A ,toggle.Eamcs
-#a::
-IfWinExist,ahk_class Emacs
-  IfWinActive ,ahk_class Emacs
-  {
-     WinMinimize ,ahk_class Emacs
-     WinMinimize ,ahk_class Emacs
-  }
-  else{
-;;    WinMaximize,ahk_class Emacs
-    WinActivate ,ahk_class Emacs
-    }
-else
-  run runemacs
-return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#a::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
 
+;;;;;;Win+q  toggle Excel
+#q::ToggleWinMinimizeOrRun("ahk_class XLMAIN", "excel")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;Win+3 toggle word
+#3::ToggleWinMinimizeOrRun("ahk_class OpusApp", "winword")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+; ;;;;;;Win+o  toggle OutLook
+; #o::ToggleWinMinimizeOrRun("ahk_class rctrl_renwnd32", "outlook")
 ; ;;;;;;;;;;Win+g ,toggle Gtalk
-; #g::
-; DetectHiddenWindows, On
-; IfWinExist,ahk_class Google Talk - Google Xmpp Client GUI Window
-;   IfWinActive ,ahk_class Google Talk - Google Xmpp Client GUI Window
-;   {
-;      WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
-;      WinMinimize ,ahk_class Google Talk - Google Xmpp Client GUI Window
-;   }
-;  else{
-;      WinRestore,ahk_class Chat View
-;      WinActivate ,ahk_class Google Talk - Google Xmpp Client GUI Window
-;      }
-; else
-;   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
-; return
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; #g::ToggleWinMinimizeOrRun("ahk_class Google Talk - Google Xmpp Client GUI Window",A_ProgramFiles . "\Google\Google Talk\googletalk.exe")
+; #b::ToggleWinMinimizeOrRun("ahk_class Chat View",A_ProgramFiles . "\Google\Google Talk\googletalk.exe")
+; ;;;;;;;;;;Win+c ,toggle Pl/sql
+; #c::ToggleWinMinimizeOrRun("ahk_class TPLSQLDevForm","C:\Prog\PLSQL\plsqldev.exe")
+;;;;;;;;;;Win+c ,toggle Toad
+; #c::ToggleWinMinimizeOrRun("ahk_class WindowsForms10.Window.8.app.0.33c0d9d","D:\usr\toad\toad.exe")
+; #c::ToggleWinMinimizeOrRun("SQL Manager","D:\usr\mysql_manager\MyManager.exe")
 
+;; remote desk
+; #n::ToggleWinMinimizeOrRun("远程桌面连接", "mstsc")
 
-; ;;;;;;;;;;Win+b ,toggle Gtalk
-; #b::
-; DetectHiddenWindows, On
-;   IfWinExist,ahk_class Chat View
-;   IfWinActive ,ahk_class Chat View
-;   {
-;      WinMinimize ,ahk_class Chat View
-;      WinMinimize ,ahk_class Chat View
-;   }
-;   else{
-;      WinRestore,ahk_class Chat View
-;     WinActivate ,ahk_class Chat View
-;     }
-; else
-;   Run, %A_ProgramFiles%\Google\Google Talk\googletalk.exe
-; return
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;Win+e 启动资源管理器，
@@ -240,72 +140,9 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;Win+q  toggle Excel
-#q::
-IfWinExist,ahk_class XLMAIN
-  IfWinActive ,ahk_class XLMAIN
-  {
-     WinMinimize ,ahk_class XLMAIN
-     WinMinimize ,ahk_class XLMAIN
-  }
-  else{
-;;    WinMaximize,ahk_class XLMAIN
-    WinActivate ,ahk_class XLMAIN
-    }
-else
-  run excel
-return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;Win+3 toggle word
-#3::
-IfWinExist,ahk_class OpusApp
-  IfWinActive ,ahk_class OpusApp
-  {
-     WinMinimize ,ahk_class OpusApp
-  }
-  else{
-;;    WinMaximize,ahk_class OpusApp
-    WinActivate ,ahk_class OpusApp
-    }
-else
-  run winword
-return
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; ;;;;;;Win+o  toggle OutLook
-; #o::
-; IfWinExist,ahk_class rctrl_renwnd32
-;   IfWinActive ,ahk_class rctrl_renwnd32
-;   {
-;      WinMinimize ,ahk_class rctrl_renwnd32
-;      WinMinimize ,ahk_class rctrl_renwnd32
-;   }
-;   else{
-; ;;    WinMaximize,ahk_class OpusApp
-;     WinActivate ,ahk_class rctrl_renwnd32
-;     }
-; else
-;   run outlook
-; return
-
-;; remote desk
-#n::
-IfWinExist,ahk_class TSSHELLWND
-  IfWinActive ,ahk_class TSSHELLWND
-  {
-     WinMinimize ,ahk_class TSSHELLWND
-     WinMinimize ,ahk_class TSSHELLWND
-  }
-  else{
-;;    WinMaximize,ahk_class OpusApp
-    WinActivate ,ahk_class TSSHELLWND
-    }
-else
-  run mstsc
-return
 
 #Tab::Send {Alt down}{tab}{Alt up}
 ; 防止 意外 按下windows键
 ~LWin Up:: return
-
