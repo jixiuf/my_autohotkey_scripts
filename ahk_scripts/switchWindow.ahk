@@ -23,15 +23,17 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
      ; DetectHiddenWindows, On
     IfWinActive, %TheWindowTitle%
     {
+
         WinMinimize, %TheWindowTitle%
 
-        ; 有时因为焦点问题， 激活窗口无效
-        ; just click something on desktop for focus
-        ; The following method may improve reliability and reduce side effects:
-        SetControlDelay -1
-        ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
+        ; ; 有时因为焦点问题， 激活窗口无效
+        WinActivate,  ahk_class Progman
 
-
+        ; ; 有时因为焦点问题， 激活窗口无效
+        ; ; just click something on desktop for focus
+        ; ; The following method may improve reliability and reduce side effects:
+        ; SetControlDelay -1
+        ; ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
     }
     Else
     {
@@ -42,10 +44,10 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
             WinGet, winid, ID, %TheWindowTitle%
             DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
 
-            ; 有时因为焦点问题， 激活窗口无效
-            ; just click something on desktop for focus
-            SetControlDelay -1
-            ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
+            ; ; 有时因为焦点问题， 激活窗口无效
+            ; ; just click something on desktop for focus
+            ; SetControlDelay -1
+            ; ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
         }
         else
         {
