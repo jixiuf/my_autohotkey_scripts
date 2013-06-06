@@ -21,13 +21,20 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
     ; SetTitleMatchMode, RegEx
     DetectHiddenWindows, Off
      ; DetectHiddenWindows, On
+
+    ; WinGetPos, winWidth, winHeight, , , ahk_class XLMAIN
+    ;  Msgbox %  winWidth  . " "  .  winHeight
+    ; 或者根据 最小化之后的窗口宽高来判断
+    ; win7 winWidth=-32000, winHeight=-32000
     IfWinActive, %TheWindowTitle%
     {
 
         WinMinimize, %TheWindowTitle%
         ; ; 有时因为焦点问题， 激活窗口无效
-        WinActivate,  ahk_class Progman
-
+        ; WinGet, id, list, , , Program Manager
+        ; WinActivate ,ahk_id %id1%
+        ; WinGetTitle ,t,ahk_id %id1%
+        ; Tooltip , %t%
         ; ; 有时因为焦点问题， 激活窗口无效
         ; ; just click something on desktop for focus
         ; ; The following method may improve reliability and reduce side effects:
