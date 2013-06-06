@@ -12,15 +12,16 @@ SendMode, Input
 ^v::StringTypePaste(Clipboard)
 ^y::StringTypePaste(Clipboard)
 ^Return::startMsysHere()
-^!Return::cmd_explore_here() 
-#Esc::Send ,exit`n
- 
-^!f::Send ^{Right} 
+^!Return::cmd_explore_here()
+#Esc::Send ,^cexit`n
+Esc::Send ,exit`n
+
+^!f::Send ^{Right}
 ^!b::Send ^{Left}
 
-^a::Send {Home} 
+^a::Send {Home}
 ^e::Send {End}
-^!a::Send {Home} 
+^!a::Send {Home}
 ^!e::Send {End}
 ^d::Send {Del}
 ^f::Send {Right}
@@ -28,7 +29,7 @@ SendMode, Input
 
 ^u::Send ^{Home}
 ^k::Send ^{End}
-#IfWinActive 
+#IfWinActive
 
 
 StringTypePaste(p_str, p_condensenewlines=1) {
@@ -62,6 +63,5 @@ startMsysHere()
 win_2_posixPath(winPath)
 {
    StringReplace, posixPath, winPath, \ , /, All
-   Return posixPath  
+   Return posixPath
 }
-
