@@ -1,4 +1,4 @@
-; -*-coding:utf-8-dos -*-
+; -*-coding:utf-8 -*-
 ;;;; switchWindow.ahk -- switch to your favourate window
 ;;;;@author jixiuf@gmail.com
 ;;;,此脚本因为含有中文，所以在保存此文本的时候必须保存为utf-8编码，
@@ -24,11 +24,9 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
     IfWinActive, %TheWindowTitle%
     {
 
-        ; ; 有时因为焦点问题， 激活窗口无效
-        WinActivate, %TheWindowTitle%
-
         WinMinimize, %TheWindowTitle%
-
+        ; ; 有时因为焦点问题， 激活窗口无效
+        WinActivate,  ahk_class Progman
 
         ; ; 有时因为焦点问题， 激活窗口无效
         ; ; just click something on desktop for focus
