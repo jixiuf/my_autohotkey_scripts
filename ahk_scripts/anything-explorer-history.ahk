@@ -99,14 +99,14 @@ addressChangeTimer()
 }
 
 ;when anything-explorer-history.ahk start
-; init variable "directory_history" from anything-explorer-history.ini if exists
+; init variable "directory_history" from %A_MyDocuments%\anything-explorer-history.ini if exists
 anything_directory_init()
 {
     global directory_history
     ;;anything_directory_init history when first run this script
-    IfExist, anything-explorer-history.ini
+    IfExist, %A_MyDocuments%\anything-explorer-history.ini
     {
-        IniRead, history_line, anything-explorer-history.ini, main, history
+        IniRead, history_line, %A_MyDocuments%\anything-explorer-history.ini, main, history
         Loop, Parse,  history_line,,
         {
             if A_LoopField <>
@@ -127,7 +127,7 @@ write_history_2_disk()
   {
     directory_text=%directory_text%%directory%
   }
-  IniWrite,%directory_text%,anything-explorer-history.ini, main, history
+  IniWrite,%directory_text%,%A_MyDocuments%\anything-explorer-history.ini, main, history
 }
 
 ; add newAddr to explorer-history candidates

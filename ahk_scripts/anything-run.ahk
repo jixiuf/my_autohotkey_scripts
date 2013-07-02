@@ -12,10 +12,10 @@
  anything_run_init()
 {
     global anything_run_cmd_array
-    ;;init anything_run_cmd_array from anything-run.ini
-    IfExist,anything-run.ini
+    ;;init anything_run_cmd_array from %A_MyDocuments%\anything-run.ini
+    IfExist,%A_MyDocuments%\anything-run.ini
     {
-        IniRead, history_line, anything-run.ini, main, anything_run_cmd_array
+        IniRead, history_line, %A_MyDocuments%\anything-run.ini, main, anything_run_cmd_array
         Loop, Parse,  history_line,,
         {
             if A_LoopField <>
@@ -58,7 +58,7 @@ anything_run_write2disk()
   {
       cmd_text:=cmd_text . "" . cmd[1] . "" . cmd[2] . "" . cmd[3]
   }
-  IniWrite,%cmd_text%,anything-run.ini, main, anything_run_cmd_array
+  IniWrite,%cmd_text%,%A_MyDocuments%\anything-run.ini, main, anything_run_cmd_array
 }
 
 ; this is a private method ,

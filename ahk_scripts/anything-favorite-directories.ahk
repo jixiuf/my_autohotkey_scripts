@@ -24,9 +24,9 @@
 ;;SetWorkingDir %A_ScriptDir%
 anything_favorite_directories:=Array()
 ;;init
-IfExist, anything-favorite-directories.ini
+IfExist, %A_MyDocuments%\anything-favorite-directories.ini
 {
-iniread, favorite_line, anything-favorite-directories.ini, main, favorites
+iniread, favorite_line, %A_MyDocuments%\anything-favorite-directories.ini, main, favorites
 Loop, Parse, favorite_line,,
    {
      if A_LoopField <>
@@ -191,7 +191,7 @@ anything_favorite_directories_write2disk()
   {
     directory_text=%directory_text%%directory%
   }
-  IniWrite,%directory_text%,anything-favorite-directories.ini, main, favorites
+  IniWrite,%directory_text%,%A_MyDocuments%\anything-favorite-directories.ini, main, favorites
 }
 ;;Windows Path to msys Path
 ;; for example d:\a\b\ to /d/a/b

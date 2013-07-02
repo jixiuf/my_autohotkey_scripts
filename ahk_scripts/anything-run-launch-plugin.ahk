@@ -2,10 +2,10 @@
  {
      global anything_run_launch_candidates
      anything_run_launch_candidates:=Array()
-     IniRead, default_scan_path_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_recursively,%A_StartMenuCommon%|%A_StartMenu%
-     IniRead, default_scan_path_none_recursively, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively,%A_Desktop%|%A_DesktopCommon%
-     IniRead, accept_type_list, anything-run-launch-plugin.ini, Settings, accept_type_list, exe|lnk|ahk|url|chm
-     IniRead, exclude_filename_list,  anything-run-launch-plugin.ini,Settings, exclude_filename_list, about|history|readme|remove|uninstall|license
+     IniRead, default_scan_path_recursively, %A_MyDocuments%\anything-run-launch-plugin.ini, Settings, default_scan_path_recursively,%A_StartMenuCommon%|%A_StartMenu%
+     IniRead, default_scan_path_none_recursively, %A_MyDocuments%\anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively,%A_Desktop%|%A_DesktopCommon%
+     IniRead, accept_type_list, %A_MyDocuments%\anything-run-launch-plugin.ini, Settings, accept_type_list, exe|lnk|ahk|url|chm
+     IniRead, exclude_filename_list,  %A_MyDocuments%\anything-run-launch-plugin.ini,Settings, exclude_filename_list, about|history|readme|remove|uninstall|license
      ;scan always updated list
      Loop, Parse, default_scan_path_recursively, |
      {
@@ -80,10 +80,10 @@
          }
      }
 
-     IniWrite, %default_scan_path_recursively%, anything-run-launch-plugin.ini, Settings, default_scan_path_recursively
-     IniWrite, %default_scan_path_none_recursively%, anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively
-     IniWrite, %accept_type_list%, anything-run-launch-plugin.ini, Settings, accept_type_list
-     IniWrite, %exclude_filename_list%,  anything-run-launch-plugin.ini,Settings, exclude_filename_list
+     IniWrite, %default_scan_path_recursively%, %A_MyDocuments%\anything-run-launch-plugin.ini, Settings, default_scan_path_recursively
+     IniWrite, %default_scan_path_none_recursively%, %A_MyDocuments%\anything-run-launch-plugin.ini, Settings, default_scan_path_none_recursively
+     IniWrite, %accept_type_list%, %A_MyDocuments%\anything-run-launch-plugin.ini, Settings, accept_type_list
+     IniWrite, %exclude_filename_list%,  %A_MyDocuments%\anything-run-launch-plugin.ini,Settings, exclude_filename_list
 
      ; anything_run_launch_get_icons_fun()
      return anything_run_launch_candidates

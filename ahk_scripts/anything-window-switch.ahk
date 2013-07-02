@@ -137,7 +137,7 @@ anything_ws_exclude_window_by_class(candidate)
   win_id:=candidate[2]
   WinGetClass, activeWinClass ,ahk_id %win_id%
  exclude_windows_by_class := ( exclude_windows_by_class . "|"  . activeWinClass)
-  IniWrite,%exclude_windows_by_class%,anything-window-switch.ini, Settings, exclude_windows_by_class
+  IniWrite,%exclude_windows_by_class%,%A_MyDocuments%\anything-window-switch.ini, Settings, exclude_windows_by_class
 }
 
 ;  when only windows left ,then visit another window automatical without press <Enter>
@@ -282,7 +282,7 @@ exclude_windows_by_class=
 ; exclude some window by window class ,
 ; default excluded class is "ATL:00573BA8" ,the separater  char is "|"
 ; if you want add "Emacs" to excluded window class ,then you can set the
-; value in anything-window-switch.ini
+; value in %A_MyDocuments%\anything-window-switch.ini
 ;  [Settings]
 ;  exclude_windows_by_class=ATL:00573BA8|Emacs
 ; there is a "action" named "anything_ws_exclude_window_by_class"
@@ -290,7 +290,7 @@ exclude_windows_by_class=
 ; then current selected window is excluded ,it wouldn't display on the
 ; window switcher
 ; default value ATL:00573BA8|DV2ControlHost (ATL:00573BA8 are googletalk window ,DV2ControlHost are start menu)
-IniRead, exclude_windows_by_class, anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8|DV2ControlHost
+IniRead, exclude_windows_by_class, %A_MyDocuments%\anything-window-switch.ini, Settings,exclude_windows_by_class,ATL:00573BA8|DV2ControlHost
 
 anything_window_switcher_source:=Object()
 anything_window_switcher_source["name"]:="Win"
