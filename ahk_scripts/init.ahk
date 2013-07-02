@@ -1,33 +1,32 @@
 #SingleInstance force
 #NoTrayIcon
-SetWorkingDir %A_ScriptDir%
-
-; run %A_ScriptDir%\xkeymacs\xkeymacs.exe
-
+SetWorkingDir d:\
+; run d:\ahk\ahk_scripts\xkeymacs\xkeymacs.exe
     
-run %A_ScriptDir%\EasyWindowDrag_(KDE).ahk
-; run %A_ScriptDir%\DoOver.ahk
-run %A_ScriptDir%\MoveInactiveWin.ahk
+run d:\ahk\ahk_scripts\EasyWindowDrag_(KDE).ahk
+; run d:\ahk\ahk_scripts\DoOver.ahk
+run d:\ahk\ahk_scripts\MoveInactiveWin.ahk
 
 
-run %A_ScriptDir%\autoclosewin.ahk
-;; run %A_ScriptDir%\iswitchw-plus.ahk
+run d:\ahk\ahk_scripts\autoclosewin.ahk
+;; run d:\ahk\ahk_scripts\iswitchw-plus.ahk
 
 
-#Include %A_ScriptDir%\anything-config.ahk
 
-#Include %A_ScriptDir%\explorer.ahk
-#Include %A_ScriptDir%\switchWindow.ahk
-#Include %A_ScriptDir%\notepad-emacs-key.ahk
-#Include %A_ScriptDir%\eclipse.ahk
-#Include %A_ScriptDir%\alias.ahk
-#Include %A_ScriptDir%\screenshots.ahk
-#Include %A_ScriptDir%\toggleTaskBar.ahk
-#Include %A_ScriptDir%\plsql.ahk
-#Include %A_ScriptDir%\toadsqlserver.ahk
-#Include %A_ScriptDir%\Console.ahk
-#Include %A_ScriptDir%\diaglog.ahk
-#Include %A_ScriptDir%\win-move-resize.ahk
-#Include %A_ScriptDir%\ie.ahk
-#Include %A_ScriptDir%\word-emacs-key.ahk
-#Include %A_ScriptDir%\googletranslate.ahk
+
+#Include d:\ahk\ahk_scripts\anything-config.ahk
+#Include d:\ahk\ahk_scripts\explorer.ahk
+#Include d:\ahk\ahk_scripts\switchWindow.ahk
+#Include d:\ahk\ahk_scripts\notepad-emacs-key.ahk
+#Include d:\ahk\ahk_scripts\eclipse.ahk
+#Include d:\ahk\ahk_scripts\alias.ahk
+#Include d:\ahk\ahk_scripts\screenshots.ahk
+#Include d:\ahk\ahk_scripts\toggleTaskBar.ahk
+#Include d:\ahk\ahk_scripts\plsql.ahk
+#Include d:\ahk\ahk_scripts\toadsqlserver.ahk
+#Include d:\ahk\ahk_scripts\Console.ahk
+#Include d:\ahk\ahk_scripts\diaglog.ahk
+#Include d:\ahk\ahk_scripts\win-move-resize.ahk
+#Include d:\ahk\ahk_scripts\ie.ahk
+#Include d:\ahk\ahk_scripts\word-emacs-key.ahk
+#Include d:\ahk\ahk_scripts\googletranslate.ahk
