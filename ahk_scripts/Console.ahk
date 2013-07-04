@@ -20,6 +20,9 @@ Esc::Send ,exit`n
 ^!f::Send ^{Right}
 ^!b::Send ^{Left}
 
+^n:: Send {Down}
+^p:: Send {UP}
+
 ^a::Send {Home}
 ^e::Send {End}
 ^!a::Send {Home}
