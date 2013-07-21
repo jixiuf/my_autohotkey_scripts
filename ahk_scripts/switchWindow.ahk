@@ -154,3 +154,31 @@ return
 #Tab::Send {Alt down}{tab}{Alt up}
 ; 防止 意外 按下windows键
 ~LWin Up:: return
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 炒股相关设置
+;F12 toggle 招商证券软件 （只在大智慧等股票软件窗口上启用）
+SetTitleMatchMode RegEx
+; 下面的窗口类依次为：桌面、Win+D后的桌面、我的电脑、资源管理器、另存为等
+#IfWinActive  ahk_class Afx:00400000:8:00010011:00000000:00090205|Afx:00400000:8:00010011:00000000:000B07E9
+; 激活
+F12::
+IfWinExist , ahk_class TdxW_MainFrame_Class
+{                               ; 如果如商证券交易软件已经打开 ，直接激活窗口
+  WinActivate , ahk_class TdxW_MainFrame_Class
+}else{                          ; 使用大智慧的F12快捷键，打开委托软件
+  Send  {F12}
+}
+return
+
+#IfWinActive
+
+; 如果当前窗口是招商证券 F12 ,则为隐藏 招商证券窗口
+#IfWinActive ahk_class TdxW_MainFrame_Class
+F12:: WinMinimize ahk_class TdxW_MainFrame_Class
+#IfWinActive
+; 默认F12激活炒股软件
+F12::WinActivate , ahk_class Afx:00400000:8:00010011:00000000:00090205
+; end of 炒股相关
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
