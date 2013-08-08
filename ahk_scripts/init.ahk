@@ -9,6 +9,7 @@ run d:\ahk\ahk_scripts\MoveInactiveWin.ahk
 
 
 run d:\ahk\ahk_scripts\autoclosewin.ahk
+run d:\ahk\ahk_scripts\dropbox.ahk
 ;; run d:\ahk\ahk_scripts\iswitchw-plus.ahk
 
 
