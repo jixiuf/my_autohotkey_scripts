@@ -1,46 +1,1 @@
-; -*- coding:utf-8  -*-
-; è‡ªåŠ¨å…³é—­æŸäº›çª—å£
-#Persistent
-#NoTrayIcon
-#SingleInstance force
-SetWorkingDir %A_ScriptDir%
-
-SetTitleMatchMode RegEx
-
-SetTimer, autocloseWin, 250
-SetTimer, autocloseWin3Min, 3000
-return
-
-autocloseWin:
-;;qq å¹¿å‘Šçª—å£
-; WinClose, æç¤º
-WinClose, è…¾è®¯ç½‘ - æˆ‘çš„èµ„è®¯
-WinClose, å®‰å…¨æ²Ÿé€š - ä¸ºæ‚¨æä¾›å…¨é¢çš„QQå®‰å…¨ä¿æŠ¤
-WinClose, è¯·è´­ä¹° WinRAR è®¸å¯
-WinClose, è¿…é›·æ–°é—»
-WinClose, èµ„è®¯å¿«æ’­
-WinClose,  è…¾è®¯ç½‘è¿·ä½ ç‰ˆ
-WinClose,  PPSè¿·ä½ é¦–é¡µ
-WinClose,  PPSä¸ºä½ æ¨è
-WinClose,  å…¬å‘Š 1/1
-WinClose,  å…¬å‘Š 1/2
-WinClose,  å…¬å‘Š 2/2
-WinClose,  å…¬å‘Š 1/3
-WinClose,  å…¬å‘Š 2/3
-WinClose,  å…¬å‘Š 3/3
-WinClose,  å…¬å‘Š 1/4
-WinClose,  å…¬å‘Š 2/4
-WinClose,  å…¬å‘Š 3/4
-WinClose,  å…¬å‘Š 4/4
-WinClose,  å…¬å‘Š 5/5
-WinClose,  é£è¡Œ
-WinClose,  æ‚ è§†èµ„è®¯
-WinClose,  UUSeeèµ„è®¯
-WinClose,  ä»Šæ—¥æ¨è
-WinClose,  é€šè¾¾ä¿¡ä¿¡æ¯
-
-return
-
-autocloseWin3Min:
- WinClose,  è…¾è®¯ç½‘æ–°é—»
-return
+; -*- coding:gbk  -*-; ×Ô¶¯¹Ø±ÕÄ³Ğ©´°¿Ú#Persistent#NoTrayIcon#SingleInstance forceSetWorkingDir %A_ScriptDir%SetTitleMatchMode RegExSetTitleMatchMode, slowSetTimer, autocloseWin, 60 ; ¶Ô ÕĞÉÌÖ¤È¯µÄ´°¿Ú½øĞĞÌØÊâ´¦Àí £¬ÒòÎªËüµÄµ¯´°Ö»ÓĞahk_class #32770SetTimer, autocloseWinTdxW_MainFrame_Class, 3100SetTimer, autocloseWin3Min, 18000returnautocloseWin:;;qq ¹ã¸æ´°¿Ú; WinClose, ÌáÊ¾WinClose, ÌÚÑ¶Íø - ÎÒµÄ×ÊÑ¶WinClose, °²È«¹µÍ¨ - ÎªÄúÌá¹©È«ÃæµÄQQ°²È«±£»¤WinClose, Çë¹ºÂò WinRAR Ğí¿ÉWinClose, Ñ¸À×ĞÂÎÅWinClose, ×ÊÑ¶¿ì²¥WinClose,  ÌÚÑ¶ÍøÃÔÄã°æWinClose,  PPSÃÔÄãÊ×Ò³WinClose,  PPSÎªÄãÍÆ¼öWinClose,  ¹«¸æ 1/1WinClose,  ¹«¸æ 1/2WinClose,  ¹«¸æ 2/2WinClose,  ¹«¸æ 1/3WinClose,  ¹«¸æ 2/3WinClose,  ¹«¸æ 3/3WinClose,  ¹«¸æ 1/4WinClose,  ¹«¸æ 2/4WinClose,  ¹«¸æ 3/4WinClose,  ¹«¸æ 4/4WinClose,  ¹«¸æ 5/5WinClose,  ·çĞĞWinClose,  ÓÆÊÓ×ÊÑ¶WinClose,  UUSee×ÊÑ¶WinClose,  ½ñÈÕÍÆ¼öWinClose,  Í¨´ïĞÅĞÅÏ¢WinClose ,ahk_class #32770,×ğ¾´µÄ²Æ¸»¹ÜÀí¼Æ»®¿Í»§;returnautocloseWin3Min: WinClose,  ÌÚÑ¶ÍøĞÂÎÅreturnautocloseWinTdxW_MainFrame_Class:IfWinNotExist, ahk_class TdxW_MainFrame_Class{   WinWait,ahk_class TdxW_MainFrame_Class, , 3   if ErrorLevel   {       ; WinWait timed out      return   }   else   {     WinWait,ahk_class #32770,¹Ø±Õ, 3     WinClose ,ahk_class #32770,¹Ø±Õ   }}return
