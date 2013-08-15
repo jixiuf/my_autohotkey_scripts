@@ -22,7 +22,7 @@ Else
     WinShow,ahk_class Shell_TrayWnd
     WinShow, ahk_class Button
     ; WinShow, ahk_class DV2ControlHost
-
+    RefreshTray()
     Gosub, Normal
 }
 return
@@ -61,3 +61,22 @@ Return
 ; ;;WinSet:=AlwaysAtBottom(WinExist("A"))
 ; ;;让任务栏始终在下
 ; AlwaysAtBottom(WinExist("ahk_class Shell_TrayWnd"))
+
+  ; 刷新右下角区域，
+RefreshTray() {
+	WM_MOUSEMOVE := 0x200
+
+	ControlGetPos, xTray,, wTray,, ToolbarWindow321, ahk_class Shell_TrayWnd
+	endX := xTray + wTray
+	x := 5
+	y := 12
+
+	Loop
+	{
+		if (x > endX)
+			break
+		point := (y << 16) + x
+		PostMessage, %WM_MOUSEMOVE%, 0, %point%, ToolbarWindow321, ahk_class Shell_TrayWnd
+		x += 18
+	}
+}
