@@ -41,9 +41,11 @@ click3(y)
         return false
 
     }
+    sleep,61000
     if(!addQun(560,y)){
         return false
     }
+    sleep,61000
     if(!addQun(854,y)){
         return false
     }
@@ -54,11 +56,11 @@ click6(y)
     if(!click3(y)){
         return false
     }
-    sleep,10000
+    sleep,60000
     if(!click3(y+170)){
         return false
     }
-    sleep,20000
+    sleep,120000
     return true
 }
 doOneLoop(n)
