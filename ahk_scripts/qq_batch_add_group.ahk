@@ -35,7 +35,9 @@ click3(y)
 click6(y)
 {
     click3(y)
+    sleep,10000
     click3(y+170)
+    sleep,20000
 }
 doOneLoop(n)
 {
@@ -48,6 +50,7 @@ doOneLoop(n)
     Send {Down 9}
     click6(280-diff)
     Send {Down 3}
+    sleep,30000
 
 }
 
