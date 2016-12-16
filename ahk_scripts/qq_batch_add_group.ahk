@@ -20,44 +20,79 @@ SetTitleMatchMode, slow
 
 addQun(x,y)
 {
+    WinGetClass, activeWinClass ,A
+    if (activeWinClass="TXGuiFoundation")
+    {
+    }else{
+        return false
+    }
+
+
     MouseClick, left, x,y
     sleep, 3000
     MouseClick, left, 345,345      ;
     sleep, 3000
     MouseClick, left, 406,340      ;
+    return true
 }
 click3(y)
 {
-    addQun(266,y)
-    addQun(560,y)
-    addQun(854,y)
+    if(!addQun(266,y)){
+        return false
+
+    }
+    if(!addQun(560,y)){
+        return false
+    }
+    if(!addQun(854,y)){
+        return false
+    }
+    return true
 }
 click6(y)
 {
-    click3(y)
+    if(!click3(y)){
+        return false
+    }
     sleep,10000
-    click3(y+170)
+    if(!click3(y+170)){
+        return false
+    }
     sleep,20000
+    return true
 }
 doOneLoop(n)
 {
     diff :=0                    ; 每一次循环导致的像素偏差
-    click6(340-diff)
+    if(!click6(340-diff)){
+        return false
+    }
     Send {Down 9}
-    click6(320-diff)
+    if(!click6(320-diff)){
+        return false
+    }
     Send {Down 9}
-    click6(300-diff)
+    if(!click6(300-diff)){
+        return false
+    }
     Send {Down 9}
-    click6(280-diff)
+    if(!click6(280-diff)){
+        return false
+
+    }
     Send {Down 3}
     sleep,30000
+    return true
 
 }
 
 doAddGroup()
 {
-    Loop,10{
-        doOneLoop(A_Index)
+    Loop,100{
+        if(!doOneLoop(A_Index)){
+            msgbox,"exit add qq group"
+            return
+        }
         sleep, 1000
     }
     return
