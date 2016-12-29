@@ -121,7 +121,10 @@ openAllQQGroup(){
         Loop,%groupCnt%{
             WinActivate,ahk_id %wid%
             MouseClick,left,xpos,ypos
+            Send {Left }
+            Send {Right }
             Send {Down %A_Index%}
+            Send {Enter}
             Send {Enter}
         }
     }
