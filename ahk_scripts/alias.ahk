@@ -19,6 +19,7 @@ SetKeyDelay 0
     Return
 
 
+#a::^a
 ;;我习惯于Win+Esc 关闭窗口,而不是Alt+F4
 #Esc::Send !{F4}
 #q::Send !{F4}
