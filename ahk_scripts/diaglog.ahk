@@ -76,7 +76,7 @@ Send +{End}^c{Del}
 }
 return
         
-#Include d:\ahk\ahk_scripts\emacs-key-sequence.ahk
+#Include c:\ahk\ahk_scripts\emacs-key-sequence.ahk
          
          
 $#x::

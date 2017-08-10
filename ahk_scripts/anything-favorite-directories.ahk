@@ -194,7 +194,7 @@ anything_favorite_directories_write2disk()
   IniWrite,%directory_text%,%A_MyDocuments%\anything-favorite-directories.ini, main, favorites
 }
 ;;Windows Path to msys Path
-;; for example d:\a\b\ to /d/a/b
+;; for example c:\a\b\ to /d/a/b
 anything_favorite_directories_win2msysPath(winPath){
    msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
    StringReplace, msysPath2, msysPath, \ , /, All
@@ -202,7 +202,7 @@ anything_favorite_directories_win2msysPath(winPath){
    return %msysPath3%
 }
 
-;;d:\a\b -->d:/a/b
+;;c:\a\b -->d:/a/b
 anything_favorite_directories_win2posixPath(winPath)
 {
    StringReplace, posixPath, winPath, \ , /, All

@@ -66,7 +66,7 @@ startMsysHere()
     send clear`n
 }
 
-;;d:\a\b -->d:/a/b
+;;c:\a\b -->d:/a/b
 win_2_posixPath(winPath)
 {
    StringReplace, posixPath, winPath, \ , /, All

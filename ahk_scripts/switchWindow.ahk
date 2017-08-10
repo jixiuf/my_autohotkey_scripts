@@ -78,13 +78,13 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 
 
 ;;Win+f toggle Firefox
-#f::ToggleWinMinimizeOrRun("ahk_class MozillaUIWindowClass|MozillaWindowClass","firefox","RegEx")
+#f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
 
 ;;;;;;;;;;;Win+i ,toggle IE
 #i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
 
 ;;;;;;;;;;Win+A ,toggle.Eamcs
-#a::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
+#e::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
 
 ;;;;;;Win+q  toggle Excel
 #q::ToggleWinMinimizeOrRun("ahk_class XLMAIN", "excel")
@@ -101,8 +101,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ; ;;;;;;;;;;Win+c ,toggle Pl/sql
 ; #c::ToggleWinMinimizeOrRun("ahk_class TPLSQLDevForm","C:\Prog\PLSQL\plsqldev.exe")
 ;;;;;;;;;;Win+c ,toggle Toad
-; #c::ToggleWinMinimizeOrRun("ahk_class WindowsForms10.Window.8.app.0.33c0d9d","D:\usr\toad\toad.exe")
-; #c::ToggleWinMinimizeOrRun("SQL Manager","D:\usr\mysql_manager\MyManager.exe")
+; #c::ToggleWinMinimizeOrRun("ahk_class WindowsForms10.Window.8.app.0.33c0d9d","c:\usr\toad\toad.exe")
+; #c::ToggleWinMinimizeOrRun("SQL Manager","c:\usr\mysql_manager\MyManager.exe")
 
 ;; remote desk
 ; #n::ToggleWinMinimizeOrRun("远程桌面连接", "mstsc")
@@ -115,8 +115,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ;;没被激活的话，不必重新启动一个，只须激活之，
 ;;有时资源管理器，需要启动多个，所以，如果当前聚集的窗口已经是一个资源管理器了
 ;;我们认为用户想重新启用一个资源管理器，为方便计，把目录定位到与这个窗口相同的目录
-#e::
-MyFavorateDir:="D:\"
+#g::
+MyFavorateDir:="c:\"
 SetTitleMatchMode, RegEx
 IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 {

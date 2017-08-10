@@ -1,14 +1,14 @@
 #NoTrayIcon
 #SingleInstance force
 ; SetWorkingDir %A_ScriptDir%
-#include d:\ahk\ahk_scripts\anything.ahk
-#include d:\ahk\ahk_scripts\anything-run.ahk
-#include d:\ahk\ahk_scripts\anything-run-launch-plugin.ahk
-#include d:\ahk\ahk_scripts\anything-favorite-directories.ahk
-#include d:\ahk\ahk_scripts\anything-window-switch.ahk
-#include d:\ahk\ahk_scripts\anything-process-manager.ahk
-#include d:\ahk\ahk_scripts\anything-services.ahk
-#include d:\ahk\ahk_scripts\anything-explorer-history.ahk
+#include c:\ahk\ahk_scripts\anything.ahk
+#include c:\ahk\ahk_scripts\anything-run.ahk
+#include c:\ahk\ahk_scripts\anything-run-launch-plugin.ahk
+#include c:\ahk\ahk_scripts\anything-favorite-directories.ahk
+#include c:\ahk\ahk_scripts\anything-window-switch.ahk
+#include c:\ahk\ahk_scripts\anything-process-manager.ahk
+#include c:\ahk\ahk_scripts\anything-services.ahk
+#include c:\ahk\ahk_scripts\anything-explorer-history.ahk
 
 ; anything-source: <anything_explorer_history_source>       defined in anything-explorer-history.ahk .
 ; anything-source: <anything_favorite_directories_source>   defined in anything-favorite-directories.ahk
@@ -35,8 +35,8 @@ return
 
 
 #r::
-#Include d:\
-SetWorkingDir, D:\
+#Include c:\
+SetWorkingDir, c:\
 my_anything_properties2:=Object()
 my_anything_properties2["anything_use_large_icon"]:=0
 my_anything_properties2["FontSize"]:= 12

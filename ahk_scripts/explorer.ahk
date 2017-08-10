@@ -170,7 +170,7 @@ ctrl_u(){
         if ((StrLen(Path1)==0)){
             ; do nothing
         }else if (StrLen(Path1)==3){
-            ; d:\
+            ; c:\
             ; this doesn't work on win7
             ; win.Navigate["::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"] ; 我的电脑
             if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
@@ -433,7 +433,7 @@ GetSelectedFileName()
 }
 
 ;;
-; file:///d:/path/ -->d:\path
+; file:///d:/path/ -->c:\path
 locationUrl2WinPath(winPath)
 {
    path1:= RegExReplace(winPath, "^file:///(.*)"  ,"$1" )

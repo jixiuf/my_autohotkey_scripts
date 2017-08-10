@@ -301,7 +301,7 @@ visit_directory( candidate_directory)
 
 
 ;;Windows Path to msys Path
-;; for example d:\a\b\ to /d/a/b
+;; for example c:\a\b\ to /d/a/b
 win2msysPath(winPath){
    msysPath:= RegExReplace(winPath, "^([a-zA-Z]):"  ,"$1" )
    StringReplace, msysPath2, msysPath, \ , /, All
@@ -309,7 +309,7 @@ win2msysPath(winPath){
    return %msysPath3%
 }
 
-;;d:\a\b -->d:/a/b
+;;c:\a\b -->d:/a/b
 win2posixPath(winPath)
 {
    StringReplace, posixPath, winPath, \ , /, All
