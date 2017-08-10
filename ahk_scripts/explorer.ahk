@@ -54,11 +54,11 @@ Backspace::back_up_dir()
 ;;Ctrl+. 选中最后一个文件
 ^.::select_last_file()
 
-;;ctrl+; 定位到目录树
-^;::focus_files()
 
-;;ctrl+L 定位在地址栏
-^l::focus_address_bar()
+;;ctrl+l 定位到目录树
+^l::focus_files()
+;;ctrl+; 定位在地址栏
+^;::focus_address_bar()
 ;"+"  like Emacs dired: create new folder
 +=::Send !fwf
 !^n::Send !fwf
