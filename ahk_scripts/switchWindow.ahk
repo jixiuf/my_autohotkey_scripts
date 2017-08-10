@@ -87,7 +87,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 #e::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
 
 ;;;;;;Win+q  toggle Excel
-#q::ToggleWinMinimizeOrRun("ahk_class XLMAIN", "excel")
+; #q::ToggleWinMinimizeOrRun("ahk_class XLMAIN", "excel")
 
 ;;;;;;Win+3 toggle word
 #3::ToggleWinMinimizeOrRun("ahk_class OpusApp", "winword")
