@@ -19,12 +19,13 @@ SetKeyDelay 0
     Return
 
 
-#a::^a
 ;;我习惯于Win+Esc 关闭窗口,而不是Alt+F4
 #Esc::Send !{F4}
 #q::Send !{F4}
 #c::^c
 #v::^v
+#s::^s
+#a::^a
     ; 按下 printScreen Alt+PrintScreen(系统自带) 时自动打开画图
 ; ~*PrintScreen Up::
 ; Run,mspaint.exe,,,pid
