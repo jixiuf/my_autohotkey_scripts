@@ -5,6 +5,8 @@
 ; #NoTrayIcon
 
 ; https://gist.github.com/kshenoy/6cce6537030f088dc95c
+; 参见 http://jixiuf.github.io/blog/000011-windows-keymap.html/
+
 
 ; window键单按时为空格 ，组合按时仍然是window键
 ; 想实现的功能 是空格键即可以是空格 ，又可以是window键 
