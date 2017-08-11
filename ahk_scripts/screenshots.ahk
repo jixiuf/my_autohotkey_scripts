@@ -15,7 +15,7 @@
 ~!PrintScreen::screenshot_actived_window()
 
 ; 自定义截屏
-~^PrintScreen::run   d:/ahk/ahk_scripts/Zizorz/Zizorz.exe
+~^PrintScreen::run   c:/ahk/ahk_scripts/Zizorz/Zizorz.exe
 
 #IfWinActive ahk_class Photo_Lightweight_Viewer|ShImgVw:CPreviewWnd
 q::Send !{F4}
@@ -35,7 +35,7 @@ screenshot_fullscreen(){
     }
     FileName:= A_YYYY . "_" . A_MM . "_" . A_DD . "-" . A_Hour . A_Min . A_Sec . A_MSec . ".png"
     Path1 := shot_dest_dir . FileName
-    Run , d:/ahk/ahk_scripts/boxcutter --fullscreen %Path1%
+    Run , c:/ahk/ahk_scripts/boxcutter --fullscreen %Path1%
     sleep 200
     Run, %Path1%
 }
@@ -51,7 +51,7 @@ screenshot_actived_window(){
     WinGetPos, X, Y, Width, Height,A
     X2:=X+Width
     Y2:=Y+ Height
-    Run , d:/ahk/ahk__scripts/boxcutter  --coords %X%`,%Y%`,%X2%`,%Y2%  %Path1%
+    Run , c:/ahk/ahk__scripts/boxcutter  --coords %X%`,%Y%`,%X2%`,%Y2%  %Path1%
     sleep 200
     Run, %Path1%
 }
