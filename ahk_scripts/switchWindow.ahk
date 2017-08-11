@@ -84,7 +84,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 #i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
 
 ;;;;;;;;;;Win+A ,toggle.Eamcs
-#e::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
+#g::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
 
 ;;;;;;Win+q  toggle Excel
 ; #q::ToggleWinMinimizeOrRun("ahk_class XLMAIN", "excel")
@@ -115,7 +115,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ;;没被激活的话，不必重新启动一个，只须激活之，
 ;;有时资源管理器，需要启动多个，所以，如果当前聚集的窗口已经是一个资源管理器了
 ;;我们认为用户想重新启用一个资源管理器，为方便计，把目录定位到与这个窗口相同的目录
-#g::
+#e::
 MyFavorateDir:="c:\"
 SetTitleMatchMode, RegEx
 IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
