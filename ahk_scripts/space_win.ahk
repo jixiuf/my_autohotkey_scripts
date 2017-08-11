@@ -1,3 +1,5 @@
+#SingleInstance force
+#NoTrayIcon
 ; -*-coding:utf-8 -*-
 ; #SingleInstance force
 ; #NoTrayIcon
