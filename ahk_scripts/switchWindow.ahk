@@ -96,6 +96,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ;;;;;;Win+3 toggle word
 #3::ToggleWinMinimizeOrRun("ahk_class OpusApp", "winword")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; win+4 pdf
+#4::ToggleWinMinimizeOrRun("ahk_class AcrobatSDIWindow", "C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe")
 
 ; ;;;;;;Win+o  toggle OutLook
 ; #o::ToggleWinMinimizeOrRun("ahk_class rctrl_renwnd32", "outlook")
