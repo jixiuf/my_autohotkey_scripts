@@ -4,9 +4,11 @@
 ; #NoTrayIcon
 ; #SingleInstance force
 SendMode, Input
+SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 
 ; ;// Win+V = "type-paste" for all apps...
 ; #v::StringTypePaste(Clipboard)
+
 
 #IfWinActive ahk_class ConsoleWindowClass
 ^v::StringTypePaste(Clipboard)
@@ -22,7 +24,6 @@ Esc::Send ,exit`n
 
 ^n:: Send {Down}
 ^p:: Send {UP}
-
 ^a::Send {Home}
 ^e::Send {End}
 ^!a::Send {Home}
@@ -32,10 +33,18 @@ Esc::Send ,exit`n
 ^b::Send {Left}
 
 ; ^u::Send ^{Home}
-^k::Send ^{End}
 ; 滚屏
 ^u::Send {WheelUp}
 ; ^v::Send {WheelDown}
+^k::Send ^{End}
+#IfWinActive
+
+#IfWinActive ahk_class mintty
+^v::StringTypePaste(Clipboard)
+#v::StringTypePaste(Clipboard)
+^y::StringTypePaste(Clipboard)
+Esc::Send ,exit`n
+
 #IfWinActive
 
 
