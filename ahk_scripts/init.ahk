@@ -37,5 +37,6 @@ run c:\ahk\ahk_scripts\space_win.ahk
 #Include c:\ahk\ahk_scripts\word-emacs-key.ahk
 ; #Include c:\ahk\ahk_scripts\googletranslate.ahk
 ; #Include c:\ahk\ahk_scripts\chrome.ahk
+#Include c:\ahk\ahk_scripts\firefox.ahk
 ; ; space即当空格又当window键来用
 ; #Include c:\ahk\ahk_scripts\space_win.ahk
