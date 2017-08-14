@@ -77,8 +77,10 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ; #1::ToggleWinMinimizeOrRun("ahk_class wndclass_desked_gsk","")
 
 
+;;Win+f chrome
+; #f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
 ;;Win+f toggle Firefox
-#f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
+#f::ToggleWinMinimizeOrRun("ahk_class MozillaUIWindowClass|MozillaWindowClass","firefox","RegEx")
 
 ;;;;;;;;;;;Win+i ,toggle IE
 #i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
