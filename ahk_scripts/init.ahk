@@ -32,7 +32,7 @@ run c:\ahk\ahk_scripts\space_win.ahk
 ; #Include c:\ahk\ahk_scripts\toadsqlserver.ahk
 #Include c:\ahk\ahk_scripts\Console.ahk
 #Include c:\ahk\ahk_scripts\diaglog.ahk
-; #Include c:\ahk\ahk_scripts\win-move-resize.ahk
+#Include c:\ahk\ahk_scripts\win-move-resize.ahk
 ; #Include c:\ahk\ahk_scripts\ie.ahk
 #Include c:\ahk\ahk_scripts\word-emacs-key.ahk
 ; #Include c:\ahk\ahk_scripts\googletranslate.ahk
