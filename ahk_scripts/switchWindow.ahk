@@ -32,8 +32,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
         WinMinimize, %TheWindowTitle%
 
        ; active next window
-        WinGet, active_id, ID, A
-        WinActivate, ahk_id %active_id%        
+        ; WinGet, active_id, ID, A
+        ; WinActivate, ahk_id %active_id%        
         ; ; 有时因为焦点问题， 激活窗口无效
         ; WinGet, id, list, , , Program Manager
         ; WinActivate ,ahk_id %id1%
