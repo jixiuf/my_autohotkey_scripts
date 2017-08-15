@@ -15,6 +15,7 @@ run c:\ahk\ahk_scripts\autoclosewin.ahk
 
 ; ; space即当空格又当window键来用
 run c:\ahk\ahk_scripts\space_win.ahk
+run c:\ahk\ahk_scripts\ctrl_escape.ahk
 ; ; ; 防止 意外 按下windows键
 ; ~LWin Up:: return
 
