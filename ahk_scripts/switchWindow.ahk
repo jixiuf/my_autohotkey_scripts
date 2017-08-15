@@ -83,6 +83,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ; bash 
 #d::ToggleWinMinimizeOrRun("ahk_class mintty","C:\Git\git-bash.exe --cd-to-home","RegEx")
 
+#b::ToggleWinMinimizeOrRun("ahk_class TXGuiFoundation","C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe","RegEx")
+
 ;;Win+f chrome
 ; #f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
 ;;Win+f toggle Firefox
