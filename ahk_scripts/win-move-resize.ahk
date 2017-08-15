@@ -2,25 +2,25 @@
 ; #NoTrayIcon
 ;WinGetPos ,,,deskWidth,deskHeight ,ahk_class Progman
 
-#j::
++#j::
 wid:=WinActive("A") ;;get activate window id 
 WinGetPos ,x,y,,,ahk_id %wid%
 WinMove  ,ahk_id %wid%,, x,y+40
 return
 
-#k::
++#k::
 wid:=WinActive("A")
 WinGetPos ,x,y,,,ahk_id %wid%
 WinMove  ,ahk_id %wid%,, x,y-40
 return
 
-#h::
++#h::
 wid:=WinActive("A")
 WinGetPos ,x,y,,,ahk_id %wid%
 WinMove  ,ahk_id %wid%,, x-50,y
 return
 
-#l::
++#l::
  if A_OSVersion in WIN_7,WIN_VISTA  ; Note: No spaces around commas.
 {
     ; enable  lockscreen for win7
