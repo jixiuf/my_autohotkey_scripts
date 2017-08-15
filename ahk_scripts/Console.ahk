@@ -9,6 +9,12 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 ; ;// Win+V = "type-paste" for all apps...
 ; #v::StringTypePaste(Clipboard)
 
+#IfWinActive ahk_class PuTTY
+#c::return
+^v::StringTypePaste(Clipboard)
+#v::StringTypePaste(Clipboard)
+^y::StringTypePaste(Clipboard)
+#IfWinActive
 
 #IfWinActive ahk_class ConsoleWindowClass
 ^v::StringTypePaste(Clipboard)
