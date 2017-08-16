@@ -28,36 +28,38 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
     ; win7 winWidth=-32000, winHeight=-32000
     IfWinActive, %TheWindowTitle%
     {
-
+    
+    
+        ; WinRestore,  %TheWindowTitle%
         WinMinimize, %TheWindowTitle%
+        ; WinMinimizeAll
+        ; WinMinimizeAllUndo
 
-       ; active next window
-        ; WinGet, active_id, ID, A
-        ; WinActivate, ahk_id %active_id%        
         ; ; 有时因为焦点问题， 激活窗口无效
-        ; WinGet, id, list, , , Program Manager
-        ; WinActivate ,ahk_id %id1%
+        WinGet, id, list, , , Program Manager
+        WinActivate ,ahk_id %id1%
         ; WinGetTitle ,t,ahk_id %id1%
         ; Tooltip , %t%
         ; ; 有时因为焦点问题， 激活窗口无效
         ; ; just click something on desktop for focus
         ; ; The following method may improve reliability and reduce side effects:
-        ; SetControlDelay -1
-        ; ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
+        SetControlDelay -1
+        ControlClick, SysListView321, ahk_class Progman,,,, NA x1 y1  ; Clicks in NA mode at coordinates that are relative to a named control.
     }
     Else
     {
         IfWinExist, %TheWindowTitle%
         {
             ; WinActivate,  ahk_class Progman
+            ; ; 有时因为焦点问题， 激活窗口无效
+            ; ; just click something on desktop for focus
+            SetControlDelay -1
+            ControlClick, SysListView321, ahk_class Progman,,,, NA x10 y10  ; Clicks in NA mode at coordinates that are relative to a named control.
             ;  有时激活窗口无效
+            ; WinMinimizeAll
             WinGet, winid, ID, %TheWindowTitle%
             DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
 
-            ; ; 有时因为焦点问题， 激活窗口无效
-            ; ; just click something on desktop for focus
-            ; SetControlDelay -1
-            ; ControlClick, SysListView321, ahk_class Progman,,,, NA x-1 y-1  ; Clicks in NA mode at coordinates that are relative to a named control.
         }
         else
         {
@@ -81,7 +83,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ; #1::ToggleWinMinimizeOrRun("ahk_class wndclass_desked_gsk","")
 
 ; bash 
-#d::ToggleWinMinimizeOrRun("ahk_class mintty","C:\Git\git-bash.exe --cd-to-home","RegEx")
+#5::ToggleWinMinimizeOrRun("ahk_class mintty","C:\Git\git-bash.exe --cd-to-home","RegEx")
+#d::ToggleWinMinimizeOrRun("ahk_class PuTTY", "putty")
 
 #b::ToggleWinMinimizeOrRun("ahk_class TXGuiFoundation","C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe","RegEx")
 
