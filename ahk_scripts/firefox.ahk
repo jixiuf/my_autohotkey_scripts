@@ -9,4 +9,5 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 #p::Send ^+{TAB}
 ^h::Send !{Left}
 ^l::Send !{Right}
+^s::Send ^f
 #IfWinActive
