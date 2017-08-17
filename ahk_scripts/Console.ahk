@@ -28,6 +28,9 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 #IfWinActive ahk_class VirtualConsoleClass
 #c::return
 #v::StringTypePaste(Clipboard)
+#n::Send ^{TAB}
+#t::Send ^t
+#p::Send ^+{TAB}
 ^BackSpace::Send {Escape}[aa
 ^;::Send {Escape}[af
 ^,::Send {Escape}[ad
