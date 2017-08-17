@@ -12,6 +12,16 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 #IfWinActive ahk_class PuTTY
 #c::return
 #v::StringTypePaste(Clipboard)
+^BackSpace::Send {Escape}[aa
+^;::Send {Escape}[af
+^,::Send {Escape}[ad
+^.::Send {Escape}[ae
+^i::Send {Escape}[ah
+^3::Send {Escape}[ai
+^4::Send {Escape}[aj
+^m::Send {Escape}[am
+^f3::Send {Escape}[al
+^f2::Send {Escape}[ab
 #IfWinActive
 
 #IfWinActive ahk_class ConsoleWindowClass
