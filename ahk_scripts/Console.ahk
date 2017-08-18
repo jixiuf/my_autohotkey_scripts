@@ -31,6 +31,7 @@ SetTitleMatchMode Regex ;可以使用正则表达式对标题进行匹配
 #n::Send ^{TAB}
 #t::Send ^t
 #p::Send ^+{TAB}
+^/::Send ^+_ ;; sometime ctrl-/ doesnot work through ssh ,but ctrl-/ == ctrl-_ for emacs ,so rebind this 
 ^BackSpace::Send {Escape}[aa
 ^;::Send {Escape}[af
 ^,::Send {Escape}[ad
