@@ -97,7 +97,8 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ; bash 
 #5::ToggleWinMinimizeOrRun("ahk_class mintty","C:\Git\git-bash.exe --cd-to-home","RegEx")
 ; #d::ToggleWinMinimizeOrRun("ahk_class PuTTY", "putty")
-#d::ToggleWinMinimizeOrRun("ahk_class VirtualConsoleClass", "C:\cmder\Cmder.exe")
+; #d::ToggleWinMinimizeOrRun("ahk_class VirtualConsoleClass", "C:\cmder\Cmder.exe")
+#d::ToggleWinMinimizeOrRun("ahk_class mintty", "C:\Users\Joseph\.babun\cygwin\bin\mintty.exe -")
 
 #b::ToggleWinMinimizeOrRun("ahk_class TXGuiFoundation","C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe","RegEx")
 
