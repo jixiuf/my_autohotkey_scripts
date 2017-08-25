@@ -76,11 +76,22 @@ Esc::Send ,exit`n
 #IfWinActive
 
 #IfWinActive ahk_class mintty
-^v::StringTypePaste(Clipboard)
+#c::return
 #v::StringTypePaste(Clipboard)
-^y::StringTypePaste(Clipboard)
-Esc::Send ,exit`n
-
+#n::Send ^{TAB}
+#p::Send ^+{TAB}
+#t::Send !{F2}
+^/::Send ^+_ ;; sometime ctrl-/ doesnot work through ssh ,but ctrl-/ == ctrl-_ for emacs ,so rebind this 
+^BackSpace::Send {Escape}[aa
+^;::Send {Escape}[af
+^,::Send {Escape}[ad
+^.::Send {Escape}[ae
+^i::Send {Escape}[ah
+^3::Send {Escape}[ai
+^4::Send {Escape}[aj
+^m::Send {Escape}[am
+^f3::Send {Escape}[al
+^f2::Send {Escape}[ab
 #IfWinActive
 
 
