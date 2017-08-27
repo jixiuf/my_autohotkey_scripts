@@ -17,3 +17,12 @@ http://jixiuf.github.io/blog/anything-doc.org/
     - ralt->space
     
 (配合ahk_scripts/space_win.ahk)实现空格键即当空格又当windows键,即单独按时产生空格，组合按时当作windows键 
+
+ahk_scripts/switchWindow.ahk 一键最大化窗口（或恢复原状）
+```
+#d::ToggleWinMinimizeOrRun("ahk_class VirtualConsoleClass", "C:\cmder\Cmder.exe")
+;;Win+f chrome
+; #f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
+;;Win+f toggle Firefox
+#f::ToggleWinMinimizeOrRun("ahk_class MozillaUIWindowClass|MozillaWindowClass","firefox","RegEx")
+```
