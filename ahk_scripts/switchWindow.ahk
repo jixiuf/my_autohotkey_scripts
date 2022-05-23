@@ -103,12 +103,12 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 #b::ToggleWinMinimizeOrRun("ahk_class TXGuiFoundation","C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe","RegEx")
 
 ;;Win+f chrome
-; #f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
+#f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
 ;;Win+f toggle Firefox
-#f::ToggleWinMinimizeOrRun("ahk_class MozillaUIWindowClass|MozillaWindowClass","firefox","RegEx")
+;#f::ToggleWinMinimizeOrRun("ahk_class MozillaUIWindowClass|MozillaWindowClass","firefox","RegEx")
 
 ;;;;;;;;;;;Win+i ,toggle IE
-#i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
+;#i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
 
 ;;;;;;;;;;Win+A ,toggle.Eamcs
 #e::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
@@ -120,7 +120,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 #3::ToggleWinMinimizeOrRun("ahk_class OpusApp", "winword")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; win+4 pdf
-#4::ToggleWinMinimizeOrRun("ahk_class AcrobatSDIWindow", "C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe")
+;#4::ToggleWinMinimizeOrRun("ahk_class AcrobatSDIWindow", "C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe")
 
 ; ;;;;;;Win+o  toggle OutLook
 ; #o::ToggleWinMinimizeOrRun("ahk_class rctrl_renwnd32", "outlook")
