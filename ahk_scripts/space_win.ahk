@@ -36,8 +36,9 @@ __Disable_LWin() {
 }
 LWin Up::__Enable_LWin_ForShortPress()
 __Enable_LWin_ForShortPress() { 
+    ; hello world aswq
     if (A_PriorKey == "LWin") {
-        if (A_TickCount - TickCount_When_LWinPressedDown < 8000) {
+        if (A_TickCount - TickCount_When_LWinPressedDown < 800) {
             ; Send, {Blind}{LWin} ; 禁用单按下lwin 弹窗 ，即什么也不做
             ; 单按下 lwin 发送 space，
             send {space}  
