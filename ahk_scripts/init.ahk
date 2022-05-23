@@ -26,16 +26,16 @@ run c:\ahk\ahk_scripts\ctrl_escape.ahk
 ; #Include c:\ahk\ahk_scripts\explorer.ahk
 ; #Include c:\ahk\ahk_scripts\notepad-emacs-key.ahk
 ; #Include c:\ahk\ahk_scripts\eclipse.ahk
-; #Include c:\ahk\ahk_scripts\alias.ahk
+#Include c:\ahk\ahk_scripts\alias.ahk
 ; #Include c:\ahk\ahk_scripts\screenshots.ahk
 ; #Include c:\ahk\ahk_scripts\toggleTaskBar.ahk
 ; #Include c:\ahk\ahk_scripts\plsql.ahk
 ; #Include c:\ahk\ahk_scripts\toadsqlserver.ahk
 ; #Include c:\ahk\ahk_scripts\Console.ahk
 ; #Include c:\ahk\ahk_scripts\diaglog.ahk
-; #Include c:\ahk\ahk_scripts\win-move-resize.ahk
+#Include c:\ahk\ahk_scripts\win-move-resize.ahk
 ; #Include c:\ahk\ahk_scripts\ie.ahk
 ; #Include c:\ahk\ahk_scripts\word-emacs-key.ahk
 ; #Include c:\ahk\ahk_scripts\googletranslate.ahk
-; #Include c:\ahk\ahk_scripts\chrome.ahk
+#Include c:\ahk\ahk_scripts\chrome.ahk
 ; #Include c:\ahk\ahk_scripts\firefox.ahk
