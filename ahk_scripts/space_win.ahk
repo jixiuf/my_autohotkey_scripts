@@ -8,22 +8,40 @@
 ;    与bin/keyboard_switch_win_space_alt_caps_ctrl.reg  配合后 （space变成了 lwin）
 ;也就是说  space单按还是 space，space+e则打开 iexplorer，space+r 则打开“运行”窗口 
  
+#SingleInstance force
+#NoTrayIcon
+;Author: Autohotkey forum user RHCP
+;http://www.autohotkey.com/board/topic/103174-dual-function-control-key/
 
- 
+; $~*LWin::
+; if !state
+;     state :=  (GetKeyState("Shift", "P") ||  GetKeyState("Alt", "P") || GetKeyState("LCtrl", "P") || GetKeyState("RCtrl", "P"))
+; return
+
+; $~LWin up::
+; if (StrLen(A_PriorKey)==0 || instr(A_PriorKey, "LWin") ){
+;     send {space} 
+; }
+; ; state := 0
+; return
+
+
+
 ~LWin::__Disable_LWin()
-            __Disable_LWin() {
-                Send, {Blind}{vkFF}
-                if (TickCount_When_LWinPressedDown = 0) {
-                    TickCount_When_LWinPressedDown := A_TickCount
-                }
-            }
+__Disable_LWin() {
+    Send, {Blind}{vkFF}
+    if (TickCount_When_LWinPressedDown = 0) {
+        TickCount_When_LWinPressedDown := A_TickCount
+    }
+}
 LWin Up::__Enable_LWin_ForShortPress()
-            __Enable_LWin_ForShortPress() { 
-                if (A_PriorKey == "LWin") {
-                    if (A_TickCount - TickCount_When_LWinPressedDown < 800) {
-                       ; Send, {Blind}{LWin} ; 禁用单按下lwin 弹窗 ，即什么也不做
-	        send {space}  ； 单按下 lwin 发送 space，
-                    }
-                }
-                TickCount_When_LWinPressedDown := 0
-            }
+__Enable_LWin_ForShortPress() { 
+    if (A_PriorKey == "LWin") {
+        if (A_TickCount - TickCount_When_LWinPressedDown < 8000) {
+            ; Send, {Blind}{LWin} ; 禁用单按下lwin 弹窗 ，即什么也不做
+            ; 单按下 lwin 发送 space，
+            send {space}  
+        }
+    }
+    TickCount_When_LWinPressedDown := 0
+}
