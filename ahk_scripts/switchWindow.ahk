@@ -34,7 +34,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
         WinMinimize, %TheWindowTitle%
         ; WinMinimizeAll
         ; WinMinimizeAllUndo
-        Send {Alt down}{tab}{Escape}{Alt up}  ; Cancel the menu without activating the selected window.
+        ; Send {Alt down}{tab}{Escape}{Alt up}  ; Cancel the menu without activating the selected window.
 
 
         ; ; ; 有时因为焦点问题， 激活窗口无效
@@ -68,7 +68,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
             ;     MsgBox, WinWait timed out.
             ;     return
             ; }
-            Send {Alt down}{tab}{Escape}{Alt up}
+            ; Send {Alt down}{tab}{Escape}{Alt up}
             ; Send {Escape}{Alt up}  ; Cancel the menu without activating the selected window.
 
 
@@ -87,7 +87,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;注意，eclipse命令必须在Path 环境变量中,
 ;;以下用到的程序，除了加了绝对路径的均须如此，
-#1::ToggleWinMinimizeOrRun("ahk_class SWT_Window0","eclipse -nl en_US")
+; #1::ToggleWinMinimizeOrRun("ahk_class SWT_Window0","eclipse -nl en_US")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;Win+1  VS
 ; #1::ToggleWinMinimizeOrRun("Microsoft Visual Studio","devenv")
@@ -96,11 +96,16 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 
 ; bash 
 #5::ToggleWinMinimizeOrRun("ahk_class mintty","C:\Git\git-bash.exe --cd-to-home","RegEx")
+; windows terminal 一时没找到启动路径
+#,::ToggleWinMinimizeOrRun("ahk_class CASCADIA_HOSTING_WINDOW_CLASS","","RegEx")
+
+
 ; #d::ToggleWinMinimizeOrRun("ahk_class PuTTY", "putty")
-#d::ToggleWinMinimizeOrRun("ahk_class VirtualConsoleClass", "C:\cmder\Cmder.exe")
+; #d::ToggleWinMinimizeOrRun("ahk_class VirtualConsoleClass", "C:\cmder\Cmder.exe")
 ; #d::ToggleWinMinimizeOrRun("ahk_class mintty", "C:\Users\Joseph\.babun\cygwin\bin\mintty.exe -")
 
-#b::ToggleWinMinimizeOrRun("ahk_class TXGuiFoundation","C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe","RegEx")
+; #b::ToggleWinMinimizeOrRun("ahk_class TXGuiFoundation","C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe","RegEx")
+#b::ToggleWinMinimizeOrRun("ahk_class WeChatMainWndForPC","D:\Program Files (x86)\Tencent\WeChat\WeChat.exe","RegEx")
 
 ;;Win+f chrome
 #f::ToggleWinMinimizeOrRun("ahk_class Chrome_WidgetWin_1|MozillaUIWindowClass|MozillaWindowClass","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe","RegEx")
@@ -110,7 +115,7 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 ;;;;;;;;;;;Win+i ,toggle IE
 ;#i::ToggleWinMinimizeOrRun("ahk_class IEFrame",A_ProgramFiles . "\Internet Explorer\iexplore.exe")
 
-;;;;;;;;;;Win+A ,toggle.Eamcs
+;;;;;;;;;;Win+e ,toggle.Eamcs
 #e::ToggleWinMinimizeOrRun("ahk_class Emacs","runemacs")
 
 ;;;;;;Win+q  toggle Excel
@@ -118,6 +123,9 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
 
 ;;;;;;Win+3 toggle word
 #3::ToggleWinMinimizeOrRun("ahk_class OpusApp", "winword")
+
+#4::ToggleWinMinimizeOrRun("ahk_exe Feishu.exe", "C:\Users\tnn\AppData\Local\Feishu\Feishu.exe")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; win+4 pdf
 ;#4::ToggleWinMinimizeOrRun("ahk_class AcrobatSDIWindow", "C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe")
@@ -177,35 +185,3 @@ IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-; #Tab::Send {Alt down}{tab}{Alt up}
-
-
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; ; 炒股相关设置
-; ;F12 toggle 招商证券软件 （只在大智慧等股票软件窗口上启用）
-; SetTitleMatchMode RegEx
-; ; 下面的窗口类依次为：桌面、Win+D后的桌面、我的电脑、资源管理器、另存为等
-; #IfWinActive  ahk_class Afx:00400000:8:00010011:00000000:00090205|Afx:00400000:8:00010011:00000000:000B07E9
-; ; 激活
-; F12::
-; IfWinExist , ahk_class TdxW_MainFrame_Class
-; {                               ; 如果如商证券交易软件已经打开 ，直接激活窗口
-;   WinActivate , ahk_class TdxW_MainFrame_Class
-; }else{                          ; 使用大智慧的F12快捷键，打开委托软件
-;   Send  {F12}
-; }
-; return
-
-; #IfWinActive
-
-; ; 如果当前窗口是招商证券 F12 ,则为隐藏 招商证券窗口
-; #IfWinActive ahk_class TdxW_MainFrame_Class
-; F12:: WinMinimize ahk_class TdxW_MainFrame_Class
-; #IfWinActive
-; ; 默认F12激活炒股软件
-; F12::WinActivate , ahk_class Afx:00400000:8:00010011:00000000:00090205
-; ; end of 炒股相关
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
