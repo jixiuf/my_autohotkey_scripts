@@ -20,67 +20,89 @@ ToggleWinMinimizeOrRun(TheWindowTitle,Cmd:="", TitleMatchMode := "2")
     SetTitleMatchMode,%TitleMatchMode%
     ; SetTitleMatchMode, RegEx
     DetectHiddenWindows, Off
-     ; DetectHiddenWindows, On
-
-    ; WinGetPos, winWidth, winHeight, , , ahk_class XLMAIN
-    ;  Msgbox %  winWidth  . " "  .  winHeight
-    ; 或者根据 最小化之后的窗口宽高来判断
-    ; win7 winWidth=-32000, winHeight=-32000
-    IfWinActive, %TheWindowTitle%
+    ; DetectHiddenWindows, On
+    IfWinExist, %TheWindowTitle%
     {
-    
-    
-        ; WinRestore,  %TheWindowTitle%
-        WinMinimize, %TheWindowTitle%
-        ; WinMinimizeAll
-        ; WinMinimizeAllUndo
-        ; Send {Alt down}{tab}{Escape}{Alt up}  ; Cancel the menu without activating the selected window.
-
-
-        ; ; ; 有时因为焦点问题， 激活窗口无效
-        ; WinGet, id, list, , , Program Manager
-        ; WinActivate ,ahk_id %id1%
-        ; ; WinGetTitle ,t,ahk_id %id1%
-        ; ; Tooltip , %t%
-        ; ; ; 有时因为焦点问题， 激活窗口无效
-        ; ; ; just click something on desktop for focus
-        ; ; ; The following method may improve reliability and reduce side effects:
-        ; SetControlDelay -1
-        ; ControlClick, SysListView321, ahk_class Progman,,,, NA x1 y1  ; Clicks in NA mode at coordinates that are relative to a named control.
-    }
-    Else
-    {
-        IfWinExist, %TheWindowTitle%
+        IfWinActive, %TheWindowTitle%
         {
-            ; WinActivate,  ahk_class Progman
-            ; ; 有时因为焦点问题， 激活窗口无效
-            ; ; just click something on desktop for focus
-            ; SetControlDelay -1
-            ; ControlClick, SysListView321, ahk_class Progman,,,, NA x10 y10  ; Clicks in NA mode at coordinates that are relative to a named control.
-            ;  有时激活窗口无效
-            ; WinMinimizeAll
-            WinGet, winid, ID, %TheWindowTitle%
-            DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
-
-            ; WinWaitActive,%TheWindowTitle%, , 2
-            ; if ErrorLevel
-            ; {
-            ;     MsgBox, WinWait timed out.
-            ;     return
-            ; }
-            ; Send {Alt down}{tab}{Escape}{Alt up}
-            ; Send {Escape}{Alt up}  ; Cancel the menu without activating the selected window.
-
-
-        }
-        else
-        {
-            if (Cmd != ""){
-              run, %Cmd%
+            WinMinimize, A
+            return
+        } else {
+            WinGet, WinState, MinMax
+            If WinState = -1
+            {
+                WinRestore, %TheWindowTitle%
+                WinActivate, %TheWindowTitle%
+            } else {
+                WinActivate, %TheWindowTitle%
             }
+
         }
+    }else{
+        if (Cmd != ""){
+            run, %Cmd%  
+        }
+
+        ; ; WinGetPos, winWidth, winHeight, , , ahk_class XLMAIN
+        ; ;  Msgbox %  winWidth  . " "  .  winHeight
+        ; ; 或者根据 最小化之后的窗口宽高来判断
+        ; ; win7 winWidth=-32000, winHeight=-32000
+        ; IfWinActive, %TheWindowTitle%
+        ; {
+
+
+        ;     ; WinRestore,  %TheWindowTitle%
+        ;     WinMinimize, %TheWindowTitle%
+        ;     ; WinMinimizeAll
+        ;     ; WinMinimizeAllUndo
+        ;     ; Send {Alt down}{tab}{Escape}{Alt up}  ; Cancel the menu without activating the selected window.
+
+
+        ;     ; ; ; 有时因为焦点问题， 激活窗口无效
+        ;     ; WinGet, id, list, , , Program Manager
+        ;     ; WinActivate ,ahk_id %id1%
+        ;     ; ; WinGetTitle ,t,ahk_id %id1%
+        ;     ; ; Tooltip , %t%
+        ;     ; ; ; 有时因为焦点问题， 激活窗口无效
+        ;     ; ; ; just click something on desktop for focus
+        ;     ; ; ; The following method may improve reliability and reduce side effects:
+        ;     ; SetControlDelay -1
+        ;     ; ControlClick, SysListView321, ahk_class Progman,,,, NA x1 y1  ; Clicks in NA mode at coordinates that are relative to a named control.
+        ; }
+        ; Else
+        ; {
+        ;     IfWinExist, %TheWindowTitle%
+        ;     {
+        ;         ; WinActivate,  ahk_class Progman
+        ;         ; ; 有时因为焦点问题， 激活窗口无效
+        ;         ; ; just click something on desktop for focus
+        ;         ; SetControlDelay -1
+        ;         ; ControlClick, SysListView321, ahk_class Progman,,,, NA x10 y10  ; Clicks in NA mode at coordinates that are relative to a named control.
+        ;         ;  有时激活窗口无效
+        ;         ; WinMinimizeAll
+        ;         WinGet, winid, ID, %TheWindowTitle%
+        ;         DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+
+        ;         ; WinWaitActive,%TheWindowTitle%, , 2
+        ;         ; if ErrorLevel
+        ;         ; {
+        ;         ;     MsgBox, WinWait timed out.
+        ;         ;     return
+        ;         ; }
+        ;         ; Send {Alt down}{tab}{Escape}{Alt up}
+        ;         ; Send {Escape}{Alt up}  ; Cancel the menu without activating the selected window.
+
+
+        ;     }
+        ;     else
+        ;     {
+        ;         if (Cmd != ""){
+        ;           run, %Cmd%
+        ;         }
+        ;     }
+        ; }
+        Return
     }
-    Return
 }
 
 
@@ -157,22 +179,22 @@ MyFavorateDir:="c:\"
 SetTitleMatchMode, RegEx
 IfWinExist,ahk_class (CabinetWClass|ExploreWClass)
 {
-  If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
-     ControlGetText, ExplorePath, Edit1, A
-;;之所以不用这条命令，是因为当地址栏里为“我的电脑”四个字时，用这条命令提示找不到路径
-    run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
-  }else{
-    WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
-    WinWaitActive
-    ControlGetFocus, focusedControl,A
-;;    Tooltip ,%focusedControl%
-    if (focusedControl <> "SysListView321")
-    {
-     ;;选中第一个文件
-      ControlFocus, SysListView321,A
-      Send {Home}
+    If WinActive("ahk_class (CabinetWClass|ExploreWClass)"){
+        ControlGetText, ExplorePath, Edit1, A
+        ;;之所以不用这条命令，是因为当地址栏里为“我的电脑”四个字时，用这条命令提示找不到路径
+        run, explorer.exe /n`, /e`, "%ExplorePath%" ,,
+    }else{
+        WinActivate ,ahk_class  (CabinetWClass|ExploreWClass)
+        WinWaitActive
+        ControlGetFocus, focusedControl,A
+        ;;    Tooltip ,%focusedControl%
+        if (focusedControl <> "SysListView321")
+        {
+            ;;选中第一个文件
+            ControlFocus, SysListView321,A
+            Send {Home}
+        }
     }
-  }
 }else{
     run, explorer.exe  /n`, /e`, %MyFavorateDir%
     WinWait ahk_class (CabinetWClass|ExploreWClass)
